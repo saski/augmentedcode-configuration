@@ -6,11 +6,11 @@ description: This meta-rule outlines the process for the AI to learn from user f
 
 ## 1. Introduction / Problem
 
-**Problem:** The AI's understanding of project-specific nuances, conventions, and user preferences can benefit from explicit feedback. Without a systematic process, valuable insights from user interactions might not be captured and integrated into the AI's guiding principles (i.e., the Cursor Rules).
+**Problem:** The AI's understanding of project-specific nuances, conventions, and user preferences can benefit from explicit feedback. Without a systematic process, valuable insights from user interactions might not be captured and integrated into the AI's guiding principles (i.e., the Development Rules in `.agents/rules/base.md`).
 
 **Purpose:** This rule establishes a mandatory process for the AI to:
 *   Actively learn from user feedback, guidance, and suggestions.
-*   Proactively identify opportunities to enhance existing Cursor Rules based on these learnings.
+*   Proactively identify opportunities to enhance existing Development Rules based on these learnings.
 *   Ensure that the AI's assistance remains aligned with evolving project needs and user expectations.
 *   Maximize the value of user feedback by incorporating it into the AI's operational framework.
 
@@ -30,10 +30,10 @@ Upon receiving feedback or guidance from the user, the AI MUST follow these step
         *   Does the user's input highlight a new best practice, convention, or piece of project knowledge?
         *   Is there an opportunity to clarify or improve an existing rule to prevent similar misunderstandings in the future?
         *   Could an existing rule be made more specific or comprehensive based on this new information?
-        *   **Did the interaction involve modifying a document, and if so, was relevant metadata (e.g., `last_updated` date, `version` number, changelogs) also considered for updates according to established documentation rules (like `docs-markdown-structure.mdc` and `docs-versioning-and-update.mdc`)?**
+        *   **Did the interaction involve modifying a document, and if so, was relevant metadata (e.g., `last_updated` date, `version` number, changelogs) also considered for updates according to established documentation standards?**
 
-3.  **Review Existing Cursor Rules for Relevance:**
-    *   Scan the contents of the `.cursor/rules/` directory.
+3.  **Review Existing Development Rules for Relevance:**
+    *   Review the contents of `.agents/rules/base.md` and other relevant rule files in `.agents/rules/`.
     *   Identify if any existing rule(s) are directly or indirectly related to the feedback received and the learnings derived.
     *   Determine if an update to one or more rules could codify the new learning, making future AI assistance more accurate or helpful.
 
@@ -42,11 +42,11 @@ Upon receiving feedback or guidance from the user, the AI MUST follow these step
         *   **Clearly state to the user which rule(s) you propose to update.**
         *   **Quote the specific section(s) or line(s) of the rule that would be affected.**
         *   **Present the exact proposed change (e.g., new wording, additions, deletions).** Use a diff format if it aids clarity for substantial changes.
-        *   **Explain *why* this change is being proposed and how it incorporates the learning from the user's recent feedback. Crucially, explicitly link the proposal back to the specific user feedback or interaction that prompted this learning. **Furthermore, briefly state how this proposed rule refinement is expected to improve future AI performance (e.g., enhancing accuracy, ensuring greater consistency with project goals, improving adherence to specific quality standards for KB documents as per `README.md` and `docs/00_knowledge_base_overview.md`).** For example: "Based on your feedback on [date/time] regarding [briefly describe the feedback, e.g., 'the need for ID stability when adding glossary terms'], I've identified an opportunity to improve `[Rule Name].mdc`. This change should help the AI consistently apply correct IDing logic in future glossary additions."
+        *   **Explain *why* this change is being proposed and how it incorporates the learning from the user's recent feedback. Crucially, explicitly link the proposal back to the specific user feedback or interaction that prompted this learning. **Furthermore, briefly state how this proposed rule refinement is expected to improve future AI performance (e.g., enhancing accuracy, ensuring greater consistency with project goals, improving adherence to specific quality standards).** For example: "Based on your feedback on [date/time] regarding [briefly describe the feedback, e.g., 'the need for stricter TDD enforcement'], I've identified an opportunity to improve `base.md` section [X]. This change should help the AI consistently apply correct TDD practices in future development."
         *   **Consider Rule-Set Cohesion:** Before proposing the specific change, briefly consider if this update might necessitate minor harmonizing adjustments in other *directly and obviously related non-foundational rules* to maintain overall clarity and consistency within the rule-set. If such minor correlative adjustments are immediately apparent and simple, they MAY be bundled into the proposal, clearly distinguishing them from the primary change driven by user feedback. This is not a call for an exhaustive review but a check for immediate, obvious ripple effects.
-        *   **Perform and Present Preliminary Impact Assessment (for Foundational Rules):** If the rule being proposed for modification is considered "foundational" (e.g., `ai-user-interaction-model.mdc`, `cursor-rule-creation.mdc`, `id-management-and-consistency.mdc`, `docs-markdown-structure.mdc`, `sustainabilityai-global-policy.mdc`, or others designated as such), the AI **MUST** also:
+        *   **Perform and Present Preliminary Impact Assessment (for Foundational Rules):** If the rule being proposed for modification is considered "foundational" (e.g., `base.md` or other core development rules), the AI **MUST** also:
             1.  Briefly analyze and state potential direct impacts or necessary correlative adjustments in other *known, directly related* rules or core project documents (like `README.md`).
-            2.  Present this as a concise impact summary. For example: "If this change to `[Foundational Rule X]` is approved, it might necessitate adjustments in `[Rule Y]` to maintain consistency regarding [specific concept], and we should also review `README.md`'s section on [related topic] to ensure continued alignment. This proposal appears consistent with the overall project goals."
+            2.  Present this as a concise impact summary. For example: "If this change to `base.md` section [X] is approved, it might necessitate adjustments in section [Y] to maintain consistency regarding [specific concept], and we should also review `README.md`'s section on [related topic] to ensure continued alignment. This proposal appears consistent with the overall project goals."
             3.  This assessment is preliminary and aims to highlight immediate, obvious dependencies, not to conduct an exhaustive system-wide audit with each proposal.
         *   **Explicitly state: "I will await your review and approval before making any changes to the rule(s).**"
 
@@ -55,17 +55,17 @@ Upon receiving feedback or guidance from the user, the AI MUST follow these step
 
 6.  **Apply Approved Changes and Confirm:**
     *   If the user approves the proposed update(s), use the appropriate tool to edit the target rule file(s) precisely as agreed.
-    *   After the update is applied, confirm to the user: "The [Rule Name].mdc has been updated as per your approval."
+    *   After the update is applied, confirm to the user: "The [Rule Name].md has been updated as per your approval."
 
 ## 3. Real-World Example
 
-*   **Scenario:** The user and AI collaboratively refined the project's `README.md`. During this process, the user provided feedback on how Markdown formatting (like bolding and use of code blocks for non-code examples) improved readability.
+*   **Scenario:** The user and AI collaboratively worked on improving test coverage. During this process, the user provided feedback that the AI should always run tests automatically after every code change, without asking for permission.
 *   **Feedback Loop in Action:**
-    1.  **Learning:** The AI learned specific formatting techniques that the user valued for clarity.
-    2.  **Rule Review:** The AI identified that the `human-readable-markdown-guide.mdc` rule was relevant.
-    3.  **Proposal:** The AI proposed to the user: "Based on our work on the README.md, I've learned more about your preferences for Markdown readability. I suggest we update the `human-readable-markdown-guide.mdc` to include more specific examples for using fenced code blocks for file structures and to refine the guidance on bolding. [Details of proposed changes followed]. I will await your review and approval."
+    1.  **Learning:** The AI learned that automatic test execution is a key expectation and should be explicitly stated in the development rules.
+    2.  **Rule Review:** The AI identified that `base.md` section 10 (Test-Driven Development Rules) was relevant.
+    3.  **Proposal:** The AI proposed to the user: "Based on our work on test execution, I've learned that automatic test running should be mandatory. I suggest we update `base.md` section 10 to explicitly state that tests should run automatically after every change without asking permission. [Details of proposed changes followed]. I will await your review and approval."
     4.  **Approval:** The user reviewed and approved the changes.
-    5.  **Update:** The AI updated `human-readable-markdown-guide.mdc`.
+    5.  **Update:** The AI updated `base.md` section 10 accordingly.
 
 ## 4. Common Pitfalls / Anti-Patterns (To Be Avoided by the AI)
 
