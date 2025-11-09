@@ -1,0 +1,37 @@
+---
+description: Directs all AI agents to use the consolidated rules in base.md
+globs: 
+alwaysApply: true
+---
+
+# Use Base Development Rules
+
+All AI agents working on this project must follow the comprehensive development rules and guidelines defined in:
+
+**📋 [.agents/rules/base.md](.agents/rules/base.md)**
+
+## Key Directive
+
+- **Single Source of Truth**: All development rules, coding standards, testing practices, and workflow requirements are maintained in `base.md`
+- **No Rule Duplication**: Do not reference or follow other rule files - `base.md` contains the complete and authoritative rule set
+- **Always Current**: `base.md` is the actively maintained configuration - other rule files may be outdated
+
+## What's Included in base.md
+
+- Core development principles (TDD, OOP, baby steps)
+- Code quality and coverage requirements  
+- Testing implementation rules (pytest, expects, doublex)
+- Makefile targets usage
+- Style guidelines and output formatting
+- Process requirements and mental preparation
+- Documentation standards
+
+## Compliance
+
+Before starting any development work, agents must:
+1. Read and understand all rules in `base.md`
+2. Follow the contemplation and TDD processes defined there
+3. Use the specified tools, testing frameworks, and make targets
+4. Maintain the required code quality standards
+
+**Remember**: `base.md` is the complete development rulebook for this project.
