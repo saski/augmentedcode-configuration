@@ -26,14 +26,14 @@ Cursor IDE slash commands. Copy to `.cursor/commands/` or adapt for other tools:
 
 | Command | Purpose |
 |---------|---------|
-| `fe-code-review` | Review pending changes (tests, maintainability, rules) |
-| `fe-increase-coverage` | Identify and test high-value untested code |
-| `fe-plan-untested-code` | Create actionable plan to cover untested code |
-| `fe-predict-problems` | Predict likely production failures |
-| `fe-mikado-method` | Guide safe, incremental refactoring |
-| `fe-technical-debt` | Catalog and prioritize technical debt |
-| `fe-xp-simple-design-refactor` | Apply XP Simple Design principles |
-| `fe-security-analysis` | Pragmatic security risk analysis |
+| `plt-code-review` | Review pending changes (tests, maintainability, rules) |
+| `plt-increase-coverage` | Identify and test high-value untested code |
+| `plt-plan-untested-code` | Create actionable plan to cover untested code |
+| `plt-predict-problems` | Predict likely production failures |
+| `plt-mikado-method` | Guide safe, incremental refactoring |
+| `plt-technical-debt` | Catalog and prioritize technical debt |
+| `plt-xp-simple-design-refactor` | Apply XP Simple Design principles |
+| `plt-security-analysis` | Pragmatic security risk analysis |
 
 ## Usage
 
