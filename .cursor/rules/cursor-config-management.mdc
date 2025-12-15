@@ -18,15 +18,30 @@ This repository is the single source of truth for all Cursor IDE configuration.
 
 ### When editing global config (~/.cursor/)
 After modifying files in `~/.cursor/rules/` or `~/.cursor/commands/`:
-1. Copy changed files to `~/saski/augmentedcode-configuration/.cursor/`
+1. Run `./sync-cursor-config.sh global-to-repo` from the repository directory
 2. Commit and push to GitHub
 
 ### When editing the repository
 After modifying files in `~/saski/augmentedcode-configuration/.cursor/`:
-1. Copy changed files to `~/.cursor/rules/` and `~/.cursor/commands/`
-2. Commit and push to GitHub
+1. Run `./sync-cursor-config.sh repo-to-global` from the repository directory
+2. Restart Cursor if needed
 
-### Sync Commands
+### Automated Sync Script
+
+Use the provided sync script for easy bidirectional synchronization:
+
+```bash
+# From repository directory
+cd ~/saski/augmentedcode-configuration
+./sync-cursor-config.sh [repo-to-global|global-to-repo|both]
+```
+
+**Default behavior**: Running without arguments syncs both directions.
+
+### Manual Sync Commands
+
+If you prefer manual sync:
+
 ```bash
 # Repo to Global
 cp -r ~/saski/augmentedcode-configuration/.cursor/rules/* ~/.cursor/rules/

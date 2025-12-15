@@ -107,12 +107,33 @@ npx thoughts metadata   # Get git metadata for frontmatter
 ### Global (applies to all projects)
 
 ```bash
-# Copy to global Cursor config
+# Automated sync (recommended)
+cd ~/saski/augmentedcode-configuration
+./sync-cursor-config.sh repo-to-global
+
+# Or manual copy
 cp -r .cursor/commands/* ~/.cursor/commands/
 cp -r .cursor/rules/* ~/.cursor/rules/
 
 # Restart Cursor
 ```
+
+### Configuration Sync
+
+This repository maintains bidirectional sync with your global Cursor configuration (`~/.cursor/`). Use the sync script to keep them synchronized:
+
+```bash
+cd ~/saski/augmentedcode-configuration
+
+# Sync both directions (default)
+./sync-cursor-config.sh
+
+# Or specify direction
+./sync-cursor-config.sh repo-to-global   # Repository → Global
+./sync-cursor-config.sh global-to-repo   # Global → Repository
+```
+
+See `.cursor/rules/cursor-config-management.mdc` for detailed sync workflow.
 
 ### Per-project
 
