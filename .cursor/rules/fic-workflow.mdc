@@ -1,0 +1,112 @@
+---
+description: FIC (Frequent Intentional Compaction) workflow for context management - activate during complex tasks
+globs: 
+alwaysApply: false
+---
+
+# FIC Workflow - Context Engineering
+
+Implements the Frequent Intentional Compaction workflow to maintain effective AI context.
+
+## Core Problem
+
+LLMs lose attention after ~60% context usage. After this threshold, the AI starts forgetting rules, making mistakes, and producing lower quality output.
+
+**Solution**: Structured phases with intentional context clearing and persistent knowledge storage.
+
+## The Four Phases
+
+### 1. Research Phase
+**Goal**: Understand what exists before changing anything.
+
+- Document the codebase as-is (no suggestions, no critiques)
+- Find relevant files, patterns, and historical context
+- Save findings to `thoughts/shared/research/YYYY-MM-DD-topic.md`
+- **Then clear context** before planning
+
+### 2. Plan Phase
+**Goal**: Create detailed, iterative implementation plans.
+
+- Read research documents
+- Ask clarifying questions
+- Create phased plan with success criteria
+- Iterate 5+ times on the plan
+- Save to `thoughts/shared/plans/YYYY-MM-DD-topic.md`
+- **Then clear context** before implementing
+
+### 3. Implement Phase
+**Goal**: Execute one phase at a time.
+
+- Read the complete plan
+- Implement ONE phase only
+- Run automated verification (tests, linting)
+- Wait for manual verification if needed
+- **Clear context** between phases if context grows
+
+### 4. Validate Phase
+**Goal**: Verify the entire implementation.
+
+- Compare code against plan
+- Run all automated checks
+- Identify deviations
+- Generate validation report
+
+## thoughts/ Directory Structure
+
+```
+thoughts/
+├── {username}/          # Personal notes (you write)
+│   ├── tickets/        # Ticket documentation
+│   └── notes/          # Personal notes
+├── shared/             # Team-shared (AI writes)
+│   ├── research/       # Research documents
+│   ├── plans/          # Implementation plans
+│   └── prs/            # PR descriptions
+```
+
+## Document Frontmatter
+
+All documents should include:
+```yaml
+---
+date: YYYY-MM-DD
+researcher: [name]
+topic: "[Topic]"
+tags: [research, component-names]
+status: complete|in-progress
+---
+```
+
+## Success Criteria Guidelines
+
+**Automated Verification** (always include):
+- `make test` or equivalent
+- `make lint` or equivalent
+- Type checking
+- Build passes
+
+**Manual Verification** (only when truly needed):
+- UI aesthetics requiring human judgment
+- Subjective UX evaluation
+- Screen reader testing
+
+## Context Management Rules
+
+1. **Check context frequently** - Be aware of conversation length
+2. **Clear between phases** - Start fresh after research, after planning
+3. **Save before clearing** - Always persist knowledge to thoughts/
+4. **Reference saved docs** - Read back from thoughts/ after clearing
+5. **One phase at a time** - Don't implement multiple phases without clearing
+
+## Quick Reference
+
+```
+📖 Research → Save → Clear
+📋 Plan → Save → Clear  
+⚙️ Implement (phase 1) → Verify → Clear
+⚙️ Implement (phase 2) → Verify → Clear
+...
+✅ Validate → Report
+```
+
+**Golden Rule**: Never exceed 60% context. When in doubt, save and clear.

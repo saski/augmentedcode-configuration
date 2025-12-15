@@ -1,0 +1,23 @@
+{
+  "name": "thoughts-cli",
+  "version": "1.0.0",
+  "description": "CLI for managing thoughts/ directory structure (FIC workflow)",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "thoughts": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node src/index.ts",
+    "thoughts-init": "ts-node src/init.ts",
+    "thoughts-sync": "ts-node src/sync.ts",
+    "thoughts-metadata": "ts-node src/metadata.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.0"
+  }
+}
+

@@ -7,49 +7,124 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 ```
 .
 ├── .agents/rules/
-│   └── base.md             # 📌 Single source of truth for all AI rules
+│   └── base.md                 # 📌 Single source of truth for all AI rules
 ├── .cursor/
-│   ├── commands/           # Slash commands (Cursor IDE)
-│   └── rules/              # Rule that references base.md
-├── AGENTS.md → base.md     # Symlink for OpenAI Codex
-├── CLAUDE.md → base.md     # Symlink for Claude
-└── GEMINI.md → base.md     # Symlink for Gemini
+│   ├── commands/               # Slash commands (Cursor IDE)
+│   │   ├── fic-*.md            # FIC workflow commands
+│   │   └── plt-*.md            # XP/TDD commands
+│   └── rules/                  # Cursor rules
+│       ├── base.mdc            # Core XP/TDD principles
+│       ├── fic-workflow.mdc    # FIC context management
+│       └── *.mdc               # Specialized rules
+├── src/thoughts/               # Node/TS CLI for thoughts/ management
+├── thoughts/                   # Research docs and plans (FIC workflow)
+├── AGENTS.md → base.md         # Symlink for OpenAI Codex
+├── CLAUDE.md → base.md         # Symlink for Claude
+└── GEMINI.md → base.md         # Symlink for Gemini
 ```
 
-### Key Concept
+## FIC Workflow (Context Engineering)
 
-**One ruleset, multiple entry points.** All AI agents use the same rules defined in `.agents/rules/base.md`. The symlinks (AGENTS.md, CLAUDE.md, GEMINI.md) allow each tool to find the rules in its expected location.
+Based on [stepwise-dev](https://github.com/nikeyes/stepwise-dev) and the [FIC methodology](https://nikeyes.github.io/tu-claude-md-no-funciona-sin-context-engineering-es/).
 
-## Available Commands
+**Problem**: LLMs lose attention after ~60% context usage.
 
-Cursor IDE slash commands. Copy to `.cursor/commands/` or adapt for other tools:
+**Solution**: Structured phases with intentional context clearing:
+
+```
+📖 Research → Save to thoughts/ → Clear context
+📋 Plan → Save to thoughts/ → Clear context
+⚙️ Implement (phase by phase) → Clear between phases
+✅ Validate → Report
+```
+
+### FIC Commands
 
 | Command | Purpose |
 |---------|---------|
-| `plt-code-review` | Review pending changes (tests, maintainability, rules) |
-| `plt-increase-coverage` | Identify and test high-value untested code |
-| `plt-plan-untested-code` | Create actionable plan to cover untested code |
-| `plt-predict-problems` | Predict likely production failures |
-| `plt-mikado-method` | Guide safe, incremental refactoring |
-| `plt-technical-debt` | Catalog and prioritize technical debt |
-| `plt-xp-simple-design-refactor` | Apply XP Simple Design principles |
-| `plt-security-analysis` | Pragmatic security risk analysis |
+| `/fic-research` | Document codebase comprehensively, save to thoughts/shared/research/ |
+| `/fic-create-plan` | Create detailed implementation plans iteratively |
+| `/fic-implement-plan` | Execute plans phase by phase with verification |
+| `/fic-validate-plan` | Verify implementation against plan |
 
-## Usage
+### thoughts/ Directory
 
-### For Cursor IDE
+Persistent storage for research and plans:
+
+```
+thoughts/
+├── {username}/          # Personal notes (you write)
+│   ├── tickets/
+│   └── notes/
+├── shared/              # Team-shared (AI writes)
+│   ├── research/        # Research documents
+│   ├── plans/           # Implementation plans
+│   └── prs/             # PR descriptions
+└── searchable/          # Hardlinks for fast grep
+```
+
+### thoughts CLI
+
+Node/TS CLI for managing thoughts/:
 
 ```bash
-# Copy commands and rules
+cd src/thoughts
+npm install
+npm run build
+
+# Commands
+npx thoughts init       # Initialize thoughts/ structure
+npx thoughts sync       # Sync hardlinks after adding files
+npx thoughts metadata   # Get git metadata for frontmatter
+```
+
+## XP/TDD Commands
+
+| Command | Purpose |
+|---------|---------|
+| `/code-review` | Review pending changes (tests, maintainability, rules) |
+| `/increase-coverage` | Identify and test high-value untested code |
+| `/plan-untested-code` | Create actionable plan to cover untested code |
+| `/predict-problems` | Predict likely production failures |
+| `/mikado-method` | Guide safe, incremental refactoring |
+| `/technical-debt` | Catalog and prioritize technical debt |
+| `/xp-refactor` | Apply XP Simple Design principles |
+| `/security-analysis` | Pragmatic security risk analysis |
+
+## Cursor Rules
+
+| Rule | Purpose | Activation |
+|------|---------|------------|
+| `base.mdc` | Core XP/TDD principles | Always active |
+| `fic-workflow.mdc` | FIC context management | Manual |
+| `tdd-workflow.mdc` | TDD-specific rules | Manual |
+| `refactoring.mdc` | Safe refactoring | Manual |
+| `debugging.mdc` | Systematic debugging | Manual |
+| `python-dev.mdc` | Python-specific | Auto on *.py |
+
+## Installation
+
+### Global (applies to all projects)
+
+```bash
+# Copy to global Cursor config
+cp -r .cursor/commands/* ~/.cursor/commands/
+cp -r .cursor/rules/* ~/.cursor/rules/
+
+# Restart Cursor
+```
+
+### Per-project
+
+```bash
+# Copy to your project
 cp -r .cursor /path/to/your/project/
 ```
 
 ### For Other AI Tools
 
-Copy the appropriate symlink or create one pointing to `base.md`:
-
 ```bash
-# Example: for Claude
+# Symlink for Claude Code
 ln -s .agents/rules/base.md CLAUDE.md
 ```
 
@@ -60,6 +135,13 @@ These configurations enforce:
 - **Baby Steps**: Small, incremental changes
 - **Simple Design**: Clarity over cleverness
 - **High Quality**: Strict validation before commits
+- **Context Engineering**: Manage AI context effectively
+
+## References
+
+- [Context Engineering Article](https://nikeyes.github.io/tu-claude-md-no-funciona-sin-context-engineering-es/)
+- [stepwise-dev Plugin](https://github.com/nikeyes/stepwise-dev)
+- [Ashley Ha Workflow](https://medium.com/@ashleyha/i-mastered-the-claude-code-workflow-145d25e502cf)
 
 ## License
 
