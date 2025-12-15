@@ -1,0 +1,82 @@
+---
+description: Test-Driven Development workflow rules - activate when writing tests or implementing features with TDD
+globs: 
+alwaysApply: false
+---
+
+# TDD Workflow Rules
+
+Rules for Test-Driven Development sessions.
+
+## 1. TDD Cycle
+
+Follow the Red-Green-Refactor cycle strictly:
+
+1. **RED**: Write a failing test first
+2. **GREEN**: Write minimal code to pass the test
+3. **REFACTOR**: Clean up while keeping tests green
+
+## 2. Test Process
+
+### One Test at a Time
+- Write only ONE test at a time
+- Never create more than one test per change
+- Show only one test file at a time
+- Wait for the test to pass before writing the next
+
+### Test First, Always
+- Always start with a failing test before implementing new functionality
+- Run the test to confirm it fails for the right reason
+- Only then implement the feature
+
+### Automatic Test Running
+- After every code or test change, run the relevant tests
+- Do not ask for permission to run tests - just do it
+
+## 3. Test Quality
+
+### Naming
+- Test function names should clearly describe the scenario and expected outcome
+- Use descriptive variable names that reflect their purpose
+
+### Structure
+- Keep each test focused and under 20 lines
+- Each test should be self-contained
+- Do not depend on the order of execution
+
+### Coverage
+- Ensure all code paths and edge cases are eventually covered
+- Add tests incrementally
+- Test behavior, not implementation
+
+## 4. Test Simplicity
+
+- Prefer the simplest test setup that covers the requirement
+- Refactor tests to remove duplication
+- If a test setup is repeated, extract a helper or fixture
+- Keep tests readable and easy to modify
+
+## 5. Post-Pass Review
+
+After a test passes:
+- Review for opportunities to simplify or clarify
+- Refactor test helpers and fixtures as needed
+- Keep the suite DRY and maintainable
+
+## 6. Quick Reference
+
+```
+❌ Write failing test
+   ↓
+🔴 Verify it fails (for the right reason)
+   ↓
+✅ Write minimal code to pass
+   ↓
+🟢 Verify it passes
+   ↓
+🔄 Refactor (tests stay green)
+   ↓
+🔁 Repeat
+```
+
+Remember: One test, one step, one commit.

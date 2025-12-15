@@ -1,0 +1,141 @@
+---
+description: Python-specific development rules with pytest, type hints, and best practices
+globs: *.py
+alwaysApply: false
+---
+
+# Python Development Rules
+
+Python-specific rules extending the base development principles.
+
+## 1. Testing with pytest
+
+### Framework
+- Use **pytest** as the test runner
+- Use **pytest-cov** for coverage analysis
+- Consider **expects** library for BDD-style assertions
+- Consider **doublex** for mocking application code
+
+### Test Structure
+```python
+def test_should_describe_expected_behavior():
+    # Given - setup
+    sut = SystemUnderTest()
+    
+    # When - action
+    result = sut.do_something()
+    
+    # Then - assertion
+    assert result == expected_value
+```
+
+### Mocking Strategy
+- Use `@patch` from unittest.mock ONLY for Python system modules (subprocess, sys, os, etc.)
+- Use doublex for all application code mocking
+- Clear separation: system modules = @patch, application code = doublex
+
+## 2. Type Hints
+
+### Requirements
+- All functions must have full type hints
+- All class attributes must be typed
+- Use `Optional[]` explicitly for nullable types
+- Use `TypeVar` for generic functions
+
+### Example
+```python
+from typing import Optional, List
+
+def process_items(items: List[str], limit: Optional[int] = None) -> int:
+    processed = items[:limit] if limit else items
+    return len(processed)
+```
+
+## 3. Code Style
+
+### Tools
+- **black**: Code formatting
+- **isort**: Import sorting
+- **mypy**: Static type checking
+- **ruff** or **flake8**: Linting
+
+### Guidelines
+- Max line length: 88 characters (black default)
+- Use docstrings for public APIs (Google style)
+- Prefer pathlib over os.path
+- Use dataclasses or Pydantic for data structures
+
+## 4. Project Structure
+
+### Typical Layout
+```
+project/
+├── src/
+│   └── package_name/
+│       ├── __init__.py
+│       ├── module.py
+│       └── domain/
+├── tests/
+│   ├── unit/
+│   └── integration/
+├── pyproject.toml
+└── Makefile
+```
+
+### Makefile Targets
+Prefer Makefile targets over direct tool calls:
+```bash
+make test-unit      # Run unit tests
+make check-typing   # Run mypy
+make check-format   # Check formatting
+make reformat       # Apply formatting
+make validate       # All checks
+```
+
+## 5. Error Handling
+
+### Patterns
+```python
+# Custom exceptions with context
+class DomainError(Exception):
+    def __init__(self, message: str, context: dict):
+        super().__init__(message)
+        self.context = context
+
+# Early returns over deep nesting
+def process(data: Optional[Data]) -> Result:
+    if data is None:
+        return EmptyResult()
+    
+    if not data.is_valid:
+        raise ValidationError("Invalid data", {"data": data})
+    
+    return process_valid_data(data)
+```
+
+## 6. Dependencies
+
+### Management
+- Use **pyproject.toml** for project metadata
+- Pin dependencies with **poetry.lock** or **requirements.txt**
+- Separate dev dependencies from production
+
+### Security
+- Run `pip-audit` or `safety` regularly
+- Keep dependencies updated
+- Review transitive dependencies
+
+## 7. Quick Reference
+
+```
+🐍 Python Best Practices:
+
+✅ Type hints on all functions
+✅ pytest for testing
+✅ black + isort for formatting
+✅ mypy for type checking
+✅ Makefile targets, not direct tool calls
+✅ dataclasses for data structures
+✅ pathlib over os.path
+✅ Explicit Optional[] types
+```

@@ -1,0 +1,114 @@
+---
+description: Debugging rules for systematic problem solving - activate when investigating bugs
+globs: 
+alwaysApply: false
+---
+
+# Debugging Rules
+
+Rules for systematic, hypothesis-driven debugging.
+
+## 1. Debugging Process
+
+### Step 1: Reproduce First
+- Create a reliable way to reproduce the bug
+- Document the exact steps to trigger it
+- Identify the expected vs actual behavior
+- If you can't reproduce it, you can't fix it
+
+### Step 2: Gather Information
+- Check error messages and stack traces
+- Review recent changes in the affected area
+- Look at logs and monitoring data
+- Understand the data flow
+
+### Step 3: Form Hypotheses
+Before making ANY changes:
+- List possible causes (at least 2-3)
+- Rank by likelihood
+- Design experiments to test each hypothesis
+
+### Step 4: Test Hypotheses
+- Test ONE hypothesis at a time
+- Use the simplest possible test
+- Add strategic logging if needed
+- Validate or invalidate each hypothesis
+
+### Step 5: Fix and Verify
+- Make the minimal fix
+- Write a test that would have caught the bug
+- Verify the fix doesn't break other things
+- Remove debugging code before committing
+
+## 2. Debugging Techniques
+
+### Binary Search
+For "it worked before" bugs:
+- Find a known good state (commit, config)
+- Binary search between good and bad states
+- Use git bisect when appropriate
+
+### Rubber Duck Debugging
+- Explain the problem out loud
+- Walk through the code line by line
+- Question every assumption
+
+### Strategic Logging
+- Add logs at decision points
+- Log input/output of suspect functions
+- Include context (IDs, timestamps, state)
+- Remove logs after debugging
+
+## 3. Common Bug Patterns
+
+Watch for:
+- Off-by-one errors
+- Null/undefined references
+- Race conditions
+- State mutation side effects
+- Incorrect assumptions about data
+- Edge cases not handled
+
+## 4. Error Handling
+
+### Graceful Errors
+- Always implement proper error handling
+- Provide meaningful error messages
+- Include sufficient context for diagnosis
+
+### Fail Fast
+- Design code to fail fast and clearly
+- Don't swallow exceptions silently
+- Log errors with full context
+
+## 5. Prevention
+
+After fixing:
+- Add a regression test
+- Consider if similar bugs exist elsewhere
+- Document the root cause if non-obvious
+- Share learnings with the team
+
+## 6. Quick Reference
+
+```
+🔴 Bug reported
+   ↓
+🔁 Reproduce reliably
+   ↓
+📊 Gather information
+   ↓
+🤔 Form hypotheses
+   ↓
+🧪 Test ONE at a time
+   ↓
+✏️ Minimal fix
+   ↓
+✅ Write regression test
+   ↓
+🧹 Clean up debug code
+   ↓
+📝 Document learnings
+```
+
+**Remember**: Debugging is detective work. Follow the evidence, test hypotheses, don't guess.

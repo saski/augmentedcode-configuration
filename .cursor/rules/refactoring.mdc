@@ -1,0 +1,101 @@
+---
+description: Refactoring rules using XP Simple Design and Mikado Method - activate during refactoring sessions
+globs: 
+alwaysApply: false
+---
+
+# Refactoring Rules
+
+Rules for safe, incremental refactoring using XP principles.
+
+## 1. XP Simple Design Principles
+
+All refactoring should aim for code that:
+
+1. **Passes all tests** - Never break existing functionality
+2. **Clearly expresses intent** - Code should read like prose
+3. **Contains no duplication** - DRY principle
+4. **Has the fewest elements needed** - Remove unnecessary complexity
+
+## 2. Refactoring Process
+
+### Before Starting
+- Ensure comprehensive test coverage exists
+- If tests are missing, add them FIRST
+- Never refactor and add features simultaneously
+
+### During Refactoring
+- Make tiny, reversible changes
+- Run tests after EVERY change
+- Commit frequently (each small improvement)
+- If tests break, revert immediately
+
+### Prioritize by ROI
+Consider these factors when choosing what to refactor:
+- Impact on readability and future evolution
+- Frequency of change in affected area
+- Risk and complexity reduction
+- Feasibility in small, safe steps
+
+## 3. Mikado Method for Large Refactorings
+
+For complex changes, use the Mikado Method:
+
+### Core Loop
+```
+1. Try the change
+   ↓
+2. If it breaks, note prerequisites
+   ↓
+3. Revert
+   ↓
+4. Recurse on prerequisites
+   ↓
+5. Solve leaf nodes first
+```
+
+### Rules
+- **Always revert** failed attempts - never leave codebase broken
+- **Commit leaf nodes immediately** - don't batch them
+- **Keep the graph updated** as you discover new prerequisites
+- **Small steps only** - if a node feels too big, break it down
+
+## 4. Code Smells to Address
+
+Prioritize refactoring these:
+- Long methods (> 20 lines)
+- God classes (too many responsibilities)
+- Primitive obsession
+- Duplicated logic
+- Unclear or misleading names
+- Deep nesting
+
+## 5. Refactoring Catalog
+
+Common safe refactorings:
+- Extract Method/Function
+- Rename (variable, function, class)
+- Extract Variable
+- Inline Variable
+- Move Function
+- Extract Class
+- Replace Conditional with Polymorphism
+
+## 6. Quick Reference
+
+```
+📋 Check tests exist
+   ↓
+🔍 Identify smell
+   ↓
+📐 Plan small change
+   ↓
+✏️ Make change
+   ↓
+🧪 Run tests
+   ↓
+✅ Green? Commit!
+❌ Red? Revert!
+```
+
+**Goal**: The code should be simpler and more maintainable than before.
