@@ -1,0 +1,42 @@
+---
+description: Cursor configuration management - defines canonical source and sync workflow
+globs: 
+alwaysApply: true
+---
+
+# Cursor Configuration Management
+
+## Canonical Source
+
+- **Repository**: `~/saski/augmentedcode-configuration`
+- **GitHub**: `github.com/saski/augmentedcode-configuration`
+- **Global Config**: `~/.cursor/rules/` and `~/.cursor/commands/`
+
+This repository is the single source of truth for all Cursor IDE configuration.
+
+## Bidirectional Sync Workflow
+
+### When editing global config (~/.cursor/)
+After modifying files in `~/.cursor/rules/` or `~/.cursor/commands/`:
+1. Copy changed files to `~/saski/augmentedcode-configuration/.cursor/`
+2. Commit and push to GitHub
+
+### When editing the repository
+After modifying files in `~/saski/augmentedcode-configuration/.cursor/`:
+1. Copy changed files to `~/.cursor/rules/` and `~/.cursor/commands/`
+2. Commit and push to GitHub
+
+### Sync Commands
+```bash
+# Repo to Global
+cp -r ~/saski/augmentedcode-configuration/.cursor/rules/* ~/.cursor/rules/
+cp -r ~/saski/augmentedcode-configuration/.cursor/commands/* ~/.cursor/commands/
+
+# Global to Repo
+cp -r ~/.cursor/rules/* ~/saski/augmentedcode-configuration/.cursor/rules/
+cp -r ~/.cursor/commands/* ~/saski/augmentedcode-configuration/.cursor/commands/
+```
+
+## Reminder
+
+Always keep both locations synchronized. The GitHub repository serves as backup and version control.
