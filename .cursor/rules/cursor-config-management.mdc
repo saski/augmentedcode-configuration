@@ -17,12 +17,16 @@ This repository is the single source of truth for all Cursor IDE configuration.
 ## Bidirectional Sync Workflow
 
 ### When editing global config (~/.cursor/)
+
 After modifying files in `~/.cursor/rules/` or `~/.cursor/commands/`:
+
 1. Run `./sync-cursor-config.sh global-to-repo` from the repository directory
 2. Commit and push to GitHub
 
 ### When editing the repository
+
 After modifying files in `~/saski/augmentedcode-configuration/.cursor/`:
+
 1. Run `./sync-cursor-config.sh repo-to-global` from the repository directory
 2. Restart Cursor if needed
 

@@ -4,7 +4,7 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 
 ## Repository Structure
 
-```
+```text
 .
 ├── .agents/rules/
 │   └── base.md                 # 📌 Single source of truth for all AI rules
@@ -31,7 +31,7 @@ Based on [stepwise-dev](https://github.com/nikeyes/stepwise-dev) and the [FIC me
 
 **Solution**: Structured phases with intentional context clearing:
 
-```
+```text
 📖 Research → Save to thoughts/ → Clear context
 📋 Plan → Save to thoughts/ → Clear context
 ⚙️ Implement (phase by phase) → Clear between phases
@@ -51,7 +51,7 @@ Based on [stepwise-dev](https://github.com/nikeyes/stepwise-dev) and the [FIC me
 
 Persistent storage for research and plans:
 
-```
+```text
 thoughts/
 ├── {username}/          # Personal notes (you write)
 │   ├── tickets/
@@ -152,6 +152,7 @@ ln -s .agents/rules/base.md CLAUDE.md
 ## Philosophy
 
 These configurations enforce:
+
 - **TDD**: Test-first, one failing test at a time
 - **Baby Steps**: Small, incremental changes
 - **Simple Design**: Clarity over cleverness
