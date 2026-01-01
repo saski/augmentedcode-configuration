@@ -227,4 +227,17 @@ When working on this project:
 10. **Focus on simplicity** over cleverness ✨
 11. **Ask for clarification** when in doubt 🤔
 
-Remember: This is a high-quality, test-driven, incremental development environment. Quality over speed, clarity over cleverness, baby steps over big leaps. 
+Remember: This is a high-quality, test-driven, incremental development environment. Quality over speed, clarity over cleverness, baby steps over big leaps.
+
+## 14. Antigravity Workflows
+
+When operating in Antigravity (Agentic) mode:
+
+1. **Workflows**: Use the defined workflows in `.agent/workflows/` for structured tasks.
+   - `/context-driven-development` for features.
+   - `/tdd-cycle` for coding.
+2. **Task Management**: Maintain `task.md` continuously.
+3. **Artifacts**: Use `implementation_plan.md` for design and `walkthrough.md` for verification.
+4. **Task Boundaries**: Explicitly call `task_boundary` when switching modes (Planning, Execution, Verification) or major sub-tasks.
+
+ 
