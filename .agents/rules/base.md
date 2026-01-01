@@ -78,6 +78,13 @@ This document contains all development rules and guidelines for this project, ap
 - **User-Focused README**: README.md must be user-focused, containing only information relevant to table authors and end users.
 - **Separate Dev Docs**: All developer, CI, and infrastructure documentation must be placed in a separate development guide (e.g., docs/development_guide.md), with a clear link from the README.
 - **Error Examples**: User-facing documentation should include example error messages for common validation failures to help users quickly resolve issues.
+- **README Maintenance**: When making changes to this repository that affect its structure, features, or usage, the README.md MUST be updated accordingly. This includes:
+  - Adding new Cursor rules or commands
+  - Adding new features or capabilities
+  - Changing directory structure
+  - Updating installation or configuration procedures
+  - Adding new research documents or plans to thoughts/shared/
+  - Any change that affects how users interact with or understand the repository
 
 ## 9. Development Best Practices
 

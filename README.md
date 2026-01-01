@@ -49,19 +49,21 @@ Based on [stepwise-dev](https://github.com/nikeyes/stepwise-dev) and the [FIC me
 
 ### thoughts/ Directory
 
-Persistent storage for research and plans:
+Persistent storage for research and plans (tracked in git):
 
 ```text
 thoughts/
 ├── {username}/          # Personal notes (you write)
 │   ├── tickets/
 │   └── notes/
-├── shared/              # Team-shared (AI writes)
-│   ├── research/        # Research documents
-│   ├── plans/           # Implementation plans
+├── shared/              # Team-shared (AI writes, tracked in git)
+│   ├── research/        # Research documents (e.g., auto-improvement mechanisms)
+│   ├── plans/           # Implementation plans (e.g., feedback loop activation)
 │   └── prs/             # PR descriptions
-└── searchable/          # Hardlinks for fast grep
+└── searchable/          # Hardlinks for fast grep (gitignored)
 ```
+
+Research documents and implementation plans in `thoughts/shared/` are committed to the repository to maintain project knowledge and enable collaboration.
 
 ### thoughts CLI
 
@@ -96,6 +98,7 @@ npx thoughts metadata   # Get git metadata for frontmatter
 | Rule | Purpose | Activation |
 |------|---------|------------|
 | `base.mdc` | Core XP/TDD principles | Always active |
+| `ai-feedback-learning-loop.mdc` | AI feedback and rule refinement cycle | Always active |
 | `fic-workflow.mdc` | FIC context management | Manual |
 | `tdd-workflow.mdc` | TDD-specific rules | Manual |
 | `refactoring.mdc` | Safe refactoring | Manual |
