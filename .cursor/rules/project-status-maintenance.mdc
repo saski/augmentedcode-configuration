@@ -1,0 +1,176 @@
+---
+description: Maintain PROJECT_STATUS.md file in every project repository - keep it updated on every iteration
+globs: 
+alwaysApply: true
+---
+
+# Project Status Maintenance
+
+## Core Requirement
+
+**Every active project repository MUST maintain a `PROJECT_STATUS.md` file at the root level.**
+
+This file serves as a living document that tracks the current state of the project, completed work, and next steps.
+
+## File Location
+
+- **Path**: `PROJECT_STATUS.md` (repository root)
+- **Format**: Markdown
+- **Required**: Yes, for all active development projects
+
+## Update Frequency
+
+**The PROJECT_STATUS.md file MUST be updated on every iteration** when:
+- New features are implemented
+- Bugs are fixed
+- Tests are added or updated
+- Dependencies are changed
+- Documentation is modified
+- Project structure changes
+- Any significant work is completed
+
+## File Structure Template
+
+The PROJECT_STATUS.md should include (at minimum):
+
+```markdown
+# [Project Name] - Project Status
+
+**Last Updated**: YYYY-MM-DD  
+**Overall Status**: [Status Emoji] **[Percentage]% Complete** - [Brief Status]
+
+---
+
+## Executive Summary
+
+| Component | Status | Progress | Blocking |
+|-----------|--------|----------|----------|
+| Component 1 | ✅ Complete | 100% | - |
+| Component 2 | 🟡 In Progress | 50% | - |
+| Component 3 | ⚠️ Pending | 0% | No |
+
+**Current Readiness**: [Status] - [Brief description]
+
+---
+
+## ✅ Completed Components
+
+[List of completed work with dates and details]
+
+---
+
+## 🚧 In Progress
+
+[Current work items with progress indicators]
+
+---
+
+## 📋 Next Steps
+
+[Prioritized list of next actions]
+
+1. [First priority task]
+2. [Second priority task]
+3. [Third priority task]
+
+---
+
+## 🐛 Known Issues
+
+[Any known bugs or limitations]
+
+---
+
+## 📝 Notes
+
+[Additional context, decisions, or important information]
+```
+
+## Status Indicators
+
+Use consistent status indicators:
+
+- **✅ Complete** - Work is finished and tested
+- **🟡 In Progress** - Currently being worked on
+- **⚠️ Pending** - Planned but not started
+- **🟢 Ready** - Ready for next phase
+- **🔴 Blocked** - Blocked by dependencies or issues
+- **❌ Cancelled** - Work that was planned but cancelled
+
+## Update Process
+
+When updating PROJECT_STATUS.md:
+
+1. **Update the "Last Updated" date** at the top
+2. **Refresh the overall status** percentage and brief description
+3. **Move completed items** from "In Progress" to "Completed Components"
+4. **Update progress percentages** for in-progress work
+5. **Revise "Next Steps"** based on current priorities
+6. **Add any new issues** to "Known Issues" section
+7. **Document decisions** in "Notes" if significant
+
+## AI Agent Responsibility
+
+**AI agents working on projects MUST:**
+
+1. **Check for PROJECT_STATUS.md** at the start of any work session
+2. **Create it if missing** using the template above
+3. **Update it after each significant change** or iteration
+4. **Keep it accurate and current** - outdated status files are worse than no file
+5. **Include specific details** - dates, commit references, or PR numbers when relevant
+
+## Integration with Development Workflow
+
+- **Before starting work**: Review PROJECT_STATUS.md to understand current state
+- **During work**: Update status as progress is made
+- **After completing work**: Update PROJECT_STATUS.md before committing
+- **Before committing**: Ensure PROJECT_STATUS.md reflects all changes in the commit
+
+## Example Update Pattern
+
+```markdown
+**Last Updated**: 2026-01-08  
+**Overall Status**: 🟢 **95% Complete** - Icon Loading Issue Fixed
+
+---
+
+## ✅ Completed Components
+
+### Icon Loading Fix (2026-01-08)
+- ✅ Fixed icon path resolution in manifest.json
+- ✅ Updated icon references in popup.html
+- ✅ Verified icons load correctly in all contexts
+
+---
+
+## 📋 Next Steps
+
+1. Manual testing of full extension functionality
+2. User acceptance testing
+3. Prepare for release
+```
+
+## Best Practices
+
+1. **Be Specific**: Include dates, commit hashes, or PR numbers when relevant
+2. **Be Honest**: Don't inflate progress percentages
+3. **Be Actionable**: Next steps should be clear and prioritized
+4. **Be Concise**: Keep it readable, not exhaustive
+5. **Be Current**: Update it regularly, not just at milestones
+
+## Anti-Patterns to Avoid
+
+- ❌ Creating the file but never updating it
+- ❌ Using vague status descriptions
+- ❌ Forgetting to update the "Last Updated" date
+- ❌ Leaving outdated information in the file
+- ❌ Making it too verbose or too sparse
+
+## Related Files
+
+This rule works in conjunction with:
+- Development workflow rules (TDD, baby steps, etc.)
+- Documentation standards
+- Git commit practices
+
+Remember: A well-maintained PROJECT_STATUS.md file is a sign of a well-managed project. Keep it current and useful.
