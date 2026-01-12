@@ -1,0 +1,69 @@
+---
+description: TLZ connection pattern for projects using Team Landing Zone AWS authentication via saml2aws
+globs: package.json,setup*.sh,**/saml2aws*,**/.aws/config
+---
+
+# TLZ Connection Pattern
+
+When working with projects that have TLZ (Team Landing Zone) configuration, use this pattern to connect to TLZ environments:
+
+## Connection Steps
+
+1. **Set AWS Profile**:
+   ```bash
+   export AWS_PROFILE=tlz-[TLZ_NAME]
+   ```
+
+2. **Authenticate with saml2aws**:
+   ```bash
+   saml2aws login -a tlz-[TLZ_NAME] --force
+   ```
+
+Replace `[TLZ_NAME]` with the actual TLZ name (e.g., `video-prod`, `listings-dev`, `listings-webapp-orch`).
+
+## When to Use
+
+Use this pattern when:
+- Connecting to TLZ AWS accounts for development or deployment
+- Switching between different TLZ environments
+- Re-authenticating after credentials expire
+- Working with projects that have `setup-saml.sh` or similar TLZ setup scripts
+- Projects with npm scripts containing `saml2aws` or `tlz-` patterns
+
+## Finding the TLZ Name
+
+The TLZ name can typically be found in:
+- `package.json` scripts (e.g., `login-dev`, `login-prod` with saml2aws commands)
+- `setup-saml.sh` or similar setup scripts
+- AWS profile names in `~/.aws/config` matching `tlz-*` pattern
+- saml2aws configuration files
+
+## Important Notes
+
+- The `--force` flag forces re-authentication even if credentials are cached
+- The AWS_PROFILE environment variable must be set before running AWS CLI commands
+- TLZ names typically follow patterns like: `[project]-[environment]` or `tlz-[service]-[env]`
+- After successful login, verify with: `aws sts get-caller-identity`
+
+## Example Usage
+
+```bash
+# Connect to video production TLZ
+export AWS_PROFILE=tlz-video-prod
+saml2aws login -a tlz-video-prod --force
+
+# Connect to listings development TLZ
+export AWS_PROFILE=tlz-listings-dev
+saml2aws login -a tlz-listings-dev --force
+
+# Verify connection
+aws sts get-caller-identity
+```
+
+## Detection Criteria
+
+This rule applies when a project has:
+- Setup scripts (`setup-saml.sh`, `setup-*.sh`) containing `tlz` or `saml2aws`
+- npm scripts in `package.json` with `saml2aws`, `tlz-`, or `login-*` patterns
+- AWS profiles matching `tlz-*` pattern
+- saml2aws configuration files referencing TLZ
