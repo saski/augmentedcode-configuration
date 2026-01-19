@@ -85,10 +85,9 @@ There are **no fully automated mechanisms** that track command usage, analyze pa
 **Location**: `.cursor/commands/` and `.agents/commands/`
 
 **Commands Found**:
-- FIC workflow commands: `fic-research.md`, `fic-create-plan.md`, `fic-implement-plan.md`, `fic-validate-plan.md`
-- XP/TDD commands: `code-review.md`, `increase-coverage.md`, `mikado-method.md`, `plan-untested-code.md`, `predict-problems.md`, `security-analysis.md`, `technical-debt.md`, `xp-refactor.md`
-- Bug fixing: `bug-fixing-agent.md`
-- Platform-specific variants: `plt-*.md` versions
+- FIC workflow commands (fic-* prefix): `fic-research.md`, `fic-create-plan.md`, `fic-implement-plan.md`, `fic-validate-plan.md`
+- XP/TDD commands (xp-* prefix): `xp-code-review.md`, `xp-increase-coverage.md`, `xp-mikado-method.md`, `xp-plan-untested-code.md`, `xp-predict-problems.md`, `xp-security-analysis.md`, `xp-technical-debt.md`, `xp-simple-design-refactor.md`, `xp-refactor.md`
+- Eventbrite-specific commands (eb-* prefix): `eb-bug-fixing-agent.md`, `eb-code-review.md`, `eb-increase-coverage.md`, `eb-mikado-method.md`, `eb-plan-untested-code.md`, `eb-predict-problems.md`, `eb-security-analysis.md`, `eb-technical-debt.md`
 
 **No Auto-Improvement Mechanisms**:
 - ❌ No usage tracking scripts

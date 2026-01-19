@@ -11,7 +11,8 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 ├── .cursor/
 │   ├── commands/               # Slash commands (Cursor IDE)
 │   │   ├── fic-*.md            # FIC workflow commands
-│   │   └── plt-*.md            # XP/TDD commands
+│   │   ├── xp-*.md             # XP/TDD commands
+│   │   └── eb-*.md             # Eventbrite-specific commands
 │   └── rules/                  # Cursor rules
 │       ├── base.mdc            # Core XP/TDD principles
 │       ├── fic-workflow.mdc    # FIC context management
@@ -82,16 +83,34 @@ npx thoughts metadata   # Get git metadata for frontmatter
 
 ## XP/TDD Commands
 
+XP/TDD commands use the `xp-` prefix. Eventbrite-specific variants use the `eb-` prefix.
+
 | Command | Purpose |
 |---------|---------|
-| `/code-review` | Review pending changes (tests, maintainability, rules) |
-| `/increase-coverage` | Identify and test high-value untested code |
-| `/plan-untested-code` | Create actionable plan to cover untested code |
-| `/predict-problems` | Predict likely production failures |
-| `/mikado-method` | Guide safe, incremental refactoring |
-| `/technical-debt` | Catalog and prioritize technical debt |
+| `/xp-code-review` | Review pending changes (tests, maintainability, rules) |
+| `/xp-increase-coverage` | Identify and test high-value untested code |
+| `/xp-plan-untested-code` | Create actionable plan to cover untested code |
+| `/xp-predict-problems` | Predict likely production failures |
+| `/xp-mikado-method` | Guide safe, incremental refactoring |
+| `/xp-technical-debt` | Catalog and prioritize technical debt |
 | `/xp-refactor` | Apply XP Simple Design principles |
-| `/security-analysis` | Pragmatic security risk analysis |
+| `/xp-simple-design-refactor` | Maintainability & Simple Design refactoring |
+| `/xp-security-analysis` | Pragmatic security risk analysis |
+
+## Eventbrite-Specific Commands
+
+Eventbrite-specific commands use the `eb-` prefix to distinguish them from generic XP/TDD commands.
+
+| Command | Purpose |
+|---------|---------|
+| `/eb-code-review` | Eventbrite-specific code review variant |
+| `/eb-increase-coverage` | Eventbrite-specific coverage analysis |
+| `/eb-plan-untested-code` | Eventbrite-specific untested code planning |
+| `/eb-predict-problems` | Eventbrite-specific problem prediction |
+| `/eb-mikado-method` | Eventbrite-specific Mikado method variant |
+| `/eb-technical-debt` | Eventbrite-specific technical debt catalog |
+| `/eb-security-analysis` | Eventbrite-specific security analysis |
+| `/eb-bug-fixing-agent` | Eventbrite bug fixing expert with OWASP, threat modeling, cloud security |
 
 ## Cursor Rules
 
