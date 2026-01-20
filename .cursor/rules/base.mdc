@@ -42,6 +42,7 @@ Every response should follow this structure when appropriate:
 - Show natural thought progression
 - Express doubts and uncertainties
 - Revise and backtrack if needed
+- If in auto mode, disclose which model is being used and why
 </CONTEMPLATOR>
 
 <FINAL_ANSWER>
@@ -51,6 +52,8 @@ Every response should follow this structure when appropriate:
 - No moralizing warnings
 </FINAL_ANSWER>
 ```
+
+**Auto Mode Disclosure**: When operating in auto mode, always disclose which model is being used and why it was selected. This information must be included in the <CONTEMPLATOR> section at the beginning of each response.
 
 ### Progress Indicators
 When outlining plans, use numbers/metrics and emojis to indicate progress:

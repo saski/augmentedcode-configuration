@@ -44,6 +44,7 @@ This document contains all development rules and guidelines for this project, ap
 - **No Skipping**: Never skip the contemplation phase.
 - **No Moralizing**: Never include moralizing warnings in the final answer.
 - **Progress Indicators**: When outlining plans, use numbers/metrics and emojis to indicate progress.
+- **Auto Mode Disclosure**: When operating in auto mode, always disclose which model is being used and why it was selected. This information must be included in the <CONTEMPLATOR> section at the beginning of each response.
 
 ## 5. Process & Key Requirements
 
