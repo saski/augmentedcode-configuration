@@ -1,0 +1,29 @@
+---
+description: React-specific development rules and best practices - activates for React projects
+globs: *.tsx,*.ts,*.jsx,*.js
+alwaysApply: false
+---
+
+# React Development Rules
+
+React-specific rules extending the base development principles.
+
+All AI agents working on React-based projects must follow the comprehensive React development rules and best practices defined in:
+
+**📋 [.agents/rules/react-best-practices.md](.agents/rules/react-best-practices.md)**
+
+## Key Directive
+
+- **React Projects**: This rule automatically activates when working on projects containing React/TypeScript files (`.tsx`, `.ts`, `.jsx`, `.js`)
+- **Extends Base Rules**: React rules extend the core development principles in `base.md`
+- **Always Current**: The `.agents/rules/react-best-practices.md` file contains the complete React-specific rule set
+
+## Compliance
+
+When working on React projects, agents must:
+1. Read and understand all rules in `.agents/rules/react-best-practices.md`
+2. Follow React-specific best practices alongside base development rules
+3. Apply React patterns and conventions as specified
+4. Maintain React code quality standards
+
+**Remember**: React rules complement the base development rules and provide React-specific guidance.
