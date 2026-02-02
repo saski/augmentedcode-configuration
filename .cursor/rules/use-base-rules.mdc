@@ -12,7 +12,7 @@ All AI agents working on this project must follow the comprehensive development 
 
 ## Key Directive
 
-- **Single Source of Truth**: All development rules, coding standards, testing practices, and workflow requirements are maintained in `base.md`
+- **Single Source of Truth**: All development rules, coding standards, testing practices, and workflow requirements are maintained in `base.md`. For the full development rulebook use base.md; other .mdc files in .cursor/rules provide Cursor-specific or situational rules (sync, project status, feedback loop, workflows).
 - **No Rule Duplication**: Do not reference or follow other rule files - `base.md` contains the complete and authoritative rule set
 - **Always Current**: `base.md` is the actively maintained configuration - other rule files may be outdated
 

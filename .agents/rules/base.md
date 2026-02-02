@@ -86,6 +86,7 @@ This document contains all development rules and guidelines for this project, ap
   - Updating installation or configuration procedures
   - Adding new research documents or plans to thoughts/shared/
   - Any change that affects how users interact with or understand the repository
+- **Rules Maintenance**: Keep the rules updated with every learning for each of the interactions, after  satisfactory completing every task. Follow the guidelines on ./ai-feedback-learning-loop.md
 
 ## 9. Development Best Practices
 
