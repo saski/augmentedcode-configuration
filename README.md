@@ -6,23 +6,37 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 
 ```text
 .
-├── .agents/rules/
-│   └── base.md                 # 📌 Single source of truth for all AI rules
+├── .agent/
+│   └── workflows/              # Context-driven development, TDD cycle
+├── .agents/
+│   ├── rules/                  # Canonical agent rules (shared across tools)
+│   │   ├── base.md
+│   │   ├── ai-feedback-learning-loop.md
+│   │   └── react-best-practices.md
+│   └── commands/               # Slash commands (synced to .cursor/commands by sync script)
+│       ├── fic-*.md
+│       ├── xp-*.md
+│       └── eb-bug-fixing-agent.md
 ├── .cursor/
-│   ├── commands/               # Slash commands (Cursor IDE)
-│   │   ├── fic-*.md            # FIC workflow commands
-│   │   ├── xp-*.md             # XP/TDD commands
-│   │   └── eb-*.md             # Eventbrite-specific commands
-│   └── rules/                  # Cursor rules
-│       ├── base.mdc            # Core XP/TDD principles
-│       ├── fic-workflow.mdc    # FIC context management
-│       └── *.mdc               # Specialized rules
+│   └── rules/                  # Cursor rules (.mdc); reference .agents/rules where applicable
+│       ├── use-base-rules.mdc
+│       ├── ai-feedback-learning-loop.mdc
+│       ├── cursor-config-management.mdc
+│       ├── project-status-maintenance.mdc
+│       ├── fic-workflow.mdc
+│       ├── tdd-workflow.mdc
+│       ├── refactoring.mdc
+│       ├── debugging.mdc
+│       ├── python-dev.mdc
+│       ├── react-best-practices.mdc
+│       └── tlz-connection.mdc
 ├── src/thoughts/               # Node/TS CLI for thoughts/ management
-├── thoughts/                   # Research docs and plans (FIC workflow)
-├── AGENTS.md → base.md         # Symlink for OpenAI Codex
-├── CLAUDE.md → base.md         # Symlink for Claude
-└── GEMINI.md → base.md         # Symlink for Gemini
+├── thoughts/                   # Research and plans (see thoughts/ tree below)
+├── sync-cursor-config.sh       # Sync .agents/commands ↔ .cursor/commands ↔ ~/.cursor/
+└── (optional) AGENTS.md / CLAUDE.md / GEMINI.md → .agents/rules/base.md
 ```
+
+Note: `.cursor/commands/` is created and populated from `.agents/commands/` when you run `./sync-cursor-config.sh`.
 
 ## FIC Workflow (Context Engineering)
 
@@ -50,18 +64,18 @@ Based on [stepwise-dev](https://github.com/nikeyes/stepwise-dev) and the [FIC me
 
 ### thoughts/ Directory
 
-Persistent storage for research and plans (tracked in git):
+Persistent storage for research and plans (tracked in git). The repo contains `thoughts/shared/research/` and `thoughts/shared/plans/`. Run `npx thoughts init` to create the full structure:
 
 ```text
 thoughts/
-├── {username}/          # Personal notes (you write)
+├── {username}/           # Personal notes (you write); created by init
 │   ├── tickets/
 │   └── notes/
-├── shared/              # Team-shared (AI writes, tracked in git)
-│   ├── research/        # Research documents (e.g., auto-improvement mechanisms)
-│   ├── plans/           # Implementation plans (e.g., feedback loop activation)
-│   └── prs/             # PR descriptions
-└── searchable/          # Hardlinks for fast grep (gitignored)
+├── shared/               # Team-shared (AI writes, tracked in git)
+│   ├── research/         # Research documents
+│   ├── plans/            # Implementation plans
+│   └── prs/              # PR descriptions; created by init
+└── searchable/           # Hardlinks for grep; created by init (gitignored)
 ```
 
 Research documents and implementation plans in `thoughts/shared/` are committed to the repository to maintain project knowledge and enable collaboration.
@@ -99,41 +113,40 @@ XP/TDD commands use the `xp-` prefix. Eventbrite-specific variants use the `eb-`
 
 ## Eventbrite-Specific Commands
 
-Eventbrite-specific commands use the `eb-` prefix to distinguish them from generic XP/TDD commands.
+Eventbrite-specific commands use the `eb-` prefix.
 
 | Command | Purpose |
 |---------|---------|
-| `/eb-code-review` | Eventbrite-specific code review variant |
-| `/eb-increase-coverage` | Eventbrite-specific coverage analysis |
-| `/eb-plan-untested-code` | Eventbrite-specific untested code planning |
-| `/eb-predict-problems` | Eventbrite-specific problem prediction |
-| `/eb-mikado-method` | Eventbrite-specific Mikado method variant |
-| `/eb-technical-debt` | Eventbrite-specific technical debt catalog |
-| `/eb-security-analysis` | Eventbrite-specific security analysis |
 | `/eb-bug-fixing-agent` | Eventbrite bug fixing expert with OWASP, threat modeling, cloud security |
 
 ## Cursor Rules
 
+Development rules live in `.agents/rules/` (canonical). Cursor rules in `.cursor/rules/` point to them or add Cursor-specific behavior.
+
 | Rule | Purpose | Activation |
 |------|---------|------------|
-| `base.mdc` | Core XP/TDD principles | Always active |
-| `ai-feedback-learning-loop.mdc` | AI feedback and rule refinement cycle | Always active |
+| `use-base-rules.mdc` | Use `.agents/rules/base.md` as development rulebook | Always active |
+| `ai-feedback-learning-loop.mdc` | Points to `.agents/rules/ai-feedback-learning-loop.md` | Always active |
+| `cursor-config-management.mdc` | Repo ↔ global sync workflow | Always active |
+| `project-status-maintenance.mdc` | PROJECT_STATUS.md maintenance | Always active |
 | `fic-workflow.mdc` | FIC context management | Manual |
 | `tdd-workflow.mdc` | TDD-specific rules | Manual |
 | `refactoring.mdc` | Safe refactoring | Manual |
 | `debugging.mdc` | Systematic debugging | Manual |
 | `python-dev.mdc` | Python-specific | Auto on *.py |
+| `react-best-practices.mdc` | React/TS rules (points to .agents/rules) | Auto on *.tsx, *.ts, *.jsx, *.js |
+| `tlz-connection.mdc` | TLZ/aws/setup context | Globs (package.json, setup*.sh, etc.) |
 
 ## Installation
 
 ### Global (applies to all projects)
 
 ```bash
-# Automated sync (recommended)
+# Automated sync (recommended) — syncs .agents/commands ↔ .cursor/commands, then .cursor/* ↔ ~/.cursor/
 cd ~/saski/augmentedcode-configuration
 ./sync-cursor-config.sh repo-to-global
 
-# Or manual copy
+# Or manual copy (ensure .cursor/commands exists; run sync once to create it from .agents/commands)
 cp -r .cursor/commands/* ~/.cursor/commands/
 cp -r .cursor/rules/* ~/.cursor/rules/
 
@@ -166,9 +179,15 @@ cp -r .cursor /path/to/your/project/
 
 ### For Other AI Tools
 
+Canonical rules are in `.agents/rules/base.md`. To use them in Claude Code, Codex, or Gemini, create a symlink in your project root:
+
 ```bash
 # Symlink for Claude Code
 ln -s .agents/rules/base.md CLAUDE.md
+
+# Optional: for Codex or Gemini
+ln -s .agents/rules/base.md AGENTS.md
+ln -s .agents/rules/base.md GEMINI.md
 ```
 
 ## Philosophy
