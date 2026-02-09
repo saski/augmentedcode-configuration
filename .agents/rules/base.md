@@ -153,6 +153,7 @@ This document contains all development rules and guidelines for this project, ap
 - **Incremental Coverage**: Ensure all code paths and edge cases are eventually covered by tests, but add them incrementally.
 
 ### Test Review & Refactoring
+- **Boy-scout rule**: Before adding new functionality, assess the quality of the existing code. If changes would result in patching fragile code, surface the issue and suggest a refactor instead.
 - **Post-Pass Review**: After a test passes, review for opportunities to simplify or clarify.
 - **Helper Refactoring**: Refactor test helpers and fixtures as needed to keep the suite DRY and maintainable.
 

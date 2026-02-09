@@ -33,5 +33,6 @@ Before starting any development work, agents must:
 2. Follow the contemplation and TDD processes defined there
 3. Use the specified tools, testing frameworks, and make targets
 4. Maintain the required code quality standards
+5. Claim the model being used and a brief reasoning
 
 **Remember**: `base.md` is the complete development rulebook for this project.
