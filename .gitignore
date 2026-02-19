@@ -1,4 +1,6 @@
 .cursorindexingignore
 .specstory/
 thoughts/saski/
+.DS_Store
+.vscode/
 

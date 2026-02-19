@@ -18,18 +18,21 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │       ├── xp-*.md
 │       └── eb-bug-fixing-agent.md
 ├── .cursor/
-│   └── rules/                  # Cursor rules (.mdc); reference .agents/rules where applicable
-│       ├── use-base-rules.mdc
-│       ├── ai-feedback-learning-loop.mdc
-│       ├── cursor-config-management.mdc
-│       ├── project-status-maintenance.mdc
-│       ├── fic-workflow.mdc
-│       ├── tdd-workflow.mdc
-│       ├── refactoring.mdc
-│       ├── debugging.mdc
-│       ├── python-dev.mdc
-│       ├── react-best-practices.mdc
-│       └── tlz-connection.mdc
+│   ├── rules/                  # Cursor rules (.mdc); reference .agents/rules where applicable
+│   │   ├── use-base-rules.mdc
+│   │   ├── ai-feedback-learning-loop.mdc
+│   │   ├── cursor-config-management.mdc
+│   │   ├── project-status-maintenance.mdc
+│   │   ├── fic-workflow.mdc
+│   │   ├── tdd-workflow.mdc
+│   │   ├── refactoring.mdc
+│   │   ├── debugging.mdc
+│   │   ├── python-dev.mdc
+│   │   ├── react-best-practices.mdc
+│   │   └── tlz-connection.mdc
+│   └── skills/                 # Reusable project skills
+│       ├── test-doubles-first/
+│       └── cwv-improvement-planner/
 ├── src/thoughts/               # Node/TS CLI for thoughts/ management
 ├── thoughts/                   # Research and plans (see thoughts/ tree below)
 ├── sync-cursor-config.sh       # Sync .agents/commands ↔ .cursor/commands ↔ ~/.cursor/
@@ -107,7 +110,6 @@ XP/TDD commands use the `xp-` prefix. Eventbrite-specific variants use the `eb-`
 | `/xp-predict-problems` | Predict likely production failures |
 | `/xp-mikado-method` | Guide safe, incremental refactoring |
 | `/xp-technical-debt` | Catalog and prioritize technical debt |
-| `/xp-refactor` | Apply XP Simple Design principles |
 | `/xp-simple-design-refactor` | Maintainability & Simple Design refactoring |
 | `/xp-security-analysis` | Pragmatic security risk analysis |
 
@@ -118,6 +120,15 @@ Eventbrite-specific commands use the `eb-` prefix.
 | Command | Purpose |
 |---------|---------|
 | `/eb-bug-fixing-agent` | Eventbrite bug fixing expert with OWASP, threat modeling, cloud security |
+
+## Cursor Skills
+
+Reusable project-level skills live in `.cursor/skills/` and can be applied contextually when user prompts match their descriptions.
+
+| Skill | Purpose |
+|-------|---------|
+| `test-doubles-first` | Choose the lightest effective test double, preferring fake/stub/spy before mock. |
+| `cwv-improvement-planner` | Create prioritized Core Web Vitals plans for LCP/INP/TTFB, including edge caching/compression and safe experimentation. |
 
 ## Cursor Rules
 
