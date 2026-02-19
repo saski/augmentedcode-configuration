@@ -1,7 +1,7 @@
 # Augmentedcode Configuration - Project Status
 
 **Last Updated**: 2026-02-19
-**Overall Status**: 🟢 **100% Complete** - Test doubles skill finalized with navigation index
+**Overall Status**: 🟢 **100% Complete** - Test doubles examples aligned to Jest JS/TS tooling
 
 ---
 
@@ -31,6 +31,7 @@
 - Added `quick.md` single-page fast reference for test-double decisions and review.
 - Reduced overlap between `usage.md` and `quick.md` to keep quick reference concise and detailed templates centralized.
 - Added `SKILL.md` quick navigation section for faster in-file discovery.
+- Reworked `examples.md` to Jest-first JavaScript/TypeScript patterns (fake, stub, spy, contract-focused mock).
 
 ---
 

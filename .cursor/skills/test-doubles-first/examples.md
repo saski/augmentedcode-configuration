@@ -1,58 +1,8 @@
 # Examples
 
-## Python (pytest style)
+## Jest (JavaScript / TypeScript)
 
-### Fake (Python)
-
-```python
-class FakeOrderRepo:
-    def __init__(self) -> None:
-        self._store: dict[str, Order] = {}
-
-    def add(self, order: Order) -> None:
-        self._store[order.id] = order
-
-    def get(self, order_id: str) -> Order | None:
-        return self._store.get(order_id)
-```
-
-### Stub (Python)
-
-```python
-class StubPaymentGateway:
-    def __init__(self, should_succeed: bool = True) -> None:
-        self.should_succeed = should_succeed
-
-    def charge(self, order_id: str, amount_cents: int) -> str:
-        if not self.should_succeed:
-            raise RuntimeError("payment failed")
-        return f"pay_{order_id}"
-```
-
-### Spy (Python)
-
-```python
-class SpyEmailService:
-    def __init__(self) -> None:
-        self.sent: list[dict[str, str]] = []
-
-    def send_receipt(self, to: str, order_id: str, payment_id: str) -> None:
-        self.sent.append({"to": to, "order_id": order_id, "payment_id": payment_id})
-```
-
-### Mock (Python, contract-focused only)
-
-```python
-from unittest.mock import Mock
-
-emails = Mock()
-# ...
-emails.send_receipt.assert_not_called()
-```
-
-## TypeScript (Jest style)
-
-### Fake (TypeScript)
+### Fake (in-memory repository)
 
 ```ts
 export class FakeOrderRepo {
@@ -68,37 +18,60 @@ export class FakeOrderRepo {
 }
 ```
 
-### Stub (TypeScript)
-
 ```ts
-export class StubPaymentGateway {
-  constructor(private readonly shouldSucceed = true) {}
+it("stores and retrieves order state", async () => {
+  const repo = new FakeOrderRepo();
+  const order = { id: "o-1", totalCents: 2500 };
 
-  charge(orderId: string, amountCents: number): string {
-    if (!this.shouldSucceed) {
-      throw new Error("payment failed");
-    }
-    return `pay_${orderId}`;
-  }
-}
+  repo.add(order);
+
+  expect(repo.get("o-1")).toEqual(order);
+});
 ```
 
-### Spy (TypeScript)
+### Stub (scenario-driven gateway)
 
 ```ts
-export class SpyEmailService {
-  public sent: Array<{ to: string; orderId: string; paymentId: string }> = [];
+const paymentGateway = {
+  charge: jest.fn<Promise<string>, [string, number]>(),
+};
 
-  sendReceipt(to: string, orderId: string, paymentId: string): void {
-    this.sent.push({ to, orderId, paymentId });
-  }
-}
+paymentGateway.charge.mockResolvedValue("pay_o-1");
+paymentGateway.charge.mockRejectedValue(new Error("payment failed"));
 ```
 
-### Mock (TypeScript, contract-focused only)
+### Spy (outbound effect observation)
 
 ```ts
-const emails = { sendReceipt: jest.fn() };
+const emailService = {
+  sendReceipt: (to: string, orderId: string, paymentId: string) => undefined,
+};
+
+const sendReceiptSpy = jest.spyOn(emailService, "sendReceipt");
+// ... run use case
+expect(sendReceiptSpy).toHaveBeenCalledTimes(1);
+expect(sendReceiptSpy).toHaveBeenCalledWith("user@acme.com", "o-1", "pay_o-1");
+```
+
+### Mock (contract-focused only)
+
+```ts
+const queueClient = {
+  publish: jest.fn<Promise<void>, [string, { orderId: string }]>(),
+};
+
+queueClient.publish.mockResolvedValue(undefined);
 // ...
-expect(emails.sendReceipt).not.toHaveBeenCalled();
+expect(queueClient.publish).not.toHaveBeenCalled();
+```
+
+### JS version (no TypeScript types)
+
+```js
+const paymentGateway = { charge: jest.fn() };
+paymentGateway.charge.mockResolvedValue("pay_o-1");
+
+const emailService = { sendReceipt: jest.fn() };
+// ... run use case
+expect(emailService.sendReceipt).toHaveBeenCalledTimes(1);
 ```
