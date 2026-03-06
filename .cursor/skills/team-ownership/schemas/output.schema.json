@@ -1,0 +1,244 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://eventbrite.local/skills/team-ownership-determination/output.schema.json",
+  "title": "TeamOwnershipOutput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "decision",
+    "classification",
+    "evidence",
+    "candidates",
+    "actions"
+  ],
+  "properties": {
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "owner_team",
+        "owner_pillar",
+        "owner_theme",
+        "confidence",
+        "reasoning_summary"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "owner_determined",
+            "needs_confirmation",
+            "incident_path",
+            "unowned"
+          ]
+        },
+        "owner_team": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "owner_pillar": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "owner_theme": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "reasoning_summary": {
+          "type": "string"
+        }
+      }
+    },
+    "classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "issue_type",
+        "incident_gate_triggered",
+        "incident_gate_reason"
+      ],
+      "properties": {
+        "issue_type": {
+          "type": "string",
+          "enum": [
+            "bug",
+            "incident",
+            "request",
+            "unknown"
+          ]
+        },
+        "incident_gate_triggered": {
+          "type": "boolean"
+        },
+        "incident_gate_reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_type",
+          "source_ref",
+          "matched_on",
+          "matched_value",
+          "weight"
+        ],
+        "properties": {
+          "source_type": {
+            "type": "string",
+            "enum": [
+              "features_db",
+              "services_db",
+              "apiv3_db",
+              "teams_db",
+              "runbook",
+              "jira_history",
+              "other"
+            ]
+          },
+          "source_ref": {
+            "type": "string"
+          },
+          "matched_on": {
+            "type": "string",
+            "enum": [
+              "feature",
+              "service",
+              "endpoint",
+              "team",
+              "keyword",
+              "component"
+            ]
+          },
+          "matched_value": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        }
+      }
+    },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "team",
+          "score",
+          "why"
+        ],
+        "properties": {
+          "team": {
+            "type": "string"
+          },
+          "score": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "why": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "actions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "routing_recommendation",
+        "ambiguity_resolution",
+        "map_update_needed"
+      ],
+      "properties": {
+        "routing_recommendation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "project",
+            "team_field",
+            "component"
+          ],
+          "properties": {
+            "project": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "team_field": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "component": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "ambiguity_resolution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "required",
+            "channel",
+            "message_template"
+          ],
+          "properties": {
+            "required": {
+              "type": "boolean"
+            },
+            "channel": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "#help-service-catalog",
+                "#eng",
+                "#feature-mapping",
+                null
+              ]
+            },
+            "message_template": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "map_update_needed": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

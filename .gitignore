@@ -4,3 +4,9 @@ thoughts/saski/
 .DS_Store
 .vscode/
 
+# Skill artifacts
+.cursor/skills/**/.venv/
+.cursor/skills/**/__pycache__/
+.cursor/skills/**/*.pyc
+.cursor/skills-cursor/**/.venv/
+

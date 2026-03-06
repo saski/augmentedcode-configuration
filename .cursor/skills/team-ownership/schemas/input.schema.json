@@ -1,0 +1,186 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://eventbrite.local/skills/team-ownership-determination/input.schema.json",
+  "title": "TeamOwnershipInput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "issue",
+    "execution",
+    "context"
+  ],
+  "properties": {
+    "issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "source",
+        "summary",
+        "description",
+        "reporter",
+        "links",
+        "artifacts"
+      ],
+      "properties": {
+        "id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "jira",
+            "slack",
+            "email",
+            "zendesk",
+            "other"
+          ]
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string"
+        },
+        "reporter": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "artifacts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "endpoint_paths",
+            "service_names",
+            "feature_terms",
+            "error_signals",
+            "environment"
+          ],
+          "properties": {
+            "endpoint_paths": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "service_names": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "feature_terms": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "error_signals": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "environment": {
+              "type": "string",
+              "enum": [
+                "prod",
+                "stage",
+                "qa",
+                "unknown"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "allow_incident_gate",
+        "max_candidates"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "determine_owner",
+            "determine_owner_and_route"
+          ]
+        },
+        "allow_incident_gate": {
+          "type": "boolean"
+        },
+        "max_candidates": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "domain_hint",
+        "known_team",
+        "channels"
+      ],
+      "properties": {
+        "domain_hint": {
+          "type": "string",
+          "enum": [
+            "listings",
+            "payments",
+            "core",
+            "unknown"
+          ]
+        },
+        "known_team": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "channels": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "help_service_catalog",
+            "eng",
+            "feature_mapping",
+            "critical_incidents"
+          ],
+          "properties": {
+            "help_service_catalog": {
+              "type": "string"
+            },
+            "eng": {
+              "type": "string"
+            },
+            "feature_mapping": {
+              "type": "string"
+            },
+            "critical_incidents": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

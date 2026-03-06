@@ -1,0 +1,36 @@
+{
+  "decision": {
+    "status": "unowned",
+    "owner_team": null,
+    "owner_pillar": null,
+    "owner_theme": null,
+    "confidence": 0.2,
+    "reasoning_summary": "Insufficient endpoint/service/feature evidence to identify a reliable owner."
+  },
+  "classification": {
+    "issue_type": "unknown",
+    "incident_gate_triggered": false,
+    "incident_gate_reason": null
+  },
+  "evidence": [],
+  "candidates": [
+    {
+      "team": "Unknown",
+      "score": 0.2,
+      "why": "Only weak generic keyword evidence."
+    }
+  ],
+  "actions": {
+    "routing_recommendation": {
+      "project": null,
+      "team_field": null,
+      "component": null
+    },
+    "ambiguity_resolution": {
+      "required": true,
+      "channel": "#eng",
+      "message_template": "Hypothesis: this belongs to Unknown because evidence is currently insufficient. Could you confirm/correct ownership? If incorrect, what is the right owner so we can update the ownership map?"
+    },
+    "map_update_needed": true
+  }
+}
