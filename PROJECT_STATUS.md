@@ -1,7 +1,24 @@
 # Augmentedcode Configuration - Project Status
 
-**Last Updated**: 2026-02-19
-**Overall Status**: 🟢 **100% Complete** - Test doubles examples aligned to Jest JS/TS tooling
+**Last Updated**: 2026-03-06
+**Overall Status**: 🟢 **100% Complete** - Config deduplication via symlinks
+
+---
+
+## Recent Changes
+
+### 2026-03-06: Config Deduplication via Symlinks ✅
+
+Completed migration from copy-based sync to symlink-based configuration:
+
+- **Eliminated**: ~50 duplicated files across `~/.cursor/`
+- **Consolidated**: All skills moved to repository (team-ownership, skills-cursor)
+- **Symlinked**: `~/.cursor/`, `~/.claude/`, and root configs now point to repo
+- **Repurposed**: `sync-cursor-config.sh` → `setup-symlinks.sh`
+
+**Impact**: Single source of truth established. All config edits in any tool propagate to repo automatically.
+
+**Files**: See implementation plan at `thoughts/shared/plans/2026-03-06-config-deduplication-symlinks.md`
 
 ---
 

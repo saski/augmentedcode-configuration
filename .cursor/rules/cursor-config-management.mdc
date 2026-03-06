@@ -1,6 +1,6 @@
 ---
-description: Cursor configuration management - defines canonical source and sync workflow
-globs: 
+description: Cursor configuration management - defines canonical source and symlink workflow
+globs:
 alwaysApply: true
 ---
 
@@ -10,52 +10,31 @@ alwaysApply: true
 
 - **Repository**: `~/saski/augmentedcode-configuration`
 - **GitHub**: `github.com/saski/augmentedcode-configuration`
-- **Global Config**: `~/.cursor/rules/` and `~/.cursor/commands/`
+- **Global Config**: `~/.cursor/rules/` and `~/.cursor/commands/` (symlinks to repo)
 
-This repository is the single source of truth for all Cursor IDE configuration.
+This repository is the single source of truth for all Cursor IDE configuration. Global config is symlinked to the repo.
 
-## Bidirectional Sync Workflow
+## Symlink Workflow
 
-### When editing global config (~/.cursor/)
+The repository uses symlinks for configuration. Use `setup-symlinks.sh` for:
 
-After modifying files in `~/.cursor/rules/` or `~/.cursor/commands/`:
+1. **Initial setup**: `./setup-symlinks.sh setup`
+2. **Validation**: `./setup-symlinks.sh validate`
+3. **Commit changes**: `./setup-symlinks.sh commit`
 
-1. Run `./sync-cursor-config.sh global-to-repo` from the repository directory
-2. Commit and push to GitHub
-
-### When editing the repository
-
-After modifying files in `~/saski/augmentedcode-configuration/.cursor/`:
-
-1. Run `./sync-cursor-config.sh repo-to-global` from the repository directory
-2. Restart Cursor if needed
-
-### Automated Sync Script
-
-Use the provided sync script for easy bidirectional synchronization:
+### Setup on New Machine
 
 ```bash
-# From repository directory
 cd ~/saski/augmentedcode-configuration
-./sync-cursor-config.sh [repo-to-global|global-to-repo|both]
+./setup-symlinks.sh setup
 ```
 
-**Default behavior**: Running without arguments syncs both directions.
-
-### Manual Sync Commands
-
-If you prefer manual sync:
+### Verify Symlinks
 
 ```bash
-# Repo to Global
-cp -r ~/saski/augmentedcode-configuration/.cursor/rules/* ~/.cursor/rules/
-cp -r ~/saski/augmentedcode-configuration/.cursor/commands/* ~/.cursor/commands/
-
-# Global to Repo
-cp -r ~/.cursor/rules/* ~/saski/augmentedcode-configuration/.cursor/rules/
-cp -r ~/.cursor/commands/* ~/saski/augmentedcode-configuration/.cursor/commands/
+./setup-symlinks.sh validate
 ```
 
 ## Reminder
 
-Always keep both locations synchronized. The GitHub repository serves as backup and version control.
+Edits in Cursor (to rules, commands, skills) modify the repo files directly. Commit with `./setup-symlinks.sh commit` or standard git workflow.

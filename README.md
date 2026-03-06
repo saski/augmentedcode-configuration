@@ -35,11 +35,58 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │       └── cwv-improvement-planner/
 ├── src/thoughts/               # Node/TS CLI for thoughts/ management
 ├── thoughts/                   # Research and plans (see thoughts/ tree below)
-├── sync-cursor-config.sh       # Sync .agents/commands ↔ .cursor/commands ↔ ~/.cursor/
+├── setup-symlinks.sh           # Setup/validate symlinks; commit config changes
 └── (optional) AGENTS.md / CLAUDE.md / GEMINI.md → .agents/rules/base.md
 ```
 
-Note: `.cursor/commands/` is created and populated from `.agents/commands/` when you run `./sync-cursor-config.sh`.
+## Configuration Management
+
+### Architecture
+
+This repository is the **single source of truth** for AI tool configuration. Configuration is shared via symlinks:
+
+**Symlink structure:**
+```text
+~/.cursor/rules     → ~/saski/augmentedcode-configuration/.cursor/rules/
+~/.cursor/commands  → ~/saski/augmentedcode-configuration/.cursor/commands/
+~/.cursor/skills    → ~/saski/augmentedcode-configuration/.cursor/skills/
+~/.cursor/.agents   → ~/saski/augmentedcode-configuration/.agents/
+~/.claude/          → ~/saski/augmentedcode-configuration/.claude/
+~/CLAUDE.md         → ~/saski/augmentedcode-configuration/CLAUDE.md
+~/AGENTS.md         → ~/saski/augmentedcode-configuration/AGENTS.md
+~/GEMINI.md         → ~/saski/augmentedcode-configuration/GEMINI.md
+```
+
+### Setup on New Machine
+
+```bash
+cd ~/saski/augmentedcode-configuration
+./setup-symlinks.sh setup
+```
+
+### Verifying Configuration
+
+```bash
+# Validate all symlinks are correct
+./setup-symlinks.sh validate
+
+# Check for uncommitted changes
+./setup-symlinks.sh status
+```
+
+### Making Changes
+
+All configuration edits (in Cursor, VS Code, or any editor) automatically modify the repository files. Commit changes with:
+
+```bash
+./setup-symlinks.sh commit
+```
+
+### Troubleshooting
+
+**Symlinks broken**: Run `./setup-symlinks.sh setup` to recreate  
+**Config not loading**: Run `./setup-symlinks.sh validate` to diagnose  
+**Restore backup**: See `~/.cursor-backups/` for timestamped backups
 
 ## FIC Workflow (Context Engineering)
 
@@ -138,7 +185,7 @@ Development rules live in `.agents/rules/` (canonical). Cursor rules in `.cursor
 |------|---------|------------|
 | `use-base-rules.mdc` | Use `.agents/rules/base.md` as development rulebook | Always active |
 | `ai-feedback-learning-loop.mdc` | Points to `.agents/rules/ai-feedback-learning-loop.md` | Always active |
-| `cursor-config-management.mdc` | Repo ↔ global sync workflow | Always active |
+| `cursor-config-management.mdc` | Symlink setup and config workflow | Always active |
 | `project-status-maintenance.mdc` | PROJECT_STATUS.md maintenance | Always active |
 | `fic-workflow.mdc` | FIC context management | Manual |
 | `tdd-workflow.mdc` | TDD-specific rules | Manual |
@@ -153,33 +200,13 @@ Development rules live in `.agents/rules/` (canonical). Cursor rules in `.cursor
 ### Global (applies to all projects)
 
 ```bash
-# Automated sync (recommended) — syncs .agents/commands ↔ .cursor/commands, then .cursor/* ↔ ~/.cursor/
 cd ~/saski/augmentedcode-configuration
-./sync-cursor-config.sh repo-to-global
-
-# Or manual copy (ensure .cursor/commands exists; run sync once to create it from .agents/commands)
-cp -r .cursor/commands/* ~/.cursor/commands/
-cp -r .cursor/rules/* ~/.cursor/rules/
+./setup-symlinks.sh setup
 
 # Restart Cursor
 ```
 
-### Configuration Sync
-
-This repository maintains bidirectional sync with your global Cursor configuration (`~/.cursor/`). Use the sync script to keep them synchronized:
-
-```bash
-cd ~/saski/augmentedcode-configuration
-
-# Sync both directions (default)
-./sync-cursor-config.sh
-
-# Or specify direction
-./sync-cursor-config.sh repo-to-global   # Repository → Global
-./sync-cursor-config.sh global-to-repo   # Global → Repository
-```
-
-See `.cursor/rules/cursor-config-management.mdc` for detailed sync workflow.
+See **Configuration Management** above and `.cursor/rules/cursor-config-management.mdc` for symlink workflow.
 
 ### Per-project
 
