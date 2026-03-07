@@ -6,10 +6,10 @@ set -e
 
 REPO_DIR="$HOME/saski/augmentedcode-configuration"
 
-# Dev/AI tools under ~ that get a "skills" symlink to repo .agents/skills.
-# Cursor is handled in the .cursor block; all others use this list.
+# Dev/AI tools under ~ that get a direct "$HOME/$tool/skills" symlink.
+# Cursor and Codex are handled separately due tool-specific directory layouts.
 # Add or remove dot-dir names to cover any dev tool config (e.g. .copilot, .kiro).
-TOOLS_WITH_SKILLS=".codex .antigravity .claude .gemini .langflow"
+TOOLS_WITH_SKILLS=".antigravity .claude .gemini .langflow"
 
 usage() {
     cat << EOF
@@ -56,25 +56,30 @@ setup_symlinks() {
 
     # Create .cursor symlinks (skills → canonical .agents/skills)
     mkdir -p ~/.cursor
-    ln -sf "$REPO_DIR/.cursor/rules" ~/.cursor/rules
-    ln -sf "$REPO_DIR/.cursor/commands" ~/.cursor/commands
-    ln -sf "$REPO_DIR/.agents/skills" ~/.cursor/skills
-    ln -sf "$REPO_DIR/.cursor/skills-cursor" ~/.cursor/skills-cursor
-    ln -sf "$REPO_DIR/.agents" ~/.cursor/.agents
+    ln -sfn "$REPO_DIR/.cursor/rules" ~/.cursor/rules
+    ln -sfn "$REPO_DIR/.cursor/commands" ~/.cursor/commands
+    ln -sfn "$REPO_DIR/.agents/skills" ~/.cursor/skills
+    ln -sfn "$REPO_DIR/.cursor/skills-cursor" ~/.cursor/skills-cursor
+    ln -sfn "$REPO_DIR/.agents" ~/.cursor/.agents
+
+    # Codex keeps local system skills under ~/.codex/skills/.system.
+    # Link ~/.codex/skills/skills to canonical shared skills.
+    mkdir -p "$HOME/.codex/skills"
+    ln -sfn "$REPO_DIR/.agents/skills" "$HOME/.codex/skills/skills"
 
     # Other dev/AI tools: point skills at canonical .agents/skills
     for tool in $TOOLS_WITH_SKILLS; do
         mkdir -p "$HOME/$tool"
-        ln -sf "$REPO_DIR/.agents/skills" "$HOME/$tool/skills"
+        ln -sfn "$REPO_DIR/.agents/skills" "$HOME/$tool/skills"
     done
 
     # Create .claude symlink
-    ln -sf "$REPO_DIR/.claude" ~/.claude
+    ln -sfn "$REPO_DIR/.claude" ~/.claude
 
     # Create root-level config symlinks
-    ln -sf "$REPO_DIR/CLAUDE.md" ~/CLAUDE.md
-    ln -sf "$REPO_DIR/AGENTS.md" ~/AGENTS.md
-    ln -sf "$REPO_DIR/GEMINI.md" ~/GEMINI.md
+    ln -sfn "$REPO_DIR/CLAUDE.md" ~/CLAUDE.md
+    ln -sfn "$REPO_DIR/AGENTS.md" ~/AGENTS.md
+    ln -sfn "$REPO_DIR/GEMINI.md" ~/GEMINI.md
 
     echo "✅ Symlinks created"
 }
@@ -105,6 +110,25 @@ validate_symlinks() {
             fi
         fi
     done
+
+    # Check Codex skills symlink (nested path due ~/.codex/skills/.system)
+    local codex_path="$HOME/.codex/skills/skills"
+    if [ ! -L "$codex_path" ]; then
+        echo "❌ $codex_path is not a symlink"
+        errors=$((errors + 1))
+    elif [ ! -e "$codex_path" ]; then
+        echo "❌ $codex_path is a broken symlink"
+        errors=$((errors + 1))
+    else
+        local codex_target
+        codex_target=$(readlink "$codex_path")
+        if [[ "$codex_target" != *".agents/skills" ]]; then
+            echo "❌ $codex_path should point to .agents/skills, got: $codex_target"
+            errors=$((errors + 1))
+        else
+            echo "✓ $codex_path → .agents/skills"
+        fi
+    fi
 
     # Check skills symlinks for other dev tools (must point to repo .agents/skills)
     for tool in $TOOLS_WITH_SKILLS; do
