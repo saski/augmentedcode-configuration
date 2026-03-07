@@ -155,6 +155,8 @@ npx thoughts metadata   # Get git metadata for frontmatter
 
 XP behaviors are provided as **trigger-based skills** under `.agents/skills/`. They are applied when the user's request matches the skill description (e.g. "technical debt", "code review", "Mikado Method"). All tools (Cursor, Codex, Antigravity, etc.) resolve skills from repo `.agents/skills/` via symlinks (e.g. `~/.cursor/skills` → repo `.agents/skills/`).
 
+**Skills sources**: `.agents/skills/` contains **native skills** (tracked in this repo, e.g. `xp-*`, `test-doubles-first`, `cwv-improvement-planner`, `team-ownership`) and **skill-factory skills** (symlinked from the [skill-factory](https://github.com/saski/skill-factory) repo after running `./pull-and-sync-skills.sh`). AI agents should consider all skills in this directory and read the matching skill's `SKILL.md` when the user's request matches a skill description.
+
 | Skill | Purpose |
 |-------|---------|
 | `xp-code-review` | Review pending changes (tests, maintainability, project rules) |
@@ -184,6 +186,22 @@ Reusable project-level skills live in **`.agents/skills/`** and are exposed to C
 | `cwv-improvement-planner` | Create prioritized Core Web Vitals plans for LCP/INP/TTFB, including edge caching/compression and safe experimentation. |
 | `team-ownership` | Determine owning team for reported issues using ownership sources and confidence-based routing. |
 
+### Syncing skills from skill-factory
+
+Skills from the [skill-factory](https://github.com/saski/skill-factory) repo can be made available here without duplication by symlinking them into `.agents/skills/`. Run the sync script after pulling skill-factory (or on first setup).
+
+**Recommended one-liner**: `./pull-and-sync-skills.sh` — pulls skill-factory then runs sync; respects `SKILL_FACTORY`. For a preview without creating symlinks: `./pull-and-sync-skills.sh --dry-run`.
+
+```bash
+# From augmentedcode-configuration repo root (skill-factory as sibling: ../skill-factory)
+./sync-skill-factory.sh
+```
+
+- **What it does**: Creates relative symlinks in `.agents/skills/` for each skill in `skill-factory/output_skills/` that does not already exist. Native skills (e.g. `xp-*`, `test-doubles-first`) are never overwritten.
+- **When to run**: After `git pull` in skill-factory, or when you add new skills there. Re-running is safe (adds only new skills).
+- **Layout**: Clone skill-factory as a sibling of this repo (e.g. `saski/skill-factory` and `saski/augmentedcode-configuration`). Override with `SKILL_FACTORY=/path/to/skill-factory ./sync-skill-factory.sh`.
+- **Dry run**: `./sync-skill-factory.sh --dry-run` lists what would be linked without creating symlinks.
+
 ## Cursor Rules
 
 Development rules live in `.agents/rules/` (canonical). Cursor rules in `.cursor/rules/` point to them or add Cursor-specific behavior.
@@ -209,6 +227,9 @@ Development rules live in `.agents/rules/` (canonical). Cursor rules in `.cursor
 ```bash
 cd ~/saski/augmentedcode-configuration
 ./setup-symlinks.sh setup
+
+# Optional: pull skill-factory + sync skills into .agents/skills (no duplication)
+# ./pull-and-sync-skills.sh
 
 # Restart Cursor
 ```
