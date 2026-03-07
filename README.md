@@ -64,6 +64,7 @@ This repository is the **single source of truth** for AI tool configuration. Con
 ~/.codex/skills/skills → ~/saski/augmentedcode-configuration/.agents/skills/ (Codex keeps system skills in ~/.codex/skills/.system)
 ~/.antigravity/skills → ~/saski/augmentedcode-configuration/.agents/skills/ (if using Antigravity)
 ~/.claude/          → ~/saski/augmentedcode-configuration/.claude/
+~/.gemini/antigravity/mcp_config.json → ~/saski/augmentedcode-configuration/.gemini/mcp_config.json
 ~/CLAUDE.md         → ~/saski/augmentedcode-configuration/CLAUDE.md
 ~/AGENTS.md         → ~/saski/augmentedcode-configuration/AGENTS.md
 ~/GEMINI.md         → ~/saski/augmentedcode-configuration/GEMINI.md

@@ -41,6 +41,11 @@ check_environment() {
         echo "❌ .cursor directory not found in repo"
         exit 1
     fi
+
+    if [ ! -f "$REPO_DIR/.gemini/mcp_config.json" ]; then
+        echo "❌ .gemini/mcp_config.json not found in repo"
+        exit 1
+    fi
 }
 
 # Create all symlinks
@@ -72,6 +77,10 @@ setup_symlinks() {
         mkdir -p "$HOME/$tool"
         ln -sfn "$REPO_DIR/.agents/skills" "$HOME/$tool/skills"
     done
+
+    # Gemini: keep MCP config canonical in this repository.
+    mkdir -p "$HOME/.gemini/antigravity"
+    ln -sfn "$REPO_DIR/.gemini/mcp_config.json" "$HOME/.gemini/antigravity/mcp_config.json"
 
     # Home-level .agents should always resolve to canonical repo .agents
     # so there is no divergent local skill source.
@@ -166,6 +175,25 @@ validate_symlinks() {
         errors=$((errors + 1))
     else
         echo "✓ ~/.claude → $(readlink ~/.claude)"
+    fi
+
+    # Check Gemini MCP config symlink
+    local gemini_mcp_path="$HOME/.gemini/antigravity/mcp_config.json"
+    if [ ! -L "$gemini_mcp_path" ]; then
+        echo "❌ $gemini_mcp_path is not a symlink"
+        errors=$((errors + 1))
+    elif [ ! -e "$gemini_mcp_path" ]; then
+        echo "❌ $gemini_mcp_path is a broken symlink"
+        errors=$((errors + 1))
+    else
+        local gemini_mcp_target
+        gemini_mcp_target=$(readlink "$gemini_mcp_path")
+        if [[ "$gemini_mcp_target" != *".gemini/mcp_config.json" ]]; then
+            echo "❌ $gemini_mcp_path should point to repo .gemini/mcp_config.json, got: $gemini_mcp_target"
+            errors=$((errors + 1))
+        else
+            echo "✓ $gemini_mcp_path → $gemini_mcp_target"
+        fi
     fi
 
     # Check ~/.agents canonical link
