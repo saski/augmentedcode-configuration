@@ -139,6 +139,27 @@ Based on [stepwise-dev](https://github.com/nikeyes/stepwise-dev) and the [FIC me
 | `/fic-implement-plan` | Execute plans phase by phase with verification |
 | `/fic-validate-plan` | Verify implementation against plan |
 
+### FIC Skills (Cross-Tool)
+
+FIC workflows are also available as trigger-based skills in `.agents/skills/`:
+
+| Skill | Purpose |
+|-------|---------|
+| `fic-research` | Research current implementation and document findings only |
+| `fic-create-plan` | Build a phased implementation plan from research/task context |
+| `fic-implement-plan` | Execute approved plans phase by phase with verification |
+| `fic-validate-plan` | Validate implementation completeness against a plan |
+
+### Tool Evaluation: Commands vs Skills
+
+| Tool | `fic-*` Commands | `fic-*` Skills | Recommendation |
+|------|-------------------|----------------|----------------|
+| Codex | No native slash-command flow from this repo | Yes (via `~/.codex/skills/skills` symlink) | Use skills as primary FIC interface |
+| Cursor | Yes (`.agents/commands` exposed as commands) | Yes (`~/.cursor/skills`) | Keep both: commands for explicit invocation, skills for natural-language trigger |
+| Claude | Commands available through `.claude/commands` | Yes (`~/.claude/skills`) | Keep both; prefer skills for portability |
+| Gemini | Commands are not standardized in this repo setup | Yes (`~/.gemini/skills`) | Use skills |
+| Antigravity/Langflow | Commands not standardized here | Yes (`~/.antigravity/skills`, `~/.langflow/skills`) | Use skills |
+
 ### thoughts/ Directory
 
 Persistent storage for research and plans (tracked in git). The repo contains `thoughts/shared/research/` and `thoughts/shared/plans/`. Run `npx thoughts init` to create the full structure:
