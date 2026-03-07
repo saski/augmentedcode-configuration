@@ -7,20 +7,21 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 ```text
 .
 ├── .agent/
-│   └── workflows/              # Context-driven development, TDD cycle
+│   └── workflows/              # Antigravity workflows (context-driven-development, tdd-cycle)
 ├── .agents/
 │   ├── rules/                  # Canonical agent rules (shared across tools)
 │   │   ├── base.md
 │   │   ├── ai-feedback-learning-loop.md
 │   │   └── react-best-practices.md
-│   ├── skills/                 # Shared skills (XP + others); symlinked by all tools
-│   │   ├── xp-*/
+│   ├── skills/                 # Canonical skills (native + skill-factory symlinks)
+│   │   ├── xp-*/               # Native: xp-code-review, xp-increase-coverage, xp-mikado-method, etc.
 │   │   ├── test-doubles-first/
 │   │   ├── cwv-improvement-planner/
-│   │   └── team-ownership/
-│   └── commands/               # Slash commands (FIC, EB; synced to .cursor/commands)
+│   │   ├── team-ownership/
+│   │   └── (symlinks)          # From skill-factory: tdd, refactoring, approval-tests, etc.
+│   └── commands/               # Slash commands (FIC, EB); .cursor/commands → here
 │       ├── fic-*.md
-│       └── eb-bug-fixing-agent.md
+│       └── eb-*.md
 ├── .cursor/
 │   ├── rules/                  # Cursor rules (.mdc); reference .agents/rules where applicable
 │   │   ├── use-base-rules.mdc
@@ -34,10 +35,16 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │   │   ├── python-dev.mdc
 │   │   ├── react-best-practices.mdc
 │   │   └── tlz-connection.mdc
-│   └── skills/                 # Symlink → repo .agents/skills/
+│   ├── commands/               # Symlink → .agents/commands/
+│   ├── skills/                 # Symlink → .agents/skills/
+│   └── skills-cursor/          # Cursor-only skills (create-skill, create-rule, update-cursor-settings, etc.)
 ├── src/thoughts/               # Node/TS CLI for thoughts/ management
 ├── thoughts/                   # Research and plans (see thoughts/ tree below)
-├── setup-symlinks.sh           # Setup/validate symlinks; commit config changes
+├── docs/                       # Pre-symlink structure, validation notes
+├── setup-symlinks.sh           # Setup / validate / commit symlinks (home ↔ repo)
+├── sync-skill-factory.sh       # Symlink skill-factory output_skills into .agents/skills/
+├── pull-and-sync-skills.sh     # Pull skill-factory + run sync (recommended one-liner)
+├── backup-cursor-config.sh     # Backup Cursor config before changes
 └── (optional) AGENTS.md / CLAUDE.md / GEMINI.md → .agents/rules/base.md
 ```
 
