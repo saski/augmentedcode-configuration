@@ -1,0 +1,9 @@
+model = "gpt-5.3-codex"
+model_reasoning_effort = "xhigh"
+personality = "pragmatic"
+
+[projects."/Users/ignacio.viejo/eventbrite/core"]
+trust_level = "trusted"
+
+[projects."/Users/ignacio.viejo/eventbrite/listings-webapp"]
+trust_level = "trusted"

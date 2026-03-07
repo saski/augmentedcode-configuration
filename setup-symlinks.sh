@@ -42,8 +42,28 @@ check_environment() {
         exit 1
     fi
 
+    if [ ! -f "$REPO_DIR/.cursor/mcp.json" ]; then
+        echo "❌ .cursor/mcp.json not found in repo"
+        exit 1
+    fi
+
+    if [ ! -f "$REPO_DIR/.cursor/cli-config.json" ]; then
+        echo "❌ .cursor/cli-config.json not found in repo"
+        exit 1
+    fi
+
+    if [ ! -f "$REPO_DIR/.codex/config.toml" ]; then
+        echo "❌ .codex/config.toml not found in repo"
+        exit 1
+    fi
+
     if [ ! -f "$REPO_DIR/.gemini/mcp_config.json" ]; then
         echo "❌ .gemini/mcp_config.json not found in repo"
+        exit 1
+    fi
+
+    if [ ! -f "$REPO_DIR/.gemini/GEMINI.md" ]; then
+        echo "❌ .gemini/GEMINI.md not found in repo"
         exit 1
     fi
 }
@@ -66,11 +86,14 @@ setup_symlinks() {
     ln -sfn "$REPO_DIR/.agents/skills" ~/.cursor/skills
     ln -sfn "$REPO_DIR/.cursor/skills-cursor" ~/.cursor/skills-cursor
     ln -sfn "$REPO_DIR/.agents" ~/.cursor/.agents
+    ln -sfn "$REPO_DIR/.cursor/mcp.json" ~/.cursor/mcp.json
+    ln -sfn "$REPO_DIR/.cursor/cli-config.json" ~/.cursor/cli-config.json
 
     # Codex keeps local system skills under ~/.codex/skills/.system.
     # Link ~/.codex/skills/skills to canonical shared skills.
     mkdir -p "$HOME/.codex/skills"
     ln -sfn "$REPO_DIR/.agents/skills" "$HOME/.codex/skills/skills"
+    ln -sfn "$REPO_DIR/.codex/config.toml" "$HOME/.codex/config.toml"
 
     # Other dev/AI tools: point skills at canonical .agents/skills
     for tool in $TOOLS_WITH_SKILLS; do
@@ -81,6 +104,7 @@ setup_symlinks() {
     # Gemini: keep MCP config canonical in this repository.
     mkdir -p "$HOME/.gemini/antigravity"
     ln -sfn "$REPO_DIR/.gemini/mcp_config.json" "$HOME/.gemini/antigravity/mcp_config.json"
+    ln -sfn "$REPO_DIR/.gemini/GEMINI.md" "$HOME/.gemini/GEMINI.md"
 
     # Home-level .agents should always resolve to canonical repo .agents
     # so there is no divergent local skill source.
@@ -129,6 +153,27 @@ validate_symlinks() {
         fi
     done
 
+    # Check Cursor managed config files
+    for file in mcp.json cli-config.json; do
+        local path="$HOME/.cursor/$file"
+        if [ ! -L "$path" ]; then
+            echo "❌ $path is not a symlink"
+            errors=$((errors + 1))
+        elif [ ! -e "$path" ]; then
+            echo "❌ $path is a broken symlink"
+            errors=$((errors + 1))
+        else
+            local target
+            target=$(readlink "$path")
+            if [[ "$target" != *".cursor/$file" ]]; then
+                echo "❌ $path should point to repo .cursor/$file, got: $target"
+                errors=$((errors + 1))
+            else
+                echo "✓ $path → $target"
+            fi
+        fi
+    done
+
     # Check Codex skills symlink (nested path due ~/.codex/skills/.system)
     local codex_path="$HOME/.codex/skills/skills"
     if [ ! -L "$codex_path" ]; then
@@ -145,6 +190,25 @@ validate_symlinks() {
             errors=$((errors + 1))
         else
             echo "✓ $codex_path → .agents/skills"
+        fi
+    fi
+
+    # Check Codex managed config file
+    local codex_config_path="$HOME/.codex/config.toml"
+    if [ ! -L "$codex_config_path" ]; then
+        echo "❌ $codex_config_path is not a symlink"
+        errors=$((errors + 1))
+    elif [ ! -e "$codex_config_path" ]; then
+        echo "❌ $codex_config_path is a broken symlink"
+        errors=$((errors + 1))
+    else
+        local codex_config_target
+        codex_config_target=$(readlink "$codex_config_path")
+        if [[ "$codex_config_target" != *".codex/config.toml" ]]; then
+            echo "❌ $codex_config_path should point to repo .codex/config.toml, got: $codex_config_target"
+            errors=$((errors + 1))
+        else
+            echo "✓ $codex_config_path → $codex_config_target"
         fi
     fi
 
@@ -196,6 +260,25 @@ validate_symlinks() {
         fi
     fi
 
+    # Check Gemini instructions symlink
+    local gemini_rules_path="$HOME/.gemini/GEMINI.md"
+    if [ ! -L "$gemini_rules_path" ]; then
+        echo "❌ $gemini_rules_path is not a symlink"
+        errors=$((errors + 1))
+    elif [ ! -e "$gemini_rules_path" ]; then
+        echo "❌ $gemini_rules_path is a broken symlink"
+        errors=$((errors + 1))
+    else
+        local gemini_rules_target
+        gemini_rules_target=$(readlink "$gemini_rules_path")
+        if [[ "$gemini_rules_target" != *".gemini/GEMINI.md" ]]; then
+            echo "❌ $gemini_rules_path should point to repo .gemini/GEMINI.md, got: $gemini_rules_target"
+            errors=$((errors + 1))
+        else
+            echo "✓ $gemini_rules_path → $gemini_rules_target"
+        fi
+    fi
+
     # Check ~/.agents canonical link
     if [ ! -L "$HOME/.agents" ]; then
         echo "❌ ~/.agents is not a symlink"
@@ -240,20 +323,20 @@ validate_symlinks() {
 show_status() {
     echo "📊 Configuration changes:"
     cd "$REPO_DIR"
-    git status --short .cursor/ .agents/ *.md 2>/dev/null || true
+    git status --short .cursor/ .codex/ .gemini/ .agents/ *.md 2>/dev/null || true
 }
 
 # Commit and push changes
 commit_changes() {
     cd "$REPO_DIR"
 
-    if git diff --quiet .cursor/ .agents/ *.md 2>/dev/null; then
+    if git diff --quiet .cursor/ .codex/ .gemini/ .agents/ *.md 2>/dev/null; then
         echo "ℹ️  No config changes to commit"
         exit 0
     fi
 
     echo "📝 Changes to commit:"
-    git status --short .cursor/ .agents/ *.md
+    git status --short .cursor/ .codex/ .gemini/ .agents/ *.md
     echo ""
 
     read -p "Commit message: " -r message
@@ -263,7 +346,7 @@ commit_changes() {
         exit 1
     fi
 
-    git add .cursor/ .agents/ *.md
+    git add .cursor/ .codex/ .gemini/ .agents/ *.md
     git commit -m "$message"
 
     read -p "Push to remote? (y/n): " -n 1 -r
