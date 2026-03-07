@@ -1,0 +1,70 @@
+{
+  "decision": {
+    "status": "owner_determined",
+    "owner_team": "Listings",
+    "owner_pillar": "Core Product",
+    "owner_theme": "Discovery",
+    "confidence": 0.9,
+    "reasoning_summary": "Endpoint and service evidence align with Listings ownership."
+  },
+  "classification": {
+    "issue_type": "bug",
+    "incident_gate_triggered": false,
+    "incident_gate_reason": null
+  },
+  "evidence": [
+    {
+      "source_type": "apiv3_db",
+      "source_ref": "https://eventbrite.atlassian.net/wiki/spaces/PLAT/database/17319100531",
+      "matched_on": "endpoint",
+      "matched_value": "/v3/events/{id}/urgency_signals/",
+      "weight": 0.45
+    },
+    {
+      "source_type": "services_db",
+      "source_ref": "https://eventbrite.atlassian.net/wiki/spaces/PLAT/database/17319362720",
+      "matched_on": "service",
+      "matched_value": "urgency-signals-service",
+      "weight": 0.35
+    },
+    {
+      "source_type": "features_db",
+      "source_ref": "https://eventbrite.atlassian.net/wiki/spaces/PLAT/database/17302356081",
+      "matched_on": "feature",
+      "matched_value": "urgency signals",
+      "weight": 0.3
+    },
+    {
+      "source_type": "teams_db",
+      "source_ref": "https://eventbrite.atlassian.net/wiki/spaces/PLAT/database/17305108532",
+      "matched_on": "team",
+      "matched_value": "Listings",
+      "weight": 0.1
+    }
+  ],
+  "candidates": [
+    {
+      "team": "Listings",
+      "score": 0.9,
+      "why": "Endpoint + service + feature alignment with listings domain context."
+    },
+    {
+      "team": "Core Platform",
+      "score": 0.3,
+      "why": "Weak feature overlap only."
+    }
+  ],
+  "actions": {
+    "routing_recommendation": {
+      "project": "EB",
+      "team_field": "Listings",
+      "component": "Listings Web"
+    },
+    "ambiguity_resolution": {
+      "required": false,
+      "channel": null,
+      "message_template": null
+    },
+    "map_update_needed": false
+  }
+}

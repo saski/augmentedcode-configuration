@@ -11,6 +11,7 @@ alwaysApply: true
 - **Repository**: `~/saski/augmentedcode-configuration`
 - **GitHub**: `github.com/saski/augmentedcode-configuration`
 - **Global Config**: `~/.cursor/rules/` and `~/.cursor/commands/` (symlinks to repo)
+- **Shared Skills**: `.agents/skills/` — canonical skill root; exposed to Cursor (and Codex, Antigravity, etc.) via symlinks (e.g. `~/.cursor/skills` → repo `.agents/skills/`)
 
 This repository is the single source of truth for all Cursor IDE configuration. Global config is symlinked to the repo.
 

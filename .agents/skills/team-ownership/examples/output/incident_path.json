@@ -1,0 +1,38 @@
+{
+  "decision": {
+    "status": "incident_path",
+    "owner_team": null,
+    "owner_pillar": null,
+    "owner_theme": null,
+    "confidence": 1.0,
+    "reasoning_summary": "Issue indicates a severe site-wide outage and must follow incident response path."
+  },
+  "classification": {
+    "issue_type": "incident",
+    "incident_gate_triggered": true,
+    "incident_gate_reason": "Site-wide purchase failures with severe customer impact."
+  },
+  "evidence": [
+    {
+      "source_type": "runbook",
+      "source_ref": "https://eventbrite.atlassian.net/wiki/spaces/SRE/pages/12330959334/Reporting+a+site+issue",
+      "matched_on": "keyword",
+      "matched_value": "site-wide outage",
+      "weight": 1.0
+    }
+  ],
+  "candidates": [],
+  "actions": {
+    "routing_recommendation": {
+      "project": null,
+      "team_field": null,
+      "component": null
+    },
+    "ambiguity_resolution": {
+      "required": false,
+      "channel": null,
+      "message_template": null
+    },
+    "map_update_needed": false
+  }
+}

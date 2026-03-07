@@ -1,3 +1,8 @@
+---
+name: xp-simple-design-refactor
+description: Refactor toward simple design and maintainability with ROI-driven prioritization. Use when the user asks to refactor, improve simple design, maintainability, or reduce accidental complexity.
+---
+
 ## Senior XP Developer — Maintainability & Simple Design Refactoring
 
 Act as a **Senior XP Developer** applying **XP Simple Design principles**:
@@ -30,4 +35,3 @@ Act as a **Senior XP Developer** applying **XP Simple Design principles**:
    - The next small improvement step
 
 **The final result must be simpler and more maintainable than before.**
-

@@ -88,7 +88,13 @@ This document contains all development rules and guidelines for this project, ap
   - Any change that affects how users interact with or understand the repository
 - **Rules Maintenance**: Keep the rules updated with every learning for each of the interactions, after  satisfactory completing every task. Follow the guidelines on ./ai-feedback-learning-loop.md
 
-## 9. Development Best Practices
+## 9. Skills (Canonical Location and Use)
+
+- **Canonical location**: Shared skills live in **`.agents/skills/`** in this repository (one directory per skill, each with at least `SKILL.md`). Tools (Cursor, Codex, Antigravity, etc.) expose them via symlinks (e.g. `~/.cursor/skills` → repo `.agents/skills/`).
+- **Trigger-based use**: When the user's request matches a skill's description (e.g. "technical debt analysis", "code review", "Mikado Method"), read that skill's `SKILL.md` at the path provided by the tool and follow its instructions.
+- **Skill format**: Each skill has frontmatter `name` and `description`; the description states when to use it. No `disable-model-invocation: true` for trigger-based skills.
+
+## 10. Development Best Practices
 
 ### Error Handling & Debugging
 - **Graceful Error Handling**: Always implement proper error handling with meaningful error messages.
@@ -114,7 +120,7 @@ This document contains all development rules and guidelines for this project, ap
 - **E2E Tests**: Full system validation (minimal, critical user paths only).
 - **Test Pyramid**: Follow the test pyramid - many unit tests, some integration tests, few E2E tests.
 
-## 10. Test-Driven Development Rules
+## 11. Test-Driven Development Rules
 
 ### TDD Approach
 - **Failing Test First**: Always start with a failing test before implementing new functionality.
@@ -165,7 +171,7 @@ For detailed usage and best practices, see the following guides in `docs/testing
 
 These guides are the canonical resources for writing and maintaining tests in this project.
 
-## 11. Makefile Targets Usage
+## 12. Makefile Targets Usage
 
 ### Core Rule
 **NEVER** call tools like `pytest`, `black`, `mypy`, or similar directly. Always use the corresponding `make` target.
@@ -204,7 +210,7 @@ make test-unit
 pytest tests/unit
 ```
 
-## 12. Pre-Commit Validation (MANDATORY)
+## 13. Pre-Commit Validation (MANDATORY)
 
 Before ANY commit:
 1. Run `make validate`
@@ -214,7 +220,7 @@ Before ANY commit:
 ❌ **NEVER**: Commit → discover errors → fix commit
 ✅ **ALWAYS**: Validate → fix all errors → commit once
 
-## 13. Quick Reference for All AI Agents
+## 14. Quick Reference for All AI Agents
 
 When working on this project:
 
@@ -232,7 +238,7 @@ When working on this project:
 
 Remember: This is a high-quality, test-driven, incremental development environment. Quality over speed, clarity over cleverness, baby steps over big leaps.
 
-## 14. Antigravity Workflows
+## 15. Antigravity Workflows
 
 When operating in Antigravity (Agentic) mode:
 

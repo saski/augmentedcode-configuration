@@ -13,9 +13,13 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │   │   ├── base.md
 │   │   ├── ai-feedback-learning-loop.md
 │   │   └── react-best-practices.md
-│   └── commands/               # Slash commands (synced to .cursor/commands by sync script)
+│   ├── skills/                 # Shared skills (XP + others); symlinked by all tools
+│   │   ├── xp-*/
+│   │   ├── test-doubles-first/
+│   │   ├── cwv-improvement-planner/
+│   │   └── team-ownership/
+│   └── commands/               # Slash commands (FIC, EB; synced to .cursor/commands)
 │       ├── fic-*.md
-│       ├── xp-*.md
 │       └── eb-bug-fixing-agent.md
 ├── .cursor/
 │   ├── rules/                  # Cursor rules (.mdc); reference .agents/rules where applicable
@@ -30,9 +34,7 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │   │   ├── python-dev.mdc
 │   │   ├── react-best-practices.mdc
 │   │   └── tlz-connection.mdc
-│   └── skills/                 # Reusable project skills
-│       ├── test-doubles-first/
-│       └── cwv-improvement-planner/
+│   └── skills/                 # Symlink → repo .agents/skills/
 ├── src/thoughts/               # Node/TS CLI for thoughts/ management
 ├── thoughts/                   # Research and plans (see thoughts/ tree below)
 ├── setup-symlinks.sh           # Setup/validate symlinks; commit config changes
@@ -49,13 +51,17 @@ This repository is the **single source of truth** for AI tool configuration. Con
 ```text
 ~/.cursor/rules     → ~/saski/augmentedcode-configuration/.cursor/rules/
 ~/.cursor/commands  → ~/saski/augmentedcode-configuration/.cursor/commands/
-~/.cursor/skills    → ~/saski/augmentedcode-configuration/.cursor/skills/
+~/.cursor/skills    → ~/saski/augmentedcode-configuration/.agents/skills/
 ~/.cursor/.agents   → ~/saski/augmentedcode-configuration/.agents/
+~/.codex/skills     → ~/saski/augmentedcode-configuration/.agents/skills/   (if using Codex)
+~/.antigravity/skills → ~/saski/augmentedcode-configuration/.agents/skills/ (if using Antigravity)
 ~/.claude/          → ~/saski/augmentedcode-configuration/.claude/
 ~/CLAUDE.md         → ~/saski/augmentedcode-configuration/CLAUDE.md
 ~/AGENTS.md         → ~/saski/augmentedcode-configuration/AGENTS.md
 ~/GEMINI.md         → ~/saski/augmentedcode-configuration/GEMINI.md
 ```
+
+Shared skills live in **`.agents/skills/`** (canonical). Cursor and other dev tools (Codex, Antigravity, etc.) point their `skills` directory at this repo path so all tools use the same XP and project skills.
 
 ### Setup on New Machine
 
@@ -145,20 +151,20 @@ npx thoughts sync       # Sync hardlinks after adding files
 npx thoughts metadata   # Get git metadata for frontmatter
 ```
 
-## XP/TDD Commands
+## XP Skills
 
-XP/TDD commands use the `xp-` prefix. Eventbrite-specific variants use the `eb-` prefix.
+XP behaviors are provided as **trigger-based skills** under `.agents/skills/`. They are applied when the user's request matches the skill description (e.g. "technical debt", "code review", "Mikado Method"). All tools (Cursor, Codex, Antigravity, etc.) resolve skills from repo `.agents/skills/` via symlinks (e.g. `~/.cursor/skills` → repo `.agents/skills/`).
 
-| Command | Purpose |
-|---------|---------|
-| `/xp-code-review` | Review pending changes (tests, maintainability, rules) |
-| `/xp-increase-coverage` | Identify and test high-value untested code |
-| `/xp-plan-untested-code` | Create actionable plan to cover untested code |
-| `/xp-predict-problems` | Predict likely production failures |
-| `/xp-mikado-method` | Guide safe, incremental refactoring |
-| `/xp-technical-debt` | Catalog and prioritize technical debt |
-| `/xp-simple-design-refactor` | Maintainability & Simple Design refactoring |
-| `/xp-security-analysis` | Pragmatic security risk analysis |
+| Skill | Purpose |
+|-------|---------|
+| `xp-code-review` | Review pending changes (tests, maintainability, project rules) |
+| `xp-increase-coverage` | Identify and test high-value untested code |
+| `xp-plan-untested-code` | Create actionable plan to cover untested code and coverage gaps |
+| `xp-predict-problems` | Predict likely production failures and edge cases |
+| `xp-mikado-method` | Guide safe refactoring via dependency graph (Mikado Method) |
+| `xp-technical-debt` | Catalog and prioritize technical debt; quick wins, strategic debt |
+| `xp-simple-design-refactor` | Maintainability & Simple Design refactoring with ROI focus |
+| `xp-security-analysis` | Pragmatic security risk analysis (OWASP, threat modeling) |
 
 ## Eventbrite-Specific Commands
 
@@ -168,14 +174,15 @@ Eventbrite-specific commands use the `eb-` prefix.
 |---------|---------|
 | `/eb-bug-fixing-agent` | Eventbrite bug fixing expert with OWASP, threat modeling, cloud security |
 
-## Cursor Skills
+## Cursor Skills (from `.agents/skills/`)
 
-Reusable project-level skills live in `.cursor/skills/` and can be applied contextually when user prompts match their descriptions.
+Reusable project-level skills live in **`.agents/skills/`** and are exposed to Cursor via `~/.cursor/skills` → repo `.agents/skills/`. They are applied when user prompts match the skill description (trigger-based).
 
 | Skill | Purpose |
 |-------|---------|
 | `test-doubles-first` | Choose the lightest effective test double, preferring fake/stub/spy before mock. |
 | `cwv-improvement-planner` | Create prioritized Core Web Vitals plans for LCP/INP/TTFB, including edge caching/compression and safe experimentation. |
+| `team-ownership` | Determine owning team for reported issues using ownership sources and confidence-based routing. |
 
 ## Cursor Rules
 

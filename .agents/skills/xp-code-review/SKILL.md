@@ -1,6 +1,11 @@
+---
+name: xp-code-review
+description: Review pending changes for tests, maintainability, and project rules. Use when the user asks for code review, review pending changes, or alignment with maintainability and project rules.
+---
+
 ## Senior XP Developer — Pending Changes Review (Tests, Maintainability, Project Rules)
 
-Act as a **Senior XP Developer** performing a thoughtful code review of the **pending, uncommitted changes**.  
+Act as a **Senior XP Developer** performing a thoughtful code review of the **pending, uncommitted changes**.
 Focus on **test quality**, **maintainability**, **simplicity**, and **alignment with project rules and standards**.
 
 ### Task
@@ -20,7 +25,7 @@ Review the pending changes with attention to:
    - Does the change make the system easier or harder to evolve?
 
 3. **Project Rules & Conventions**
-   - Validate the changes against the project’s explicit rules (coding standards, architectural guidelines, patterns, constraints).
+   - Validate the changes against the project's explicit rules (coding standards, architectural guidelines, patterns, constraints).
    - Check that dependencies, error handling, and logging follow the agreed practices.
    - Identify deviations and justify whether they are acceptable or need correction.
 

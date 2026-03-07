@@ -1,0 +1,44 @@
+{
+  "issue": {
+    "id": "EB-999001",
+    "source": "jira",
+    "summary": "Listings event page fails to load urgency signals",
+    "description": "Customer reports the urgency signals panel is empty on event pages.",
+    "reporter": "qa@eventbrite.com",
+    "links": [
+      "https://eventbrite.atlassian.net/browse/EB-999001"
+    ],
+    "artifacts": {
+      "endpoint_paths": [
+        "/v3/events/{id}/urgency_signals/"
+      ],
+      "service_names": [
+        "urgency-signals-service"
+      ],
+      "feature_terms": [
+        "urgency signals",
+        "event listing"
+      ],
+      "error_signals": [
+        "404",
+        "empty response"
+      ],
+      "environment": "prod"
+    }
+  },
+  "execution": {
+    "mode": "determine_owner_and_route",
+    "allow_incident_gate": true,
+    "max_candidates": 5
+  },
+  "context": {
+    "domain_hint": "listings",
+    "known_team": null,
+    "channels": {
+      "help_service_catalog": "#help-service-catalog",
+      "eng": "#eng",
+      "feature_mapping": "#feature-mapping",
+      "critical_incidents": "#critical-site-incidents-and-customer-bugs"
+    }
+  }
+}

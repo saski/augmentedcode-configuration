@@ -6,6 +6,11 @@ set -e
 
 REPO_DIR="$HOME/saski/augmentedcode-configuration"
 
+# Dev/AI tools under ~ that get a "skills" symlink to repo .agents/skills.
+# Cursor is handled in the .cursor block; all others use this list.
+# Add or remove dot-dir names to cover any dev tool config (e.g. .copilot, .kiro).
+TOOLS_WITH_SKILLS=".codex .antigravity .claude .gemini .langflow"
+
 usage() {
     cat << EOF
 Usage: $(basename $0) [command]
@@ -49,13 +54,19 @@ setup_symlinks() {
         exit 1
     fi
 
-    # Create .cursor symlinks
+    # Create .cursor symlinks (skills → canonical .agents/skills)
     mkdir -p ~/.cursor
     ln -sf "$REPO_DIR/.cursor/rules" ~/.cursor/rules
     ln -sf "$REPO_DIR/.cursor/commands" ~/.cursor/commands
-    ln -sf "$REPO_DIR/.cursor/skills" ~/.cursor/skills
+    ln -sf "$REPO_DIR/.agents/skills" ~/.cursor/skills
     ln -sf "$REPO_DIR/.cursor/skills-cursor" ~/.cursor/skills-cursor
     ln -sf "$REPO_DIR/.agents" ~/.cursor/.agents
+
+    # Other dev/AI tools: point skills at canonical .agents/skills
+    for tool in $TOOLS_WITH_SKILLS; do
+        mkdir -p "$HOME/$tool"
+        ln -sf "$REPO_DIR/.agents/skills" "$HOME/$tool/skills"
+    done
 
     # Create .claude symlink
     ln -sf "$REPO_DIR/.claude" ~/.claude
@@ -84,8 +95,35 @@ validate_symlinks() {
             echo "❌ $path is a broken symlink"
             errors=$((errors + 1))
         else
-            local target=$(readlink "$path")
-            echo "✓ ~/.cursor/$link → $target"
+            local target
+            target=$(readlink "$path")
+            if [ "$link" = "skills" ] && [[ "$target" != *".agents/skills" ]]; then
+                echo "❌ $path should point to .agents/skills, got: $target"
+                errors=$((errors + 1))
+            else
+                echo "✓ ~/.cursor/$link → $target"
+            fi
+        fi
+    done
+
+    # Check skills symlinks for other dev tools (must point to repo .agents/skills)
+    for tool in $TOOLS_WITH_SKILLS; do
+        local path="$HOME/$tool/skills"
+        if [ ! -L "$path" ]; then
+            echo "❌ $path is not a symlink"
+            errors=$((errors + 1))
+        elif [ ! -e "$path" ]; then
+            echo "❌ $path is a broken symlink"
+            errors=$((errors + 1))
+        else
+            local target
+            target=$(readlink "$path")
+            if [[ "$target" != *".agents/skills" ]]; then
+                echo "❌ $path should point to .agents/skills, got: $target"
+                errors=$((errors + 1))
+            else
+                echo "✓ $path → .agents/skills"
+            fi
         fi
     done
 

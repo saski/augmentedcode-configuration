@@ -1,11 +1,21 @@
 # Augmentedcode Configuration - Project Status
 
-**Last Updated**: 2026-03-06
+**Last Updated**: 2026-03-07
 **Overall Status**: 🟢 **100% Complete** - Config deduplication via symlinks
 
 ---
 
 ## Recent Changes
+
+### 2026-03-07: XP Skills Tool-Awareness Follow-up ✅
+
+Tool-awareness documentation so every coding tool knows how to use skills:
+
+- **base.md**: Added §9 Skills (Canonical Location and Use) — `.agents/skills/`, trigger-based use, skill format.
+- **create-skill**: Storage Locations row for canonical shared path `.agents/skills/skill-name/` and symlink exposure.
+- **Research**: `2026-03-06-commands-movable-as-skills.md` updated — canonical `.agents/skills/` and open question "where XP skills should live" resolved.
+
+**Reference**: Validation report `thoughts/shared/research/2026-03-07-VALIDATION-REPORT-xp-skills-tool-awareness.md`.
 
 ### 2026-03-06: Config Deduplication via Symlinks ✅
 

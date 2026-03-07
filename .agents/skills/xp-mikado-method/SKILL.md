@@ -1,3 +1,8 @@
+---
+name: xp-mikado-method
+description: Apply the Mikado Method for safe refactoring via a dependency graph of small steps. Use when the user asks for Mikado Method, safe refactoring, or dependency graph for a large change.
+---
+
 ## Senior XP Developer — Mikado Method for Safe Refactoring
 
 Act as a **Senior XP Developer** applying the **Mikado Method** to achieve a complex change through small, safe, incremental steps.
@@ -49,4 +54,3 @@ The Mikado Method helps break down large refactorings into a dependency graph of
 - **Small steps only**. If a node feels too big, break it down further.
 
 **The goal is not to finish fast—it's to finish safely, one small commit at a time.**
-
