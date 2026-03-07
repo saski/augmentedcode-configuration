@@ -60,6 +60,7 @@ This repository is the **single source of truth** for AI tool configuration. Con
 ~/.cursor/commands  → ~/saski/augmentedcode-configuration/.cursor/commands/
 ~/.cursor/skills    → ~/saski/augmentedcode-configuration/.agents/skills/
 ~/.cursor/.agents   → ~/saski/augmentedcode-configuration/.agents/
+~/.agents           → ~/saski/augmentedcode-configuration/.agents/
 ~/.codex/skills/skills → ~/saski/augmentedcode-configuration/.agents/skills/ (Codex keeps system skills in ~/.codex/skills/.system)
 ~/.antigravity/skills → ~/saski/augmentedcode-configuration/.agents/skills/ (if using Antigravity)
 ~/.claude/          → ~/saski/augmentedcode-configuration/.claude/

@@ -73,6 +73,15 @@ setup_symlinks() {
         ln -sfn "$REPO_DIR/.agents/skills" "$HOME/$tool/skills"
     done
 
+    # Home-level .agents should always resolve to canonical repo .agents
+    # so there is no divergent local skill source.
+    if [ -d "$HOME/.agents" ] && [ ! -L "$HOME/.agents" ]; then
+        echo "⚠️  Found existing ~/.agents directory (not a symlink)"
+        echo "   Please move it to a backup location, then rerun setup."
+        exit 1
+    fi
+    ln -sfn "$REPO_DIR/.agents" "$HOME/.agents"
+
     # Create .claude symlink
     ln -sfn "$REPO_DIR/.claude" ~/.claude
 
@@ -157,6 +166,24 @@ validate_symlinks() {
         errors=$((errors + 1))
     else
         echo "✓ ~/.claude → $(readlink ~/.claude)"
+    fi
+
+    # Check ~/.agents canonical link
+    if [ ! -L "$HOME/.agents" ]; then
+        echo "❌ ~/.agents is not a symlink"
+        errors=$((errors + 1))
+    elif [ ! -e "$HOME/.agents" ]; then
+        echo "❌ ~/.agents is a broken symlink"
+        errors=$((errors + 1))
+    else
+        local agents_target
+        agents_target=$(readlink "$HOME/.agents")
+        if [[ "$agents_target" != *"augmentedcode-configuration/.agents" ]]; then
+            echo "❌ ~/.agents should point to repo .agents, got: $agents_target"
+            errors=$((errors + 1))
+        else
+            echo "✓ ~/.agents → $agents_target"
+        fi
     fi
 
     # Check root configs
