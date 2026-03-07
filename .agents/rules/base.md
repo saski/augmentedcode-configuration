@@ -30,36 +30,37 @@ This document contains all development rules and guidelines for this project, ap
 
 ## 3. Style Guidelines
 
-- **Natural Expression**: Express all reasoning in a natural, conversational internal monologue.
-- **Progressive Building**: Use progressive, stepwise building: start with basics, build on previous points, break down complex thoughts.
-- **Simple Communication**: Use short, simple sentences that mirror natural thought patterns.
-- **Avoid Rushing**: Never rush to conclusions; frequently reassess and revise.
-- **Seek Clarification**: If in doubt, always ask for clarification before proceeding.
+- **Clear Communication**: Use direct, concise, professional language.
+- **Progressive Building**: Explain decisions step by step when helpful.
+- **Avoid Rushing**: Reassess assumptions before concluding.
+- **Seek Clarification**: If requirements are ambiguous, ask one focused question.
 - **Self-Documenting Code**: Avoid comments in code; rely on self-documenting names. Eliminate superficial comments (Arrange/Act/Assert, describing obvious code behavior, historical references that Git already manages).
 
 ## 4. Output Format Requirements
 
-- **Contemplation Phase**: Every response must begin with a <CONTEMPLATOR> section: show all work, doubts, and natural thought progression.
-- **Final Answer**: Only provide a <FINAL_ANSWER> if reasoning converges to a clear conclusion.
-- **No Skipping**: Never skip the contemplation phase.
-- **No Moralizing**: Never include moralizing warnings in the final answer.
-- **Progress Indicators**: When outlining plans, use numbers/metrics and emojis to indicate progress.
-- **Auto Mode Disclosure**: When operating in auto mode, always disclose which model is being used and why it was selected. This information must be included in the <CONTEMPLATOR> section at the beginning of each response.
+- **Answer Structure**: Provide a concise outcome first, then supporting detail as needed.
+- **No Hidden-Reasoning Formats**: Do not require internal-monologue or chain-of-thought sections.
+- **No Moralizing**: Never include moralizing warnings.
+- **Progress Indicators**: When outlining plans, use numbered progress steps.
+- **Run Metadata (Required)**: End each response with a short metadata block for cross-tool calibration, especially in Auto mode.
+  - `Tool`: Tool or assistant name.
+  - `Mode`: `auto` or `manual`.
+  - `Model ID`: Exact model id if exposed, else `not exposed`.
+  - `Model Source`: `api/runtime`, `ui label`, or `inferred`.
+  - `Task Type`: Short category (e.g., `bugfix`, `review`, `refactor`, `planning`, `docs`).
+  - `Confidence`: `low`, `medium`, or `high`.
+  - `Verification`: Checks executed (tests/lint/typecheck) or `none`.
 
 ## 5. Process & Key Requirements
 
-- **Extensive Contemplation**: Never skip the extensive contemplation phase.
-- **Show Work**: Show all work and thinking.
-- **Embrace Uncertainty**: Embrace uncertainty and revision.
+- **Evidence First**: Validate important assumptions with code, tests, or docs.
 - **Persistence**: Persist through multiple attempts until resolution.
-- **Thorough Iteration**: Break down complex thoughts and iterate thoroughly.
+- **Thorough Iteration**: Break complex changes into incremental steps.
 - **Sequential Questions**: Only one question at a time; each question should build on previous answers.
 
 ## 6. Mental Preparation
 
-- **Contemplative Walk**: Before every response, take a contemplative walk through the woods.
-- **Deep Reflection**: Use this time for deep reflection on the query.
-- **Confirmation**: Confirm completion of this preparatory walk before proceeding.
+- **Think Before Acting**: Confirm goal, constraints, and risks before making changes.
 
 ## 7. Language Standards
 
@@ -225,12 +226,12 @@ Before ANY commit:
 
 When working on this project:
 
-1. **Start every response with contemplation** 🌲
+1. **Start with goal alignment** - clarify task, constraints, and expected output 🌲
 2. **Take baby steps** - one test, one file, one change at a time 👣
 3. **Always write the failing test first** (TDD) ❌➡️✅
 4. **Use make targets** - never call tools directly 🔧
 5. **Keep code small and typed** - max 20 lines per method 📏
-6. **Show your thinking process** - be conversational and progressive 💭
+6. **Communicate decisions clearly** - concise and actionable 💭
 7. **Question everything** - assumptions, requirements, design choices ❓
 8. **Run `make validate` before EVERY commit** - zero tolerance ✅
 9. **Run tests automatically** after every change 🧪
