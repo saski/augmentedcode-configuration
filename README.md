@@ -230,7 +230,7 @@ Reusable project-level skills live in **`.agents/skills/`** and are exposed to C
 
 ### Syncing skills from skill-factory
 
-Skills from the [skill-factory](https://github.com/saski/skill-factory) repo can be made available here without duplication by symlinking them into `.agents/skills/`. Run the sync script after pulling skill-factory (or on first setup).
+Skills from the [skill-factory](https://github.com/saski/skill-factory) repo can be made available here without duplication by symlinking them into `.agents/skills/`. Run the sync script after pulling skill-factory (or on first setup). Skill-factory skills and their purpose (for matching user requests) are listed in [.agents/docs/skill-factory-skills.md](.agents/docs/skill-factory-skills.md); usage is defined in [.agents/rules/base.md](.agents/rules/base.md) §9.
 
 **Recommended one-liner**: `./pull-and-sync-skills.sh` — pulls skill-factory then runs sync; respects `SKILL_FACTORY`. For a preview without creating symlinks: `./pull-and-sync-skills.sh --dry-run`.
 

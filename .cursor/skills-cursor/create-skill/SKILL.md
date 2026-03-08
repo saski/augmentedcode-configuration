@@ -57,7 +57,6 @@ skill-name/
 |------|------|-------|
 | Personal | ~/.cursor/skills/skill-name/ | Available across all your projects |
 | Project | .cursor/skills/skill-name/ | Shared with anyone using the repository |
-| **Canonical shared (this repo)** | **.agents/skills/skill-name/** | Single source of truth; Cursor and other tools (Codex, Antigravity, etc.) symlink to it (e.g. `~/.cursor/skills` → repo `.agents/skills/`). Prefer this for shared/XP skills. |
 
 **IMPORTANT**: Never create skills in `~/.cursor/skills-cursor/`. This directory is reserved for Cursor's internal built-in skills and is managed automatically by the system.
 
