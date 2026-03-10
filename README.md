@@ -35,7 +35,6 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │   │   ├── python-dev.mdc
 │   │   ├── react-best-practices.mdc
 │   │   └── tlz-connection.mdc
-│   ├── commands/               # Symlink → .agents/commands/
 │   ├── skills/                 # Symlink → .agents/skills/
 │   ├── mcp.json                # Canonical Cursor MCP servers config
 │   ├── cli-config.json         # Canonical Cursor model/agent config
