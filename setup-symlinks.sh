@@ -42,8 +42,8 @@ check_environment() {
         exit 1
     fi
 
-    if [ ! -f "$REPO_DIR/.cursor/mcp.json" ]; then
-        echo "❌ .cursor/mcp.json not found in repo"
+    if [ ! -f "$REPO_DIR/.agents/mcp.json" ]; then
+        echo "❌ .agents/mcp.json not found in repo"
         exit 1
     fi
 
@@ -54,11 +54,6 @@ check_environment() {
 
     if [ ! -f "$REPO_DIR/.codex/config.toml" ]; then
         echo "❌ .codex/config.toml not found in repo"
-        exit 1
-    fi
-
-    if [ ! -f "$REPO_DIR/.gemini/mcp_config.json" ]; then
-        echo "❌ .gemini/mcp_config.json not found in repo"
         exit 1
     fi
 
@@ -86,7 +81,7 @@ setup_symlinks() {
     ln -sfn "$REPO_DIR/.agents/skills" ~/.cursor/skills
     ln -sfn "$REPO_DIR/.cursor/skills-cursor" ~/.cursor/skills-cursor
     ln -sfn "$REPO_DIR/.agents" ~/.cursor/.agents
-    ln -sfn "$REPO_DIR/.cursor/mcp.json" ~/.cursor/mcp.json
+    ln -sfn "$REPO_DIR/.agents/mcp.json" ~/.cursor/mcp.json
     ln -sfn "$REPO_DIR/.cursor/cli-config.json" ~/.cursor/cli-config.json
 
     # Codex keeps local system skills under ~/.codex/skills/.system.
@@ -101,9 +96,9 @@ setup_symlinks() {
         ln -sfn "$REPO_DIR/.agents/skills" "$HOME/$tool/skills"
     done
 
-    # Gemini: keep MCP config canonical in this repository.
+    # Gemini: use shared MCP config from canonical .agents path.
     mkdir -p "$HOME/.gemini/antigravity"
-    ln -sfn "$REPO_DIR/.gemini/mcp_config.json" "$HOME/.gemini/antigravity/mcp_config.json"
+    ln -sfn "$REPO_DIR/.agents/mcp.json" "$HOME/.gemini/antigravity/mcp_config.json"
     ln -sfn "$REPO_DIR/.gemini/GEMINI.md" "$HOME/.gemini/GEMINI.md"
 
     # Home-level .agents should always resolve to canonical repo .agents
@@ -154,7 +149,7 @@ validate_symlinks() {
     done
 
     # Check Cursor managed config files
-    for file in mcp.json cli-config.json; do
+    for file in cli-config.json; do
         local path="$HOME/.cursor/$file"
         if [ ! -L "$path" ]; then
             echo "❌ $path is not a symlink"
@@ -173,6 +168,25 @@ validate_symlinks() {
             fi
         fi
     done
+
+    # Check Cursor shared MCP config symlink
+    local cursor_mcp_path="$HOME/.cursor/mcp.json"
+    if [ ! -L "$cursor_mcp_path" ]; then
+        echo "❌ $cursor_mcp_path is not a symlink"
+        errors=$((errors + 1))
+    elif [ ! -e "$cursor_mcp_path" ]; then
+        echo "❌ $cursor_mcp_path is a broken symlink"
+        errors=$((errors + 1))
+    else
+        local cursor_mcp_target
+        cursor_mcp_target=$(readlink "$cursor_mcp_path")
+        if [[ "$cursor_mcp_target" != *".agents/mcp.json" ]]; then
+            echo "❌ $cursor_mcp_path should point to repo .agents/mcp.json, got: $cursor_mcp_target"
+            errors=$((errors + 1))
+        else
+            echo "✓ $cursor_mcp_path → $cursor_mcp_target"
+        fi
+    fi
 
     # Check Codex skills symlink (nested path due ~/.codex/skills/.system)
     local codex_path="$HOME/.codex/skills/skills"
@@ -252,8 +266,8 @@ validate_symlinks() {
     else
         local gemini_mcp_target
         gemini_mcp_target=$(readlink "$gemini_mcp_path")
-        if [[ "$gemini_mcp_target" != *".gemini/mcp_config.json" ]]; then
-            echo "❌ $gemini_mcp_path should point to repo .gemini/mcp_config.json, got: $gemini_mcp_target"
+        if [[ "$gemini_mcp_target" != *".agents/mcp.json" ]]; then
+            echo "❌ $gemini_mcp_path should point to repo .agents/mcp.json, got: $gemini_mcp_target"
             errors=$((errors + 1))
         else
             echo "✓ $gemini_mcp_path → $gemini_mcp_target"

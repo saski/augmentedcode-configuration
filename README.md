@@ -19,6 +19,7 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │   │   ├── cwv-improvement-planner/
 │   │   ├── team-ownership/
 │   │   └── (symlinks)          # From skill-factory: tdd, refactoring, approval-tests, etc.
+│   ├── mcp.json                # Canonical MCP servers config (shared across tools)
 │   └── commands/               # Slash commands (FIC, EB); .cursor/commands → here
 │       ├── fic-*.md
 │       └── eb-*.md
@@ -36,13 +37,13 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │   │   ├── react-best-practices.mdc
 │   │   └── tlz-connection.mdc
 │   ├── skills/                 # Symlink → .agents/skills/
-│   ├── mcp.json                # Canonical Cursor MCP servers config
+│   ├── mcp.json                # Symlink → ../.agents/mcp.json
 │   ├── cli-config.json         # Canonical Cursor model/agent config
 │   └── skills-cursor/          # Cursor-only skills (create-skill, create-rule, update-cursor-settings, etc.)
 ├── .codex/
 │   └── config.toml             # Canonical Codex model/trust config
 ├── .gemini/
-│   ├── mcp_config.json         # Canonical Gemini MCP servers config
+│   ├── mcp_config.json         # Symlink → ../.agents/mcp.json
 │   └── GEMINI.md               # Symlink → ../GEMINI.md
 ├── src/thoughts/               # Node/TS CLI for thoughts/ management
 ├── thoughts/                   # Research and plans (see thoughts/ tree below)
@@ -66,21 +67,21 @@ This repository is the **single source of truth** for AI tool configuration. Con
 ~/.cursor/commands  → ~/saski/augmentedcode-configuration/.cursor/commands/
 ~/.cursor/skills    → ~/saski/augmentedcode-configuration/.agents/skills/
 ~/.cursor/.agents   → ~/saski/augmentedcode-configuration/.agents/
-~/.cursor/mcp.json  → ~/saski/augmentedcode-configuration/.cursor/mcp.json
+~/.cursor/mcp.json  → ~/saski/augmentedcode-configuration/.agents/mcp.json
 ~/.cursor/cli-config.json → ~/saski/augmentedcode-configuration/.cursor/cli-config.json
 ~/.agents           → ~/saski/augmentedcode-configuration/.agents/
 ~/.codex/config.toml → ~/saski/augmentedcode-configuration/.codex/config.toml
 ~/.codex/skills/skills → ~/saski/augmentedcode-configuration/.agents/skills/ (Codex keeps system skills in ~/.codex/skills/.system)
 ~/.antigravity/skills → ~/saski/augmentedcode-configuration/.agents/skills/ (if using Antigravity)
 ~/.claude/          → ~/saski/augmentedcode-configuration/.claude/
-~/.gemini/antigravity/mcp_config.json → ~/saski/augmentedcode-configuration/.gemini/mcp_config.json
+~/.gemini/antigravity/mcp_config.json → ~/saski/augmentedcode-configuration/.agents/mcp.json
 ~/.gemini/GEMINI.md → ~/saski/augmentedcode-configuration/.gemini/GEMINI.md
 ~/CLAUDE.md         → ~/saski/augmentedcode-configuration/CLAUDE.md
 ~/AGENTS.md         → ~/saski/augmentedcode-configuration/AGENTS.md
 ~/GEMINI.md         → ~/saski/augmentedcode-configuration/GEMINI.md
 ```
 
-Shared skills live in **`.agents/skills/`** (canonical). Cursor and other dev tools (Codex, Antigravity, etc.) point their `skills` directory at this repo path so all tools use the same XP and project skills.
+Shared skills live in **`.agents/skills/`** (canonical). Cursor and other dev tools (Codex, Antigravity, etc.) point their `skills` directory at this repo path so all tools use the same XP and project skills. Shared MCP servers config is also canonicalized at **`.agents/mcp.json`** and reused across tools.
 Volatile runtime state (for example Cursor `ide_state.json`, Codex session/history databases, Gemini brain artifacts) intentionally remains local and outside the canonical config scope.
 
 ### Setup on New Machine
