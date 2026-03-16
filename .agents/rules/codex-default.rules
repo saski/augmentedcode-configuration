@@ -1,0 +1,2 @@
+prefix_rule(pattern=["rm", "/Users/ignacio.viejo/saski/augmentedcode-configuration/.agents/commands/commands"], decision="allow")
+prefix_rule(pattern=["curl", "-I", "-L"], decision="allow")

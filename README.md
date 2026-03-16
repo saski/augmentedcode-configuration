@@ -12,11 +12,13 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │   ├── rules/                  # Canonical agent rules (shared across tools)
 │   │   ├── base.md
 │   │   ├── ai-feedback-learning-loop.md
-│   │   └── react-best-practices.md
+│   │   ├── react-best-practices.md
+│   │   └── codex-default.rules # Shared Codex approval defaults
 │   ├── skills/                 # Canonical skills (native + skill-factory symlinks)
 │   │   ├── xp-*/               # Native: xp-code-review, xp-increase-coverage, xp-mikado-method, etc.
 │   │   ├── test-doubles-first/
 │   │   ├── cwv-improvement-planner/
+│   │   ├── lean-ai-adoption-coach/
 │   │   ├── team-ownership/
 │   │   └── (symlinks)          # From skill-factory: tdd, refactoring, approval-tests, etc.
 │   ├── mcp.json                # Canonical MCP servers config (shared across tools)
@@ -72,6 +74,8 @@ This repository is the **single source of truth** for AI tool configuration. Con
 ~/.agents           → ~/saski/augmentedcode-configuration/.agents/
 ~/.codex/config.toml → ~/saski/augmentedcode-configuration/.codex/config.toml
 ~/.codex/skills/skills → ~/saski/augmentedcode-configuration/.agents/skills/ (Codex keeps system skills in ~/.codex/skills/.system)
+~/.codex/rules/default.rules → ~/saski/augmentedcode-configuration/.agents/rules/codex-default.rules
+~/.codex/AGENTS.md → ~/saski/augmentedcode-configuration/AGENTS.md
 ~/.antigravity/skills → ~/saski/augmentedcode-configuration/.agents/skills/ (if using Antigravity)
 ~/.claude/          → ~/saski/augmentedcode-configuration/.claude/
 ~/.gemini/antigravity/mcp_config.json → ~/saski/augmentedcode-configuration/.agents/mcp.json
@@ -81,7 +85,7 @@ This repository is the **single source of truth** for AI tool configuration. Con
 ~/GEMINI.md         → ~/saski/augmentedcode-configuration/GEMINI.md
 ```
 
-Shared skills live in **`.agents/skills/`** (canonical). Cursor and other dev tools (Codex, Antigravity, etc.) point their `skills` directory at this repo path so all tools use the same XP and project skills. Shared MCP servers config is also canonicalized at **`.agents/mcp.json`** and reused across tools.
+Shared skills live in **`.agents/skills/`** (canonical). Cursor and other dev tools (Codex, Antigravity, etc.) point their `skills` directory at this repo path so all tools use the same XP and project skills. Shared MCP servers config is also canonicalized at **`.agents/mcp.json`** and reused across tools. Codex approval defaults are centralized at **`.agents/rules/codex-default.rules`**.
 Volatile runtime state (for example Cursor `ide_state.json`, Codex session/history databases, Gemini brain artifacts) intentionally remains local and outside the canonical config scope.
 
 ### Setup on New Machine
@@ -197,7 +201,7 @@ npx thoughts metadata   # Get git metadata for frontmatter
 
 XP behaviors are provided as **trigger-based skills** under `.agents/skills/`. They are applied when the user's request matches the skill description (e.g. "technical debt", "code review", "Mikado Method"). All tools (Cursor, Codex, Antigravity, etc.) resolve skills from repo `.agents/skills/` via symlinks (e.g. `~/.cursor/skills` → repo `.agents/skills/`).
 
-**Skills sources**: `.agents/skills/` contains **native skills** (tracked in this repo, e.g. `xp-*`, `test-doubles-first`, `cwv-improvement-planner`, `team-ownership`) and **skill-factory skills** (symlinked from the [skill-factory](https://github.com/saski/skill-factory) repo after running `./pull-and-sync-skills.sh`). AI agents should consider all skills in this directory and read the matching skill's `SKILL.md` when the user's request matches a skill description.
+**Skills sources**: `.agents/skills/` contains **native skills** (tracked in this repo, e.g. `xp-*`, `test-doubles-first`, `cwv-improvement-planner`, `lean-ai-adoption-coach`, `team-ownership`) and **skill-factory skills** (symlinked from the [skill-factory](https://github.com/saski/skill-factory) repo after running `./pull-and-sync-skills.sh`). AI agents should consider all skills in this directory and read the matching skill's `SKILL.md` when the user's request matches a skill description.
 
 | Skill | Purpose |
 |-------|---------|
@@ -218,14 +222,15 @@ Eventbrite-specific commands use the `eb-` prefix.
 |---------|---------|
 | `/eb-bug-fixing-agent` | Eventbrite bug fixing expert with OWASP, threat modeling, cloud security |
 
-## Cursor Skills (from `.agents/skills/`)
+## Shared Project Skills (from `.agents/skills/`)
 
-Reusable project-level skills live in **`.agents/skills/`** and are exposed to Cursor via `~/.cursor/skills` → repo `.agents/skills/`. They are applied when user prompts match the skill description (trigger-based).
+Reusable project-level skills live in **`.agents/skills/`** and are exposed to Cursor, Codex, Claude, Gemini, Antigravity, and other configured tools via symlinks to repo `.agents/skills/`. They are applied when user prompts match the skill description (trigger-based).
 
 | Skill | Purpose |
 |-------|---------|
 | `test-doubles-first` | Choose the lightest effective test double, preferring fake/stub/spy before mock. |
 | `cwv-improvement-planner` | Create prioritized Core Web Vitals plans for LCP/INP/TTFB, including edge caching/compression and safe experimentation. |
+| `lean-ai-adoption-coach` | Evaluate AI tools, agents, workflows, and automations with a Lean/XP simplicity lens; recommend the smallest useful experiment and guardrails. |
 | `team-ownership` | Determine owning team for reported issues using ownership sources and confidence-based routing. |
 
 ### Syncing skills from skill-factory

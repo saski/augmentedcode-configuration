@@ -57,8 +57,13 @@ check_environment() {
         exit 1
     fi
 
-    if [ ! -f "$REPO_DIR/.gemini/GEMINI.md" ]; then
-        echo "❌ .gemini/GEMINI.md not found in repo"
+    if [ ! -f "$REPO_DIR/.agents/rules/codex-default.rules" ]; then
+        echo "❌ .agents/rules/codex-default.rules not found in repo"
+        exit 1
+    fi
+
+    if [ ! -f "$REPO_DIR/GEMINI.md" ]; then
+        echo "❌ GEMINI.md not found in repo"
         exit 1
     fi
 }
@@ -85,10 +90,12 @@ setup_symlinks() {
     ln -sfn "$REPO_DIR/.cursor/cli-config.json" ~/.cursor/cli-config.json
 
     # Codex keeps local system skills under ~/.codex/skills/.system.
-    # Link ~/.codex/skills/skills to canonical shared skills.
-    mkdir -p "$HOME/.codex/skills"
+    # Link shared skills and shared rules into ~/.codex.
+    mkdir -p "$HOME/.codex/skills" "$HOME/.codex/rules"
     ln -sfn "$REPO_DIR/.agents/skills" "$HOME/.codex/skills/skills"
     ln -sfn "$REPO_DIR/.codex/config.toml" "$HOME/.codex/config.toml"
+    ln -sfn "$REPO_DIR/.agents/rules/codex-default.rules" "$HOME/.codex/rules/default.rules"
+    ln -sfn "$REPO_DIR/AGENTS.md" "$HOME/.codex/AGENTS.md"
 
     # Other dev/AI tools: point skills at canonical .agents/skills
     for tool in $TOOLS_WITH_SKILLS; do
@@ -96,10 +103,12 @@ setup_symlinks() {
         ln -sfn "$REPO_DIR/.agents/skills" "$HOME/$tool/skills"
     done
 
-    # Gemini: use shared MCP config from canonical .agents path.
+    # Gemini: use shared MCP config, commands, and workflows from canonical .agents path.
     mkdir -p "$HOME/.gemini/antigravity"
     ln -sfn "$REPO_DIR/.agents/mcp.json" "$HOME/.gemini/antigravity/mcp_config.json"
-    ln -sfn "$REPO_DIR/.gemini/GEMINI.md" "$HOME/.gemini/GEMINI.md"
+    ln -sfn "$REPO_DIR/GEMINI.md" "$HOME/.gemini/GEMINI.md"
+    ln -sfn "$REPO_DIR/.agents/workflows" "$HOME/.gemini/antigravity/workflows"
+    ln -sfn "$REPO_DIR/.agents/commands" "$HOME/.gemini/antigravity/commands"
 
     # Home-level .agents should always resolve to canonical repo .agents
     # so there is no divergent local skill source.
@@ -226,6 +235,44 @@ validate_symlinks() {
         fi
     fi
 
+    # Check Codex shared rules symlink
+    local codex_rules_path="$HOME/.codex/rules/default.rules"
+    if [ ! -L "$codex_rules_path" ]; then
+        echo "❌ $codex_rules_path is not a symlink"
+        errors=$((errors + 1))
+    elif [ ! -e "$codex_rules_path" ]; then
+        echo "❌ $codex_rules_path is a broken symlink"
+        errors=$((errors + 1))
+    else
+        local codex_rules_target
+        codex_rules_target=$(readlink "$codex_rules_path")
+        if [[ "$codex_rules_target" != *".agents/rules/codex-default.rules" ]]; then
+            echo "❌ $codex_rules_path should point to repo .agents/rules/codex-default.rules, got: $codex_rules_target"
+            errors=$((errors + 1))
+        else
+            echo "✓ $codex_rules_path → $codex_rules_target"
+        fi
+    fi
+
+    # Check Codex instructions symlink
+    local codex_agents_path="$HOME/.codex/AGENTS.md"
+    if [ ! -L "$codex_agents_path" ]; then
+        echo "❌ $codex_agents_path is not a symlink"
+        errors=$((errors + 1))
+    elif [ ! -e "$codex_agents_path" ]; then
+        echo "❌ $codex_agents_path is a broken symlink"
+        errors=$((errors + 1))
+    else
+        local codex_agents_target
+        codex_agents_target=$(readlink "$codex_agents_path")
+        if [[ "$codex_agents_target" != *"/AGENTS.md" ]]; then
+            echo "❌ $codex_agents_path should point to repo AGENTS.md, got: $codex_agents_target"
+            errors=$((errors + 1))
+        else
+            echo "✓ $codex_agents_path → $codex_agents_target"
+        fi
+    fi
+
     # Check skills symlinks for other dev tools (must point to repo .agents/skills)
     for tool in $TOOLS_WITH_SKILLS; do
         local path="$HOME/$tool/skills"
@@ -274,6 +321,27 @@ validate_symlinks() {
         fi
     fi
 
+    # Check Gemini commands and workflows symlinks
+    for dir in workflows commands; do
+        local path="$HOME/.gemini/antigravity/$dir"
+        if [ ! -L "$path" ]; then
+            echo "❌ $path is not a symlink"
+            errors=$((errors + 1))
+        elif [ ! -e "$path" ]; then
+            echo "❌ $path is a broken symlink"
+            errors=$((errors + 1))
+        else
+            local target
+            target=$(readlink "$path")
+            if [[ "$target" != *".agents/$dir" ]]; then
+                echo "❌ $path should point to repo .agents/$dir, got: $target"
+                errors=$((errors + 1))
+            else
+                echo "✓ $path → $target"
+            fi
+        fi
+    done
+
     # Check Gemini instructions symlink
     local gemini_rules_path="$HOME/.gemini/GEMINI.md"
     if [ ! -L "$gemini_rules_path" ]; then
@@ -285,8 +353,8 @@ validate_symlinks() {
     else
         local gemini_rules_target
         gemini_rules_target=$(readlink "$gemini_rules_path")
-        if [[ "$gemini_rules_target" != *".gemini/GEMINI.md" ]]; then
-            echo "❌ $gemini_rules_path should point to repo .gemini/GEMINI.md, got: $gemini_rules_target"
+        if [[ "$gemini_rules_target" != *"/GEMINI.md" ]]; then
+            echo "❌ $gemini_rules_path should point to repo GEMINI.md, got: $gemini_rules_target"
             errors=$((errors + 1))
         else
             echo "✓ $gemini_rules_path → $gemini_rules_target"
