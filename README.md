@@ -18,6 +18,7 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │   │   ├── xp-*/               # Native: xp-code-review, xp-increase-coverage, xp-mikado-method, etc.
 │   │   ├── test-doubles-first/
 │   │   ├── cwv-improvement-planner/
+│   │   ├── code-notify/
 │   │   ├── lean-ai-adoption-coach/
 │   │   ├── team-ownership/
 │   │   └── (symlinks)          # From skill-factory: tdd, refactoring, approval-tests, etc.
@@ -201,7 +202,7 @@ npx thoughts metadata   # Get git metadata for frontmatter
 
 XP behaviors are provided as **trigger-based skills** under `.agents/skills/`. They are applied when the user's request matches the skill description (e.g. "technical debt", "code review", "Mikado Method"). All tools (Cursor, Codex, Antigravity, etc.) resolve skills from repo `.agents/skills/` via symlinks (e.g. `~/.cursor/skills` → repo `.agents/skills/`).
 
-**Skills sources**: `.agents/skills/` contains **native skills** (tracked in this repo, e.g. `xp-*`, `test-doubles-first`, `cwv-improvement-planner`, `lean-ai-adoption-coach`, `team-ownership`) and **skill-factory skills** (symlinked from the [skill-factory](https://github.com/saski/skill-factory) repo after running `./pull-and-sync-skills.sh`). AI agents should consider all skills in this directory and read the matching skill's `SKILL.md` when the user's request matches a skill description.
+**Skills sources**: `.agents/skills/` contains **native skills** (tracked in this repo, e.g. `xp-*`, `test-doubles-first`, `cwv-improvement-planner`, `code-notify`, `lean-ai-adoption-coach`, `team-ownership`) and **skill-factory skills** (symlinked from the [skill-factory](https://github.com/saski/skill-factory) repo after running `./pull-and-sync-skills.sh`). AI agents should consider all skills in this directory and read the matching skill's `SKILL.md` when the user's request matches a skill description.
 
 | Skill | Purpose |
 |-------|---------|
@@ -230,6 +231,7 @@ Reusable project-level skills live in **`.agents/skills/`** and are exposed to C
 |-------|---------|
 | `test-doubles-first` | Choose the lightest effective test double, preferring fake/stub/spy before mock. |
 | `cwv-improvement-planner` | Create prioritized Core Web Vitals plans for LCP/INP/TTFB, including edge caching/compression and safe experimentation. |
+| `code-notify` | Recognize and use the local code-notify integration for end-of-task notifications across supported AI tools after verifying the installed command or hook. |
 | `lean-ai-adoption-coach` | Evaluate AI tools, agents, workflows, and automations with a Lean/XP simplicity lens; recommend the smallest useful experiment and guardrails. |
 | `team-ownership` | Determine owning team for reported issues using ownership sources and confidence-based routing. |
 
