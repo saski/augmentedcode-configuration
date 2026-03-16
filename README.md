@@ -234,6 +234,7 @@ Reusable project-level skills live in **`.agents/skills/`** and are exposed to C
 | `code-notify` | Recognize and use the local code-notify integration for end-of-task notifications across supported AI tools after verifying the installed command or hook. |
 | `lean-ai-adoption-coach` | Evaluate AI tools, agents, workflows, and automations with a Lean/XP simplicity lens; recommend the smallest useful experiment and guardrails. |
 | `team-ownership` | Determine owning team for reported issues using ownership sources and confidence-based routing. |
+| `planning-with-files` | Use file-based planning for complex multi-step work with persistent `task_plan.md`, `findings.md`, and `progress.md` tracking. |
 
 ### Syncing skills from skill-factory
 
