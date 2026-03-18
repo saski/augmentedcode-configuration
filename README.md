@@ -21,6 +21,7 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │   │   ├── code-notify/
 │   │   ├── lean-ai-adoption-coach/
 │   │   ├── team-ownership/
+│   │   ├── github-host-alias/
 │   │   └── (symlinks)          # From skill-factory: tdd, refactoring, approval-tests, etc.
 │   ├── mcp.json                # Canonical MCP servers config (shared across tools)
 │   └── commands/               # Slash commands (FIC, EB); .cursor/commands → here
@@ -235,6 +236,7 @@ Reusable project-level skills live in **`.agents/skills/`** and are exposed to C
 | `lean-ai-adoption-coach` | Evaluate AI tools, agents, workflows, and automations with a Lean/XP simplicity lens; recommend the smallest useful experiment and guardrails. |
 | `team-ownership` | Determine owning team for reported issues using ownership sources and confidence-based routing. |
 | `planning-with-files` | Use file-based planning for complex multi-step work with persistent `task_plan.md`, `findings.md`, and `progress.md` tracking. |
+| `github-host-alias` | Ensure correct SSH host alias is used when authenticating via SSH, based on local paths (~/eventbrite vs ~/saski). |
 
 ### Syncing skills from skill-factory
 

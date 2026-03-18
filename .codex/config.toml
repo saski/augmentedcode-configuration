@@ -13,3 +13,6 @@ url = "https://mcp.atlassian.com/v1/sse"
 
 # Code-Notify: Desktop notifications
 notify = ["bash", "-c", "/Users/ignacio.viejo/.code-notify/lib/code-notify/core/notifier.sh stop codex"]
+
+[features]
+multi_agent = true
