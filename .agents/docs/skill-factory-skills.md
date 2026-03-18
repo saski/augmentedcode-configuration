@@ -22,6 +22,7 @@ Skills in this list are synced from [skill-factory](https://github.com/saski/ski
 | code-simplifier | practices | Simplifies and refines code for clarity, readability, and maintainability. Reduces complexity without changing behavior. Use when simplifying, cleaning up, or reducing complexity in code. |
 | writing-bash-scripts | developer-tools | Bash script style guide. Always use when writing bash scripts, shell scripts, or CLI bash tools. |
 | using-uv | developer-tools | Python package and project management with UV. Use when creating Python scripts, initializing projects, or managing dependencies. |
+| bun-toolkit | developer-tools | JS/TS/JSX toolkit with Bun awareness. Use when using Bun as a runtime, test runner, or package manager in JavaScript and TypeScript projects. |
 | git-worktrees | developer-tools | Creates git worktrees for parallel development. Use when creating a git worktree, setting up multiple working directories, or working on features in parallel. |
 | dockerfile-review | developer-tools | Reviews Dockerfiles for build performance, image size, and security issues. Use when optimizing, validating, or improving Dockerfiles. |
 | modern-cli-design | design | Principles for scalable, modern command-line tools - object-command architecture (noun-verb), LLM-optimized help, JSON output, concurrency patterns, credential management. Use when building CLIs, designing command structures, or implementing terminal applications. |

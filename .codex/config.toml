@@ -8,10 +8,10 @@ trust_level = "trusted"
 [projects."/Users/ignacio.viejo/eventbrite/listings-webapp"]
 trust_level = "trusted"
 
-[mcp_servers.atlassian]
-url = "https://mcp.atlassian.com/v1/sse"
-
 [mcp_servers.atlassian_v1]
+url = "https://mcp.atlassian.com/v1"
+
+[mcp_servers.atlassian]
 url = "https://mcp.atlassian.com/v1"
 
 [features]
