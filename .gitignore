@@ -10,3 +10,4 @@ thoughts/saski/
 .cursor/skills/**/*.pyc
 .cursor/skills-cursor/**/.venv/
 
+.agents/gemini/
