@@ -6,11 +6,11 @@ description: This meta-rule outlines the process for the AI to learn from user f
 
 ## 1. Introduction / Problem
 
-**Problem:** The AI's understanding of project-specific nuances, conventions, and user preferences can benefit from explicit feedback. Without a systematic process, valuable insights from user interactions might not be captured and integrated into the AI's guiding principles (i.e., the Development Rules in `.agents/rules/base.md`).
+**Problem:** The AI's understanding of project-specific nuances, conventions, and user preferences can benefit from explicit feedback. Without a systematic process, valuable insights from user interactions might not be captured and integrated into the AI's guiding principles — including rules (`.agents/rules/`), skills (`.agents/skills/`), workflows (`.agents/workflows/`), and commands (`.agents/commands/`).
 
 **Purpose:** This rule establishes a mandatory process for the AI to:
 *   Actively learn from user feedback, guidance, and suggestions.
-*   Proactively identify opportunities to enhance existing Development Rules based on these learnings.
+*   Proactively identify opportunities to enhance existing rules, skills, workflows, and commands based on these learnings.
 *   Ensure that the AI's assistance remains aligned with evolving project needs and user expectations.
 *   Maximize the value of user feedback by incorporating it into the AI's operational framework.
 
@@ -32,13 +32,14 @@ Upon receiving feedback or guidance from the user, the AI MUST follow these step
         *   Could an existing rule be made more specific or comprehensive based on this new information?
         *   **Did the interaction involve modifying a document, and if so, was relevant metadata (e.g., `last_updated` date, `version` number, changelogs) also considered for updates according to established documentation standards?**
 
-3.  **Review Existing Development Rules for Relevance:**
-    *   Review the contents of `.agents/rules/base.md` and other relevant rule files in `.agents/rules/`.
-    *   Identify if any existing rule(s) are directly or indirectly related to the feedback received and the learnings derived.
-    *   Determine if an update to one or more rules could codify the new learning, making future AI assistance more accurate or helpful.
+3.  **Review Existing Rules, Skills, Workflows, and Commands for Relevance:**
+    *   Review the contents of `.agents/rules/base.md` and other relevant files in `.agents/rules/`.
+    *   Also check if a skill in `.agents/skills/`, a workflow in `.agents/workflows/`, or a command in `.agents/commands/` is directly or indirectly related to the feedback.
+    *   Determine if an update to one or more of these artifacts could codify the new learning, making future AI assistance more accurate or helpful.
+    *   Consider whether a **new** skill or workflow should be created to capture the learning.
 
-4.  **Formulate and Propose Rule Update(s) (If Applicable):**
-    *   If a relevant rule can be improved or a new clarification is needed:
+4.  **Formulate and Propose Updates (If Applicable):**
+    *   If a relevant rule, skill, workflow, or command can be improved — or a new one is needed:
         *   **Clearly state to the user which rule(s) you propose to update.**
         *   **Quote the specific section(s) or line(s) of the rule that would be affected.**
         *   **Present the exact proposed change (e.g., new wording, additions, deletions).** Use a diff format if it aids clarity for substantial changes.
@@ -54,7 +55,8 @@ Upon receiving feedback or guidance from the user, the AI MUST follow these step
     *   **DO NOT** modify any rule file(s) until the user explicitly reviews the proposal and gives clear approval to proceed with the specific changes.
 
 6.  **Apply Approved Changes and Confirm:**
-    *   If the user approves the proposed update(s), use the appropriate tool to edit the target rule file(s) precisely as agreed.
+    *   If the user approves the proposed update(s), use the appropriate tool to edit the target file(s) precisely as agreed.
+    *   If the change affects the project's feature inventory, skills catalog, or completion status, also update `PROJECT_STATUS.md` accordingly.
     *   After the update is applied, confirm to the user: "The [Rule Name].md has been updated as per your approval."
 
 ## 3. Real-World Example

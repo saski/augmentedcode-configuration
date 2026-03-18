@@ -1,11 +1,19 @@
 # Augmentedcode Configuration - Project Status
 
-**Last Updated**: 2026-03-07
+**Last Updated**: 2026-03-18
 **Overall Status**: 🟢 **100% Complete** - Config deduplication via symlinks
 
 ---
 
 ## Recent Changes
+
+### 2026-03-18: Self-Improvement Mechanisms Hardened ✅
+
+Closed 6 gaps in recursive self-improvement infrastructure:
+
+- **base.md**: Added `<!-- version: 1.1 -->` header, fixed broken path to `ai-feedback-learning-loop.md`, added §16 Periodic Self-Audit.
+- **ai-feedback-learning-loop.md**: Broadened scope from rules-only to cover skills, workflows, and commands. Added `PROJECT_STATUS.md` refresh to step 6.
+- **Root shims**: Converted `AGENTS.md`, `GEMINI.md`, `CLAUDE.md` from copies to symlinks → `.agents/rules/base.md`.
 
 ### 2026-03-07: XP Skills Tool-Awareness Follow-up ✅
 

@@ -1,3 +1,5 @@
+<!-- last_updated: 2026-03-18 -->
+<!-- version: 1.1 -->
 # AI Agent Development Rules  
 
 This document contains all development rules and guidelines for this project, applicable to all AI agents (Claude, Gemini, etc.).
@@ -87,7 +89,7 @@ This document contains all development rules and guidelines for this project, ap
   - Updating installation or configuration procedures
   - Adding new research documents or plans to thoughts/shared/
   - Any change that affects how users interact with or understand the repository
-- **Rules Maintenance**: Keep the rules updated with every learning for each of the interactions, after  satisfactory completing every task. Follow the guidelines on ./ai-feedback-learning-loop.md
+- **Rules Maintenance**: Keep the rules updated with every learning for each of the interactions, after satisfactorily completing every task. Follow the guidelines in [ai-feedback-learning-loop.md](.agents/rules/ai-feedback-learning-loop.md).
 
 ## 9. Skills (Canonical Location and Use)
 
@@ -251,5 +253,15 @@ When operating in Antigravity (Agentic) mode:
 2. **Task Management**: Maintain `task.md` continuously.
 3. **Artifacts**: Use `implementation_plan.md` for design and `walkthrough.md` for verification.
 4. **Task Boundaries**: Explicitly call `task_boundary` when switching modes (Planning, Execution, Verification) or major sub-tasks.
+
+## 16. Periodic Self-Audit
+
+At the start of each planning session (PLANNING mode), briefly verify:
+
+1. **Rules accuracy**: Are the rules, skills, and workflows referenced in this session still accurate and up to date?
+2. **Redundancy check**: Are there unused, outdated, or redundant skills, rules, or workflows that should be flagged for removal or consolidation?
+3. **Status freshness**: Is `PROJECT_STATUS.md` still current? If not, flag it for update.
+
+If any discrepancies are found, follow the feedback learning loop in [ai-feedback-learning-loop.md](.agents/rules/ai-feedback-learning-loop.md).
 
  
