@@ -14,5 +14,12 @@ url = "https://mcp.atlassian.com/v1"
 [mcp_servers.atlassian]
 url = "https://mcp.atlassian.com/v1"
 
+[mcp_servers.playwright]
+args = ["@playwright/mcp@latest"]
+command = "npx"
+
+[mcp_servers.figma]
+url = "https://mcp.figma.com/mcp"
+
 [features]
 multi_agent = true
