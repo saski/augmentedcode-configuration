@@ -1,44 +1,45 @@
-<!-- last_updated: 2026-03-18 -->
-<!-- version: 1.1 -->
-# AI Agent Development Rules  
+<!-- last_updated: 2026-03-19 -->
+<!-- version: 2.0 -->
+# AI Agent Development Rules
 
-This document contains all development rules and guidelines for this project, applicable to all AI agents (Claude, Gemini, etc.).
+This document contains the universal development rules and guidelines for this project, applicable to all AI agents (Claude, Gemini, Codex, and others).
 
 ## 1. Core Principles
 
 - **Baby Steps**: Always work in baby steps, one at a time. Never go forward more than one step.
-- **Test-Driven Development**: Start with a failing test for any new functionality (TDD).
+- **Test-Driven Development**: Start with a failing test for any new functionality.
 - **Progressive Revelation**: Never show all the code at once; only the next step.
-- **Type Safety**: All code must be fully typed.
+- **Type Safety**: Keep code fully typed where the language supports it.
 - **Simplicity First**: Use the simplest working solution; avoid unnecessary abstractions.
-- **Small Components**: Classes and methods should be small (10–20 lines max).
+- **Small Components**: Keep classes and methods small and focused.
 - **Clear Naming**: Use clear, descriptive names for all variables and functions.
 - **Incremental Changes**: Prefer incremental, focused changes over large, complex modifications.
 - **Question Assumptions**: Always question assumptions and inferences.
-- **Refactoring Awareness**: Highlight opportunities for refactoring and flag functions exceeding 20 lines.
+- **Refactoring Awareness**: Highlight opportunities for refactoring and flag functions that are getting too large.
 - **Pattern Detection**: Detect and highlight repeated code patterns.
 
-## 2. Code Quality & Coverage
+## 2. Contextual Rule Loading
 
-- **MANDATORY Validation**: Before EVERY commit, run `make validate` and fix ALL errors. Zero tolerance.
-- **Quality Requirements**: The project has strict requirements for code quality and maintainability.
-- **High Coverage**: All code must have very high test coverage; strive for 100% where practical.
-- **Pre-commit Checks**: All code must pass the following before any commit:
-    - `make check-typing`
-    - `make check-format`
-    - `make check-style`
-- **TDD Workflow**: Test-Driven Development (TDD) is the default workflow: always write tests first.
-- **OOP Design**: Use Object-Oriented Programming (OOP) for all components and features.
+- When the repo contains Python source or Python project markers, also read `.agents/rules/python-project.md`.
+- When the repo contains a `Makefile`, also read `.agents/rules/makefile-project.md`.
+- These contextual rules extend, not replace, the universal rules in this file.
 
-## 3. Style Guidelines
+## 3. Code Quality & Coverage
+
+- Maintain strong code quality and maintainability standards.
+- Keep test coverage high, aiming for comprehensive coverage where practical.
+- Validate important changes with the repository's canonical automated checks before merging.
+- Prefer the smallest change that solves the problem cleanly.
+
+## 4. Style Guidelines
 
 - **Clear Communication**: Use direct, concise, professional language.
 - **Progressive Building**: Explain decisions step by step when helpful.
 - **Avoid Rushing**: Reassess assumptions before concluding.
 - **Seek Clarification**: If requirements are ambiguous, ask one focused question.
-- **Self-Documenting Code**: Avoid comments in code; rely on self-documenting names. Eliminate superficial comments (Arrange/Act/Assert, describing obvious code behavior, historical references that Git already manages).
+- **Self-Documenting Code**: Avoid comments in code; rely on self-documenting names.
 
-## 4. Output Format Requirements
+## 5. Output Format Requirements
 
 - **Answer Structure**: Provide a concise outcome first, then supporting detail as needed.
 - **No Hidden-Reasoning Formats**: Do not require internal-monologue or chain-of-thought sections.
@@ -53,215 +54,78 @@ This document contains all development rules and guidelines for this project, ap
   - `Confidence`: `low`, `medium`, or `high`.
   - `Verification`: Checks executed (tests/lint/typecheck) or `none`.
 
-## 5. Process & Key Requirements
+## 6. Process & Key Requirements
 
 - **Evidence First**: Validate important assumptions with code, tests, or docs.
 - **Persistence**: Persist through multiple attempts until resolution.
 - **Thorough Iteration**: Break complex changes into incremental steps.
 - **Sequential Questions**: Only one question at a time; each question should build on previous answers.
 
-## 6. Mental Preparation
+## 7. Mental Preparation
 
 - **Think Before Acting**: Confirm goal, constraints, and risks before making changes.
 
-## 7. Language Standards
+## 8. Language Standards
 
 - **Communication Flexibility**: Team communication can be conducted in Spanish or English for convenience and comfort.
-- **English-Only Artifacts**: All technical artifacts must always use English, including:
-  - Code (variables, functions, classes, comments)
-  - Documentation (README, guides, API docs)
-  - Jira tickets (titles, descriptions, comments)
-  - Data schemas and database names
-  - Configuration files and scripts
-  - Git commit messages
-  - Test names and descriptions
+- **English-Only Artifacts**: All technical artifacts must always use English, including code, documentation, tickets, schemas, configuration, scripts, git commit messages, and test names.
 - **Professional Consistency**: This ensures global collaboration, tool compatibility, and industry best practices.
 
-## 8. Documentation Standards
+## 9. Documentation Standards
 
-- **User-Focused README**: README.md must be user-focused, containing only information relevant to table authors and end users.
-- **Separate Dev Docs**: All developer, CI, and infrastructure documentation must be placed in a separate development guide (e.g., docs/development_guide.md), with a clear link from the README.
+- **User-Focused README**: README.md must be user-focused, containing only information relevant to end users.
+- **Separate Dev Docs**: All developer, CI, and infrastructure documentation must be placed in a separate development guide, with a clear link from the README.
 - **Error Examples**: User-facing documentation should include example error messages for common validation failures to help users quickly resolve issues.
-- **README Maintenance**: When making changes to this repository that affect its structure, features, or usage, the README.md MUST be updated accordingly. This includes:
-  - Adding new Cursor rules or commands
-  - Adding new features or capabilities
-  - Changing directory structure
-  - Updating installation or configuration procedures
-  - Adding new research documents or plans to thoughts/shared/
-  - Any change that affects how users interact with or understand the repository
+- **README Maintenance**: When making changes to this repository that affect its structure, features, or usage, the README.md must be updated accordingly.
 - **Rules Maintenance**: Keep the rules updated with every learning for each of the interactions, after satisfactorily completing every task. Follow the guidelines in [ai-feedback-learning-loop.md](.agents/rules/ai-feedback-learning-loop.md).
 
-## 9. Skills (Canonical Location and Use)
+## 10. Skills (Canonical Location and Use)
 
-- **Canonical location**: Shared skills live in **`.agents/skills/`** in this repository (one directory per skill, each with at least `SKILL.md`). Tools (Cursor, Codex, Antigravity, etc.) expose them via symlinks (e.g. `~/.cursor/skills` → repo `.agents/skills/`).
-- **Two sources**: Skills in `.agents/skills/` may be **native** (tracked in this repo, e.g. `xp-*`, `test-doubles-first`, `cwv-improvement-planner`, `lean-ai-adoption-coach`, `github-host-alias`) or **from skill-factory** (symlinked from the [skill-factory](https://github.com/saski/skill-factory) repo via `./pull-and-sync-skills.sh`). Consider all skills in `.agents/skills/` when matching the user's request.
-- **Skill-factory skills (synced into `.agents/skills/`) are listed with their purpose in [.agents/docs/skill-factory-skills.md](.agents/docs/skill-factory-skills.md).** Use that list when matching user requests to skills; then read the skill's `SKILL.md` and follow its instructions.
-- **Trigger-based use**: When the user's request matches a skill's description (e.g. "technical debt analysis", "code review", "Mikado Method"), read that skill's `SKILL.md` at the path provided by the tool and follow its instructions.
-- **Skill format**: Each skill has frontmatter `name` and `description`; the description states when to use it. No `disable-model-invocation: true` for trigger-based skills.
+- **Canonical location**: Shared skills live in `.agents/skills/` in this repository, one directory per skill with at least `SKILL.md`.
+- **Two sources**: Skills in `.agents/skills/` may be native or synced from the skill-factory repository.
+- **Skill-factory skills**: Use [.agents/docs/skill-factory-skills.md](.agents/docs/skill-factory-skills.md) to match user requests to skills before reading the skill's `SKILL.md`.
+- **Trigger-based use**: When the user's request matches a skill's description, read that skill's `SKILL.md` and follow its instructions.
+- **Skill format**: Each skill has frontmatter `name` and `description`; the description states when to use it.
 
-## 10. Development Best Practices
+## 11. Development Best Practices
 
-### Error Handling & Debugging
-- **Graceful Error Handling**: Always implement proper error handling with meaningful error messages.
+- **Error Handling & Debugging**: Always implement proper error handling with meaningful error messages.
 - **Debugging First**: When encountering issues, use debugging tools and logging before asking for help.
 - **Error Context**: Provide sufficient context in error messages to enable quick problem resolution.
 - **Fail Fast**: Design code to fail fast and fail clearly when errors occur.
-
-### Code Review & Collaboration  
 - **Pair Programming**: Prefer pairing sessions for complex features and knowledge sharing.
 - **Small Pull Requests**: Keep changes small and focused for easier review and faster integration.
 - **Code Review Standards**: All code must be reviewed before merging, following project quality standards.
-- **Knowledge Sharing**: Document decisions and share context with team members.
-
-### Security Considerations
 - **Security by Design**: Consider security implications in all design decisions.
 - **Input Validation**: Always validate and sanitize user inputs and external data.
 - **Secrets Management**: Never hardcode secrets; use proper secret management systems.
 - **Dependency Security**: Regularly update dependencies and monitor for security vulnerabilities.
 
-### Testing Strategy Distinction
-- **Unit Tests**: Fast, isolated tests for individual components (majority of test suite).
-- **Integration Tests**: Test interactions between components and external systems (limited, focused).
-- **E2E Tests**: Full system validation (minimal, critical user paths only).
-- **Test Pyramid**: Follow the test pyramid - many unit tests, some integration tests, few E2E tests.
+## 12. Testing Strategy Distinction
 
-## 11. Test-Driven Development Rules
+- **Unit Tests**: Fast, isolated tests for individual components.
+- **Integration Tests**: Test interactions between components and external systems.
+- **E2E Tests**: Full system validation for critical user paths only.
+- **Test Pyramid**: Follow the test pyramid with many unit tests, some integration tests, and few E2E tests.
 
-### TDD Approach
+## 13. TDD Rules
+
 - **Failing Test First**: Always start with a failing test before implementing new functionality.
 - **Single Test**: Write only one test at a time; never create more than one test per change.
 - **Complete Coverage**: Ensure every new feature or bugfix is covered by a test.
+- **Test Simplicity**: Keep tests focused, readable, and easy to modify.
+- **Process Discipline**: After every code or test change, rerun the repository's canonical automated checks.
 
-### Test Structure & Style
-- **Test Runner**: Use pytest as the test runner.
-- **Assertion Library**: Use the expects library for assertions (BDD style).
-- **Mocking**: Use doublex and doublex-expects for mocking and spy assertions.
-- **Type Hints**: All test functions and helpers must have full type hints.
-- **Focused Tests**: Keep each test focused and under 20 lines.
-- **Clear Naming**: Use clear, descriptive names for test functions and variables.
-- **No Comments**: Avoid comments; make code self-documenting through naming.
-- **Simple Helpers**: Use helper methods (e.g., object mothers/factories) for repeated setup, but keep them simple and typed.
-- **Strategic Mocking Rule**: Use `@patch` from unittest.mock ONLY for Python system modules (readline, atexit, subprocess, sys, os, etc.). Use doublex for all application code mocking. This provides clear separation: system modules = @patch, application code = doublex.
+## 14. Antigravity Workflows
 
-### Test Simplicity & Maintainability
-- **Simplest Setup**: Prefer the simplest test setup that covers the requirement.
-- **Refactor Tests**: Refactor tests to remove duplication and improve readability.
-- **Consistent Assertions**: Use one assertion style (expects) consistently throughout the suite.
-- **Extract Helpers**: If a test setup is repeated, extract a helper or fixture.
-- **Readable Tests**: Always keep tests readable and easy to modify.
+- When operating in Antigravity mode, use the defined workflows in `.agent/workflows/` for structured tasks.
+- Keep task, plan, and verification artifacts current when those workflows are in use.
+- Explicitly call task boundaries when switching modes or major sub-tasks.
 
-### Test Process & Output
-- **Single Test Display**: Only show one test at a time; never present multiple tests in a single step.
-- **Single File Display**: Never show more than one file at a time.
-- **Self-Contained Tests**: Each test should be self-contained and not depend on the order of execution.
-- **Clarify Requirements**: If in doubt about requirements, ask for clarification before writing the test.
-- **Verify Failure**: After writing a test, run it to ensure it fails before implementing the feature.
-- **Automatic Test Running**: After every code or test change, always run the relevant tests using the appropriate Makefile target. Do not ask for permission to run tests—just do it.
+## 15. Periodic Self-Audit
 
-### Test Naming & Coverage
-- **Descriptive Names**: Test function names should clearly describe the scenario and expected outcome.
-- **Purpose-Driven Variables**: Use descriptive variable names that reflect their purpose in the test.
-- **Incremental Coverage**: Ensure all code paths and edge cases are eventually covered by tests, but add them incrementally.
-
-### Test Review & Refactoring
-- **Boy-scout rule**: Before adding new functionality, assess the quality of the existing code. If changes would result in patching fragile code, surface the issue and suggest a refactor instead.
-- **Post-Pass Review**: After a test passes, review for opportunities to simplify or clarify.
-- **Helper Refactoring**: Refactor test helpers and fixtures as needed to keep the suite DRY and maintainable.
-
-### Test Reference Guides
-For detailed usage and best practices, see the following guides in `docs/testing/`:
-- **expects_guide.md**: How to use the expects library for BDD-style assertions.
-- **doublex_guide.md**: How to use doublex for mocking and stubbing.
-- **doublex_expects_guide.md**: How to integrate doublex with expects for mock assertions.
-
-These guides are the canonical resources for writing and maintaining tests in this project.
-
-## 12. Makefile Targets Usage
-
-### Core Rule
-**NEVER** call tools like `pytest`, `black`, `mypy`, or similar directly. Always use the corresponding `make` target.
-
-### Available Make Targets
-- `make help` — Show this help.
-- `make local-setup` — Sets up the local environment (e.g. install git hooks)
-- `make build` — Builds the app
-- `make update` — Updates the app packages
-- `make add-package` — Installs a new package in the app. ex: make install package=XXX
-- `make up` — Runs the app
-- `make down` — Stop the FastAPI app
-- `make check-typing` — Run a static analyzer over the code to find issues
-- `make check-format` — Checks the code format
-- `make check-style` — Checks the code style
-- `make reformat` — Format python code
-- `make test-unit` — Run all unit tests
-- `make test-e2e` — Run all e2e tests
-- `make validate` — Run tests, style, and typing checks (test-unit, check-style, check-typing)
-
-### Usage Rules
-1. **Testing**: When running tests, use `make test-unit` or `make test-e2e` as appropriate.
-2. **Formatting**: For formatting, use `make reformat` or `make check-format`.
-3. **Type Checking**: For type checking, use `make check-typing`.
-4. **Style Checks**: For style checks, use `make check-style`.
-5. **Building**: For building or updating the app, use `make build` or `make update`.
-6. **Help**: If you are unsure which target to use, run `make help` to see all available options.
-7. **New Operations**: If a new operation is needed, prefer adding a new Makefile target rather than running a tool directly.
-
-### Good vs Bad Examples
-```sh
-# Good: Use make target for unit tests
-make test-unit
-
-# Bad: Call pytest directly
-pytest tests/unit
-```
-
-## 13. Pre-Commit Validation (MANDATORY)
-
-Before ANY commit:
-1. Run `make validate`
-2. If errors exist: fix them and re-run
-3. Only commit when `make validate` passes with ZERO errors
-
-❌ **NEVER**: Commit → discover errors → fix commit
-✅ **ALWAYS**: Validate → fix all errors → commit once
-
-## 14. Quick Reference for All AI Agents
-
-When working on this project:
-
-1. **Start with goal alignment** - clarify task, constraints, and expected output 🌲
-2. **Take baby steps** - one test, one file, one change at a time 👣
-3. **Always write the failing test first** (TDD) ❌➡️✅
-4. **Use make targets** - never call tools directly 🔧
-5. **Keep code small and typed** - max 20 lines per method 📏
-6. **Communicate decisions clearly** - concise and actionable 💭
-7. **Question everything** - assumptions, requirements, design choices ❓
-8. **Run `make validate` before EVERY commit** - zero tolerance ✅
-9. **Run tests automatically** after every change 🧪
-10. **Focus on simplicity** over cleverness ✨
-11. **Ask for clarification** when in doubt 🤔
-
-Remember: This is a high-quality, test-driven, incremental development environment. Quality over speed, clarity over cleverness, baby steps over big leaps.
-
-## 15. Antigravity Workflows
-
-When operating in Antigravity (Agentic) mode:
-
-1. **Workflows**: Use the defined workflows in `.agent/workflows/` for structured tasks.
-   - `/context-driven-development` for features.
-   - `/tdd-cycle` for coding.
-2. **Task Management**: Maintain `task.md` continuously.
-3. **Artifacts**: Use `implementation_plan.md` for design and `walkthrough.md` for verification.
-4. **Task Boundaries**: Explicitly call `task_boundary` when switching modes (Planning, Execution, Verification) or major sub-tasks.
-
-## 16. Periodic Self-Audit
-
-At the start of each planning session (PLANNING mode), briefly verify:
-
-1. **Rules accuracy**: Are the rules, skills, and workflows referenced in this session still accurate and up to date?
-2. **Redundancy check**: Are there unused, outdated, or redundant skills, rules, or workflows that should be flagged for removal or consolidation?
-3. **Status freshness**: Is `PROJECT_STATUS.md` still current? If not, flag it for update.
-
-If any discrepancies are found, follow the feedback learning loop in [ai-feedback-learning-loop.md](.agents/rules/ai-feedback-learning-loop.md).
+- At the start of each planning session, verify that the rules, skills, workflows, and project status are current.
+- Flag redundant, outdated, or missing guidance when you find it.
+- If discrepancies are found, follow the feedback learning loop in [ai-feedback-learning-loop.md](.agents/rules/ai-feedback-learning-loop.md).
 
  

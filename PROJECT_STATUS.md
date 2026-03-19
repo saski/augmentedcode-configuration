@@ -1,11 +1,19 @@
 # Augmentedcode Configuration - Project Status
 
-**Last Updated**: 2026-03-18
+**Last Updated**: 2026-03-19
 **Overall Status**: 🟢 **100% Complete** - Config deduplication via symlinks
 
 ---
 
 ## Recent Changes
+
+### 2026-03-19: Base Rule Context Split Completed ✅
+
+Split the rulebook into a universal base plus contextual modules:
+
+- **base.md**: Trimmed to universal rules and added contextual loading for Python and Makefile repositories.
+- **python-project.md** and **makefile-project.md**: Added canonical contextual rule modules for Python and Makefile projects.
+- **Cursor wrappers**: Aligned `python-dev.mdc`, added `makefile-dev.mdc`, and updated `use-base-rules.mdc` to point at the canonical modules.
 
 ### 2026-03-18: Self-Improvement Mechanisms Hardened ✅
 

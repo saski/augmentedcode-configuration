@@ -1,0 +1,24 @@
+---
+description: Makefile-specific development rules with contextual loading for repositories that use make as the automation entry point
+globs: Makefile,**/Makefile,*.mk,*.mak
+alwaysApply: false
+---
+
+# Makefile Development Rules
+
+Makefile-specific rules extend the universal development principles.
+
+All AI agents working on Makefile-based projects must follow:
+
+**📋 [.agents/rules/base.md](.agents/rules/base.md)**
+
+and:
+
+**📋 [.agents/rules/makefile-project.md](.agents/rules/makefile-project.md)**
+
+## Compliance
+
+Before starting Makefile-driven work, agents must:
+1. Read and understand `base.md`
+2. Read and understand `.agents/rules/makefile-project.md`
+3. Prefer the repository's canonical `make` targets over direct tool calls

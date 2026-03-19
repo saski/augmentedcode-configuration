@@ -186,6 +186,7 @@
   },
   "active": "6dbd823475eafb37",
   "lastOpenFiles": [
+    ".cursor/rules/makefile-dev.mdc",
     ".agents/rules/makefile-project.md",
     ".agents/rules/python-project.md",
     "thoughts/shared/plans/2026-03-19-base-rule-context-split.md",
@@ -219,7 +220,6 @@
     ".agents/skills/nullables/references/building/infrastructure-wrappers.md",
     ".agents/skills/nullables/references/architecture/event-driven.md",
     ".agents/skills/nullables/references/building/embedded-stubs.md",
-    ".agents/skills/nullables/references/architecture/logic-sandwich.md",
     ".cursor/skills/team-ownership/examples/output/unowned.json",
     ".cursor/skills/team-ownership/examples/output/owner_determined.json"
   ]

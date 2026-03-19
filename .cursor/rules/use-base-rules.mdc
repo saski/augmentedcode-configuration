@@ -1,37 +1,25 @@
 ---
-description: Directs all AI agents to use the consolidated rules in base.md
+description: Directs all AI agents to use the universal rules in base.md and any applicable contextual rule modules
 globs: 
 alwaysApply: true
 ---
 
 # Use Base Development Rules
 
-All AI agents working on this project must follow the comprehensive development rules and guidelines defined in:
+All AI agents working on this project must follow the universal development rules and guidelines defined in:
 
 **📋 [.agents/rules/base.md](.agents/rules/base.md)**
 
 ## Key Directive
 
-- **Single Source of Truth**: All development rules, coding standards, testing practices, and workflow requirements are maintained in `base.md`. For the full development rulebook use base.md; other .mdc files in .cursor/rules provide Cursor-specific or situational rules (sync, project status, feedback loop, workflows).
-- **No Rule Duplication**: Do not reference or follow other rule files - `base.md` contains the complete and authoritative rule set
-- **Always Current**: `base.md` is the actively maintained configuration - other rule files may be outdated
-
-## What's Included in base.md
-
-- Core development principles (TDD, OOP, baby steps)
-- Code quality and coverage requirements  
-- Testing implementation rules (pytest, expects, doublex)
-- Makefile targets usage
-- Style guidelines and output formatting
-- Process requirements and mental preparation
-- Documentation standards
+- **Universal Source**: `base.md` is the universal rulebook for every repository and tool.
+- **Contextual Extension**: Python and Makefile projects also load their contextual modules from `.agents/rules/`.
+- **No Duplication**: Cursor wrappers should point at canonical rule files instead of re-stating their contents.
 
 ## Compliance
 
 Before starting any development work, agents must:
 1. Read and understand all rules in `base.md`
-2. Follow the communication and TDD processes defined there
-3. Use the specified tools, testing frameworks, and make targets
+2. Load any applicable contextual rule modules for the repository shape
+3. Follow the communication, process, and quality requirements defined there
 4. Maintain the required code quality standards
-
-**Remember**: `base.md` is the complete development rulebook for this project.

@@ -11,3 +11,5 @@ thoughts/
 .cursor/skills-cursor/**/.venv/
 
 .agents/gemini/
+
+.codex/config.toml

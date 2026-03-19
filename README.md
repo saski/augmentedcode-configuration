@@ -12,6 +12,8 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │   ├── rules/                  # Canonical agent rules (shared across tools)
 │   │   ├── base.md
 │   │   ├── ai-feedback-learning-loop.md
+│   │   ├── python-project.md
+│   │   ├── makefile-project.md
 │   │   ├── react-best-practices.md
 │   │   └── codex-default.rules # Shared Codex approval defaults
 │   ├── skills/                 # Canonical skills (native + skill-factory symlinks)
@@ -37,6 +39,7 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │   │   ├── refactoring.mdc
 │   │   ├── debugging.mdc
 │   │   ├── python-dev.mdc
+│   │   ├── makefile-dev.mdc
 │   │   ├── react-best-practices.mdc
 │   │   └── tlz-connection.mdc
 │   ├── skills/                 # Symlink → .agents/skills/
@@ -254,7 +257,7 @@ Skills from the [skill-factory](https://github.com/saski/skill-factory) repo can
 
 ## Cursor Rules
 
-Development rules live in `.agents/rules/` (canonical). Cursor rules in `.cursor/rules/` point to them or add Cursor-specific behavior.
+Development rules live in `.agents/rules/` (canonical). `base.md` is the universal rulebook, and `python-project.md` / `makefile-project.md` extend it for those repository contexts. Cursor rules in `.cursor/rules/` point to the canonical files or add Cursor-specific behavior.
 
 | Rule | Purpose | Activation |
 |------|---------|------------|
@@ -267,6 +270,7 @@ Development rules live in `.agents/rules/` (canonical). Cursor rules in `.cursor
 | `refactoring.mdc` | Safe refactoring | Manual |
 | `debugging.mdc` | Systematic debugging | Manual |
 | `python-dev.mdc` | Python-specific | Auto on *.py |
+| `makefile-dev.mdc` | Makefile-specific | Auto on Makefile, *.mk, *.mak |
 | `react-best-practices.mdc` | React/TS rules (points to .agents/rules) | Auto on *.tsx, *.ts, *.jsx, *.js |
 | `tlz-connection.mdc` | TLZ/aws/setup context | Globs (package.json, setup*.sh, etc.) |
 
