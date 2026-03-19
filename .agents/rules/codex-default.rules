@@ -1,2 +1,8 @@
 prefix_rule(pattern=["rm", "/Users/ignacio.viejo/saski/augmentedcode-configuration/.agents/commands/commands"], decision="allow")
 prefix_rule(pattern=["curl", "-I", "-L"], decision="allow")
+prefix_rule(pattern=["curl", "-I", "https://mcp.atlassian.com/v1/mcp"], decision="allow")
+prefix_rule(pattern=["/Applications/Codex.app/Contents/Resources/codex", "mcp", "remove", "atlassian"], decision="allow")
+prefix_rule(pattern=["/Applications/Codex.app/Contents/Resources/codex", "mcp", "add", "atlassian", "--url", "https://mcp.atlassian.com/v1/mcp"], decision="allow")
+prefix_rule(pattern=["git", "fetch", "origin"], decision="allow")
+prefix_rule(pattern=["npm", "install", "--no-save"], decision="allow")
+prefix_rule(pattern=["mkdir", "-p", "/tmp/fc"], decision="allow")

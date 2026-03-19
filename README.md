@@ -20,13 +20,12 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │   │   ├── cwv-improvement-planner/
 │   │   ├── code-notify/
 │   │   ├── lean-ai-adoption-coach/
-│   │   ├── team-ownership/
 │   │   ├── github-host-alias/
 │   │   └── (symlinks)          # From skill-factory: tdd, refactoring, approval-tests, etc.
 │   ├── mcp.json                # Canonical MCP servers config (shared across tools)
-│   └── commands/               # Slash commands (FIC, EB); .cursor/commands → here
+│   └── commands/               # Slash commands (FIC + project workflows); .cursor/commands → here
 │       ├── fic-*.md
-│       └── eb-*.md
+│       └── review-pr/install-command/bug-fixing-agent
 ├── .cursor/
 │   ├── rules/                  # Cursor rules (.mdc); reference .agents/rules where applicable
 │   │   ├── use-base-rules.mdc
@@ -203,7 +202,7 @@ npx thoughts metadata   # Get git metadata for frontmatter
 
 XP behaviors are provided as **trigger-based skills** under `.agents/skills/`. They are applied when the user's request matches the skill description (e.g. "technical debt", "code review", "Mikado Method"). All tools (Cursor, Codex, Antigravity, etc.) resolve skills from repo `.agents/skills/` via symlinks (e.g. `~/.cursor/skills` → repo `.agents/skills/`).
 
-**Skills sources**: `.agents/skills/` contains **native skills** (tracked in this repo, e.g. `xp-*`, `test-doubles-first`, `cwv-improvement-planner`, `code-notify`, `lean-ai-adoption-coach`, `team-ownership`) and **skill-factory skills** (symlinked from the [skill-factory](https://github.com/saski/skill-factory) repo after running `./pull-and-sync-skills.sh`). AI agents should consider all skills in this directory and read the matching skill's `SKILL.md` when the user's request matches a skill description.
+**Skills sources**: `.agents/skills/` contains **native skills** (tracked in this repo, e.g. `xp-*`, `test-doubles-first`, `cwv-improvement-planner`, `code-notify`, `lean-ai-adoption-coach`) and **skill-factory skills** (symlinked from the [skill-factory](https://github.com/saski/skill-factory) repo after running `./pull-and-sync-skills.sh`). AI agents should consider all skills in this directory and read the matching skill's `SKILL.md` when the user's request matches a skill description.
 
 | Skill | Purpose |
 |-------|---------|
@@ -216,13 +215,13 @@ XP behaviors are provided as **trigger-based skills** under `.agents/skills/`. T
 | `xp-simple-design-refactor` | Maintainability & Simple Design refactoring with ROI focus |
 | `xp-security-analysis` | Pragmatic security risk analysis (OWASP, threat modeling) |
 
-## Eventbrite-Specific Commands
-
-Eventbrite-specific commands use the `eb-` prefix.
+## Project Commands
 
 | Command | Purpose |
 |---------|---------|
-| `/eb-bug-fixing-agent` | Eventbrite bug fixing expert with OWASP, threat modeling, cloud security |
+| `/bug-fixing-agent` | Security-focused bug fixing workflow with OWASP, threat modeling, and cloud risk analysis |
+| `/review-pr` | Interactive PR review workflow with walkthrough, comments, and optional fixes |
+| `/install-command` | Install and customize command templates for the current repository |
 
 ## Shared Project Skills (from `.agents/skills/`)
 
@@ -234,9 +233,8 @@ Reusable project-level skills live in **`.agents/skills/`** and are exposed to C
 | `cwv-improvement-planner` | Create prioritized Core Web Vitals plans for LCP/INP/TTFB, including edge caching/compression and safe experimentation. |
 | `code-notify` | Recognize and use the local code-notify integration for end-of-task notifications across supported AI tools after verifying the installed command or hook. |
 | `lean-ai-adoption-coach` | Evaluate AI tools, agents, workflows, and automations with a Lean/XP simplicity lens; recommend the smallest useful experiment and guardrails. |
-| `team-ownership` | Determine owning team for reported issues using ownership sources and confidence-based routing. |
 | `planning-with-files` | Use file-based planning for complex multi-step work with persistent `task_plan.md`, `findings.md`, and `progress.md` tracking. |
-| `github-host-alias` | Ensure correct SSH host alias is used when authenticating via SSH, based on local paths (~/eventbrite vs ~/saski). |
+| `github-host-alias` | Ensure correct SSH host alias is used when authenticating via SSH, based on local paths (~/work vs ~/saski). |
 
 ### Syncing skills from skill-factory
 

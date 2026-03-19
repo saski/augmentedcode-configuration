@@ -1,0 +1,226 @@
+{
+  "main": {
+    "id": "c9fb44506ef9a483",
+    "type": "split",
+    "children": [
+      {
+        "id": "27de29db7e8502d2",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6dbd823475eafb37",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": ".agents/rules/base.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "base"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "8bab8d25ed075ef1",
+    "type": "split",
+    "children": [
+      {
+        "id": "248a871ac4e7de14",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "54d94b35468cc4fc",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "32113b2d2dc01458",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "9e6eda763f1a421b",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "bda8a34333efc7d7",
+    "type": "split",
+    "children": [
+      {
+        "id": "61c765e0671bbfc2",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "fa48ed327086487f",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": ".agents/rules/base.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for base"
+            }
+          },
+          {
+            "id": "3584c4c39fce0e5a",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": ".agents/rules/base.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from base"
+            }
+          },
+          {
+            "id": "6b2efc9e709e3585",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "dade30dd84808da7",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "ced225b749cc0557",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": ".agents/rules/base.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of base"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false,
+      "obsidian42-brat:BRAT": false
+    }
+  },
+  "active": "6dbd823475eafb37",
+  "lastOpenFiles": [
+    ".agents/rules/makefile-project.md",
+    ".agents/rules/python-project.md",
+    "thoughts/shared/plans/2026-03-19-base-rule-context-split.md",
+    ".agents/commands/review-pr.md",
+    ".agents/commands/install-command.md",
+    ".agents/commands/bug-fixing-agent.md",
+    ".agents/gemini/trustedFolders.json",
+    ".agents/gemini/state.json",
+    ".agents/gemini/settings.json",
+    ".agents/gemini/projects.json",
+    ".agents/gemini/oauth_creds.json",
+    ".agents/gemini/google_accounts.json",
+    ".agents/gemini",
+    ".agents/docs/skill-factory-skills.md",
+    ".agents/rules/base.md",
+    ".agents/rules/ai-feedback-learning-loop.md",
+    ".agents/rules/react-best-practices.md",
+    ".agents/skills/xp-code-review/SKILL.md",
+    ".agents/skills/refactoring/SKILL.md",
+    ".agents/skills/tdd/SKILL.md",
+    ".agents/skills/hexagonal-architecture/SKILL.md",
+    ".agents/skills/lean-ai-adoption-coach/SKILL.md",
+    ".agents/skills/approval-tests/references/java/api.md",
+    ".obsidian/graph.json",
+    ".agents/skills/fic-create-plan/SKILL.md",
+    ".agents/skills/event-modeling/SKILL.md",
+    ".agents/skills/dockerfile-review/SKILL.md",
+    ".agents/skills/code-simplifier/SKILL.md",
+    ".agents/skills/nullables/SKILL.md",
+    ".agents/skills/nullables/references/building/output-tracking.md",
+    ".agents/skills/nullables/references/building/infrastructure-wrappers.md",
+    ".agents/skills/nullables/references/architecture/event-driven.md",
+    ".agents/skills/nullables/references/building/embedded-stubs.md",
+    ".agents/skills/nullables/references/architecture/logic-sandwich.md",
+    ".cursor/skills/team-ownership/examples/output/unowned.json",
+    ".cursor/skills/team-ownership/examples/output/owner_determined.json"
+  ]
+}

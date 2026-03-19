@@ -30,7 +30,7 @@ Tool-awareness documentation so every coding tool knows how to use skills:
 Completed migration from copy-based sync to symlink-based configuration:
 
 - **Eliminated**: ~50 duplicated files across `~/.cursor/`
-- **Consolidated**: All skills moved to repository (team-ownership, skills-cursor)
+- **Consolidated**: All skills moved to repository (skills-cursor)
 - **Symlinked**: `~/.cursor/`, `~/.claude/`, and root configs now point to repo
 - **Repurposed**: `sync-cursor-config.sh` → `setup-symlinks.sh`
 
