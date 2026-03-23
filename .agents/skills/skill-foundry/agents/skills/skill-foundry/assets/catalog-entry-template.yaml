@@ -1,0 +1,13 @@
+- name: your-skill-name
+  category: artifact-creation
+  pattern: generator
+  owner: your-team
+  status: draft
+  review_cycle_days: 30
+  benchmark_after_model_update: true
+  platforms:
+    - claude
+    - codex
+    - chatgpt
+  overlap_with: []
+  notes: "Brief note about purpose and scope"

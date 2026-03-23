@@ -1,0 +1,38 @@
+taxonomy:
+  - artifact-creation
+  - workflow-automation
+  - tool-reference
+  - verification-testing
+  - data-analysis
+  - connector-enhancement
+  - team-process
+  - skill-governance
+
+patterns:
+  - tool-wrapper
+  - generator
+  - reviewer
+  - inversion
+  - pipeline
+
+lifecycle_statuses:
+  - draft
+  - active
+  - monitor
+  - deprecated
+  - retired
+
+skills:
+  - name: skill-foundry
+    category: skill-governance
+    pattern: reviewer
+    owner: platform-ai
+    status: active
+    review_cycle_days: 60
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - chatgpt
+    overlap_with: []
+    notes: "Meta-skill for creating, auditing, benchmarking, and organizing skills"

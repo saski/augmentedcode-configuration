@@ -128,4 +128,6 @@ This document contains the universal development rules and guidelines for this p
 - Flag redundant, outdated, or missing guidance when you find it.
 - If discrepancies are found, follow the feedback learning loop in [ai-feedback-learning-loop.md](.agents/rules/ai-feedback-learning-loop.md).
 
+@RTK.md
+
  
