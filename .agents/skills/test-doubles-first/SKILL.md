@@ -75,6 +75,6 @@ Always use forward slashes in paths.
 
 ## Minimal Templates
 
-See [examples.md](examples.md) for Jest-based JavaScript and TypeScript templates for fake, stub, spy, and contract-focused mock.
-See [usage.md](usage.md) for trigger prompts and copy-paste templates.
-See [quick.md](quick.md) for single-page fast reference.
+See [references/examples.md](references/examples.md) for Jest-based JavaScript and TypeScript templates for fake, stub, spy, and contract-focused mock.
+See [references/usage.md](references/usage.md) for trigger prompts and copy-paste templates.
+See [references/quick.md](references/quick.md) for single-page fast reference.

@@ -1,0 +1,754 @@
+# Skill-foundry governance for engineering skills in .agents/skills/<name>/.
+# Taxonomy keys: see taxonomy.md in this directory.
+# Sources: skill-factory (synced via pull-and-sync-skills.sh) and native/local skills.
+# Routing text stays in each SKILL.md frontmatter (name + description); this file adds taxonomy and overlaps only.
+
+skills:
+  # --- Testing skills ---
+
+  - name: tdd
+    category: verification-testing
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - xp-increase-coverage
+      - xp-plan-untested-code
+    notes: "Red-green-refactor cycle for new code. Use xp-increase-coverage for adding tests to existing untested code; use xp-plan-untested-code for planning where to add tests."
+
+  - name: test-desiderata
+    category: verification-testing
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - xp-code-review
+    notes: "Kent Beck's test quality framework. xp-code-review is broader (tests + production code + project rules)."
+
+  - name: test-doubles-first
+    category: verification-testing
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - nullables
+    notes: "Selects fakes/stubs/spies over mocks. nullables goes further with infrastructure wrappers that eliminate test doubles entirely."
+
+  - name: nullables
+    category: verification-testing
+    pattern: inversion
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - test-doubles-first
+      - thin-wrappers
+    notes: "Tests without mocks via nulled infrastructure. thin-wrappers provides the wrapper pattern; nullables provides the testing pattern."
+
+  - name: mutation-testing
+    category: verification-testing
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "Verifies test effectiveness by mutating code. Complements tdd and test-desiderata."
+
+  - name: approval-tests
+    category: verification-testing
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - bdd-with-approvals
+    notes: "Snapshot/golden-master testing mechanics. bdd-with-approvals uses approval tests for BDD-style specifications."
+
+  - name: bdd-with-approvals
+    category: verification-testing
+    pattern: generator
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - approval-tests
+      - event-modeling
+    notes: "BDD specs as approval fixtures. Uses approval-tests for mechanics; pairs with event-modeling for slice specs."
+
+  - name: pbt-pragmatic-adoption
+    category: verification-testing
+    pattern: reviewer
+    owner: engineering
+    status: monitor
+    review_cycle_days: 60
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "Context-specific to listings-webapp monorepo (Jest + fast-check). Candidate for retirement or generalization."
+
+  - name: xp-increase-coverage
+    category: verification-testing
+    pattern: generator
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - tdd
+      - xp-plan-untested-code
+    notes: "Adds tests to existing untested code. tdd is for new code; xp-plan-untested-code plans where to add tests."
+
+  - name: xp-plan-untested-code
+    category: verification-testing
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - xp-increase-coverage
+    notes: "Plans test coverage strategy. xp-increase-coverage executes the plan."
+
+  # --- Practices / refactoring skills ---
+
+  - name: refactoring
+    category: workflow-automation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - xp-simple-design-refactor
+      - xp-mikado-method
+      - code-simplifier
+    notes: "Structured 4-phase refactoring process. xp-simple-design-refactor adds ROI prioritization; xp-mikado-method handles large dependency graphs; code-simplifier does quick single-pass cleanup."
+
+  - name: xp-simple-design-refactor
+    category: workflow-automation
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - refactoring
+      - code-simplifier
+    notes: "ROI-driven refactoring toward simple design. refactoring is the hands-on process; code-simplifier is lighter."
+
+  - name: xp-mikado-method
+    category: workflow-automation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - refactoring
+      - small-safe-steps
+    notes: "Dependency graph for large refactorings. small-safe-steps provides the expand-contract pattern for risky changes."
+
+  - name: code-simplifier
+    category: workflow-automation
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - refactoring
+      - xp-simple-design-refactor
+    notes: "Quick single-pass cleanup. refactoring is more structured; xp-simple-design-refactor adds ROI lens."
+
+  # --- Work-splitting skills ---
+
+  - name: small-safe-steps
+    category: workflow-automation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - hamburger-method
+      - story-splitting
+    notes: "1-3h implementation steps with expand-contract for risky changes. story-splitting breaks stories first; hamburger-method picks vertical slices; small-safe-steps plans execution."
+
+  - name: hamburger-method
+    category: workflow-automation
+    pattern: generator
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - story-splitting
+      - small-safe-steps
+    notes: "Vertical slicing with 4-5 options per layer. story-splitting uses heuristics to split stories; small-safe-steps plans 1-3h execution steps."
+
+  - name: story-splitting
+    category: workflow-automation
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - hamburger-method
+      - small-safe-steps
+    notes: "Detects too-large stories and suggests splits. hamburger-method provides vertical slicing; small-safe-steps provides implementation step planning."
+
+  # --- Design skills ---
+
+  - name: hexagonal-architecture
+    category: artifact-creation
+    pattern: generator
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - thin-wrappers
+    notes: "Ports & adapters architecture. thin-wrappers implements the adapter pattern for infrastructure."
+
+  - name: event-modeling
+    category: artifact-creation
+    pattern: generator
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - bdd-with-approvals
+      - collaborative-design
+    notes: "Domain modeling with vertical slices. bdd-with-approvals turns slices into executable specs; collaborative-design is broader."
+
+  - name: collaborative-design
+    category: artifact-creation
+    pattern: generator
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - event-modeling
+    notes: "General-purpose feature design through visual scenarios. event-modeling is more structured for event-driven systems."
+
+  - name: thin-wrappers
+    category: artifact-creation
+    pattern: inversion
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - hexagonal-architecture
+      - nullables
+    notes: "Minimal SDK wrappers for infrastructure. hexagonal-architecture provides the big picture; nullables uses wrappers for testing."
+
+  - name: complexity-review
+    category: verification-testing
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "30-dimension complexity review. Use before committing to technical approach."
+
+  # --- Review and analysis skills ---
+
+  - name: xp-code-review
+    category: verification-testing
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - test-desiderata
+    notes: "Holistic code review (tests, maintainability, rules). test-desiderata focuses on test quality only."
+
+  - name: xp-predict-problems
+    category: verification-testing
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - xp-security-analysis
+    notes: "General production risk prediction. xp-security-analysis focuses on security-specific threats."
+
+  - name: xp-security-analysis
+    category: verification-testing
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - xp-predict-problems
+    notes: "OWASP and threat-modeling lens. xp-predict-problems covers broader production risks."
+
+  - name: xp-technical-debt
+    category: data-analysis
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - xp-simple-design-refactor
+    notes: "Catalogs and prioritizes tech debt. xp-simple-design-refactor acts on the findings."
+
+  # --- Developer tools ---
+
+  - name: writing-bash-scripts
+    category: tool-reference
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "Bash style guide."
+
+  - name: using-uv
+    category: tool-reference
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "Python package management with UV."
+
+  - name: bun-toolkit
+    category: tool-reference
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "JS/TS toolkit with Bun runtime awareness."
+
+  - name: git-worktrees
+    category: tool-reference
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "Parallel git worktree setup."
+
+  - name: dockerfile-review
+    category: verification-testing
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "Dockerfile performance, size, and security review."
+
+  - name: modern-cli-design
+    category: artifact-creation
+    pattern: generator
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "CLI architecture patterns (noun-verb, JSON output, etc.)."
+
+  - name: cwv-improvement-planner
+    category: workflow-automation
+    pattern: generator
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "Core Web Vitals improvement planning (LCP, INP, TTFB)."
+
+  # --- AI tooling skills ---
+
+  - name: creating-hooks
+    category: tool-reference
+    pattern: tool-wrapper
+    owner: engineering
+    status: monitor
+    review_cycle_days: 60
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+    overlap_with:
+      - writing-statuslines
+    notes: "Claude Code hooks. Narrow scope; benchmark against baseline model behavior."
+
+  - name: writing-statuslines
+    category: tool-reference
+    pattern: tool-wrapper
+    owner: engineering
+    status: monitor
+    review_cycle_days: 60
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+    overlap_with:
+      - creating-hooks
+    notes: "Claude Code statusline scripts. Narrow scope; benchmark against baseline model behavior."
+
+  - name: creating-process-files
+    category: artifact-creation
+    pattern: generator
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "Text-as-code process files for AI workflows."
+
+  - name: ai-patterns
+    category: tool-reference
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - lean-ai-adoption-coach
+    notes: "Reference collection of AI coding patterns. lean-ai-adoption-coach covers adoption decisions."
+
+  - name: lean-ai-adoption-coach
+    category: team-process
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - ai-patterns
+    notes: "AI adoption decisions with Lean/XP lens. ai-patterns provides the reference collection."
+
+  # --- Workflow skills ---
+
+  - name: fic-create-plan
+    category: workflow-automation
+    pattern: generator
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - fic-implement-plan
+      - fic-validate-plan
+      - planning-with-files
+    notes: "Creates phase-based plans. Part of the FIC workflow (research -> plan -> implement -> validate)."
+
+  - name: fic-implement-plan
+    category: workflow-automation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - fic-create-plan
+      - fic-validate-plan
+    notes: "Executes plans phase by phase. Part of the FIC workflow."
+
+  - name: fic-research
+    category: data-analysis
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - fic-create-plan
+    notes: "Investigates codebase without proposing changes. Precedes fic-create-plan."
+
+  - name: fic-validate-plan
+    category: verification-testing
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - fic-implement-plan
+    notes: "Validates plan execution. Follows fic-implement-plan."
+
+  - name: planning-with-files
+    category: workflow-automation
+    pattern: generator
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - fic-create-plan
+    notes: "Manus-style file-based planning. fic-create-plan is more structured with phases."
+
+  - name: refinement-loop
+    category: workflow-automation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "Multi-pass iterative refinement."
+
+  - name: thinkies
+    category: team-process
+    pattern: inversion
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "Kent Beck's pattern-based thinking habits."
+
+  # --- Utility skills ---
+
+  - name: traductor-bilingue
+    category: artifact-creation
+    pattern: generator
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "EN/ES technical translation."
+
+  - name: find-skills
+    category: connector-enhancement
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "Skill discovery and installation helper."
+
+  - name: code-notify
+    category: connector-enhancement
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "Local completion notifications for AI tools."
+
+  - name: github-host-alias
+    category: tool-reference
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "SSH host alias routing for multi-account GitHub."

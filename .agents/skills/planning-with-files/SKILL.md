@@ -109,8 +109,8 @@ AFTER 3 FAILURES: Escalate to User
 
 ## Advanced Topics
 
-- **Manus Principles:** See references.md for complete context engineering patterns
-- **Real Examples:** See examples.md for practical implementations
+- **Manus Principles:** See [references/references.md](references/references.md) for complete context engineering patterns
+- **Real Examples:** See [references/examples.md](references/examples.md) for practical implementations
 
 ## Anti-Patterns
 

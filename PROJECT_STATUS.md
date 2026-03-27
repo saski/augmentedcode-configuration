@@ -1,11 +1,31 @@
 # Augmentedcode Configuration - Project Status
 
 **Last Updated**: 2026-03-27
-**Overall Status**: 🟢 **100% Complete** - Config deduplication via symlinks
+**Overall Status**: 🟢 **100% Complete** - Skills library audit completed
 
 ---
 
 ## Recent Changes
+
+### 2026-03-27: Skills library audit against skill-foundry criteria ✅
+
+Full audit of 74 skills in `.agents/skills/` across three phases:
+
+**Phase 1 (High-impact)**:
+- Improved descriptions for 4 synced skills (creating-hooks, event-modeling, bdd-with-approvals, refactoring) in discovery index; SKILL.md frontmatter changes need upstreaming to skill-factory
+- Added 21 native skills to `.agents/docs/skill-factory-skills.md` (new "Native skills" section)
+- Added SKILL.md symlink at `.agents/skills/skill-foundry/` root for standard discovery
+
+**Phase 2 (Governance)**:
+- Created `catalog-engineering.yaml` with 50+ engineering skills (category, pattern, overlap_with, notes)
+- Documented overlap disambiguation for refactoring, testing, and work-splitting skill clusters
+- Standardized reference material for native skills (test-doubles-first, planning-with-files)
+
+**Phase 3 (Lifecycle)**:
+- Assessed retirement candidates (pbt-pragmatic-adoption, creating-hooks, writing-statuslines) -- kept as `monitor` with 60-day review
+- Evaluated ab-test-designer/trustworthy-experiments merge -- keep separate (synced upstream)
+
+**Plan**: `.cursor/plans/skills_library_audit_affb1665.plan.md`
 
 ### 2026-03-27: Product management skills — skill-foundry catalog and docs index ✅
 
@@ -69,7 +89,7 @@ Completed migration from copy-based sync to symlink-based configuration:
 | ----- | ----- | ---- | ---- |
 | Cursor rules baseline | ✅ Complete | 100% | - |
 | Workflow/rule documentation | 🟡 In Progress | 90% | - |
-| Skills catalog | 🟡 In Progress | 80% | No |
+| Skills catalog | ✅ Complete | 100% | - |
 
 **Current Readiness**: 🟢 Ready - Configuration repo is usable and actively maintained.
 
@@ -101,15 +121,15 @@ Completed migration from copy-based sync to symlink-based configuration:
 
 ## 📋 Next Steps
 
-1. Validate the new skill with real test-writing prompts.
-2. Add additional test-double examples for async and error-handling scenarios.
-3. Keep skills index and docs aligned with new skills.
+1. Upstream improved descriptions for synced skills (creating-hooks, event-modeling, bdd-with-approvals, refactoring) to skill-factory.
+2. Upstream reference file standardization (REFERENCE.md/reference.md -> references/) to skill-factory for synced skills.
+3. Validate the test-doubles skill with real test-writing prompts.
 
 ---
 
 ## 🐛 Known Issues
 
-- None currently tracked for the test-doubles skill.
+- Synced skill description improvements in discovery index may drift from SKILL.md frontmatter on next skill-factory sync.
 
 ---
 
