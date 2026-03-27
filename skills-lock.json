@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "skills": {
+    "ab-test-designer": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "c72561e2e277c95ed52a8d683afb4040c0e396d6ded4c77b22deed3ba6dd2f71"
+    },
+    "design-sprint": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "56930150ff6eea94330309811bed114425d32ac5c36c5573ab41d8db12716159"
+    },
+    "feature-prioritization-assistant": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "406856ecd9006855c0e390c8f9d2a7a92d5ad3e9297e36e92fa7a79c80149885"
+    },
+    "growth-loops": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "737720f7e4d3aff0280639c62e12f969f82274d3adb62348d1688c17df44aaed"
+    },
+    "hierarchy-of-engagement": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "c9f7adde159d3260241492875af9fe8e6dd8edf6fe10febf9e3cce293ac7964f"
+    },
+    "hierarchy-of-marketplaces": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "25355b4cd09a0b7d327c42840990fbd49e97c646f596da4e9162f9b5e982b36a"
+    },
+    "hooked-model": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "238e24d2d0d23aff347f80ffef0ff9d640351ecc06ad298e9579b26d94629253"
+    },
+    "jobs-to-be-done": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "3f9b72ef53477e35d7904ddac1c642d77b4ec6b7ac8992792689f51258aafeb0"
+    },
+    "monetizing-innovation": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "d50c35fd25d9313f47389d41c08e8fa45488eb0c8e5d20d06ef81a912b858f37"
+    },
+    "okrs": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "bdbae4e8f9b935a45688729ae2f03d3d95b630abb26fd16b6ca72f222d3c526a"
+    },
+    "opportunity-solution-trees": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "639a556f2019114e984d4608a26b3ac370b86e8e5601d1669d2a6e834aba74ef"
+    },
+    "pmf-survey": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "fce0643f1ea7d9e807bf6c65f9d76d25c728a15aa573d3bcb05871e82d68c9c4"
+    },
+    "positioning-canvas": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "75b2d28174195c86da5d47578548349aac68aa5631b72b90a3872d6e8561cbe6"
+    },
+    "prd-writer": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "d225ececb30fd50c74e938b387b9794c2017fa3988e76c9457a743a6ca6ceba0"
+    },
+    "product-led-growth": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "bc5669521050a2be6ad1478bc2e2a1068d2ab79e382b22798c30a9d49e06b916"
+    },
+    "product-led-seo": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "4f6f93c4f92a719064e24f5382401a7400b24e3274ff180165c8d1b3dda9d163"
+    },
+    "radical-candor": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "f408f04d1d0a8697cbc86d7cd7ffa6626504109b60bc07d91a92cbb59410a550"
+    },
+    "seven-powers": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "9c05d54b2f440672d0b3ca84e5604d84e8fd93612edc74a1be1983946d6673a2"
+    },
+    "shape-up": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "e508c1ad0e675dc525fe5798047eace6e60a94154c30c827c43755a8e57fc05b"
+    },
+    "stakeholder-update-generator": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "cc2935c557f18245688cba9ea53ff1aeed09898fc0c2308cd1b7a1c9ab0945f1"
+    },
+    "strategic-narrative": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "d921258ee77d200008e742505fff051089ce5a10396b5f12f185fa2393e3476f"
+    },
+    "thinking-in-bets": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "e53a742d774cbcbff53cb68a8032741d7f76a04e706490aaa4f9b77ebbdbba29"
+    },
+    "trustworthy-experiments": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "f153410fc9c9c778b8575584b5c7c32260c3c8ae3ad54ca114335eaaab33de14"
+    },
+    "user-feedback-synthesizer": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "3cf570a8f18b39ceb1a28814430ac26fd3cb91ce82f42ca3d9e6f1ec4826e61f"
+    },
+    "working-backwards": {
+      "source": "pmprompt/claude-plugin-product-management",
+      "sourceType": "github",
+      "computedHash": "99ce4114c30598c6d16dfe6f1a7b56c5ebbf22099080d229c1263d20ad7734e3"
+    }
+  }
+}

@@ -1,11 +1,26 @@
 # Augmentedcode Configuration - Project Status
 
-**Last Updated**: 2026-03-19
+**Last Updated**: 2026-03-27
 **Overall Status**: 🟢 **100% Complete** - Config deduplication via symlinks
 
 ---
 
 ## Recent Changes
+
+### 2026-03-27: Product management skills — skill-foundry catalog and docs index ✅
+
+- **Catalog**: `.agents/skills/skill-foundry/agents/catalog-product-management.yaml` — 25 skills from `pmprompt/claude-plugin-product-management` with category, pattern, `overlap_with`, and sync provenance (see `skills-lock.json`).
+- **Discovery**: `.agents/docs/skill-factory-skills.md` retitled to a general skills index; added Product management table mirroring each skill’s `description` frontmatter.
+
+### 2026-03-26: Stop tracking Claude runtime notification state ✅
+
+- **Issue**: `.claude/notifications/last_stop_notification` remained in the index after `.gitignore` gained `.claude/notifications/`; ignored paths do not untrack existing files.
+- **Fix**: `git rm --cached .claude/notifications/last_stop_notification` so the file stays local-only and per-session; directory remains ignored.
+
+### 2026-03-26: Skill-foundry vs repo skills — implementation plan drafted 📋
+
+- **Research**: `thoughts/shared/research/2026-03-26-skill-foundry-vs-repo-skills.md` (governance gap vs minimal `SKILL.md` contract).
+- **Plan**: `thoughts/shared/plans/2026-03-26-skill-foundry-repo-alignment.md` — document two-layer model, add `library-catalog.json`, validate filesystem vs catalog, keep skill-foundry bundle catalog separate; `skill-foundry` directory has no top-level `SKILL.md` (bundle exception encoded in validator spec).
 
 ### 2026-03-19: Base Rule Context Split Completed ✅
 

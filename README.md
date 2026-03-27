@@ -205,7 +205,7 @@ npx thoughts metadata   # Get git metadata for frontmatter
 
 XP behaviors are provided as **trigger-based skills** under `.agents/skills/`. They are applied when the user's request matches the skill description (e.g. "technical debt", "code review", "Mikado Method"). All tools (Cursor, Codex, Antigravity, etc.) resolve skills from repo `.agents/skills/` via symlinks (e.g. `~/.cursor/skills` → repo `.agents/skills/`).
 
-**Skills sources**: `.agents/skills/` contains **native skills** (tracked in this repo, e.g. `xp-*`, `test-doubles-first`, `cwv-improvement-planner`, `code-notify`, `lean-ai-adoption-coach`) and **skill-factory skills** (symlinked from the [skill-factory](https://github.com/saski/skill-factory) repo after running `./pull-and-sync-skills.sh`). AI agents should consider all skills in this directory and read the matching skill's `SKILL.md` when the user's request matches a skill description.
+**Skills sources**: `.agents/skills/` contains **native skills** (tracked in this repo, e.g. `xp-*`, `test-doubles-first`, `cwv-improvement-planner`, `code-notify`, `lean-ai-adoption-coach`), **skill-factory skills** (symlinked from the [skill-factory](https://github.com/saski/skill-factory) repo after running `./pull-and-sync-skills.sh`), and **product-management skills** (vendored or synced; provenance in repo-root `skills-lock.json`, skill-foundry taxonomy in [.agents/skills/skill-foundry/agents/catalog-product-management.yaml](.agents/skills/skill-foundry/agents/catalog-product-management.yaml)). AI agents should consider all skills in this directory and read the matching skill's `SKILL.md` when the user's request matches a skill description. The combined routing index is [.agents/docs/skill-factory-skills.md](.agents/docs/skill-factory-skills.md).
 
 | Skill | Purpose |
 |-------|---------|
@@ -241,7 +241,7 @@ Reusable project-level skills live in **`.agents/skills/`** and are exposed to C
 
 ### Syncing skills from skill-factory
 
-Skills from the [skill-factory](https://github.com/saski/skill-factory) repo can be made available here without duplication by symlinking them into `.agents/skills/`. Run the sync script after pulling skill-factory (or on first setup). Skill-factory skills and their purpose (for matching user requests) are listed in [.agents/docs/skill-factory-skills.md](.agents/docs/skill-factory-skills.md); usage is defined in [.agents/rules/base.md](.agents/rules/base.md) §9.
+Skills from the [skill-factory](https://github.com/saski/skill-factory) repo can be made available here without duplication by symlinking them into `.agents/skills/`. Run the sync script after pulling skill-factory (or on first setup). All skills in `.agents/skills/` (skill-factory, product-management pack, and native) are listed for request-matching in [.agents/docs/skill-factory-skills.md](.agents/docs/skill-factory-skills.md); usage is defined in [.agents/rules/base.md](.agents/rules/base.md) §10.
 
 **Recommended one-liner**: `./pull-and-sync-skills.sh` — pulls skill-factory then runs sync; respects `SKILL_FACTORY`. For a preview without creating symlinks: `./pull-and-sync-skills.sh --dry-run`.
 

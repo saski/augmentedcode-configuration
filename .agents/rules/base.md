@@ -82,8 +82,8 @@ This document contains the universal development rules and guidelines for this p
 ## 10. Skills (Canonical Location and Use)
 
 - **Canonical location**: Shared skills live in `.agents/skills/` in this repository, one directory per skill with at least `SKILL.md`.
-- **Two sources**: Skills in `.agents/skills/` may be native or synced from the skill-factory repository.
-- **Skill-factory skills**: Use [.agents/docs/skill-factory-skills.md](.agents/docs/skill-factory-skills.md) to match user requests to skills before reading the skill's `SKILL.md`.
+- **Sources**: Skills in `.agents/skills/` may be native, synced from [skill-factory](https://github.com/saski/skill-factory), or synced from other packages (e.g. product-management skills; see `skills-lock.json`).
+- **Discovery index**: Use [.agents/docs/skill-factory-skills.md](.agents/docs/skill-factory-skills.md) to match user requests to skills before reading the skill's `SKILL.md`. Product-management entries use skill-foundry governance in [.agents/skills/skill-foundry/agents/catalog-product-management.yaml](.agents/skills/skill-foundry/agents/catalog-product-management.yaml) (category, pattern, overlaps); routing text remains in each `SKILL.md` frontmatter.
 - **Trigger-based use**: When the user's request matches a skill's description, read that skill's `SKILL.md` and follow its instructions.
 - **Skill format**: Each skill has frontmatter `name` and `description`; the description states when to use it.
 

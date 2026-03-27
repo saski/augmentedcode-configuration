@@ -13,3 +13,7 @@ thoughts/
 .agents/gemini/
 
 .codex/config.toml
+.claude/notifications/
+.codex/config.toml
+.claude/backups/
+.claude/cache/changelog.md

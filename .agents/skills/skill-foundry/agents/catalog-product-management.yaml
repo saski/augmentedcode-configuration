@@ -1,0 +1,401 @@
+# Skill-foundry governance for product-management skills in .agents/skills/<name>/.
+# Taxonomy keys: see taxonomy.md in this directory.
+# Content sync: pmprompt/claude-plugin-product-management (see repo-root skills-lock.json).
+# Routing text stays in each SKILL.md frontmatter (name + description); this file adds taxonomy and overlaps only.
+
+source:
+  repository: pmprompt/claude-plugin-product-management
+  source_type: github
+
+skills:
+  - name: ab-test-designer
+    category: verification-testing
+    pattern: generator
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - trustworthy-experiments
+    notes: "Experiment design narrative; prefer trustworthy-experiments for statistical rigor and guardrails."
+
+  - name: design-sprint
+    category: workflow-automation
+    pattern: pipeline
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - shape-up
+    notes: "Time-boxed discovery and prototype validation."
+
+  - name: feature-prioritization-assistant
+    category: team-process
+    pattern: generator
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - okrs
+      - opportunity-solution-trees
+    notes: "RICE-style prioritization vs outcome trees and OKR alignment."
+
+  - name: growth-loops
+    category: workflow-automation
+    pattern: generator
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - product-led-growth
+      - hooked-model
+    notes: "Compounding acquisition/retention loops."
+
+  - name: hierarchy-of-engagement
+    category: data-analysis
+    pattern: generator
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - hooked-model
+    notes: "Retention and core-action progression (consumer)."
+
+  - name: hierarchy-of-marketplaces
+    category: data-analysis
+    pattern: generator
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - seven-powers
+      - growth-loops
+    notes: "Marketplace sequencing and liquidity."
+
+  - name: hooked-model
+    category: workflow-automation
+    pattern: generator
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - hierarchy-of-engagement
+      - growth-loops
+    notes: "Habit loops (trigger, action, reward, investment)."
+
+  - name: jobs-to-be-done
+    category: data-analysis
+    pattern: inversion
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - opportunity-solution-trees
+      - pmf-survey
+    notes: "Customer demand and switch context before solutions."
+
+  - name: monetizing-innovation
+    category: artifact-creation
+    pattern: generator
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - positioning-canvas
+      - pmf-survey
+    notes: "Pricing, packaging, and willingness to pay."
+
+  - name: okrs
+    category: team-process
+    pattern: pipeline
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - feature-prioritization-assistant
+    notes: "Objectives and key results cadence."
+
+  - name: opportunity-solution-trees
+    category: workflow-automation
+    pattern: inversion
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - jobs-to-be-done
+      - prd-writer
+    notes: "Discovery structure from outcomes to opportunities and solutions."
+
+  - name: pmf-survey
+    category: data-analysis
+    pattern: generator
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - jobs-to-be-done
+      - user-feedback-synthesizer
+    notes: "Sean Ellis-style PMF measurement."
+
+  - name: positioning-canvas
+    category: artifact-creation
+    pattern: generator
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - strategic-narrative
+      - seven-powers
+    notes: "Category, alternatives, and differentiated value."
+
+  - name: prd-writer
+    category: artifact-creation
+    pattern: generator
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - working-backwards
+      - opportunity-solution-trees
+    notes: "Structured requirements doc for engineering."
+
+  - name: product-led-growth
+    category: workflow-automation
+    pattern: generator
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - growth-loops
+      - product-led-seo
+    notes: "Self-serve and product-driven GTM motion."
+
+  - name: product-led-seo
+    category: workflow-automation
+    pattern: generator
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - product-led-growth
+    notes: "Programmatic and product-native SEO."
+
+  - name: radical-candor
+    category: team-process
+    pattern: reviewer
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - stakeholder-update-generator
+    notes: "Feedback and difficult conversations."
+
+  - name: seven-powers
+    category: verification-testing
+    pattern: reviewer
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - positioning-canvas
+      - hierarchy-of-marketplaces
+    notes: "Defensibility and durable advantage."
+
+  - name: shape-up
+    category: workflow-automation
+    pattern: pipeline
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - design-sprint
+      - feature-prioritization-assistant
+    notes: "Fixed cycles, appetite, and shaping."
+
+  - name: stakeholder-update-generator
+    category: artifact-creation
+    pattern: generator
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - user-feedback-synthesizer
+    notes: "Progress and release communications."
+
+  - name: strategic-narrative
+    category: artifact-creation
+    pattern: generator
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - positioning-canvas
+      - working-backwards
+    notes: "Movement- and change-led story (e.g. Raskin-style)."
+
+  - name: thinking-in-bets
+    category: team-process
+    pattern: inversion
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - trustworthy-experiments
+      - ab-test-designer
+    notes: "Decisions under uncertainty; complements experiment interpretation."
+
+  - name: trustworthy-experiments
+    category: verification-testing
+    pattern: reviewer
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - ab-test-designer
+    notes: "Kohavi-style trustworthy online experiments; prefer for stats and false-positive control."
+
+  - name: user-feedback-synthesizer
+    category: data-analysis
+    pattern: generator
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - stakeholder-update-generator
+      - pmf-survey
+    notes: "Themes across qualitative feedback sources."
+
+  - name: working-backwards
+    category: artifact-creation
+    pattern: generator
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - prd-writer
+      - strategic-narrative
+    notes: "PR-FAQ and customer-back product definition."
