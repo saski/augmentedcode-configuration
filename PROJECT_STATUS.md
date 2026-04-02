@@ -1,11 +1,17 @@
 # Augmentedcode Configuration - Project Status
 
-**Last Updated**: 2026-03-27
-**Overall Status**: 🟢 **100% Complete** - Skills library audit completed
+**Last Updated**: 2026-04-02
+**Overall Status**: 🟢 **100% Complete** - Shared RTK rule path fixed for all tools
 
 ---
 
 ## Recent Changes
+
+### 2026-04-02: Shared RTK rule include fixed for Cursor/Codex/Claude ✅
+
+- **Issue**: `.agents/rules/base.md` includes `@RTK.md`, but no canonical `RTK.md` existed in `.agents/rules/`.
+- **Fix**: Added `.agents/rules/RTK.md` as the shared, tool-agnostic RTK guidance file so base-rule consumers resolve the include consistently.
+- **Impact**: Cursor and Codex now inherit RTK guidance from the same canonical include path used by shared base rules.
 
 ### 2026-03-27: Skills library audit against skill-foundry criteria ✅
 
