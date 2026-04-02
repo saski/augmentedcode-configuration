@@ -9,7 +9,17 @@ REPO_DIR="$HOME/saski/augmentedcode-configuration"
 # Dev/AI tools under ~ that get a direct "$HOME/$tool/skills" symlink.
 # Cursor and Codex are handled separately due tool-specific directory layouts.
 # Add or remove dot-dir names to cover any dev tool config (e.g. .copilot, .kiro).
-TOOLS_WITH_SKILLS=".antigravity .claude .gemini .langflow"
+TOOLS_WITH_SKILLS=".antigravity .gemini .langflow"
+
+backup_and_remove_if_not_symlink() {
+    local path="$1"
+    local label="$2"
+    if [ -e "$path" ] && [ ! -L "$path" ]; then
+        local backup_path="${path}.backup.$(date +%Y%m%d-%H%M%S)"
+        mv "$path" "$backup_path"
+        echo "⚠️  Backed up existing $label to $backup_path"
+    fi
+}
 
 usage() {
     cat << EOF
@@ -78,6 +88,11 @@ setup_symlinks() {
         echo "   Create backup with: ./backup-cursor-config.sh"
         exit 1
     fi
+
+    # Ensure managed locations can be replaced with symlinks on macOS
+    # where ln -sfn does not replace existing directories in-place.
+    backup_and_remove_if_not_symlink "$HOME/.cursor/skills-cursor" "~/.cursor/skills-cursor"
+    backup_and_remove_if_not_symlink "$HOME/.claude" "~/.claude"
 
     # Create .cursor symlinks (skills → canonical .agents/skills)
     mkdir -p ~/.cursor
