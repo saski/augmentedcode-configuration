@@ -118,7 +118,7 @@ This document contains the universal development rules and guidelines for this p
 
 ## 14. Antigravity Workflows
 
-- When operating in Antigravity mode, use the defined workflows in `.agent/workflows/` for structured tasks.
+- When operating in Antigravity mode, use the defined workflows in `.agents/workflows/` for structured tasks.
 - Keep task, plan, and verification artifacts current when those workflows are in use.
 - Explicitly call task boundaries when switching modes or major sub-tasks.
 

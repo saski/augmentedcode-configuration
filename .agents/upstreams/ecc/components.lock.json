@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "components": [
+    {
+      "source_repo": "everything-claude-code",
+      "source_ref": "5df943ed2bdfaf1297775066d84e1e1e0fc1d579",
+      "source_path": ".agents/skills/documentation-lookup",
+      "local_path": ".agents/skills/documentation-lookup",
+      "owner": "ignacio.viejo",
+      "reason": "Pilot ECC documentation lookup skill with a narrow, explicit upstream intake.",
+      "review_date": "2026-05-06",
+      "status": "pilot"
+    },
+    {
+      "source_repo": "everything-claude-code",
+      "source_ref": "5df943ed2bdfaf1297775066d84e1e1e0fc1d579",
+      "source_path": ".agents/skills/verification-loop",
+      "local_path": ".agents/skills/verification-loop",
+      "owner": "ignacio.viejo",
+      "reason": "Pilot ECC verification workflow patterns without broad repo sync.",
+      "review_date": "2026-05-06",
+      "status": "pilot"
+    },
+    {
+      "source_repo": "everything-claude-code",
+      "source_ref": "5df943ed2bdfaf1297775066d84e1e1e0fc1d579",
+      "source_path": ".agents/skills/strategic-compact",
+      "local_path": ".agents/skills/strategic-compact",
+      "owner": "ignacio.viejo",
+      "reason": "Pilot ECC context-compaction guidance with a self-contained local helper script.",
+      "review_date": "2026-05-06",
+      "status": "pilot"
+    }
+  ]
+}

@@ -6,8 +6,6 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 
 ```text
 .
-├── .agent/
-│   └── workflows/              # Antigravity workflows (context-driven-development, tdd-cycle)
 ├── .agents/
 │   ├── rules/                  # Canonical agent rules (shared across tools)
 │   │   ├── base.md
@@ -25,6 +23,8 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │   │   ├── github-host-alias/
 │   │   └── (symlinks)          # From skill-factory: tdd, refactoring, approval-tests, etc.
 │   ├── mcp.json                # Canonical MCP servers config (shared across tools)
+│   ├── upstreams/              # Explicit upstream intake metadata (for example ECC pilot imports)
+│   ├── workflows/              # Canonical workflows (Antigravity and related structured flows)
 │   └── commands/               # Slash commands (FIC + project workflows); .cursor/commands → here
 │       ├── fic-*.md
 │       └── review-pr/install-command/bug-fixing-agent
@@ -46,11 +46,15 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │   ├── mcp.json                # Symlink → ../.agents/mcp.json
 │   ├── cli-config.json         # Canonical Cursor model/agent config
 │   └── skills-cursor/          # Cursor-only skills (create-skill, create-rule, update-cursor-settings, etc.)
-├── .codex/
-│   └── config.toml             # Canonical Codex model/trust config
+├── .claude/
+│   ├── hooks/                  # Canonical Claude hook scripts
+│   └── CLAUDE.md / RTK.md      # Canonical Claude-local helper files
 ├── .gemini/
 │   ├── mcp_config.json         # Symlink → ../.agents/mcp.json
 │   └── GEMINI.md               # Symlink → ../GEMINI.md
+├── templates/
+│   ├── claude/settings.json    # Seed for local Claude settings (copied, not symlinked)
+│   └── codex/config.toml       # Seed for local Codex config (copied, not symlinked)
 ├── src/thoughts/               # Node/TS CLI for thoughts/ management
 ├── thoughts/                   # Research and plans (see thoughts/ tree below)
 ├── docs/                       # Pre-symlink structure, validation notes
@@ -76,12 +80,17 @@ This repository is the **single source of truth** for AI tool configuration. Con
 ~/.cursor/mcp.json  → ~/saski/augmentedcode-configuration/.agents/mcp.json
 ~/.cursor/cli-config.json → ~/saski/augmentedcode-configuration/.cursor/cli-config.json
 ~/.agents           → ~/saski/augmentedcode-configuration/.agents/
-~/.codex/config.toml → ~/saski/augmentedcode-configuration/.codex/config.toml
 ~/.codex/skills/skills → ~/saski/augmentedcode-configuration/.agents/skills/ (Codex keeps system skills in ~/.codex/skills/.system)
 ~/.codex/rules/default.rules → ~/saski/augmentedcode-configuration/.agents/rules/codex-default.rules
 ~/.codex/AGENTS.md → ~/saski/augmentedcode-configuration/AGENTS.md
+~/.codex/config.toml ← copied from ~/saski/augmentedcode-configuration/templates/codex/config.toml
 ~/.antigravity/skills → ~/saski/augmentedcode-configuration/.agents/skills/ (if using Antigravity)
-~/.claude/          → ~/saski/augmentedcode-configuration/.claude/
+~/.claude/commands → ~/saski/augmentedcode-configuration/.agents/commands/
+~/.claude/skills → ~/saski/augmentedcode-configuration/.agents/skills/
+~/.claude/hooks → ~/saski/augmentedcode-configuration/.claude/hooks/
+~/.claude/CLAUDE.md → ~/saski/augmentedcode-configuration/.claude/CLAUDE.md
+~/.claude/RTK.md → ~/saski/augmentedcode-configuration/.claude/RTK.md
+~/.claude/settings.json ← copied from ~/saski/augmentedcode-configuration/templates/claude/settings.json
 ~/.gemini/antigravity/mcp_config.json → ~/saski/augmentedcode-configuration/.agents/mcp.json
 ~/.gemini/GEMINI.md → ~/saski/augmentedcode-configuration/.gemini/GEMINI.md
 ~/CLAUDE.md         → ~/saski/augmentedcode-configuration/CLAUDE.md
@@ -90,7 +99,7 @@ This repository is the **single source of truth** for AI tool configuration. Con
 ```
 
 Shared skills live in **`.agents/skills/`** (canonical). Cursor and other dev tools (Codex, Antigravity, etc.) point their `skills` directory at this repo path so all tools use the same XP and project skills. Shared MCP servers config is also canonicalized at **`.agents/mcp.json`** and reused across tools. Codex approval defaults are centralized at **`.agents/rules/codex-default.rules`**.
-Volatile runtime state (for example Cursor `ide_state.json`, Codex session/history databases, Gemini brain artifacts) intentionally remains local and outside the canonical config scope.
+Volatile runtime state (for example Claude `projects/` and `sessions/`, Cursor managed manifests, Codex mutable local config, and Obsidian workspace state) intentionally remains local and outside the canonical config scope. Canonical defaults for mutable files live under `templates/` and are copied into place during setup instead of being symlinked back into the repo.
 
 ### Setup on New Machine
 
@@ -238,6 +247,13 @@ Reusable project-level skills live in **`.agents/skills/`** and are exposed to C
 | `lean-ai-adoption-coach` | Evaluate AI tools, agents, workflows, and automations with a Lean/XP simplicity lens; recommend the smallest useful experiment and guardrails. |
 | `planning-with-files` | Use file-based planning for complex multi-step work with persistent `task_plan.md`, `findings.md`, and `progress.md` tracking. |
 | `github-host-alias` | Ensure correct SSH host alias is used when authenticating via SSH, based on local paths (~/work vs ~/saski). |
+| `documentation-lookup` | Use live Context7 docs for library and framework questions instead of stale model memory. Imported from ECC under the explicit upstream intake lane. |
+| `verification-loop` | Run a structured build, typecheck, lint, test, and security verification pass after meaningful changes. Imported from ECC under the explicit upstream intake lane. |
+| `strategic-compact` | Suggest context compaction at logical phase boundaries instead of arbitrary auto-compaction. Imported from ECC under the explicit upstream intake lane. |
+
+### ECC Upstream Intake
+
+Selective ECC imports are tracked in `.agents/upstreams/ecc/components.lock.json`. This keeps imported components explicit, reviewable, and easy to retire without turning ECC into a second canonical config repo.
 
 ### Syncing skills from skill-factory
 

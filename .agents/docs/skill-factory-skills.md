@@ -79,6 +79,9 @@ Two sources land in the same tree:
 | fic-implement-plan | workflow | Execute an approved implementation plan phase by phase with verification. Use when the user asks to implement a plan file from thoughts/shared/plans. |
 | fic-research | workflow | Research and document the current codebase state without proposing changes. Use when the user asks to investigate existing behavior, architecture, or implementation details and capture findings. |
 | fic-validate-plan | workflow | Validate that an implementation plan was executed correctly. Use when the user asks to verify completion, compare code changes to a plan, or produce a validation report. |
+| documentation-lookup | developer-tools | Use up-to-date library and framework docs via Context7 MCP instead of training data. Activates for setup questions, API references, code examples, or when the user names a framework (e.g. React, Next.js, Prisma). |
+| verification-loop | workflow | A comprehensive verification system for Claude Code sessions. |
+| strategic-compact | workflow | Suggests manual context compaction at logical intervals to preserve context through task phases rather than arbitrary auto-compaction. |
 | xp-code-review | practices | Review pending changes for tests, maintainability, and project rules. Use when the user asks for code review, review pending changes, or alignment with maintainability and project rules. |
 | xp-increase-coverage | testing | Increase test coverage with high-value, behavior-focused tests. Use when the user asks to increase coverage, write tests for untested code, or add high-value tests. |
 | xp-mikado-method | practices | Apply the Mikado Method for safe refactoring via a dependency graph of small steps. Use when the user asks for Mikado Method, safe refactoring, or dependency graph for a large change. |

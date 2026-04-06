@@ -9,11 +9,15 @@ thoughts/
 .cursor/skills/**/__pycache__/
 .cursor/skills/**/*.pyc
 .cursor/skills-cursor/**/.venv/
+.cursor/skills-cursor/.cursor-managed-skills-manifest.json
 
 .agents/gemini/
 
-.codex/config.toml
 .claude/notifications/
-.codex/config.toml
 .claude/backups/
+.claude/cache/
 .claude/cache/changelog.md
+.claude/downloads/
+.claude/projects/
+.claude/sessions/
+.obsidian/workspace.json

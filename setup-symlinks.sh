@@ -1,25 +1,16 @@
-#!/bin/bash
-# Setup and Validate Symlinks for AI Tool Configuration
-# Establishes ~/.cursor/, ~/.claude/, and other AI tool config as symlinks to this repo
+#!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
-REPO_DIR="$HOME/saski/augmentedcode-configuration"
+REPO_DIR="${REPO_DIR:-$HOME/saski/augmentedcode-configuration}"
+TEMPLATES_DIR="$REPO_DIR/templates"
+CODEX_CONFIG_TEMPLATE="$TEMPLATES_DIR/codex/config.toml"
+CLAUDE_SETTINGS_TEMPLATE="$TEMPLATES_DIR/claude/settings.json"
 
 # Dev/AI tools under ~ that get a direct "$HOME/$tool/skills" symlink.
 # Cursor and Codex are handled separately due tool-specific directory layouts.
 # Add or remove dot-dir names to cover any dev tool config (e.g. .copilot, .kiro).
 TOOLS_WITH_SKILLS=".antigravity .gemini .langflow"
-
-backup_and_remove_if_not_symlink() {
-    local path="$1"
-    local label="$2"
-    if [ -e "$path" ] && [ ! -L "$path" ]; then
-        local backup_path="${path}.backup.$(date +%Y%m%d-%H%M%S)"
-        mv "$path" "$backup_path"
-        echo "⚠️  Backed up existing $label to $backup_path"
-    fi
-}
 
 usage() {
     cat << EOF
@@ -62,8 +53,8 @@ check_environment() {
         exit 1
     fi
 
-    if [ ! -f "$REPO_DIR/.codex/config.toml" ]; then
-        echo "❌ .codex/config.toml not found in repo"
+    if [ ! -f "$CODEX_CONFIG_TEMPLATE" ]; then
+        echo "❌ templates/codex/config.toml not found in repo"
         exit 1
     fi
 
@@ -76,9 +67,63 @@ check_environment() {
         echo "❌ GEMINI.md not found in repo"
         exit 1
     fi
+
+    if [ ! -d "$REPO_DIR/.claude/hooks" ]; then
+        echo "❌ .claude/hooks directory not found in repo"
+        exit 1
+    fi
+
+    if [ ! -f "$CLAUDE_SETTINGS_TEMPLATE" ]; then
+        echo "❌ templates/claude/settings.json not found in repo"
+        exit 1
+    fi
 }
 
-# Create all symlinks
+ensure_local_directory() {
+    local path="$1"
+
+    if [ -L "$path" ]; then
+        rm "$path"
+    fi
+
+    mkdir -p "$path"
+}
+
+install_template_file() {
+    local template_path="$1"
+    local destination_path="$2"
+
+    mkdir -p "$(dirname "$destination_path")"
+
+    if [ -L "$destination_path" ]; then
+        rm "$destination_path"
+    fi
+
+    if [ ! -f "$destination_path" ]; then
+        cp "$template_path" "$destination_path"
+    fi
+}
+
+link_managed_path() {
+    local source_path="$1"
+    local destination_path="$2"
+
+    mkdir -p "$(dirname "$destination_path")"
+    ln -sfn "$source_path" "$destination_path"
+}
+
+setup_claude_config() {
+    ensure_local_directory "$HOME/.claude"
+
+    link_managed_path "$REPO_DIR/.agents/commands" "$HOME/.claude/commands"
+    link_managed_path "$REPO_DIR/.agents/skills" "$HOME/.claude/skills"
+    link_managed_path "$REPO_DIR/.claude/hooks" "$HOME/.claude/hooks"
+    link_managed_path "$REPO_DIR/.claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
+    link_managed_path "$REPO_DIR/.claude/RTK.md" "$HOME/.claude/RTK.md"
+
+    install_template_file "$CLAUDE_SETTINGS_TEMPLATE" "$HOME/.claude/settings.json"
+}
+
 setup_symlinks() {
     echo "🔗 Setting up symlinks..."
 
@@ -88,11 +133,6 @@ setup_symlinks() {
         echo "   Create backup with: ./backup-cursor-config.sh"
         exit 1
     fi
-
-    # Ensure managed locations can be replaced with symlinks on macOS
-    # where ln -sfn does not replace existing directories in-place.
-    backup_and_remove_if_not_symlink "$HOME/.cursor/skills-cursor" "~/.cursor/skills-cursor"
-    backup_and_remove_if_not_symlink "$HOME/.claude" "~/.claude"
 
     # Create .cursor symlinks (skills → canonical .agents/skills)
     mkdir -p ~/.cursor
@@ -108,7 +148,7 @@ setup_symlinks() {
     # Link shared skills and shared rules into ~/.codex.
     mkdir -p "$HOME/.codex/skills" "$HOME/.codex/rules"
     ln -sfn "$REPO_DIR/.agents/skills" "$HOME/.codex/skills/skills"
-    ln -sfn "$REPO_DIR/.codex/config.toml" "$HOME/.codex/config.toml"
+    install_template_file "$CODEX_CONFIG_TEMPLATE" "$HOME/.codex/config.toml"
     ln -sfn "$REPO_DIR/.agents/rules/codex-default.rules" "$HOME/.codex/rules/default.rules"
     ln -sfn "$REPO_DIR/AGENTS.md" "$HOME/.codex/AGENTS.md"
 
@@ -134,8 +174,7 @@ setup_symlinks() {
     fi
     ln -sfn "$REPO_DIR/.agents" "$HOME/.agents"
 
-    # Create .claude symlink
-    ln -sfn "$REPO_DIR/.claude" ~/.claude
+    setup_claude_config
 
     # Create root-level config symlinks
     ln -sfn "$REPO_DIR/CLAUDE.md" ~/CLAUDE.md
@@ -233,21 +272,14 @@ validate_symlinks() {
 
     # Check Codex managed config file
     local codex_config_path="$HOME/.codex/config.toml"
-    if [ ! -L "$codex_config_path" ]; then
-        echo "❌ $codex_config_path is not a symlink"
+    if [ ! -f "$codex_config_path" ]; then
+        echo "❌ $codex_config_path is missing"
         errors=$((errors + 1))
-    elif [ ! -e "$codex_config_path" ]; then
-        echo "❌ $codex_config_path is a broken symlink"
+    elif [ -L "$codex_config_path" ]; then
+        echo "❌ $codex_config_path should be a local file, not a symlink"
         errors=$((errors + 1))
     else
-        local codex_config_target
-        codex_config_target=$(readlink "$codex_config_path")
-        if [[ "$codex_config_target" != *".codex/config.toml" ]]; then
-            echo "❌ $codex_config_path should point to repo .codex/config.toml, got: $codex_config_target"
-            errors=$((errors + 1))
-        else
-            echo "✓ $codex_config_path → $codex_config_target"
-        fi
+        echo "✓ $codex_config_path is a local managed file"
     fi
 
     # Check Codex shared rules symlink
@@ -309,12 +341,36 @@ validate_symlinks() {
         fi
     done
 
-    # Check .claude
-    if [ ! -L ~/.claude ]; then
-        echo "❌ ~/.claude is not a symlink"
+    # Check .claude managed layout
+    if [ ! -d "$HOME/.claude" ] || [ -L "$HOME/.claude" ]; then
+        echo "❌ ~/.claude should be a local directory"
         errors=$((errors + 1))
     else
-        echo "✓ ~/.claude → $(readlink ~/.claude)"
+        echo "✓ ~/.claude is a local directory"
+    fi
+
+    for path in commands skills hooks CLAUDE.md RTK.md; do
+        local claude_path="$HOME/.claude/$path"
+        if [ ! -L "$claude_path" ]; then
+            echo "❌ $claude_path is not a symlink"
+            errors=$((errors + 1))
+        elif [ ! -e "$claude_path" ]; then
+            echo "❌ $claude_path is a broken symlink"
+            errors=$((errors + 1))
+        else
+            echo "✓ $claude_path → $(readlink "$claude_path")"
+        fi
+    done
+
+    local claude_settings_path="$HOME/.claude/settings.json"
+    if [ ! -f "$claude_settings_path" ]; then
+        echo "❌ $claude_settings_path is missing"
+        errors=$((errors + 1))
+    elif [ -L "$claude_settings_path" ]; then
+        echo "❌ $claude_settings_path should be a local file, not a symlink"
+        errors=$((errors + 1))
+    else
+        echo "✓ $claude_settings_path is a local managed file"
     fi
 
     # Check Gemini MCP config symlink
@@ -420,20 +476,20 @@ validate_symlinks() {
 show_status() {
     echo "📊 Configuration changes:"
     cd "$REPO_DIR"
-    git status --short .cursor/ .codex/ .gemini/ .agents/ *.md 2>/dev/null || true
+    git status --short .cursor/ .claude/ .gemini/ .agents/ templates/ *.md 2>/dev/null || true
 }
 
 # Commit and push changes
 commit_changes() {
     cd "$REPO_DIR"
 
-    if git diff --quiet .cursor/ .codex/ .gemini/ .agents/ *.md 2>/dev/null; then
+    if git diff --quiet .cursor/ .claude/ .gemini/ .agents/ templates/ *.md 2>/dev/null; then
         echo "ℹ️  No config changes to commit"
         exit 0
     fi
 
     echo "📝 Changes to commit:"
-    git status --short .cursor/ .codex/ .gemini/ .agents/ *.md
+    git status --short .cursor/ .claude/ .gemini/ .agents/ templates/ *.md
     echo ""
 
     read -p "Commit message: " -r message
@@ -443,7 +499,7 @@ commit_changes() {
         exit 1
     fi
 
-    git add .cursor/ .codex/ .gemini/ .agents/ *.md
+    git add .cursor/ .claude/ .gemini/ .agents/ templates/ *.md
     git commit -m "$message"
 
     read -p "Push to remote? (y/n): " -n 1 -r
