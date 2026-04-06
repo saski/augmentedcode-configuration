@@ -515,6 +515,20 @@ skills:
     overlap_with: []
     notes: "Core Web Vitals improvement planning (LCP, INP, TTFB)."
 
+  - name: documentation-lookup
+    category: tool-reference
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "Fetches current framework and library docs through Context7 instead of relying on stale model memory."
+
   # --- AI tooling skills ---
 
   - name: creating-hooks
@@ -666,6 +680,38 @@ skills:
     overlap_with:
       - fic-create-plan
     notes: "Manus-style file-based planning. fic-create-plan is more structured with phases."
+
+  - name: strategic-compact
+    category: workflow-automation
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - planning-with-files
+      - fic-create-plan
+    notes: "Suggests context compaction at logical boundaries. planning-with-files and fic-create-plan structure the underlying work."
+
+  - name: verification-loop
+    category: verification-testing
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - fic-validate-plan
+      - xp-code-review
+    notes: "Structured post-change verification loop spanning build, lint, typecheck, test, and security checks."
 
   - name: refinement-loop
     category: workflow-automation

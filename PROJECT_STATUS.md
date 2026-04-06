@@ -1,145 +1,49 @@
 # Augmentedcode Configuration - Project Status
 
-**Last Updated**: 2026-04-02
-**Overall Status**: 🟢 **100% Complete** - Shared RTK rule path fixed for all tools
+**Last Updated**: 2026-04-06
+**Overall Status**: 🟢 Ready - self-contained skill library and validation are in place
 
 ---
 
 ## Recent Changes
 
-### 2026-04-02: Shared RTK rule include fixed for Cursor/Codex/Claude ✅
+### 2026-04-06: Skill library made self-contained ✅
 
-- **Issue**: `.agents/rules/base.md` includes `@RTK.md`, but no canonical `RTK.md` existed in `.agents/rules/`.
-- **Fix**: Added `.agents/rules/RTK.md` as the shared, tool-agnostic RTK guidance file so base-rule consumers resolve the include consistently.
-- **Impact**: Cursor and Codex now inherit RTK guidance from the same canonical include path used by shared base rules.
+- Replaced broken skill-factory symlinks in `.agents/skills/` with tracked local directories.
+- Added `.agents/upstreams/skill-factory/components.lock.json` to record upstream provenance for imported skills.
+- Removed tracked `.cursor/skills/` duplicates so `.agents/skills/` is the only shared skill source in the repo.
+- Replaced the absolute `.claude/skills` symlink with a relative repo-local symlink.
 
-### 2026-03-27: Skills library audit against skill-foundry criteria ✅
+### 2026-04-06: Repository validation and portability cleanup ✅
 
-Full audit of 74 skills in `.agents/skills/` across three phases:
+- Added `validate-skill-library.sh` and `tests/validate-skill-library-test.sh`.
+- Validator now checks for broken imported skills, missing governance catalog entries, missing discovery-index entries, and absolute skill symlinks.
+- `setup-symlinks.sh` now derives `REPO_DIR` from the script location by default.
+- `sync-skill-factory.sh` now imports tracked directories instead of creating external symlinks.
 
-**Phase 1 (High-impact)**:
-- Improved descriptions for 4 synced skills (creating-hooks, event-modeling, bdd-with-approvals, refactoring) in discovery index; SKILL.md frontmatter changes need upstreaming to skill-factory
-- Added 21 native skills to `.agents/docs/skill-factory-skills.md` (new "Native skills" section)
-- Added SKILL.md symlink at `.agents/skills/skill-foundry/` root for standard discovery
+### 2026-04-06: Docs aligned to current architecture ✅
 
-**Phase 2 (Governance)**:
-- Created `catalog-engineering.yaml` with 50+ engineering skills (category, pattern, overlap_with, notes)
-- Documented overlap disambiguation for refactoring, testing, and work-splitting skill clusters
-- Standardized reference material for native skills (test-doubles-first, planning-with-files)
-
-**Phase 3 (Lifecycle)**:
-- Assessed retirement candidates (pbt-pragmatic-adoption, creating-hooks, writing-statuslines) -- kept as `monitor` with 60-day review
-- Evaluated ab-test-designer/trustworthy-experiments merge -- keep separate (synced upstream)
-
-**Plan**: `.cursor/plans/skills_library_audit_affb1665.plan.md`
-
-### 2026-03-27: Product management skills — skill-foundry catalog and docs index ✅
-
-- **Catalog**: `.agents/skills/skill-foundry/agents/catalog-product-management.yaml` — 25 skills from `pmprompt/claude-plugin-product-management` with category, pattern, `overlap_with`, and sync provenance (see `skills-lock.json`).
-- **Discovery**: `.agents/docs/skill-factory-skills.md` retitled to a general skills index; added Product management table mirroring each skill’s `description` frontmatter.
-
-### 2026-03-26: Stop tracking Claude runtime notification state ✅
-
-- **Issue**: `.claude/notifications/last_stop_notification` remained in the index after `.gitignore` gained `.claude/notifications/`; ignored paths do not untrack existing files.
-- **Fix**: `git rm --cached .claude/notifications/last_stop_notification` so the file stays local-only and per-session; directory remains ignored.
-
-### 2026-03-26: Skill-foundry vs repo skills — implementation plan drafted 📋
-
-- **Research**: `thoughts/shared/research/2026-03-26-skill-foundry-vs-repo-skills.md` (governance gap vs minimal `SKILL.md` contract).
-- **Plan**: `thoughts/shared/plans/2026-03-26-skill-foundry-repo-alignment.md` — document two-layer model, add `library-catalog.json`, validate filesystem vs catalog, keep skill-foundry bundle catalog separate; `skill-foundry` directory has no top-level `SKILL.md` (bundle exception encoded in validator spec).
-
-### 2026-03-19: Base Rule Context Split Completed ✅
-
-Split the rulebook into a universal base plus contextual modules:
-
-- **base.md**: Trimmed to universal rules and added contextual loading for Python and Makefile repositories.
-- **python-project.md** and **makefile-project.md**: Added canonical contextual rule modules for Python and Makefile projects.
-- **Cursor wrappers**: Aligned `python-dev.mdc`, added `makefile-dev.mdc`, and updated `use-base-rules.mdc` to point at the canonical modules.
-
-### 2026-03-18: Self-Improvement Mechanisms Hardened ✅
-
-Closed 6 gaps in recursive self-improvement infrastructure:
-
-- **base.md**: Added `<!-- version: 1.1 -->` header, fixed broken path to `ai-feedback-learning-loop.md`, added §16 Periodic Self-Audit.
-- **ai-feedback-learning-loop.md**: Broadened scope from rules-only to cover skills, workflows, and commands. Added `PROJECT_STATUS.md` refresh to step 6.
-- **Root shims**: Converted `AGENTS.md`, `GEMINI.md`, `CLAUDE.md` from copies to symlinks → `.agents/rules/base.md`.
-
-### 2026-03-07: XP Skills Tool-Awareness Follow-up ✅
-
-Tool-awareness documentation so every coding tool knows how to use skills:
-
-- **base.md**: Added §9 Skills (Canonical Location and Use) — `.agents/skills/`, trigger-based use, skill format.
-- **create-skill**: Storage Locations row for canonical shared path `.agents/skills/skill-name/` and symlink exposure.
-- **Research**: `2026-03-06-commands-movable-as-skills.md` updated — canonical `.agents/skills/` and open question "where XP skills should live" resolved.
-
-**Reference**: Validation report `thoughts/shared/research/2026-03-07-VALIDATION-REPORT-xp-skills-tool-awareness.md`.
-
-### 2026-03-06: Config Deduplication via Symlinks ✅
-
-Completed migration from copy-based sync to symlink-based configuration:
-
-- **Eliminated**: ~50 duplicated files across `~/.cursor/`
-- **Consolidated**: All skills moved to repository (skills-cursor)
-- **Symlinked**: `~/.cursor/`, `~/.claude/`, and root configs now point to repo
-- **Repurposed**: `sync-cursor-config.sh` → `setup-symlinks.sh`
-
-**Impact**: Single source of truth established. All config edits in any tool propagate to repo automatically.
-
-**Files**: See implementation plan at `thoughts/shared/plans/2026-03-06-config-deduplication-symlinks.md`
+- Rewrote `README.md` as a user-focused quick-start document.
+- Added `docs/development-guide.md` for maintainer and infrastructure documentation.
+- Updated discovery/governance metadata for `documentation-lookup`, `strategic-compact`, and `verification-loop`.
+- Generalized path-specific guidance that assumed a `~/saski` clone layout.
 
 ---
 
 ## Executive Summary
 
-| Component | Status | Progress | Blocking |
-| ----- | ----- | ---- | ---- |
-| Cursor rules baseline | ✅ Complete | 100% | - |
-| Workflow/rule documentation | 🟡 In Progress | 90% | - |
-| Skills catalog | ✅ Complete | 100% | - |
-
-**Current Readiness**: 🟢 Ready - Configuration repo is usable and actively maintained.
-
----
-
-## ✅ Completed Components
-
-### Test Doubles Skill (2026-02-19)
-
-- Added project skill at `.cursor/skills/test-doubles-first/`.
-- Added `SKILL.md` with decision tree favoring fake/stub/spy before mock.
-- Added `examples.md` with minimal Python and TypeScript templates.
-- Added `usage.md` with trigger prompts and copy-paste templates.
-- Added language-specific quick chooser tables for Python and TypeScript dependency types.
-- Added anti-pattern -> replacement table to speed up test review and refactoring decisions.
-- Added PR review comment templates for fast, consistent code review feedback.
-- Added `quick.md` single-page fast reference for test-double decisions and review.
-- Reduced overlap between `usage.md` and `quick.md` to keep quick reference concise and detailed templates centralized.
-- Added `SKILL.md` quick navigation section for faster in-file discovery.
-- Reworked `examples.md` to Jest-first JavaScript/TypeScript patterns (fake, stub, spy, contract-focused mock).
+| Component | Status | Notes |
+| ----- | ----- | ----- |
+| Shared rules | ✅ Complete | Canonical under `.agents/rules/` |
+| Shared skills | ✅ Complete | Self-contained and tracked in repo |
+| Skill governance | ✅ Complete | Index and catalogs are validated |
+| Local setup scripts | ✅ Complete | Path-portable defaults in place |
+| Maintainer docs | ✅ Complete | Split from the user-facing README |
 
 ---
 
-## 🚧 In Progress
+## Next Steps
 
-- Expanding reusable Cursor skills for common engineering workflows.
-
----
-
-## 📋 Next Steps
-
-1. Upstream improved descriptions for synced skills (creating-hooks, event-modeling, bdd-with-approvals, refactoring) to skill-factory.
-2. Upstream reference file standardization (REFERENCE.md/reference.md -> references/) to skill-factory for synced skills.
-3. Validate the test-doubles skill with real test-writing prompts.
-
----
-
-## 🐛 Known Issues
-
-- Synced skill description improvements in discovery index may drift from SKILL.md frontmatter on next skill-factory sync.
-
----
-
-## 📝 Notes
-
-- Skill content is cross-platform and uses forward-slash paths.
-- Skill intentionally encourages behavior/state assertions over interaction-heavy mocking.
+1. Benchmark monitored skills (`pbt-pragmatic-adoption`, `creating-hooks`, `writing-statuslines`) after the next major model update.
+2. Upstream any skill-factory improvements that should be shared back to the source repository.
+3. Keep `components.lock.json`, the discovery index, and the skill-foundry catalogs aligned whenever skills change.

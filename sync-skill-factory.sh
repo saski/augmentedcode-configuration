@@ -1,29 +1,26 @@
-#!/bin/bash
-# Sync skills from skill-factory into .agents/skills via symlinks.
-# Adds symlinks only for skills not already present (no overwrite of native skills).
-# Run after pulling skill-factory to make new skills available to all tools.
+#!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 SKILL_FACTORY="${SKILL_FACTORY:-$REPO_DIR/../skill-factory}"
 OUTPUT_SKILLS="$SKILL_FACTORY/output_skills"
 CANONICAL_SKILLS="$REPO_DIR/.agents/skills"
+LOCK_PATH="$REPO_DIR/.agents/upstreams/skill-factory/components.lock.json"
 
 usage() {
     cat << EOF
 Usage: $(basename "$0") [--dry-run]
 
-Syncs skill-factory's output_skills into this repo's .agents/skills/ by creating
-relative symlinks for each skill that does not already exist (native skills like
-xp-* are never overwritten). Run after pulling skill-factory to get new skills.
+Imports skill-factory output_skills into this repo's .agents/skills/ as tracked
+directories. Native skills are preserved. Previously imported skill-factory
+skills are refreshed in place and the provenance lock file is regenerated.
 
   SKILL_FACTORY  Default: \$REPO/../skill-factory (sibling directory)
-  --dry-run      List what would be linked, do not create symlinks
+  --dry-run      List what would be refreshed or imported without writing files
 
 Example:
-  cd ~/saski/skill-factory && git pull
-  cd ~/saski/augmentedcode-configuration && ./sync-skill-factory.sh
+  SKILL_FACTORY=/path/to/skill-factory ./sync-skill-factory.sh
 EOF
     exit 0
 }
@@ -48,7 +45,28 @@ if [[ ! -d "$CANONICAL_SKILLS" ]]; then
     exit 1
 fi
 
+mkdir -p "$(dirname "$LOCK_PATH")"
+
+previous_imports_file="$(mktemp)"
+current_imports_file="$(mktemp)"
+trap 'rm -f "$previous_imports_file" "$current_imports_file"' EXIT
+
+python3 - <<'PY' "$LOCK_PATH" > "$previous_imports_file"
+import json
+import sys
+from pathlib import Path
+
+lock_path = Path(sys.argv[1])
+if not lock_path.exists():
+    raise SystemExit(0)
+
+payload = json.loads(lock_path.read_text())
+for name in sorted(payload.get("skills", {})):
+    print(name)
+PY
+
 added=0
+refreshed=0
 skipped=0
 
 while IFS= read -r -d '' skill_md; do
@@ -56,30 +74,90 @@ while IFS= read -r -d '' skill_md; do
     name="$(basename "$skill_dir")"
     target="$CANONICAL_SKILLS/$name"
 
-    if [[ -e "$target" ]]; then
+    if [[ -e "$target" && ! -L "$target" ]] && ! grep -qx "$name" "$previous_imports_file"; then
         ((skipped++)) || true
         if [[ "$DRY_RUN" == true ]]; then
-            echo "  skip (exists) $name"
+            echo "  skip (native/custom) $name"
         fi
         continue
     fi
 
-    rel_path="$(python3 -c "import os.path; print(os.path.relpath(r'$skill_dir', r'$CANONICAL_SKILLS'))")"
+    printf '%s\n' "$name" >> "$current_imports_file"
+
     if [[ "$DRY_RUN" == true ]]; then
-        echo "  link $name -> $rel_path"
-        ((added++)) || true
+        if grep -qx "$name" "$previous_imports_file"; then
+            echo "  refresh $name"
+            ((refreshed++)) || true
+        else
+            echo "  import $name"
+            ((added++)) || true
+        fi
         continue
     fi
 
-    ln -s "$rel_path" "$target"
-    echo "  + $name -> $rel_path"
-    ((added++)) || true
+    rm -rf "$target"
+    cp -R "$skill_dir" "$target"
+    if grep -qx "$name" "$previous_imports_file"; then
+        echo "  ~ $name"
+        ((refreshed++)) || true
+    else
+        echo "  + $name"
+        ((added++)) || true
+    fi
 done < <(find "$OUTPUT_SKILLS" -name "SKILL.md" -type f -print0 2>/dev/null | sort -z)
 
 if [[ "$DRY_RUN" == true ]]; then
     echo ""
-    echo "Dry run: would add $added symlink(s), skip $skipped existing."
-else
-    echo ""
-    echo "✅ Synced: $added new symlink(s), $skipped already present."
+    echo "Dry run: would import $added skill(s), refresh $refreshed, skip $skipped."
+    exit 0
 fi
+
+source_commit="$(git -C "$SKILL_FACTORY" rev-parse HEAD)"
+
+python3 - <<'PY' "$OUTPUT_SKILLS" "$LOCK_PATH" "$current_imports_file" "$source_commit"
+import hashlib
+import json
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+output_skills = Path(sys.argv[1])
+lock_path = Path(sys.argv[2])
+imports_file = Path(sys.argv[3])
+source_commit = sys.argv[4]
+skill_names = [line.strip() for line in imports_file.read_text().splitlines() if line.strip()]
+
+skills = {}
+for name in sorted(set(skill_names)):
+    matches = list(output_skills.glob(f"**/{name}/SKILL.md"))
+    if not matches:
+        continue
+    source_dir = matches[0].parent
+    digest = hashlib.sha256()
+    for path in sorted(source_dir.rglob("*")):
+        if path.is_file():
+            digest.update(str(path.relative_to(source_dir)).encode())
+            digest.update(path.read_bytes())
+    skills[name] = {
+        "source": "saski/skill-factory",
+        "sourceType": "github",
+        "sourceCommit": source_commit,
+        "sourcePath": str(source_dir.relative_to(output_skills.parent)).replace("\\", "/"),
+        "computedHash": digest.hexdigest(),
+        "syncedAt": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
+    }
+
+payload = {
+    "version": 1,
+    "source": {
+        "repository": "saski/skill-factory",
+        "sourceType": "github",
+        "sourceCommit": source_commit,
+    },
+    "skills": skills,
+}
+lock_path.write_text(json.dumps(payload, indent=2) + "\n")
+PY
+
+echo ""
+echo "✅ Synced: imported $added skill(s), refreshed $refreshed, skipped $skipped."

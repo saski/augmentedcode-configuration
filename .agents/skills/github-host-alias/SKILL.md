@@ -1,6 +1,6 @@
 ---
 name: github-host-alias
-description: Use when running git clone, git remote add, or suggesting git commands interacting with GitHub to ensure the correct SSH host alias is used based on the local workspace path (~/work vs ~/saski).
+description: Use when running git clone, git remote add, or suggesting git commands interacting with GitHub to ensure the correct SSH host alias is used based on the local workspace path (~/work vs non-work paths).
 ---
 
 # GitHub Host Alias Selection
@@ -23,7 +23,7 @@ The environment has multiple GitHub accounts configured via `~/.ssh/config`:
 - **`github.com`** (default):
   - Authenticates as `saski` (personal account).
   - Has NO access to the work organization.
-  - **Path trigger**: Use this for work under `~/saski/*` or general personal paths.
+  - **Path trigger**: Use this for any path outside `~/work/*`.
   
 - **`github.com-work`**:
   - Uses `~/.ssh/id_ed25519_work` for authentication (work account).
@@ -32,14 +32,14 @@ The environment has multiple GitHub accounts configured via `~/.ssh/config`:
 
 ## Workflow & Examples
 
-1. **Check the local path**: Identify whether the target directory for the repository is under the `work` folder or the `saski` folder.
+1. **Check the local path**: Identify whether the target directory for the repository is under the `work` folder or outside it.
 2. **Format the SSH URL**:
    - If work, the SSH URL must use `@github.com-work:`.
    - If personal, the SSH URL must use `@github.com:`.
 
 ### Example: Cloning
 
-**Personal repo (under `~/saski/*`)**
+**Personal repo (outside `~/work/*`)**
 ```bash
 git clone git@github.com:saski/my-personal-repo.git
 ```

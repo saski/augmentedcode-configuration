@@ -2,10 +2,11 @@
 
 Use this file to match user requests to a skill **before** opening `SKILL.md`. Purposes mirror each skill’s `description` in frontmatter.
 
-Two sources land in the same tree:
+Three sources land in the same tree:
 
-- **[skill-factory](https://github.com/saski/skill-factory)** — synced via `./pull-and-sync-skills.sh`
+- **[skill-factory](https://github.com/saski/skill-factory)** — imported into this repo via `./pull-and-sync-skills.sh` / `./sync-skill-factory.sh`
 - **Product management pack** — `pmprompt/claude-plugin-product-management` (integrity: repo-root `skills-lock.json`; taxonomy and overlaps: [.agents/skills/skill-foundry/agents/catalog-product-management.yaml](../skills/skill-foundry/agents/catalog-product-management.yaml))
+- **Native skills** — authored and maintained directly in this repository
 
 ## Skill-Factory (synced)
 
@@ -95,7 +96,7 @@ Two sources land in the same tree:
 | planning-with-files | workflow | Implements Manus-style file-based planning to organize and track progress on complex tasks. Creates task_plan.md, findings.md, and progress.md. Use when asked to plan out, break down, or organize a multi-step project, research task, or any work requiring >5 tool calls. |
 | find-skills | ai | Helps users discover and install agent skills when they ask questions like "how do I do X", "find a skill for X", "is there a skill that can...", or express interest in extending capabilities. |
 | code-notify | developer-tools | Use when a task should trigger a local completion notification through code-notify, or when configuring cross-tool notification behavior for Codex, Cursor, Claude, Gemini, or similar agent workflows. |
-| github-host-alias | developer-tools | Use when running git clone, git remote add, or suggesting git commands interacting with GitHub to ensure the correct SSH host alias is used based on the local workspace path (~/work vs ~/saski). |
+| github-host-alias | developer-tools | Use when running git clone, git remote add, or suggesting git commands interacting with GitHub to ensure the correct SSH host alias is used based on the local workspace path (~/work vs non-work paths). |
 | lean-ai-adoption-coach | ai | Guide AI adoption decisions in software development using Lean, Extreme Programming, and pragmatic simplicity. Use when evaluating AI tools, agents, workflows, prompts, automations, or rollout guardrails. |
 | pbt-pragmatic-adoption | testing | Pragmatic property-based testing review and first-wave adoption for this listings-webapp monorepo (Jest + fast-check, unit tests only). |
 | skill-foundry | skill-governance | Design, organize, evaluate, benchmark, and improve portable Agent Skills. Use when creating a new skill, auditing a skill library, comparing a skill against baseline, optimizing descriptions, or retiring outdated skills. |

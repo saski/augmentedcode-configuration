@@ -1,0 +1,234 @@
+{
+  "version": 1,
+  "source": {
+    "repository": "saski/skill-factory",
+    "sourceType": "github",
+    "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3"
+  },
+  "skills": {
+    "ai-patterns": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/ai/ai-patterns",
+      "computedHash": "763216320aff26ccf0c24ea7766e094f078644924e4f1873e9372370ab420030",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "approval-tests": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/testing/approval-tests",
+      "computedHash": "cb3da544890bf3da53dcd7ed62c29cd230d2ac9bcb6921994fdc97a1454c34dd",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "bdd-with-approvals": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/testing/bdd-with-approvals",
+      "computedHash": "c5796d45e3a9de5706d5519eaa6d66eb242c3cb1654d3c3850235f13576cb536",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "code-simplifier": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/practices/code-simplifier",
+      "computedHash": "bc35611540c29c5b84bbab9b08f52854821ea8406c54d2846f0ff16ee8cb91ed",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "collaborative-design": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/design/collaborative-design",
+      "computedHash": "fb0dd53643babc5d5a9f56710177ed1470ae0e6f5bf4b6f7fee70114376b6d3d",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "complexity-review": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/practices/complexity-review",
+      "computedHash": "94c517fc2cc24549fd9ed928d6725d162497f070bd164b8b38e27083d89e7b34",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "creating-hooks": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/ai/claude-code/creating-hooks",
+      "computedHash": "cac1694ec3d46708ba51f0925ea4ecbcfa1f34a1db9b87d12f0e0ccf7930b9f2",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "creating-process-files": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/ai/creating-process-files",
+      "computedHash": "d5ac5b11977c807452b6f99a6a290001bba5b3fdacf6df6afc72297224338ad4",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "dockerfile-review": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/developer-tools/dockerfile-review",
+      "computedHash": "4576be82103947629596c77ab5ceb3d62d7f2cce6d34d5ef487dcc33835cc963",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "event-modeling": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/design/event-modeling",
+      "computedHash": "685393f319f698ad97c12a7c6f5b7235134fa3655759ffc6dad8e47b2abbbae5",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "git-worktrees": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/developer-tools/git-worktrees",
+      "computedHash": "c5eea126af4f7bccb031aad2b5f865a4de35a56448de0a7a6dc5476264882ca9",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "hamburger-method": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/practices/hamburger-method",
+      "computedHash": "ede1e88cee8c7ad035aaf670fa4de521863d438f0e9bd23f22d6f679ae3de94f",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "hexagonal-architecture": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/design/hexagonal-architecture",
+      "computedHash": "c532e21dc1b08b9c52db6c4a5c378981cd7109fb9ea9986d18f447ad06f84dc9",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "modern-cli-design": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/design/modern-cli-design",
+      "computedHash": "4907c742cec57523da5404fc0cfc0a73e728ee581e047b287210c56793cf6a75",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "mutation-testing": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/testing/mutation-testing",
+      "computedHash": "6caa0fefdb70de3860c272a1c8b22e9172680b12f54f359c9863f5327001ca0d",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "nullables": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/testing/nullables",
+      "computedHash": "f03eb9d101f60e7a85649a9392d3fdb2e515c5c7d32237ee061b93c70ebc432b",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "refactoring": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/practices/refactoring",
+      "computedHash": "4f498d13e236b9e47573ff3b2a3f6131b8bffa647da7e76e9fb9644af91f9082",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "refinement-loop": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/practices/refinement-loop",
+      "computedHash": "b0cd1974458bcfb07affc8b2ee05c4c24d37b76663e24fd2ef1233c8fd777c91",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "small-safe-steps": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/practices/small-safe-steps",
+      "computedHash": "ef176fe52e1091b63e9e3f281a9eac910c4ca5ea7827f5be8556e6fcfa32ebd6",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "story-splitting": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/practices/story-splitting",
+      "computedHash": "5baedd05bcfbf58bb8fe34185a24f29513b8391b17b90fce74b66021b7018580",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "tdd": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/testing/tdd",
+      "computedHash": "830612518527fc2c28240af6e87a2e086cbc8ad9b5dfa2a9530310b2321b7c8c",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "test-desiderata": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/testing/test-desiderata",
+      "computedHash": "79284ae4f3d8b9a0dba3fc0da3f97b73d13bd6b45dbdded32ca7c194baa80b67",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "thin-wrappers": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/practices/thin-wrappers",
+      "computedHash": "e8287f6f4b2c9130c35f2e51e04086244461d499a7d482d1a98e6917ee764a1e",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "thinkies": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/practices/thinkies",
+      "computedHash": "e708a5d96ef1722bb45226f6c57e2c3ab6b66cfb37e7d49651a15248ff1cb7c2",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "traductor-bilingue": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/tools/traductor-bilingue",
+      "computedHash": "dc5a10368830b0537c26c7289f865d5c4402974fe6ca6c1e1b9630f80d6dd188",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "using-uv": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/developer-tools/using-uv",
+      "computedHash": "b8ea35f1857dae94b462e9febe360439c695a507680327141f25cc7c370ae150",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "writing-bash-scripts": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/developer-tools/writing-bash-scripts",
+      "computedHash": "52f0a61d8698a0727e960ac9ed21ca86d0ec06c1f2a3044bf459c4022941d839",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    },
+    "writing-statuslines": {
+      "source": "saski/skill-factory",
+      "sourceType": "github",
+      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
+      "sourcePath": "output_skills/ai/claude-code/writing-statuslines",
+      "computedHash": "c3713b1f11a9fe11cc947c06dc795726c50f28ef7915ee35ef34212cb9d5abe4",
+      "syncedAt": "2026-04-06T16:10:03Z"
+    }
+  }
+}
