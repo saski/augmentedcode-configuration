@@ -5,3 +5,5 @@ prefix_rule(pattern=["/Applications/Codex.app/Contents/Resources/codex", "mcp", 
 prefix_rule(pattern=["git", "fetch", "origin"], decision="allow")
 prefix_rule(pattern=["npm", "install", "--no-save"], decision="allow")
 prefix_rule(pattern=["mkdir", "-p", "/tmp/fc"], decision="allow")
+prefix_rule(pattern=["/bin/zsh", "-lc", "UV_CACHE_DIR=/tmp/uv-cache PYTHONPATH=. uv run --with pytest --with redis --with invoke-release pytest -c /dev/null -p no:cacheprovider --noconftest lib/cache/tests/test_redis_client.py tests/test_config.py -q"], decision="allow")
+prefix_rule(pattern=["xcrun", "simctl"], decision="allow")

@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-REPO_DIR="${REPO_DIR:-$(cd "$(dirname "$0")" && pwd)}"
+REPO_DIR="${REPO_DIR:-$HOME/saski/augmentedcode-configuration}"
 TEMPLATES_DIR="$REPO_DIR/templates"
 CODEX_CONFIG_TEMPLATE="$TEMPLATES_DIR/codex/config.toml"
 CLAUDE_SETTINGS_TEMPLATE="$TEMPLATES_DIR/claude/settings.json"

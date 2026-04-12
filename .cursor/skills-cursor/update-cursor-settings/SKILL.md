@@ -4,6 +4,9 @@ description: >-
   Modify Cursor/VSCode user settings in settings.json. Use when you want to
   change editor settings, preferences, configuration, themes, font size, tab
   size, format on save, auto save, keybindings, or any settings.json values.
+metadata:
+  surfaces:
+    - ide
 ---
 # Updating Cursor Settings
 

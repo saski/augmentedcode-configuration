@@ -1,5 +1,5 @@
-<!-- last_updated: 2026-03-19 -->
-<!-- version: 2.0 -->
+<!-- last_updated: 2026-04-08 -->
+<!-- version: 2.2 -->
 # AI Agent Development Rules
 
 This document contains the universal development rules and guidelines for this project, applicable to all AI agents (Claude, Gemini, Codex, and others).
@@ -20,8 +20,9 @@ This document contains the universal development rules and guidelines for this p
 
 ## 2. Contextual Rule Loading
 
-- When the repo contains Python source or Python project markers, also read `.agents/rules/python-project.md`.
-- When the repo contains a `Makefile`, also read `.agents/rules/makefile-project.md`.
+- When the repo contains Python source or Python project markers, also read `.agents/rules/pyth![[REDIS_AUTH_REMEDIATION_HANDOFF]]on-project.md` if that file exists in the current repository.
+- When the repo contains a `Makefile`, also read `.agents/rules/makefile-project.md` if that file exists in the current repository.
+- If a contextual rule file is referenced by this section but is not present in the current repository, treat it as optional, note that it is missing, and continue with the applicable rules that are available.
 - These contextual rules extend, not replace, the universal rules in this file.
 
 ## 3. Code Quality & Coverage
@@ -60,6 +61,7 @@ This document contains the universal development rules and guidelines for this p
 - **Persistence**: Persist through multiple attempts until resolution.
 - **Thorough Iteration**: Break complex changes into incremental steps.
 - **Sequential Questions**: Only one question at a time; each question should build on previous answers.
+- **Workspace-Aware GitHub SSH**: Before suggesting or running GitHub SSH commands (`git clone`, `git fetch`, `git pull`, `git push`, `git remote add`, `git remote set-url`), choose the SSH host alias from the local workspace path. Use `git@github.com-eventbrite:` for repositories under `~/eventbrite/*` and `git@github.com-saski:` for repositories under `~/saski/*`. Never use bare `git@github.com:` in this environment. If the correct alias is unclear, load the `github-host-alias` skill and verify against `~/.ssh/config`.
 
 ## 7. Mental Preparation
 
