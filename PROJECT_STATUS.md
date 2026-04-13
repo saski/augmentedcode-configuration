@@ -1,11 +1,16 @@
 # Augmentedcode Configuration - Project Status
 
-**Last Updated**: 2026-04-06
+**Last Updated**: 2026-04-13
 **Overall Status**: 🟢 Ready - self-contained skill library and validation are in place
 
 ---
 
 ## Recent Changes
+
+### 2026-04-13: Codex RTK symlink ✅
+
+- `setup-symlinks.sh` now links `~/.codex/RTK.md` to `.agents/rules/RTK.md` so `AGENTS.md` `@RTK.md` embeds resolve for Codex CLI.
+- Validation checks the new symlink; README and `cursor-config-management.mdc` document it.
 
 ### 2026-04-06: Skill library made self-contained ✅
 
