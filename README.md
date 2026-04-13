@@ -83,6 +83,7 @@ This repository is the **single source of truth** for AI tool configuration. Con
 ~/.codex/skills/skills → ~/saski/augmentedcode-configuration/.agents/skills/ (Codex keeps system skills in ~/.codex/skills/.system)
 ~/.codex/rules/default.rules → ~/saski/augmentedcode-configuration/.agents/rules/codex-default.rules
 ~/.codex/AGENTS.md → ~/saski/augmentedcode-configuration/AGENTS.md
+~/.codex/RTK.md → ~/saski/augmentedcode-configuration/.agents/rules/RTK.md
 ~/.codex/config.toml ← copied from ~/saski/augmentedcode-configuration/templates/codex/config.toml
 ~/.antigravity/skills → ~/saski/augmentedcode-configuration/.agents/skills/ (if using Antigravity)
 ~/.claude/commands → ~/saski/augmentedcode-configuration/.agents/commands/

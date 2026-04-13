@@ -12,7 +12,7 @@ alwaysApply: true
 - **GitHub**: `github.com/saski/augmentedcode-configuration`
 - **Global Config**: `~/.cursor/rules/` and `~/.cursor/commands/` (symlinks to repo)
 - **Managed Cursor Config**: `~/.cursor/mcp.json` and `~/.cursor/cli-config.json` (symlinked to repo)
-- **Managed Codex Config**: `~/.codex/rules/default.rules` and `~/.codex/AGENTS.md` are symlinked to repo; `~/.codex/config.toml` is copied from `templates/codex/config.toml`
+- **Managed Codex Config**: `~/.codex/rules/default.rules`, `~/.codex/AGENTS.md`, and `~/.codex/RTK.md` are symlinked to repo; `~/.codex/config.toml` is copied from `templates/codex/config.toml`
 - **Managed Gemini Config**: `~/.gemini/antigravity/mcp_config.json` and `~/.gemini/GEMINI.md` (symlinked to repo)
 - **Canonical .agents Link**: `~/.agents` should be a symlink to repo `.agents/` (no local duplicate)
 - **Shared Skills**: `.agents/skills/` — canonical skill root; exposed to Cursor (and Codex, Antigravity, etc.) via symlinks (e.g. `~/.cursor/skills` → repo `.agents/skills/`). Includes native skills plus imported upstream skills tracked in this repo. Agents should consider all skills in this directory when the user's request matches a skill description; read the skill's `SKILL.md` and follow its instructions. For skill usage and discovery, follow the Skills section in `.agents/rules/base.md` and the index in `.agents/docs/`.

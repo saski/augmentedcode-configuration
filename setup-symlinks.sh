@@ -151,6 +151,7 @@ setup_symlinks() {
     install_template_file "$CODEX_CONFIG_TEMPLATE" "$HOME/.codex/config.toml"
     ln -sfn "$REPO_DIR/.agents/rules/codex-default.rules" "$HOME/.codex/rules/default.rules"
     ln -sfn "$REPO_DIR/AGENTS.md" "$HOME/.codex/AGENTS.md"
+    link_managed_path "$REPO_DIR/.agents/rules/RTK.md" "$HOME/.codex/RTK.md"
 
     # Other dev/AI tools: point skills at canonical .agents/skills
     for tool in $TOOLS_WITH_SKILLS; do
@@ -317,6 +318,25 @@ validate_symlinks() {
             errors=$((errors + 1))
         else
             echo "✓ $codex_agents_path → $codex_agents_target"
+        fi
+    fi
+
+    # Check Codex RTK instructions symlink (AGENTS.md embeds @RTK.md)
+    local codex_rtk_path="$HOME/.codex/RTK.md"
+    if [ ! -L "$codex_rtk_path" ]; then
+        echo "❌ $codex_rtk_path is not a symlink"
+        errors=$((errors + 1))
+    elif [ ! -e "$codex_rtk_path" ]; then
+        echo "❌ $codex_rtk_path is a broken symlink"
+        errors=$((errors + 1))
+    else
+        local codex_rtk_target
+        codex_rtk_target=$(readlink "$codex_rtk_path")
+        if [[ "$codex_rtk_target" != *".agents/rules/RTK.md" ]]; then
+            echo "❌ $codex_rtk_path should point to repo .agents/rules/RTK.md, got: $codex_rtk_target"
+            errors=$((errors + 1))
+        else
+            echo "✓ $codex_rtk_path → $codex_rtk_target"
         fi
     fi
 
