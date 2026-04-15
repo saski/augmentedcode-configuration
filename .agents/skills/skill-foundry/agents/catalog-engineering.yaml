@@ -798,3 +798,277 @@ skills:
       - cursor
     overlap_with: []
     notes: "SSH host alias routing for multi-account GitHub."
+
+  # --- Google ADK (native) ---
+
+  - name: google-adk-setup
+    category: tool-reference
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - google-adk-agent-patterns
+    notes: "Bootstrap ADK projects and local dev UI."
+
+  - name: google-adk-agent-patterns
+    category: workflow-automation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - google-adk-setup
+    notes: "Agent definitions, tools, and multi-agent composition on ADK."
+
+  # --- Obsidian LLM Wiki stack (native) ---
+
+  - name: llm-wiki
+    category: workflow-automation
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 180
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "Architecture and strategy for the LLM Wiki pattern."
+
+  - name: wiki-setup
+    category: workflow-automation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 180
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - llm-wiki
+    notes: "Vault initialization and structure."
+
+  - name: wiki-ingest
+    category: workflow-automation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 180
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - wiki-update
+      - data-ingest
+    notes: "Document distillation into wiki pages."
+
+  - name: wiki-update
+    category: workflow-automation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 180
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - wiki-ingest
+    notes: "Project-scoped sync into the vault."
+
+  - name: wiki-query
+    category: connector-enhancement
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 180
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "Retrieval and synthesis from compiled wiki pages."
+
+  - name: wiki-lint
+    category: verification-testing
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 180
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - wiki-status
+    notes: "Structural wiki health audits."
+
+  - name: wiki-status
+    category: data-analysis
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 180
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - wiki-lint
+    notes: "Ingest progress, deltas, and graph insights."
+
+  - name: wiki-rebuild
+    category: workflow-automation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 180
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - wiki-setup
+    notes: "Archive, rebuild, or restore wiki snapshots."
+
+  - name: wiki-export
+    category: artifact-creation
+    pattern: generator
+    owner: engineering
+    status: active
+    review_cycle_days: 180
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "Export wiki graph to portable formats."
+
+  - name: cross-linker
+    category: workflow-automation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 180
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - wiki-lint
+    notes: "Adds missing wikilinks across pages."
+
+  - name: tag-taxonomy
+    category: team-process
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 180
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "Controlled vocabulary for wiki tags."
+
+  - name: claude-history-ingest
+    category: workflow-automation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 180
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - codex-history-ingest
+      - wiki-history-ingest
+    notes: "Claude Code session mining into the wiki."
+
+  - name: codex-history-ingest
+    category: workflow-automation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 180
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - claude-history-ingest
+      - wiki-history-ingest
+    notes: "Codex CLI session mining into the wiki."
+
+  - name: wiki-history-ingest
+    category: workflow-automation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 180
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - claude-history-ingest
+      - codex-history-ingest
+    notes: "Router entrypoint for agent history ingests."
+
+  - name: data-ingest
+    category: workflow-automation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 180
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - wiki-ingest
+    notes: "Generic text and log ingest not covered by specialized ingesters."
+
+  - name: skill-creator
+    category: skill-governance
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - skill-foundry
+    notes: "Skill authoring, evals, and tuning; complements skill-foundry governance."

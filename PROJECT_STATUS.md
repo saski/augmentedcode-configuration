@@ -7,6 +7,12 @@
 
 ## Recent Changes
 
+### 2026-04-13: MCP, skill governance, and symlink hygiene ✅
+
+- Canonical `.agents/mcp.json` Atlassian endpoint updated to `https://mcp.atlassian.com/v1/mcp` (streamable HTTP per vendor guidance).
+- `catalog-engineering.yaml` and `.agents/docs/skill-factory-skills.md` now cover the Obsidian LLM Wiki stack, `skill-creator`, and Google ADK native skills so `validate-skill-library.sh` passes.
+- Re-ran `./setup-symlinks.sh setup` so `~/.cursor/cli-config.json` and `~/.gemini/skills` match the documented symlink layout on this machine.
+
 ### 2026-04-13: Codex RTK symlink ✅
 
 - `setup-symlinks.sh` now links `~/.codex/RTK.md` to `.agents/rules/RTK.md` so `AGENTS.md` `@RTK.md` embeds resolve for Codex CLI.

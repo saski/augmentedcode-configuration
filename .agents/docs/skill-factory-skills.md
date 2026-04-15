@@ -102,3 +102,19 @@ Three sources land in the same tree:
 | skill-foundry | skill-governance | Design, organize, evaluate, benchmark, and improve portable Agent Skills. Use when creating a new skill, auditing a skill library, comparing a skill against baseline, optimizing descriptions, or retiring outdated skills. |
 | google-adk-setup | developer-tools | Bootstrap a Google ADK project from zero to a running local dev UI. Use when setting up a new ADK agent project, configuring Vertex AI credentials, scaffolding the agent folder with `uv run adk create agent`, or launching the ADK dev UI. |
 | google-adk-agent-patterns | ai | Define ADK agents with function tools and compose multi-agent systems (SequentialAgent, LoopAgent, ParallelAgent, AgentTool). Use when writing agent definitions, adding Python tools, building pipelines, or designing router/delegation patterns. |
+| llm-wiki | workflow | Foundational LLM Wiki (Karpathy-style) pattern for Obsidian: raw → wiki → schema; use for wiki architecture and knowledge strategy. |
+| wiki-setup | workflow | Initialize or repair an Obsidian wiki vault structure, `.env`, and special files; use on "set up my wiki" or vault init. |
+| wiki-ingest | workflow | Ingest documents into the Obsidian wiki from files, folders, or `_raw/` staging; use for "add this to the wiki" and bulk imports. |
+| wiki-update | workflow | Distill the current project into the wiki from any repo; use for "update wiki", "sync to wiki", cross-project capture. |
+| wiki-query | workflow | Search and answer from the compiled wiki with citations; includes fast index-only mode for quick lookups. |
+| wiki-lint | workflow | Audit wiki health: orphans, broken links, staleness, contradictions; use for "clean up the wiki" and maintenance passes. |
+| wiki-status | workflow | Dashboard of ingest progress, deltas, and optional graph insights ("hubs", structure) before append vs rebuild decisions. |
+| wiki-rebuild | workflow | Archive current wiki and rebuild from sources or restore from archive; use for "rebuild the wiki" / controlled resets. |
+| wiki-export | workflow | Export the wiki graph to JSON, GraphML, Neo4j Cypher, or HTML for external tools and visualization. |
+| cross-linker | workflow | Discover and add missing wikilinks across pages; write-heavy linking pass after large ingests. |
+| tag-taxonomy | workflow | Controlled vocabulary for wiki tags; use before assigning tags or when normalizing messy tag usage. |
+| claude-history-ingest | workflow | Mine Claude Code history (`~/.claude`) into the wiki; use for "process my Claude history". |
+| codex-history-ingest | workflow | Mine Codex CLI history (`~/.codex`) into the wiki; use for Codex sessions and transcript logs. |
+| wiki-history-ingest | workflow | Router for `/wiki-history-ingest claude|codex`; dispatches to the matching history ingest skill. |
+| data-ingest | workflow | Catch-all ingest for chat exports, Slack/Discord logs, transcripts, CSV, and other unstructured text sources. |
+| skill-creator | skill-governance | Create, edit, benchmark, and tune Agent Skills and evals; use for new skills and performance tuning. |
