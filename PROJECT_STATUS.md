@@ -7,6 +7,12 @@
 
 ## Recent Changes
 
+### 2026-04-27: Repo hygiene (tracked noise, portable defaults) ✅
+
+- Removed `.obsidian/workspace.json` from version control so it matches `.gitignore` and Obsidian UI state stays local.
+- Restored canonical `.agents/mcp.json`, `.agents/rules/codex-default.rules`, and `templates/codex/config.toml` (no machine-specific paths or personal Codex sandbox rules in the shared tree).
+- Quoted YAML `description` frontmatter in `google-adk-agent-patterns`, `google-adk-setup`, and `small-safe-steps` skills for safer parsing.
+
 ### 2026-04-27: Maintenance pass (governance, symlinks, Cursor skills) ✅
 
 - Registered `corporate-aws-cli` in `.agents/skills/skill-foundry/agents/catalog-engineering.yaml` so `./validate-skill-library.sh` stays aligned with filesystem skills (index already listed it).

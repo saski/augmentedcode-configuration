@@ -1,6 +1,6 @@
 ---
 name: google-adk-setup
-description: Bootstrap a Google ADK (Agent Development Kit) project from zero to a running local dev UI. Use when setting up a new ADK agent project, configuring Vertex AI credentials, scaffolding the agent folder, or troubleshooting ADK environment issues. Trigger on: adk setup, adk init, google-adk, vertex ai agent, uv run adk, adk web.
+description: "Bootstrap a Google ADK (Agent Development Kit) project from zero to a running local dev UI. Use when setting up a new ADK agent project, configuring Vertex AI credentials, scaffolding the agent folder, or troubleshooting ADK environment issues. Trigger on: adk setup, adk init, google-adk, vertex ai agent, uv run adk, adk web."
 ---
 
 # Google ADK Setup

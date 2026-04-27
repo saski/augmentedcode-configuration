@@ -1,6 +1,6 @@
 ---
 name: google-adk-agent-patterns
-description: Define, compose, and wire Google ADK agents with function tools and multi-agent orchestration. Use when writing agent definitions, adding Python function tools, building pipelines with SequentialAgent/LoopAgent/ParallelAgent, or designing router/delegation patterns. Trigger on: adk agent, LlmAgent, SequentialAgent, LoopAgent, ParallelAgent, AgentTool, function tool, output_key, output_schema, agent routing.
+description: "Define, compose, and wire Google ADK agents with function tools and multi-agent orchestration. Use when writing agent definitions, adding Python function tools, building pipelines with SequentialAgent/LoopAgent/ParallelAgent, or designing router/delegation patterns. Trigger on: adk agent, LlmAgent, SequentialAgent, LoopAgent, ParallelAgent, AgentTool, function tool, output_key, output_schema, agent routing."
 ---
 
 # Google ADK Agent Patterns
