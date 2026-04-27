@@ -515,6 +515,20 @@ skills:
     overlap_with: []
     notes: "Core Web Vitals improvement planning (LCP, INP, TTFB)."
 
+  - name: corporate-aws-cli
+    category: tool-reference
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "Federated AWS CLI (SAML/SSO), profiles/regions, STS errors, and RDS orderable options alignment."
+
   - name: documentation-lookup
     category: tool-reference
     pattern: tool-wrapper

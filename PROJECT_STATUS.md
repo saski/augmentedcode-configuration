@@ -1,11 +1,17 @@
 # Augmentedcode Configuration - Project Status
 
-**Last Updated**: 2026-04-13
-**Overall Status**: 🟢 Ready - self-contained skill library and validation are in place
+**Last Updated**: 2026-04-27
+**Overall Status**: 🟢 Ready - skill validator, governance catalogs, and symlink layout verified
 
 ---
 
 ## Recent Changes
+
+### 2026-04-27: Maintenance pass (governance, symlinks, Cursor skills) ✅
+
+- Registered `corporate-aws-cli` in `.agents/skills/skill-foundry/agents/catalog-engineering.yaml` so `./validate-skill-library.sh` stays aligned with filesystem skills (index already listed it).
+- Ran `./setup-symlinks.sh setup` to restore `~/.cursor/cli-config.json` as a symlink to repo `.cursor/cli-config.json`; `./setup-symlinks.sh validate` is clean.
+- Tracked `.cursor/skills-cursor/` (canvas SDK stubs, split-to-prs, manifests, and existing Cursor-only skills) so the tree matches the documented `~/.cursor/skills-cursor` symlink target.
 
 ### 2026-04-13: MCP, skill governance, and symlink hygiene ✅
 
