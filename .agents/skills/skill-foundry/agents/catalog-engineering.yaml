@@ -890,6 +890,9 @@ skills:
     overlap_with:
       - wiki-update
       - data-ingest
+      - ingest-url
+      - wiki-capture
+      - wiki-research
     notes: "Document distillation into wiki pages."
 
   - name: wiki-update
@@ -905,6 +908,7 @@ skills:
       - cursor
     overlap_with:
       - wiki-ingest
+      - wiki-capture
     notes: "Project-scoped sync into the vault."
 
   - name: wiki-query
@@ -918,7 +922,8 @@ skills:
       - claude
       - codex
       - cursor
-    overlap_with: []
+    overlap_with:
+      - wiki-dashboard
     notes: "Retrieval and synthesis from compiled wiki pages."
 
   - name: wiki-lint
@@ -934,6 +939,7 @@ skills:
       - cursor
     overlap_with:
       - wiki-status
+      - wiki-synthesize
     notes: "Structural wiki health audits."
 
   - name: wiki-status
@@ -949,6 +955,7 @@ skills:
       - cursor
     overlap_with:
       - wiki-lint
+      - wiki-dashboard
     notes: "Ingest progress, deltas, and graph insights."
 
   - name: wiki-rebuild
@@ -977,8 +984,107 @@ skills:
       - claude
       - codex
       - cursor
-    overlap_with: []
+    overlap_with:
+      - graph-colorize
     notes: "Export wiki graph to portable formats."
+
+  - name: graph-colorize
+    category: tool-reference
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 180
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - wiki-export
+    notes: "Obsidian graph colorGroups configuration; preserves existing graph settings."
+
+  - name: ingest-url
+    category: workflow-automation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 180
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - wiki-ingest
+      - data-ingest
+      - wiki-update
+    notes: "URL-specific ingest with project-aware placement."
+
+  - name: wiki-capture
+    category: workflow-automation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 180
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - wiki-update
+      - wiki-ingest
+    notes: "Conversation-to-wiki capture; distinct from document and project sync ingest."
+
+  - name: wiki-dashboard
+    category: artifact-creation
+    pattern: generator
+    owner: engineering
+    status: active
+    review_cycle_days: 180
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - wiki-query
+      - wiki-status
+    notes: "Obsidian Bases dashboard generation from vault frontmatter."
+
+  - name: wiki-research
+    category: workflow-automation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 180
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - documentation-lookup
+      - fic-research
+      - wiki-ingest
+    notes: "Web research loop whose output is filed into the Obsidian wiki."
+
+  - name: wiki-synthesize
+    category: data-analysis
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 180
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - cross-linker
+      - wiki-lint
+      - wiki-status
+    notes: "Finds concept co-occurrence gaps and creates synthesis pages."
 
   - name: cross-linker
     category: workflow-automation
@@ -993,6 +1099,7 @@ skills:
       - cursor
     overlap_with:
       - wiki-lint
+      - wiki-synthesize
     notes: "Adds missing wikilinks across pages."
 
   - name: tag-taxonomy
@@ -1070,6 +1177,7 @@ skills:
       - cursor
     overlap_with:
       - wiki-ingest
+      - ingest-url
     notes: "Generic text and log ingest not covered by specialized ingesters."
 
   - name: skill-creator

@@ -6,7 +6,7 @@ Three sources land in the same tree:
 
 - **[skill-factory](https://github.com/saski/skill-factory)** — imported into this repo via `./pull-and-sync-skills.sh` / `./sync-skill-factory.sh`
 - **Product management pack** — `pmprompt/claude-plugin-product-management` (integrity: repo-root `skills-lock.json`; taxonomy and overlaps: [.agents/skills/skill-foundry/agents/catalog-product-management.yaml](../skills/skill-foundry/agents/catalog-product-management.yaml))
-- **Native skills** — authored and maintained directly in this repository
+- **Native and local skills** — authored, maintained, or locally installed into this repository
 
 ## Skill-Factory (synced)
 
@@ -110,8 +110,14 @@ Three sources land in the same tree:
 | wiki-query | workflow | Search and answer from the compiled wiki with citations; includes fast index-only mode for quick lookups. |
 | wiki-lint | workflow | Audit wiki health: orphans, broken links, staleness, contradictions; use for "clean up the wiki" and maintenance passes. |
 | wiki-status | workflow | Dashboard of ingest progress, deltas, and optional graph insights ("hubs", structure) before append vs rebuild decisions. |
+| wiki-capture | workflow | Save the current conversation or discussion as a structured Obsidian wiki note; use for conversation capture, not generic source ingest. |
+| wiki-dashboard | workflow | Create Obsidian Bases dashboard views from vault frontmatter; use for dynamic tables, card views, and content indexes. |
+| wiki-research | workflow | Research a topic with web sources and file the synthesized result into the Obsidian wiki; use when the requested output belongs in the wiki. |
+| wiki-synthesize | workflow | Discover recurring concept co-occurrences and create first-class synthesis pages that connect them. |
 | wiki-rebuild | workflow | Archive current wiki and rebuild from sources or restore from archive; use for "rebuild the wiki" / controlled resets. |
 | wiki-export | workflow | Export the wiki graph to JSON, GraphML, Neo4j Cypher, or HTML for external tools and visualization. |
+| graph-colorize | workflow | Color-code the Obsidian graph view by updating `.obsidian/graph.json` color groups while preserving other graph settings. |
+| ingest-url | workflow | Fetch a URL and distill the page into the Obsidian wiki; use for pasted links or explicit URL ingest requests. |
 | cross-linker | workflow | Discover and add missing wikilinks across pages; write-heavy linking pass after large ingests. |
 | tag-taxonomy | workflow | Controlled vocabulary for wiki tags; use before assigning tags or when normalizing messy tag usage. |
 | claude-history-ingest | workflow | Mine Claude Code history (`~/.claude`) into the wiki; use for "process my Claude history". |

@@ -122,6 +122,13 @@ For Codex history specifically, also compute:
 
 ## Step 3: Report the Status
 
+**Visibility tally (before rendering the report):** Grep frontmatter across all vault `.md` pages for `visibility/internal` and `visibility/pii` tag values. Count:
+- `public` = pages with `visibility/public` tag **or** no `visibility/` tag at all
+- `internal` = pages with `visibility/internal` tag
+- `pii` = pages with `visibility/pii` tag
+
+Include this in the Overview section as `Page visibility: N public · M internal · K pii`. Skip the line if all pages are untagged (fully public vault).
+
 Present a clear summary:
 
 ```markdown
@@ -129,6 +136,7 @@ Present a clear summary:
 
 ## Overview
 - **Total wiki pages:** 87 across 6 categories
+- **Page visibility:** 72 public · 11 internal · 4 pii
 - **Total sources ingested:** 42
 - **Projects tracked:** 6
 - **Last ingest:** 2026-04-06T11:00:00Z

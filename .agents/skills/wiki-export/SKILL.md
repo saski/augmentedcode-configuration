@@ -258,6 +258,11 @@ Wiki export complete → wiki-export/
   graph.html    — interactive browser visualization (open in any browser)
 ```
 
+In filtered mode, append a line showing what was excluded:
+```
+  (filtered: X of Y pages excluded — visibility/internal, visibility/pii)
+```
+
 ## Notes
 
 - **Re-running is safe** — all output files are overwritten on each run

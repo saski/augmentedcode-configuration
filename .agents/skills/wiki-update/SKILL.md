@@ -180,6 +180,12 @@ Append:
 - [TIMESTAMP] WIKI_UPDATE project=<project-name> pages_updated=X pages_created=Y source_cwd=/path/to/project
 ```
 
+### Update `hot.md`
+
+Read `$OBSIDIAN_VAULT_PATH/hot.md` (create from the template in `wiki-ingest` if missing). Rewrite **Recent Activity** with what was just synced — last 3 operations max. Update **Active Threads** if this project is an ongoing focus. Update **Key Takeaways** with the most important architectural insight or decision surfaced during this sync. Update `updated` timestamp.
+
+Write conceptually: "Synced obsidian-wiki — added wiki-capture and wiki-research skills, core new capabilities are autonomous web research and conversation capture."
+
 ## Tips
 
 - **Be aggressive about merging.** If the project uses React Server Components, don't create a new page if `concepts/react-server-components.md` already exists. Update the existing one and add this project as a source.

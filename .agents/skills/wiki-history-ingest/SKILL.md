@@ -27,7 +27,8 @@ If the user invokes `/wiki-history-ingest <target>` (or equivalent text command)
    - `~/.claude` or Claude memory/session JSONL artifacts -> `claude-history-ingest`
    - `~/.codex` or rollout/session index artifacts -> `codex-history-ingest`
 3. If ambiguous, ask one short clarification:
-   - "Should I ingest `claude` history or `codex` history?"
+   - "Should I ingest `claude` or `codex` history?"
+4. If the user asks for another history source, say that only `claude` and `codex` history ingesters are installed in this repository.
 
 ## Execution Contract
 

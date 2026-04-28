@@ -58,6 +58,7 @@ For each page in the vault:
 ### Matching Rules
 
 - **Case-insensitive matching** for names (e.g., "my-project" matches page `MyProject`)
+- **Diacritic-insensitive matching** — normalize both the page name and the body text with Unicode NFKD (decompose accented characters to base + combining marks, strip combining marks) before comparing. This ensures body text "Muller" matches page `[[entities/müller]]` and vice versa.
 - **Skip self-references** — a page shouldn't link to itself
 - **Skip common words** — don't link "the", "and", generic terms. Only match on distinctive names
 - **Prefer the shortest unambiguous wikilink path** — use `[[page-name]]` not `[[full/path/to/page-name]]` when the name is unique across the vault
@@ -125,7 +126,31 @@ If the term isn't mentioned naturally in the body but the pages are semantically
 
 If a `## Related` section already exists, append to it. Don't duplicate existing entries.
 
-## Step 5: Report
+## Step 5: Score Misc Page Affinity
+
+After the main linking pass, update affinity scores for all pages in `misc/` (pages with `promotion_status: misc` in their frontmatter, or located under the `misc/` directory).
+
+For each misc page:
+
+1. **Collect outgoing links** — all `[[wikilinks]]` in the page body
+2. **Collect incoming links** — grep the vault for `[[misc/<slug>]]` and `[[<slug>]]` references
+3. For each linked page (both directions), check if it belongs to a project:
+   - Lives under `projects/<project-name>/`
+   - Has a `project:` frontmatter field matching a project name
+4. Group by project name and sum: `outgoing_links + incoming_links`
+5. Update the `affinity` frontmatter block on the misc page:
+
+```yaml
+affinity:
+  obsidian-wiki: 3
+  another-project: 1
+```
+
+6. If any project's score ≥ 3: flag this page as a **promotion candidate** and record it for the report
+
+**Efficiency note:** only read the full body of misc pages — other pages only need a frontmatter grep to determine their project membership.
+
+## Step 6: Report
 
 Present a summary:
 
@@ -144,17 +169,28 @@ Present a summary:
 - `references/foo.md` — no incoming or outgoing links found
 - `concepts/bar.md` — could not find related pages
 
+### Misc Promotion Candidates: N
+Pages in misc/ that have ≥ 3 connections to a single project — ready to be promoted:
+
+| Page | Top Project | Score |
+|---|---|---|
+| `misc/web-martinfowler-articles-microservices.md` | `obsidian-wiki` | 4 |
+
+To promote: move the page to `projects/<project-name>/references/` and update all backlinks.
+
 ### Pages Skipped: 3
 - `index.md`, `log.md` — special files
 - `_archives/*` — archived content
 ```
 
-## Step 6: Update Log
+## Step 7: Update Log and Hot Cache
 
 Append to `log.md`:
 ```
-- [TIMESTAMP] CROSS_LINK pages_scanned=N links_added=M pages_modified=P orphans_remaining=Q
+- [TIMESTAMP] CROSS_LINK pages_scanned=N links_added=M pages_modified=P orphans_remaining=Q misc_affinity_updated=R promotion_candidates=S
 ```
+
+**`hot.md`** — Read `$OBSIDIAN_VAULT_PATH/hot.md` (create from the template in `wiki-ingest` if missing). Update **Recent Activity** with a one-line summary of what was linked — e.g. "Cross-linked 23 mentions across 12 pages; 2 orphans remain." Keep the last 3 operations. Update `updated` timestamp.
 
 ## Tips
 

@@ -1,11 +1,18 @@
 # Augmentedcode Configuration - Project Status
 
-**Last Updated**: 2026-04-27
+**Last Updated**: 2026-04-28
 **Overall Status**: 🟢 Ready - skill validator, governance catalogs, and symlink layout verified
 
 ---
 
 ## Recent Changes
+
+### 2026-04-28: Obsidian wiki skills compatibility pass ✅
+
+- Registered locally installed `Ar9av/obsidian-wiki` skills in the discovery index and engineering governance catalog.
+- Added overlap warnings for URL ingest, conversation capture, dashboards, web research, synthesis, and graph colorizing so routing collisions stay explicit.
+- Removed unsupported `hermes`/`openclaw` routes from `wiki-history-ingest`; only installed `claude` and `codex` history ingesters are advertised.
+- Preserved native `skill-creator` ownership by removing the generated `Ar9av/obsidian-wiki` lock entry for that existing skill.
 
 ### 2026-04-27: Repo hygiene (tracked noise, portable defaults) ✅
 

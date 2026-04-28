@@ -84,6 +84,35 @@ title: Wiki Log
 - [TIMESTAMP] INIT vault_path="OBSIDIAN_VAULT_PATH" categories=concepts,entities,skills,references,synthesis,journal
 ```
 
+### hot.md
+
+```markdown
+---
+title: Hot Cache
+updated: TIMESTAMP
+---
+
+# Hot Cache
+
+*A ~500-word semantic snapshot of recent activity. Updated after every major write operation.*
+
+## Recent Activity
+
+- [TIMESTAMP] INIT — vault created at OBSIDIAN_VAULT_PATH
+
+## Active Threads
+
+*None yet — start ingesting sources to populate.*
+
+## Key Takeaways
+
+*None yet.*
+
+## Flagged Contradictions
+
+*None yet.*
+```
+
 ## Step 4: Create .obsidian Configuration
 
 Create minimal Obsidian config for a good out-of-box experience:
@@ -120,6 +149,7 @@ Run a quick sanity check:
 - [ ] Vault directory exists with: `concepts/`, `entities/`, `skills/`, `references/`, `synthesis/`, `journal/`, `projects/`, `_archives/`, `_raw/`
 - [ ] `index.md` exists at vault root
 - [ ] `log.md` exists at vault root
+- [ ] `hot.md` exists at vault root
 - [ ] `.env` has `OBSIDIAN_VAULT_PATH` set
 - [ ] `.obsidian/` directory exists
 - [ ] Source directories (if configured) exist and are readable

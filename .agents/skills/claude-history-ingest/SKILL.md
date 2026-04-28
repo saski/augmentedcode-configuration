@@ -5,7 +5,7 @@ description: >
   their past Claude conversations for knowledge, import their ~/.claude folder, extract insights from
   previous coding sessions, or says things like "process my Claude history", "add my conversations to the wiki",
   "what have I discussed with Claude before". Also triggers when the user mentions their .claude folder,
-  Claude projects, session data, or past conversation logs.
+  Claude projects, session data, past conversation logs, local-agent-mode sessions, or audit logs.
 ---
 
 # Claude History Ingest — Conversation Mining
@@ -37,7 +37,9 @@ Process everything regardless of manifest. Use after a `wiki-rebuild` or if the 
 
 ## Claude Code Data Layout
 
-Claude Code stores everything under `~/.claude/`. Here is the actual structure:
+Claude Code stores data in two locations. Scan **both**.
+
+### Source 1: `~/.claude/` (CLI sessions)
 
 ```
 ~/.claude/
@@ -59,17 +61,55 @@ Claude Code stores everything under `~/.claude/`. Here is the actual structure:
 └── settings.json
 ```
 
-### Key data sources ranked by value:
+### Source 2: `~/Library/Application Support/Claude/local-agent-mode-sessions/` (Desktop app agent sessions)
 
-1. **Memory files** (`projects/*/memory/*.md`) — Pre-distilled, already wiki-friendly. These contain the user's preferences, project decisions, and feedback. Gold.
-2. **Conversation JSONL** (`projects/*/*.jsonl`) — Full conversation transcripts. Rich but noisy.
-3. **Session metadata** (`sessions/*.json`) — Tells you which project, when, and what CWD.
+The Claude desktop app stores local agent mode sessions here. The structure is deeply nested:
+
+```
+~/Library/Application Support/Claude/local-agent-mode-sessions/
+└── <outer-uuid>/
+    └── <inner-uuid>/
+        ├── local_<session-uuid>.json          # Session metadata
+        └── local_<session-uuid>/
+            ├── audit.jsonl                    # Audit log — tool calls, file reads, commands run
+            └── .claude/
+                └── projects/
+                    └── <path-encoded-name>/   # Same path-encoding as ~/.claude/projects/
+                        └── <uuid>.jsonl       # Conversation transcript (same JSONL format as CLI)
+```
+
+**How to find all local-agent-mode sessions:**
+
+```bash
+# Find all session metadata files
+find ~/Library/Application\ Support/Claude/local-agent-mode-sessions -name "local_*.json" -maxdepth 4
+
+# Find all audit logs
+find ~/Library/Application\ Support/Claude/local-agent-mode-sessions -name "audit.jsonl"
+
+# Find all conversation transcripts
+find ~/Library/Application\ Support/Claude/local-agent-mode-sessions -name "*.jsonl" -path "*/.claude/projects/*"
+```
+
+**Session metadata (`local_<uuid>.json`)** — JSON file with fields like `sessionId`, `cwd`, `startedAt`, `model`, `title`. Read this first to understand the session context before opening the transcript.
+
+**Audit log (`audit.jsonl`)** — Each line is a JSON record of one agent action: tool calls (Read, Write, Bash, Edit), file accesses, shell commands executed, MCP calls. Useful for understanding *what the agent actually did* — often richer signal than the conversation text alone. Fields: `type`, `toolName`, `input`, `output`, `timestamp`, `sessionId`.
+
+**Conversation transcript (`.claude/projects/.../<uuid>.jsonl`)** — Identical format to CLI conversation JSONL. Parse the same way as `~/.claude/projects/*/*.jsonl`.
+
+### Key data sources ranked by value (both locations combined):
+
+1. **Memory files** (`~/.claude/projects/*/memory/*.md`) — Pre-distilled, already wiki-friendly. Gold.
+2. **Conversation JSONL** (both `~/.claude/projects/*/*.jsonl` and desktop app transcripts) — Full conversation transcripts. Rich but noisy.
+3. **Audit logs** (`audit.jsonl` in desktop sessions) — Tool-call level record of what was done. Useful for extracting concrete actions, file patterns, and command patterns even when the conversation is sparse.
+4. **Session metadata** (`sessions/*.json` and `local_*.json`) — Tells you which project, when, and what CWD.
 
 ## Step 1: Survey and Compute Delta
 
-Scan `CLAUDE_HISTORY_PATH` and compare against `.manifest.json`:
+Scan both data locations and compare against `.manifest.json`:
 
-```
+```bash
+# --- Source 1: CLI sessions (~/.claude) ---
 # Find all projects
 Glob: ~/.claude/projects/*/
 
@@ -78,15 +118,27 @@ Glob: ~/.claude/projects/*/memory/*.md
 
 # Find conversation JSONL files
 Glob: ~/.claude/projects/*/*.jsonl
+
+# --- Source 2: Desktop app local-agent-mode sessions ---
+DESKTOP_SESSIONS="$HOME/Library/Application Support/Claude/local-agent-mode-sessions"
+
+# Session metadata
+find "$DESKTOP_SESSIONS" -name "local_*.json" -maxdepth 4
+
+# Audit logs
+find "$DESKTOP_SESSIONS" -name "audit.jsonl"
+
+# Conversation transcripts
+find "$DESKTOP_SESSIONS" -name "*.jsonl" -path "*/.claude/projects/*"
 ```
 
-Build an inventory and classify each file:
+Build a unified inventory and classify each file:
 
 - **New** — not in manifest → needs ingesting
 - **Modified** — in manifest but file is newer → needs re-ingesting
 - **Unchanged** — in manifest and not modified → skip in append mode
 
-Report to the user: "Found X projects, Y conversations, Z memory files. Delta: A new, B modified."
+Report to the user: "Found X CLI projects, Y desktop sessions. Memory files: A. Conversations: B. Audit logs: C. Delta: D new, E modified."
 
 ## Step 2: Ingest Memory Files First
 
@@ -156,6 +208,39 @@ For assistant messages, `content` may be an array of content blocks:
 - `type: "file-history-snapshot"` — file state tracking
 - Subagent conversations (under `subagents/` subdirectories) — unless the user specifically asks
 
+## Step 3b: Parse Audit Logs (desktop sessions only)
+
+For each `audit.jsonl` found under `local-agent-mode-sessions/`, read it line by line. Each line is a JSON record of one agent action:
+
+```json
+{
+  "type": "tool_call",
+  "toolName": "Bash",
+  "input": {"command": "npm test"},
+  "output": "...",
+  "timestamp": "2026-04-10T14:22:00Z",
+  "sessionId": "..."
+}
+```
+
+**What to extract from audit logs:**
+
+- **File access patterns** — which files does the agent repeatedly Read or Edit? These are the high-value files in the project. Note them as project references.
+- **Shell commands** — recurring Bash commands reveal the project's build/test/deploy workflow. Distill these into a `skills/` page (e.g. "how this project is built and tested").
+- **Tool call sequences** — if the agent always does Read → Edit → Bash in a particular order, that's a workflow pattern worth capturing.
+- **Error patterns** — failed tool calls (non-zero exit codes, error outputs) reveal pain points, known rough edges, or recurring bugs.
+- **MCP tool calls** — calls to MCP tools reveal which external services and APIs the project integrates with.
+
+**Skip from audit logs:**
+
+- Routine file reads with no pattern (e.g. reading config files once)
+- Tool outputs that are just noise (long stack traces, verbose logs) — summarize the error class, not the full output
+- Anything that looks like secrets, tokens, or credentials in command arguments or outputs
+
+**Cross-reference with the conversation transcript:** The audit log tells you *what happened*; the conversation tells you *why*. When both are available for the same session, use them together — the audit log grounds the conversation in concrete actions.
+
+Read the paired `local_<uuid>.json` session metadata before processing the audit log — it gives you `cwd`, `startedAt`, and `title` to contextualize the actions.
+
 ## Step 4: Cluster by Topic
 
 Don't create one wiki page per conversation. Instead:
@@ -202,10 +287,10 @@ For each project with content, create or update the project overview page at `pr
 
 ### Update `.manifest.json`
 
-For each source file processed (conversation JSONL, memory file), add/update its entry with:
+For each source file processed, add/update its entry with:
 
 - `ingested_at`, `size_bytes`, `modified_at`
-- `source_type`: `"claude_conversation"` or `"claude_memory"`
+- `source_type`: one of `"claude_conversation"`, `"claude_memory"`, `"claude_audit_log"`, `"claude_desktop_session"`
 - `project`: the decoded project name
 - `pages_created` and `pages_updated` lists
 
@@ -219,7 +304,9 @@ Also update the `projects` section of the manifest:
     "last_ingested": "TIMESTAMP",
     "conversations_ingested": 5,
     "conversations_total": 8,
-    "memory_files_ingested": 3
+    "memory_files_ingested": 3,
+    "desktop_sessions_ingested": 2,
+    "audit_logs_ingested": 2
   }
 }
 ```
@@ -229,8 +316,10 @@ Also update the `projects` section of the manifest:
 Update `index.md` and `log.md` per the standard process:
 
 ```
-- [TIMESTAMP] CLAUDE_HISTORY_INGEST projects=N conversations=M pages_updated=X pages_created=Y mode=append|full
+- [TIMESTAMP] CLAUDE_HISTORY_INGEST projects=N conversations=M desktop_sessions=D audit_logs=A pages_updated=X pages_created=Y mode=append|full
 ```
+
+**`hot.md`** — Read `$OBSIDIAN_VAULT_PATH/hot.md` (create from the template in `wiki-ingest` if missing). Update **Recent Activity** with a one-line summary — e.g. "Ingested 5 Claude conversations across 2 projects; surfaced patterns in API design and testing strategy." Keep the last 3 operations. Update **Active Threads** if any ongoing project is now better understood. Update `updated` timestamp.
 
 ## Privacy
 

@@ -218,6 +218,22 @@ If the manifest doesn't exist yet, create it with `version: 1`.
 - [TIMESTAMP] INGEST source="path/to/source" pages_updated=N pages_created=M mode=append|full
 ```
 
+**`hot.md`** — Read `$OBSIDIAN_VAULT_PATH/hot.md` (create from template below if missing). Rewrite the **Recent Activity** section to reflect what you just ingested — keep it to the last 3 operations max. Update **Key Takeaways** and **Active Threads** if the content materially shifted them. Update the `updated` timestamp.
+
+Write the *conceptual* change, not a file list. Example: "Ingested Fowler's microservices article — 3 new concept pages on service decomposition, API gateway, bounded contexts."
+
+hot.md template (use if the file doesn't exist):
+```markdown
+---
+title: Hot Cache
+updated: TIMESTAMP
+---
+## Recent Activity
+## Active Threads
+## Key Takeaways
+## Flagged Contradictions
+```
+
 ## Handling Multiple Sources
 
 When ingesting a directory, process sources one at a time but maintain a running awareness of the full batch. Later sources may strengthen or contradict earlier ones — that's fine, just update pages as you go.

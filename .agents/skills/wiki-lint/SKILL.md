@@ -137,6 +137,52 @@ Checks whether pages that share a tag are actually linked to each other. Tags im
 - Run the `cross-linker` skill targeted at the fragmented tag — it will surface and insert the missing links
 - If a tag group is large (n > 15) and still fragmented, consider splitting it into more specific sub-tags
 
+### 9. Visibility Tag Consistency
+
+Checks that `visibility/` tags are applied correctly and aren't silently missing where they matter.
+
+**How to check:**
+
+- **Untagged PII patterns:** Grep page bodies for patterns that commonly indicate sensitive data — lines containing `password`, `api_key`, `secret`, `token`, `ssn`, `email:`, `phone:` followed by an actual value (not a field description). If a page matches and lacks `visibility/pii` or `visibility/internal`, flag it as a likely mis-classification.
+- **`visibility/pii` without `sources:`:** A page tagged `visibility/pii` should always have a `sources:` frontmatter field — if there's no provenance, there's no way to verify the classification. Flag any `visibility/pii` page missing `sources:`.
+- **Visibility tags in taxonomy:** `visibility/` tags are system tags and must **not** appear in `_meta/taxonomy.md`. If found there, flag as misconfigured — they'd be counted toward the 5-tag limit on pages that include them.
+
+**How to fix:**
+- For untagged PII patterns: add `visibility/pii` (or `visibility/internal` if it's team-context rather than personal data) to the page's frontmatter tags
+- For missing `sources:`: add provenance or escalate to the user — don't auto-fill
+- For taxonomy contamination: remove the `visibility/` entries from `_meta/taxonomy.md`
+
+### 10. Misc Promotion Candidates
+
+Find pages in `misc/` that have accumulated enough project affinity to be promoted.
+
+**How to check:**
+- Glob `$OBSIDIAN_VAULT_PATH/misc/*.md`
+- For each page, read the `affinity` frontmatter field
+- Flag pages where any single project's score ≥ 3
+
+**How to fix:**
+- Run the `cross-linker` skill first if affinity scores look stale (e.g., `affinity: {}` on a page with many wikilinks)
+- To promote: move the page to `projects/<project-name>/references/` (or another appropriate category), update its `category` frontmatter, remove `promotion_status`, and grep the vault for backlinks to update them
+
+### 11. Synthesis Gaps
+
+Identify high-value synthesis opportunities the wiki is missing — concept pairs that co-occur across many pages but have no `synthesis/` page connecting them.
+
+**How to check:**
+- List all pages in `synthesis/` — collect the concept pairs each one already covers (from its `[[wikilinks]]` or title)
+- Pick 10-15 frequently linked concepts from `concepts/` and `entities/`
+- For each pair, run a quick grep to count pages that link to both:
+  ```bash
+  grep -rl "\[\[ConceptA\]\]" "$OBSIDIAN_VAULT_PATH" --include="*.md" > /tmp/a.txt
+  grep -rl "\[\[ConceptB\]\]" "$OBSIDIAN_VAULT_PATH" --include="*.md" > /tmp/b.txt
+  comm -12 <(sort /tmp/a.txt) <(sort /tmp/b.txt) | wc -l
+  ```
+- Flag pairs with co-occurrence ≥ 3 that have no existing synthesis page
+
+**How to fix:**
+- Run `/wiki-synthesize` to automatically discover and fill the top gaps
+
 ## Output Format
 
 Report findings as a structured list:
@@ -175,13 +221,33 @@ Report findings as a structured list:
 ### Fragmented Tag Clusters (N found)
 - **#systems** — 7 pages, cohesion=0.06 ⚠️ — run cross-linker on this tag
 - **#databases** — 5 pages, cohesion=0.10 ⚠️
+
+### Visibility Issues (N found)
+- `entities/user-records.md` — contains `email:` value pattern but no `visibility/pii` tag
+- `concepts/auth-flow.md` — tagged `visibility/pii` but missing `sources:` frontmatter
+- `_meta/taxonomy.md` — contains `visibility/internal` entry (system tag must not be in taxonomy)
+
+### Misc Promotion Candidates (N found)
+Pages in misc/ that have ≥ 3 connections to a single project and are ready to be promoted:
+
+| Page | Top Project | Affinity Score |
+|---|---|---|
+| `misc/web-martinfowler-articles-microservices.md` | `obsidian-wiki` | 4 |
+
+### Synthesis Gaps (N found)
+Concept pairs that co-occur frequently but have no synthesis page:
+
+| Pair | Co-occurrence | Suggested Action |
+|---|---|---|
+| [[Caching]] × [[Consistency]] | 5 pages | Run `/wiki-synthesize` |
+| [[Testing]] × [[Observability]] | 3 pages | Run `/wiki-synthesize` |
 ```
 
 ## After Linting
 
 Append to `log.md`:
 ```
-- [TIMESTAMP] LINT issues_found=N orphans=X broken_links=Y stale=Z contradictions=W prov_issues=P missing_summary=S fragmented_clusters=F
+- [TIMESTAMP] LINT issues_found=N orphans=X broken_links=Y stale=Z contradictions=W prov_issues=P missing_summary=S fragmented_clusters=F visibility_issues=V promotion_candidates=C synthesis_gaps=G
 ```
 
 Offer to fix issues automatically or let the user decide which to address.

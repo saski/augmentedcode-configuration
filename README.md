@@ -215,7 +215,7 @@ npx thoughts metadata   # Get git metadata for frontmatter
 
 XP behaviors are provided as **trigger-based skills** under `.agents/skills/`. They are applied when the user's request matches the skill description (e.g. "technical debt", "code review", "Mikado Method"). All tools (Cursor, Codex, Antigravity, etc.) resolve skills from repo `.agents/skills/` via symlinks (e.g. `~/.cursor/skills` → repo `.agents/skills/`).
 
-**Skills sources**: `.agents/skills/` contains **native skills** (tracked in this repo, e.g. `xp-*`, `test-doubles-first`, `cwv-improvement-planner`, `code-notify`, `lean-ai-adoption-coach`), **skill-factory skills** (symlinked from the [skill-factory](https://github.com/saski/skill-factory) repo after running `./pull-and-sync-skills.sh`), and **product-management skills** (vendored or synced; provenance in repo-root `skills-lock.json`, skill-foundry taxonomy in [.agents/skills/skill-foundry/agents/catalog-product-management.yaml](.agents/skills/skill-foundry/agents/catalog-product-management.yaml)). AI agents should consider all skills in this directory and read the matching skill's `SKILL.md` when the user's request matches a skill description. The combined routing index is [.agents/docs/skill-factory-skills.md](.agents/docs/skill-factory-skills.md).
+**Skills sources**: `.agents/skills/` contains **native skills** (tracked in this repo, e.g. `xp-*`, `test-doubles-first`, `cwv-improvement-planner`, `code-notify`, `lean-ai-adoption-coach`), **skill-factory skills** (symlinked from the [skill-factory](https://github.com/saski/skill-factory) repo after running `./pull-and-sync-skills.sh`), **product-management skills** (vendored or synced; provenance in repo-root `skills-lock.json`, skill-foundry taxonomy in [.agents/skills/skill-foundry/agents/catalog-product-management.yaml](.agents/skills/skill-foundry/agents/catalog-product-management.yaml)), and the **Obsidian wiki skill stack** (locally installed from `Ar9av/obsidian-wiki`; provenance in `.agents/.skill-lock.json`). AI agents should consider all skills in this directory and read the matching skill's `SKILL.md` when the user's request matches a skill description. The combined routing index is [.agents/docs/skill-factory-skills.md](.agents/docs/skill-factory-skills.md).
 
 | Skill | Purpose |
 |-------|---------|
@@ -251,6 +251,10 @@ Reusable project-level skills live in **`.agents/skills/`** and are exposed to C
 | `documentation-lookup` | Use live Context7 docs for library and framework questions instead of stale model memory. Imported from ECC under the explicit upstream intake lane. |
 | `verification-loop` | Run a structured build, typecheck, lint, test, and security verification pass after meaningful changes. Imported from ECC under the explicit upstream intake lane. |
 | `strategic-compact` | Suggest context compaction at logical phase boundaries instead of arbitrary auto-compaction. Imported from ECC under the explicit upstream intake lane. |
+
+### Obsidian Wiki Skills
+
+The Obsidian wiki stack supports vault setup, ingest, query, lint/status, update/export, URL ingest, conversation capture, dashboard generation, web research, synthesis, graph colorizing, and agent-history ingest. Discovery and collision boundaries are maintained in [.agents/docs/skill-factory-skills.md](.agents/docs/skill-factory-skills.md) and [.agents/skills/skill-foundry/agents/catalog-engineering.yaml](.agents/skills/skill-foundry/agents/catalog-engineering.yaml).
 
 ### ECC Upstream Intake
 
