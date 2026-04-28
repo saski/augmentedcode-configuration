@@ -615,6 +615,23 @@ skills:
       - ai-patterns
     notes: "AI adoption decisions with Lean/XP lens. ai-patterns provides the reference collection."
 
+  - name: personal-knowledge-routing
+    category: workflow-automation
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - llm-wiki
+      - wiki-capture
+      - wiki-update
+    notes: "Routes personal context and durable knowledge between agent config and the personal vault."
+
   # --- Workflow skills ---
 
   - name: fic-create-plan

@@ -1,5 +1,5 @@
-<!-- last_updated: 2026-04-08 -->
-<!-- version: 2.2 -->
+<!-- last_updated: 2026-04-28 -->
+<!-- version: 2.3 -->
 # AI Agent Development Rules
 
 This document contains the universal development rules and guidelines for this project, applicable to all AI agents (Claude, Gemini, Codex, and others).
@@ -130,6 +130,11 @@ This document contains the universal development rules and guidelines for this p
 - Flag redundant, outdated, or missing guidance when you find it.
 - If discrepancies are found, follow the feedback learning loop in [ai-feedback-learning-loop.md](.agents/rules/ai-feedback-learning-loop.md).
 
-@RTK.md
+## 16. Personal Knowledge Persistence
 
- 
+- Durable personal context, reusable knowledge, source summaries, and decisions belong in the personal knowledge vault, not in always-loaded agent rules.
+- Use the `personal-knowledge-routing` skill when the user asks to remember, persist, capture, retrieve, or route personal knowledge, or when deciding whether information belongs in `augmentedcode-configuration` versus the personal knowledge vault.
+- Load only the vault guide, conventions, relevant maps, and exact target files needed for the task. Do not bulk-load the vault into context.
+- Keep this repository focused on executable agent behavior: rules, skills, workflows, commands, validation, and setup.
+
+@RTK.md

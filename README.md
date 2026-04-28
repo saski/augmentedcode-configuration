@@ -248,6 +248,7 @@ Reusable project-level skills live in **`.agents/skills/`** and are exposed to C
 | `lean-ai-adoption-coach` | Evaluate AI tools, agents, workflows, and automations with a Lean/XP simplicity lens; recommend the smallest useful experiment and guardrails. |
 | `planning-with-files` | Use file-based planning for complex multi-step work with persistent `task_plan.md`, `findings.md`, and `progress.md` tracking. |
 | `github-host-alias` | Ensure correct SSH host alias is used when authenticating via SSH, based on local paths (~/eventbrite vs ~/saski). |
+| `personal-knowledge-routing` | Route durable personal context and reusable knowledge to the personal knowledge vault while keeping shared agent rules small. |
 | `documentation-lookup` | Use live Context7 docs for library and framework questions instead of stale model memory. Imported from ECC under the explicit upstream intake lane. |
 | `verification-loop` | Run a structured build, typecheck, lint, test, and security verification pass after meaningful changes. Imported from ECC under the explicit upstream intake lane. |
 | `strategic-compact` | Suggest context compaction at logical phase boundaries instead of arbitrary auto-compaction. Imported from ECC under the explicit upstream intake lane. |

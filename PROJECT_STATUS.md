@@ -7,6 +7,12 @@
 
 ## Recent Changes
 
+### 2026-04-28: Personal knowledge vault routing ✅
+
+- Added `personal-knowledge-routing` so durable personal context and reusable knowledge are stored in the personal vault instead of always-loaded rules.
+- Updated base rules with a small persistence pointer and context-loading boundary for the vault.
+- Registered the routing skill in the discovery index, README, and skill governance catalog.
+
 ### 2026-04-28: Obsidian wiki skills compatibility pass ✅
 
 - Registered locally installed `Ar9av/obsidian-wiki` skills in the discovery index and engineering governance catalog.
