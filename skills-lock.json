@@ -6,15 +6,39 @@
       "sourceType": "github",
       "computedHash": "c72561e2e277c95ed52a8d683afb4040c0e396d6ded4c77b22deed3ba6dd2f71"
     },
+    "caveman": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/productivity/caveman/SKILL.md",
+      "computedHash": "934433479903febc585bf6deb5f0cebc63137e3f86b7babe0aab1ecb94d6d7a4"
+    },
     "design-sprint": {
       "source": "pmprompt/claude-plugin-product-management",
       "sourceType": "github",
       "computedHash": "56930150ff6eea94330309811bed114425d32ac5c36c5573ab41d8db12716159"
     },
+    "diagnose": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/diagnose/SKILL.md",
+      "computedHash": "15939a26f86edec2d4862042b8564e5a062cb81d04e047a0cea6305c8830b5f5"
+    },
     "feature-prioritization-assistant": {
       "source": "pmprompt/claude-plugin-product-management",
       "sourceType": "github",
       "computedHash": "406856ecd9006855c0e390c8f9d2a7a92d5ad3e9297e36e92fa7a79c80149885"
+    },
+    "grill-me": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/productivity/grill-me/SKILL.md",
+      "computedHash": "784f0dbb7403b0f00324bce9a112f715342777a0daee7bbb7385f9c6f0a170ea"
+    },
+    "grill-with-docs": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/grill-with-docs/SKILL.md",
+      "computedHash": "ea225e10406dbb6a18ba97af34e4e9313424438195cd16e657635f841b6e7a2f"
     },
     "growth-loops": {
       "source": "pmprompt/claude-plugin-product-management",
@@ -35,6 +59,12 @@
       "source": "pmprompt/claude-plugin-product-management",
       "sourceType": "github",
       "computedHash": "238e24d2d0d23aff347f80ffef0ff9d640351ecc06ad298e9579b26d94629253"
+    },
+    "improve-codebase-architecture": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/improve-codebase-architecture/SKILL.md",
+      "computedHash": "c77b86b4332919499608f9af1880074e1fec65a59b95c70c27a9f39cd137865e"
     },
     "jobs-to-be-done": {
       "source": "pmprompt/claude-plugin-product-management",
@@ -86,6 +116,12 @@
       "sourceType": "github",
       "computedHash": "f408f04d1d0a8697cbc86d7cd7ffa6626504109b60bc07d91a92cbb59410a550"
     },
+    "setup-matt-pocock-skills": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/setup-matt-pocock-skills/SKILL.md",
+      "computedHash": "3a32f8f1ed8160c9d286a2aabe88ee9b884c6f3f88a7a6c47b7d5d552c959587"
+    },
     "seven-powers": {
       "source": "pmprompt/claude-plugin-product-management",
       "sourceType": "github",
@@ -106,10 +142,34 @@
       "sourceType": "github",
       "computedHash": "d921258ee77d200008e742505fff051089ce5a10396b5f12f185fa2393e3476f"
     },
+    "tdd": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/tdd/SKILL.md",
+      "computedHash": "15a7b5e36383ebadb2dec5e586679e55e9663d292da418926b8da6fc0ef27d84"
+    },
     "thinking-in-bets": {
       "source": "pmprompt/claude-plugin-product-management",
       "sourceType": "github",
       "computedHash": "e53a742d774cbcbff53cb68a8032741d7f76a04e706490aaa4f9b77ebbdbba29"
+    },
+    "to-issues": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/to-issues/SKILL.md",
+      "computedHash": "73a91f30784523aa59ec9b02769576ebfc738e2cd5ad8f6441076031f0a5d5ac"
+    },
+    "to-prd": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/to-prd/SKILL.md",
+      "computedHash": "fd8c259f9c44eff08e29a1a2fc71a806a3568d279a55387a361f78620b10f2aa"
+    },
+    "triage": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/triage/SKILL.md",
+      "computedHash": "2b6efb6da12d92551772fcc04acf331f4e0e6f7bd9d4cb23ce0b301e0b128feb"
     },
     "trustworthy-experiments": {
       "source": "pmprompt/claude-plugin-product-management",
@@ -125,6 +185,18 @@
       "source": "pmprompt/claude-plugin-product-management",
       "sourceType": "github",
       "computedHash": "99ce4114c30598c6d16dfe6f1a7b56c5ebbf22099080d229c1263d20ad7734e3"
+    },
+    "write-a-skill": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/productivity/write-a-skill/SKILL.md",
+      "computedHash": "b44d8aab2ead83c716e01af4c9a24ccc4575ce70ad58ec4f1749fb88c9cc82ba"
+    },
+    "zoom-out": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/zoom-out/SKILL.md",
+      "computedHash": "8357aeaece3b709c442eab67e64b86844e05e2f1ea95b109565eba50b6def36e"
     }
   }
 }

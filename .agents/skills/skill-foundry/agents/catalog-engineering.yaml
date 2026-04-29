@@ -1,6 +1,6 @@
 # Skill-foundry governance for engineering skills in .agents/skills/<name>/.
 # Taxonomy keys: see taxonomy.md in this directory.
-# Sources: skill-factory (synced via pull-and-sync-skills.sh) and native/local skills.
+# Sources: skill-factory (synced via pull-and-sync-skills.sh), mattpocock/skills, and native/local skills.
 # Routing text stays in each SKILL.md frontmatter (name + description); this file adds taxonomy and overlaps only.
 
 skills:
@@ -20,7 +20,7 @@ skills:
     overlap_with:
       - xp-increase-coverage
       - xp-plan-untested-code
-    notes: "Red-green-refactor cycle for new code. Use xp-increase-coverage for adding tests to existing untested code; use xp-plan-untested-code for planning where to add tests."
+    notes: "Matt Pocock red-green-refactor cycle for new code and bug fixes. Use xp-increase-coverage for adding tests to existing untested code; use xp-plan-untested-code for planning where to add tests."
 
   - name: test-desiderata
     category: verification-testing
@@ -771,6 +771,183 @@ skills:
       - cursor
     overlap_with: []
     notes: "Kent Beck's pattern-based thinking habits."
+
+  # --- Matt Pocock skills (external sync) ---
+
+  - name: diagnose
+    category: workflow-automation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - tdd
+      - xp-predict-problems
+    notes: "Disciplined reproduce-minimise-hypothesise-instrument-fix loop for bugs and performance regressions."
+
+  - name: improve-codebase-architecture
+    category: data-analysis
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - xp-simple-design-refactor
+      - xp-technical-debt
+    notes: "Finds architecture deepening opportunities using CONTEXT.md and ADRs. xp-simple-design-refactor is narrower and implementation-oriented; xp-technical-debt prioritizes payoff."
+
+  - name: to-issues
+    category: artifact-creation
+    pattern: generator
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - story-splitting
+      - hamburger-method
+      - triage
+    notes: "Turns plans, specs, and PRDs into issue-tracker tickets using tracer-bullet vertical slices."
+
+  - name: to-prd
+    category: artifact-creation
+    pattern: generator
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - prd-writer
+      - to-issues
+    notes: "Synthesizes conversation and repo context into a PRD, then publishes it to the configured issue tracker."
+
+  - name: triage
+    category: workflow-automation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - to-issues
+      - diagnose
+    notes: "Moves issues through category/state roles and prepares agent briefs for AFK-ready work."
+
+  - name: grill-me
+    category: team-process
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - collaborative-design
+      - grill-with-docs
+    notes: "Stress-tests a plan or design through an interview loop until the decision tree is understood."
+
+  - name: grill-with-docs
+    category: team-process
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - grill-me
+      - improve-codebase-architecture
+    notes: "Stress-tests a plan against project domain docs and updates CONTEXT.md or ADRs when decisions crystallize."
+
+  - name: setup-matt-pocock-skills
+    category: skill-governance
+    pattern: generator
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - triage
+      - to-issues
+      - to-prd
+    notes: "Scaffolds per-repo issue tracker, triage-label, and domain-doc configuration for the Matt Pocock engineering skills."
+
+  - name: write-a-skill
+    category: skill-governance
+    pattern: generator
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - skill-creator
+      - skill-foundry
+    notes: "Creates portable agent skills with progressive disclosure and bundled resources. skill-creator and skill-foundry are the local governance-oriented variants."
+
+  - name: zoom-out
+    category: data-analysis
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - fic-research
+    notes: "Requests a higher-level module and caller map using project domain language."
+
+  - name: caveman
+    category: team-process
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "Persistent ultra-compressed communication mode for lower-token replies while preserving technical accuracy."
 
   # --- Utility skills ---
 

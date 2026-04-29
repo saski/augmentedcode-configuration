@@ -1,84 +1,109 @@
 ---
 name: tdd
-description: Test-driven development (TDD) process used when writing code. Use whenever you are adding any new code, unless the user explicitly asks to skip TDD or the code is exploratory/spike.
+description: Test-driven development with red-green-refactor loop. Use when user wants to build features or fix bugs using TDD, mentions "red-green-refactor", wants integration tests, or asks for test-first development.
 ---
 
-# Test-Driven Development Process
+# Test-Driven Development
 
-TDD is a design technique that uses tests as a tool. Design emerges from usage, not speculation. Short feedback loops let you course-correct immediately. The resulting architecture is testable by design, not retrofitted. We are not trying to rush towards a feature completion, it's important that the code is correct and well-designed, it's crucial to be thorough and only add what tests demand. 
+## Philosophy
 
-When starting, announce: "Using TDD skill in mode: [auto|human]"
+**Core principle**: Tests should verify behavior through public interfaces, not implementation details. Code can change entirely; tests shouldn't.
 
-MODE (user specifies, default: auto)
-- auto: DO NOT ask for confirmation or approval. Proceed through all steps without stopping.
-- human: wait for confirmation at key points
+**Good tests** are integration-style: they exercise real code paths through public APIs. They describe _what_ the system does, not _how_ it does it. A good test reads like a specification - "user can checkout with valid cart" tells you exactly what capability exists. These tests survive refactors because they don't care about internal structure.
 
-STARTER_CHARACTER = 🔴 for red test, 🌱 for green, 🌀 when refactoring, always followed by a space
+**Bad tests** are coupled to implementation. They mock internal collaborators, test private methods, or verify through external means (like querying a database directly instead of using the interface). The warning sign: your test breaks when you refactor, but behavior hasn't changed. If you rename an internal function and tests fail, those tests were testing implementation, not behavior.
 
-## Core Rules
+See [tests.md](tests.md) for examples and [mocking.md](mocking.md) for mocking guidelines.
 
-1. ALL code changes follow TDD - Feature requests mid-stream are NOT exceptions. Write test first, then code.
-2. Write only one test at a time - focus on the simplest, lowest-hanging fruit test
-3. Predict failures - State what we expect to fail before running tests
-4. Two-step red phase:
-   - First: Make it fail to compile (class/method doesn't exist)
-   - Second: Make it compile but fail the assertion (return wrong value)
-5. Minimal code to pass - Just enough to make the test green. If no test requires it, don't write it.
-6. No comments in production code - Keep it clean unless specifically asked
-7. Run all tests every time - Not just the one you're working on
-8. Refactor at the first opportunity when the tests are green
-9. Test behavior, not implementation - check responses or state, not method calls
-10. Push back when something seems wrong or unclear
+## Anti-Pattern: Horizontal Slices
 
-## Test Planning
+**DO NOT write all tests first, then all implementation.** This is "horizontal slicing" - treating RED as "write all tests" and GREEN as "write all code."
 
-1. Think about what the code you want to write should do
-2. Plan tests as single-line `[TEST]` comments. Example:
-   ```
-   [TEST] Zero plus a number is equal to that number
-   [TEST] Add two positive numbers
-   [TEST] Add two negative numbers
-   [TEST] Adds a negative and a positive number
-   [TEST] Division by zero is not allowed
-   ...
-   ```
-3. Check completeness - walk through [ZOMBIES](references/zombies.md) explicitly:
-   - Zero/empty cases covered?
-   - One item cases covered?
-   - Many items cases covered?
-   - Boundary transitions covered?
-   - Interface clarity verified?
-   - Exceptions/errors covered?
-4. If MODE is human, wait for confirmation after test planning
+This produces **crap tests**:
 
-## Implementation Phase
+- Tests written in bulk test _imagined_ behavior, not _actual_ behavior
+- You end up testing the _shape_ of things (data structures, function signatures) rather than user-facing behavior
+- Tests become insensitive to real changes - they pass when behavior breaks, fail when behavior is fine
+- You outrun your headlights, committing to test structure before understanding the implementation
 
-1. Replace the next [TEST] comment directly with a failing test. No intermediate markers.
-2. Test should be in format given-when-then (do not add as comments), with empty line separating them
-3. Think through the expected value BEFORE writing the assertion. Trace the logic step by step.
-4. Predict what will fail
-5. Run tests, see compilation error (if testing something new)
-6. Add minimal code to compile
-7. Predict assertion failure
-8. Run tests, see assertion failure
-9. Add minimal code to pass
-10. Predict whether the tests will pass and why. Run tests, see green
-11. Simplify. For each line/expression you just added, ask: "Does a failing test require this?"
-    - If no test requires it, delete it or if it's necessary, add a test comment to write that test
-    - Run tests after each simplification
-    - Repeat until every line is justified by a test
-12. Refactor.
-    - Reflect on the domain: Is there a missing concept that would make the code more expressive? An object waiting to be extracted? A better way to model the problem?
-    - You may introduce domain concepts (new abstractions) as long as you add NO new behavior. Tests must still pass, and there should be no new code added that doesn't have tests.
-    - Think about improvements to expressiveness, clarity, simplicity
-    - Say `🧹 Starting refactoring stage` and list planned refactorings
-    - Implement one at a time, run tests after each
-    - When done (or if none needed), say "🧹 Refactoring complete"
-13. Go to step 1 for the next [TEST] comment. Repeat until all planned tests are passing.
+**Correct approach**: Vertical slices via tracer bullets. One test → one implementation → repeat. Each test responds to what you learned from the previous cycle. Because you just wrote the code, you know exactly what behavior matters and how to verify it.
 
-## Final Evaluation
+```
+WRONG (horizontal):
+  RED:   test1, test2, test3, test4, test5
+  GREEN: impl1, impl2, impl3, impl4, impl5
 
-1. Analyze the code written and think about the tests that we might have missed.
-2. If there are any gaps in the tests, start the process for the missing tests from the beginning, starting from test comments then following the process flow until done
-3. Is anything still hardcoded in the code that shouldn't be? Fix it, analyze test gaps and go back to previous stages if needed.
-4. Analyze code expressiveness and quality. If there's anything you can see to improve, go to refactoring phase.
+RIGHT (vertical):
+  RED→GREEN: test1→impl1
+  RED→GREEN: test2→impl2
+  RED→GREEN: test3→impl3
+  ...
+```
+
+## Workflow
+
+### 1. Planning
+
+When exploring the codebase, use the project's domain glossary so that test names and interface vocabulary match the project's language, and respect ADRs in the area you're touching.
+
+Before writing any code:
+
+- [ ] Confirm with user what interface changes are needed
+- [ ] Confirm with user which behaviors to test (prioritize)
+- [ ] Identify opportunities for [deep modules](deep-modules.md) (small interface, deep implementation)
+- [ ] Design interfaces for [testability](interface-design.md)
+- [ ] List the behaviors to test (not implementation steps)
+- [ ] Get user approval on the plan
+
+Ask: "What should the public interface look like? Which behaviors are most important to test?"
+
+**You can't test everything.** Confirm with the user exactly which behaviors matter most. Focus testing effort on critical paths and complex logic, not every possible edge case.
+
+### 2. Tracer Bullet
+
+Write ONE test that confirms ONE thing about the system:
+
+```
+RED:   Write test for first behavior → test fails
+GREEN: Write minimal code to pass → test passes
+```
+
+This is your tracer bullet - proves the path works end-to-end.
+
+### 3. Incremental Loop
+
+For each remaining behavior:
+
+```
+RED:   Write next test → fails
+GREEN: Minimal code to pass → passes
+```
+
+Rules:
+
+- One test at a time
+- Only enough code to pass current test
+- Don't anticipate future tests
+- Keep tests focused on observable behavior
+
+### 4. Refactor
+
+After all tests pass, look for [refactor candidates](refactoring.md):
+
+- [ ] Extract duplication
+- [ ] Deepen modules (move complexity behind simple interfaces)
+- [ ] Apply SOLID principles where natural
+- [ ] Consider what new code reveals about existing code
+- [ ] Run tests after each refactor step
+
+**Never refactor while RED.** Get to GREEN first.
+
+## Checklist Per Cycle
+
+```
+[ ] Test describes behavior, not implementation
+[ ] Test uses public interface only
+[ ] Test would survive internal refactor
+[ ] Code is minimal for this test
+[ ] No speculative features added
+```

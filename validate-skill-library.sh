@@ -12,36 +12,41 @@ if [[ ! -d "$SKILLS_DIR" ]]; then
     exit 1
 fi
 
-mapfile -t broken_symlinks < <(find "$SKILLS_DIR" -maxdepth 1 -mindepth 1 -type l ! -exec test -e {} \; -print | sort)
-mapfile -t absolute_symlinks < <(
+broken_symlinks_file="$(mktemp)"
+absolute_symlinks_file="$(mktemp)"
+trap 'rm -f "$broken_symlinks_file" "$absolute_symlinks_file"' EXIT
+
+find "$SKILLS_DIR" -maxdepth 1 -mindepth 1 -type l ! -exec test -e {} \; -print | sort > "$broken_symlinks_file"
+(
     while IFS= read -r path; do
         target="$(readlink "$path")"
         if [[ "$target" = /* ]]; then
             echo "$path"
         fi
     done < <(find "$SKILLS_DIR" -maxdepth 1 -mindepth 1 -type l | sort)
-)
+) > "$absolute_symlinks_file"
 failed=0
 
-if [[ ${#broken_symlinks[@]} -gt 0 ]]; then
+if [[ -s "$broken_symlinks_file" ]]; then
     echo "broken skill symlinks:"
-    for path in "${broken_symlinks[@]}"; do
+    while IFS= read -r path; do
         basename "$path"
-    done
+    done < "$broken_symlinks_file"
     failed=1
 fi
 
-if [[ ${#absolute_symlinks[@]} -gt 0 ]]; then
+if [[ -s "$absolute_symlinks_file" ]]; then
     echo "absolute symlinks:"
-    for path in "${absolute_symlinks[@]}"; do
+    while IFS= read -r path; do
         basename "$path"
-    done
+    done < "$absolute_symlinks_file"
     failed=1
 fi
 
 skill_names_file="$(mktemp)"
 catalog_names_file="$(mktemp)"
-trap 'rm -f "$skill_names_file" "$catalog_names_file"' EXIT
+missing_catalog_entries_file="$(mktemp)"
+trap 'rm -f "$broken_symlinks_file" "$absolute_symlinks_file" "$skill_names_file" "$catalog_names_file" "$missing_catalog_entries_file"' EXIT
 
 while IFS= read -r path; do
     if [[ -f "$path/SKILL.md" ]]; then
@@ -55,16 +60,17 @@ done < <(find "$SKILLS_DIR" -maxdepth 1 -mindepth 1 \( -type d -o -type l \) | s
         "$SKILL_FOUNDRY_DIR/catalog-product-management.yaml" || true
 ) | sed 's/^  - name: //' | sort -u > "$catalog_names_file"
 
-mapfile -t missing_catalog_entries < <(comm -23 "$skill_names_file" "$catalog_names_file")
+comm -23 "$skill_names_file" "$catalog_names_file" > "$missing_catalog_entries_file"
 
-if [[ ${#missing_catalog_entries[@]} -gt 0 ]]; then
+if [[ -s "$missing_catalog_entries_file" ]]; then
     echo "missing from governance catalogs:"
-    printf '%s\n' "${missing_catalog_entries[@]}"
+    cat "$missing_catalog_entries_file"
     failed=1
 fi
 
 index_names_file="$(mktemp)"
-trap 'rm -f "$skill_names_file" "$catalog_names_file" "$index_names_file"' EXIT
+missing_index_entries_file="$(mktemp)"
+trap 'rm -f "$broken_symlinks_file" "$absolute_symlinks_file" "$skill_names_file" "$catalog_names_file" "$missing_catalog_entries_file" "$index_names_file" "$missing_index_entries_file"' EXIT
 
 awk -F'|' '
     /^\|/ {
@@ -77,11 +83,11 @@ awk -F'|' '
     }
 ' "$INDEX_PATH" | sort -u > "$index_names_file"
 
-mapfile -t missing_index_entries < <(comm -23 "$skill_names_file" "$index_names_file")
+comm -23 "$skill_names_file" "$index_names_file" > "$missing_index_entries_file"
 
-if [[ ${#missing_index_entries[@]} -gt 0 ]]; then
+if [[ -s "$missing_index_entries_file" ]]; then
     echo "missing from skills index:"
-    printf '%s\n' "${missing_index_entries[@]}"
+    cat "$missing_index_entries_file"
     failed=1
 fi
 

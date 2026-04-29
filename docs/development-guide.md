@@ -16,6 +16,7 @@ The skill library is self-contained:
 
 - Native skills are authored directly in `.agents/skills/`.
 - Imported skill-factory skills are copied into `.agents/skills/` and tracked in git.
+- Matt Pocock skills are installed into `.agents/skills/` and tracked in git with provenance in `skills-lock.json`.
 - Product-management skills are tracked in `.agents/skills/` with provenance in `skills-lock.json`.
 - Skill-factory provenance is tracked in `.agents/upstreams/skill-factory/components.lock.json`.
 - ECC upstream components are tracked in `.agents/upstreams/ecc/components.lock.json`.
@@ -55,7 +56,7 @@ What this does:
 
 - pulls the upstream repository
 - copies upstream skill directories into `.agents/skills/`
-- preserves native repo-owned skills
+- preserves native repo-owned skills and other external skill packs
 - refreshes `.agents/upstreams/skill-factory/components.lock.json`
 
 Preview only:
@@ -96,3 +97,4 @@ Mutable local config such as `~/.codex/config.toml` and `~/.claude/settings.json
 - The root shims `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` point to `.agents/rules/base.md`.
 - The validator only passes when filesystem inventory, catalogs, and the skills index are in sync.
 - When updating imported or native skills, update both the discovery index and the relevant skill-foundry catalog.
+- If a skill moves from skill-factory to another source, remove it from `.agents/upstreams/skill-factory/components.lock.json`; otherwise the skill-factory sync will refresh and overwrite it.

@@ -1,11 +1,17 @@
 # Augmentedcode Configuration - Project Status
 
-**Last Updated**: 2026-04-28
+**Last Updated**: 2026-04-29
 **Overall Status**: 🟢 Ready - skill validator, governance catalogs, and symlink layout verified
 
 ---
 
 ## Recent Changes
+
+### 2026-04-29: Matt Pocock skills compatibility pass ✅
+
+- Registered `mattpocock/skills` in the shared discovery index and engineering governance catalog.
+- Kept `tdd` owned by the Matt Pocock provenance in `skills-lock.json` and removed it from the skill-factory upstream lock so future skill-factory syncs skip it instead of overwriting it.
+- Verified the global `~` symlink layout still exposes repo `.agents/skills/` to Cursor, Codex, Claude, Gemini, Antigravity, and Langflow.
 
 ### 2026-04-28: Personal knowledge vault routing ✅
 

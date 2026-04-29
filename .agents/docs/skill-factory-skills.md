@@ -2,10 +2,11 @@
 
 Use this file to match user requests to a skill **before** opening `SKILL.md`. Purposes mirror each skill’s `description` in frontmatter.
 
-Three sources land in the same tree:
+Imported and local sources land in the same tree:
 
 - **[skill-factory](https://github.com/saski/skill-factory)** — imported into this repo via `./pull-and-sync-skills.sh` / `./sync-skill-factory.sh`
 - **Product management pack** — `pmprompt/claude-plugin-product-management` (integrity: repo-root `skills-lock.json`; taxonomy and overlaps: [.agents/skills/skill-foundry/agents/catalog-product-management.yaml](../skills/skill-foundry/agents/catalog-product-management.yaml))
+- **Matt Pocock skills** — `mattpocock/skills` (integrity: repo-root `skills-lock.json`; governance: [.agents/skills/skill-foundry/agents/catalog-engineering.yaml](../skills/skill-foundry/agents/catalog-engineering.yaml))
 - **Native and local skills** — authored, maintained, or locally installed into this repository
 
 ## Skill-Factory (synced)
@@ -14,7 +15,6 @@ Three sources land in the same tree:
 |-------|----------|---------|
 | traductor-bilingue | tools | Translates technical text between English and Spanish preserving tone and format. Keeps technical terms in English when common in Spanish dev teams (deploy, pull request, pipeline, staging). Use when translating technical documentation, code comments, or team communication. |
 | test-desiderata | testing | Analyze and improve test code quality using Kent Beck's Test Desiderata framework. Use when analyzing test files, reviewing test code, identifying test quality issues, suggesting test improvements, or when asked to evaluate tests against best practices. Applies to unit tests, integration tests, and any automated test code. |
-| tdd | testing | Test-driven development (TDD) process used when writing code. Use whenever you are adding any new code, unless the user explicitly asks to skip TDD or the code is exploratory/spike. |
 | nullables | testing | Writes tests without mocks using Nullables. Use when writing tests, especially testing code with external I/O (HTTP, files, databases, clocks, random numbers), designing infrastructure wrappers or replacing mocking libraries. |
 | mutation-testing | testing | Finds weak or missing tests by analyzing if code changes would be caught. Use when verifying test effectiveness, strengthening test suites, or validating TDD workflows. |
 | bdd-with-approvals | testing | Write executable BDD specifications as approval-test fixtures in domain language. Use when doing BDD, writing Given/When/Then specs, creating human-scannable test fixtures, or turning event model slices into executable tests. Pairs with event-modeling and approval-tests skills. Not for unit test mechanics or mock setup. |
@@ -71,6 +71,23 @@ Three sources land in the same tree:
 | trustworthy-experiments | product-management | Use when asked to "run an A/B test", "design an experiment", "check statistical significance", "trust our results", "avoid false positives", or "experiment guardrails". Helps design, run, and interpret controlled experiments correctly. Based on Ronny Kohavi's framework from "Trustworthy Online Controlled Experiments". |
 | user-feedback-synthesizer | product-management | Analyze collections of user feedback to identify patterns and themes. Use when you have user feedback from multiple sources that needs synthesis. |
 | working-backwards | product-management | Use when asked to "working backwards", "PR/FAQ", "Amazon PR/FAQ", "write a press release", "define a new product", or "write a customer-focused PRD". Helps define products by starting with the customer problem and desired outcome before building. The Working Backwards process (developed at Amazon) forces clarity on customer value before committing engineering resources. |
+
+## Matt Pocock skills (external sync)
+
+| Skill | Category | Purpose |
+|-------|----------|---------|
+| caveman | productivity | Ultra-compressed communication mode. Use when the user asks for caveman mode, shorter replies, fewer tokens, or invokes `/caveman`. |
+| diagnose | engineering | Disciplined diagnosis loop for hard bugs and performance regressions. Use when debugging failures, broken behavior, or performance regressions. |
+| grill-me | productivity | Interview the user relentlessly about a plan or design until reaching shared understanding. Use when stress-testing a plan or design. |
+| grill-with-docs | engineering | Challenge a plan against the existing domain model and update CONTEXT/ADR docs as decisions crystallise. Use when stress-testing a plan against project language and documented decisions. |
+| improve-codebase-architecture | engineering | Find architecture deepening opportunities using CONTEXT.md and docs/adr/. Use when improving architecture, testability, coupling, or AI navigability. |
+| setup-matt-pocock-skills | engineering | Set up per-repo issue tracker, triage label, and domain-doc configuration for Matt Pocock engineering skills. |
+| tdd | engineering | Test-driven development with a red-green-refactor loop. Use when building features or fixing bugs test-first. |
+| to-issues | engineering | Break a plan, spec, or PRD into independently grabbable issue-tracker tickets using tracer-bullet vertical slices. |
+| to-prd | engineering | Turn the current conversation context into a PRD and publish it to the project issue tracker. |
+| triage | engineering | Triage issues through a role-driven state machine. Use for incoming bugs, feature requests, issue workflow, and AFK-agent readiness. |
+| write-a-skill | productivity | Create new agent skills with proper structure, progressive disclosure, and bundled resources. |
+| zoom-out | engineering | Ask the agent to zoom out and provide broader module/caller context using project domain language. |
 
 ## Native skills (local to this repo)
 

@@ -14,14 +14,14 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │   │   ├── makefile-project.md
 │   │   ├── react-best-practices.md
 │   │   └── codex-default.rules # Shared Codex approval defaults
-│   ├── skills/                 # Canonical skills (native + skill-factory symlinks)
+│   ├── skills/                 # Canonical skills (native + imported packs)
 │   │   ├── xp-*/               # Native: xp-code-review, xp-increase-coverage, xp-mikado-method, etc.
 │   │   ├── test-doubles-first/
 │   │   ├── cwv-improvement-planner/
 │   │   ├── code-notify/
 │   │   ├── lean-ai-adoption-coach/
 │   │   ├── github-host-alias/
-│   │   └── (symlinks)          # From skill-factory: tdd, refactoring, approval-tests, etc.
+│   │   └── (imports)           # From skill-factory, mattpocock/skills, product-management, etc.
 │   ├── mcp.json                # Canonical MCP servers config (shared across tools)
 │   ├── upstreams/              # Explicit upstream intake metadata (for example ECC pilot imports)
 │   ├── workflows/              # Canonical workflows (Antigravity and related structured flows)
@@ -59,7 +59,7 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 ├── thoughts/                   # Research and plans (see thoughts/ tree below)
 ├── docs/                       # Pre-symlink structure, validation notes
 ├── setup-symlinks.sh           # Setup / validate / commit symlinks (home ↔ repo)
-├── sync-skill-factory.sh       # Symlink skill-factory output_skills into .agents/skills/
+├── sync-skill-factory.sh       # Copy skill-factory output_skills into .agents/skills/
 ├── pull-and-sync-skills.sh     # Pull skill-factory + run sync (recommended one-liner)
 ├── backup-cursor-config.sh     # Backup Cursor config before changes
 └── (optional) AGENTS.md / CLAUDE.md / GEMINI.md → .agents/rules/base.md
@@ -215,7 +215,7 @@ npx thoughts metadata   # Get git metadata for frontmatter
 
 XP behaviors are provided as **trigger-based skills** under `.agents/skills/`. They are applied when the user's request matches the skill description (e.g. "technical debt", "code review", "Mikado Method"). All tools (Cursor, Codex, Antigravity, etc.) resolve skills from repo `.agents/skills/` via symlinks (e.g. `~/.cursor/skills` → repo `.agents/skills/`).
 
-**Skills sources**: `.agents/skills/` contains **native skills** (tracked in this repo, e.g. `xp-*`, `test-doubles-first`, `cwv-improvement-planner`, `code-notify`, `lean-ai-adoption-coach`), **skill-factory skills** (symlinked from the [skill-factory](https://github.com/saski/skill-factory) repo after running `./pull-and-sync-skills.sh`), **product-management skills** (vendored or synced; provenance in repo-root `skills-lock.json`, skill-foundry taxonomy in [.agents/skills/skill-foundry/agents/catalog-product-management.yaml](.agents/skills/skill-foundry/agents/catalog-product-management.yaml)), and the **Obsidian wiki skill stack** (locally installed from `Ar9av/obsidian-wiki`; provenance in `.agents/.skill-lock.json`). AI agents should consider all skills in this directory and read the matching skill's `SKILL.md` when the user's request matches a skill description. The combined routing index is [.agents/docs/skill-factory-skills.md](.agents/docs/skill-factory-skills.md).
+**Skills sources**: `.agents/skills/` contains **native skills** (tracked in this repo, e.g. `xp-*`, `test-doubles-first`, `cwv-improvement-planner`, `code-notify`, `lean-ai-adoption-coach`), **skill-factory skills** (copied from the [skill-factory](https://github.com/saski/skill-factory) repo after running `./pull-and-sync-skills.sh`), **Matt Pocock skills** (installed from `mattpocock/skills`; provenance in repo-root `skills-lock.json`, skill-foundry taxonomy in [.agents/skills/skill-foundry/agents/catalog-engineering.yaml](.agents/skills/skill-foundry/agents/catalog-engineering.yaml)), **product-management skills** (vendored or synced; provenance in repo-root `skills-lock.json`, skill-foundry taxonomy in [.agents/skills/skill-foundry/agents/catalog-product-management.yaml](.agents/skills/skill-foundry/agents/catalog-product-management.yaml)), and the **Obsidian wiki skill stack** (locally installed from `Ar9av/obsidian-wiki`; provenance in `.agents/.skill-lock.json`). AI agents should consider all skills in this directory and read the matching skill's `SKILL.md` when the user's request matches a skill description. The combined routing index is [.agents/docs/skill-factory-skills.md](.agents/docs/skill-factory-skills.md).
 
 | Skill | Purpose |
 |-------|---------|
@@ -263,19 +263,19 @@ Selective ECC imports are tracked in `.agents/upstreams/ecc/components.lock.json
 
 ### Syncing skills from skill-factory
 
-Skills from the [skill-factory](https://github.com/saski/skill-factory) repo can be made available here without duplication by symlinking them into `.agents/skills/`. Run the sync script after pulling skill-factory (or on first setup). All skills in `.agents/skills/` (skill-factory, product-management pack, and native) are listed for request-matching in [.agents/docs/skill-factory-skills.md](.agents/docs/skill-factory-skills.md); usage is defined in [.agents/rules/base.md](.agents/rules/base.md) §10.
+Skills from the [skill-factory](https://github.com/saski/skill-factory) repo can be made available here by copying them into the canonical `.agents/skills/` library. Run the sync script after pulling skill-factory (or on first setup). All skills in `.agents/skills/` (skill-factory, Matt Pocock, product-management pack, Obsidian wiki stack, and native) are listed for request-matching in [.agents/docs/skill-factory-skills.md](.agents/docs/skill-factory-skills.md); usage is defined in [.agents/rules/base.md](.agents/rules/base.md) §10.
 
-**Recommended one-liner**: `./pull-and-sync-skills.sh` — pulls skill-factory then runs sync; respects `SKILL_FACTORY`. For a preview without creating symlinks: `./pull-and-sync-skills.sh --dry-run`.
+**Recommended one-liner**: `./pull-and-sync-skills.sh` — pulls skill-factory then runs sync; respects `SKILL_FACTORY`. For a preview without writing changes: `./pull-and-sync-skills.sh --dry-run`.
 
 ```bash
 # From augmentedcode-configuration repo root (skill-factory as sibling: ../skill-factory)
 ./sync-skill-factory.sh
 ```
 
-- **What it does**: Creates relative symlinks in `.agents/skills/` for each skill in `skill-factory/output_skills/` that does not already exist. Native skills (e.g. `xp-*`, `test-doubles-first`) are never overwritten.
-- **When to run**: After `git pull` in skill-factory, or when you add new skills there. Re-running is safe (adds only new skills).
+- **What it does**: Copies each `skill-factory/output_skills/` skill into `.agents/skills/`, refreshing only skills listed in `.agents/upstreams/skill-factory/components.lock.json`. Native and other external-pack skills (for example `mattpocock/skills`) are not overwritten.
+- **When to run**: After `git pull` in skill-factory, or when you add new skills there. Re-running is safe for non-skill-factory skills because the lock file identifies which directories belong to skill-factory.
 - **Layout**: Clone skill-factory as a sibling of this repo (e.g. `saski/skill-factory` and `saski/augmentedcode-configuration`). Override with `SKILL_FACTORY=/path/to/skill-factory ./sync-skill-factory.sh`.
-- **Dry run**: `./sync-skill-factory.sh --dry-run` lists what would be linked without creating symlinks.
+- **Dry run**: `./sync-skill-factory.sh --dry-run` lists what would be imported or refreshed without writing changes.
 
 ## Cursor Rules
 
