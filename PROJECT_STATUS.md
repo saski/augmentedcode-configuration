@@ -1,11 +1,16 @@
 # Augmentedcode Configuration - Project Status
 
-**Last Updated**: 2026-04-29
+**Last Updated**: 2026-05-05
 **Overall Status**: 🟢 Ready - skill validator, governance catalogs, and symlink layout verified
 
 ---
 
 ## Recent Changes
+
+### 2026-05-05: Skill validator frontmatter check ✅
+
+- Added `SKILL.md` YAML frontmatter parsing to `validate-skill-library.sh` so loader-breaking skill metadata errors fail validation.
+- Added a regression test for unquoted colon values in skill descriptions.
 
 ### 2026-04-29: Matt Pocock skills compatibility pass ✅
 
@@ -59,7 +64,7 @@
 ### 2026-04-06: Repository validation and portability cleanup ✅
 
 - Added `validate-skill-library.sh` and `tests/validate-skill-library-test.sh`.
-- Validator now checks for broken imported skills, missing governance catalog entries, missing discovery-index entries, and absolute skill symlinks.
+- Validator now checks for broken imported skills, invalid `SKILL.md` frontmatter, missing governance catalog entries, missing discovery-index entries, and absolute skill symlinks.
 - `setup-symlinks.sh` now derives `REPO_DIR` from the script location by default.
 - `sync-skill-factory.sh` now imports tracked directories instead of creating external symlinks.
 

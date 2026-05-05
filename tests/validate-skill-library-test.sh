@@ -183,7 +183,36 @@ EOF
     assert_contains "$output" "portable-skill"
 }
 
+test_detects_invalid_skill_frontmatter() {
+    local fixture_dir
+    fixture_dir="$(mktemp -d)"
+    trap 'rm -rf "$fixture_dir"' RETURN
+
+    create_local_skill_fixture "$fixture_dir" "invalid-yaml-skill" "yes" "yes"
+    cat > "$fixture_dir/.agents/skills/invalid-yaml-skill/SKILL.md" <<'EOF'
+---
+name: invalid-yaml-skill
+description: Invalid YAML: unquoted colon
+---
+EOF
+
+    local output
+    set +e
+    output="$("$VALIDATOR" "$fixture_dir" 2>&1)"
+    local exit_code=$?
+    set -e
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "expected validator to fail for invalid skill frontmatter" >&2
+        exit 1
+    fi
+
+    assert_contains "$output" "invalid SKILL.md frontmatter"
+    assert_contains "$output" "invalid-yaml-skill"
+}
+
 test_detects_broken_skill_symlink
 test_detects_missing_catalog_entry
 test_detects_missing_index_entry
 test_detects_absolute_symlink
+test_detects_invalid_skill_frontmatter

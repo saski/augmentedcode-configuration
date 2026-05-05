@@ -14,7 +14,8 @@ fi
 
 broken_symlinks_file="$(mktemp)"
 absolute_symlinks_file="$(mktemp)"
-trap 'rm -f "$broken_symlinks_file" "$absolute_symlinks_file"' EXIT
+invalid_frontmatter_file="$(mktemp)"
+trap 'rm -f "$broken_symlinks_file" "$absolute_symlinks_file" "$invalid_frontmatter_file"' EXIT
 
 find "$SKILLS_DIR" -maxdepth 1 -mindepth 1 -type l ! -exec test -e {} \; -print | sort > "$broken_symlinks_file"
 (
@@ -25,6 +26,32 @@ find "$SKILLS_DIR" -maxdepth 1 -mindepth 1 -type l ! -exec test -e {} \; -print 
         fi
     done < <(find "$SKILLS_DIR" -maxdepth 1 -mindepth 1 -type l | sort)
 ) > "$absolute_symlinks_file"
+(
+    ruby -ryaml -e '
+skills_dir = ARGV.fetch(0)
+
+Dir.glob(File.join(skills_dir, "*", "SKILL.md")).sort.each do |path|
+  text = File.read(path)
+  unless text.start_with?("---\n")
+    puts "#{path}\tmissing YAML frontmatter"
+    next
+  end
+
+  parts = text.split(/^---\s*$/, 3)
+  unless parts.length >= 3
+    puts "#{path}\tmissing closing YAML frontmatter delimiter"
+    next
+  end
+
+  begin
+    YAML.safe_load(parts.fetch(1), aliases: true)
+  rescue Psych::Exception => e
+    message = e.message.lines.first&.strip || e.class.name
+    puts "#{path}\t#{message}"
+  end
+end
+' "$SKILLS_DIR"
+) > "$invalid_frontmatter_file"
 failed=0
 
 if [[ -s "$broken_symlinks_file" ]]; then
@@ -43,10 +70,18 @@ if [[ -s "$absolute_symlinks_file" ]]; then
     failed=1
 fi
 
+if [[ -s "$invalid_frontmatter_file" ]]; then
+    echo "invalid SKILL.md frontmatter:"
+    while IFS=$'\t' read -r path message; do
+        echo "$(basename "$(dirname "$path")"): $message"
+    done < "$invalid_frontmatter_file"
+    failed=1
+fi
+
 skill_names_file="$(mktemp)"
 catalog_names_file="$(mktemp)"
 missing_catalog_entries_file="$(mktemp)"
-trap 'rm -f "$broken_symlinks_file" "$absolute_symlinks_file" "$skill_names_file" "$catalog_names_file" "$missing_catalog_entries_file"' EXIT
+trap 'rm -f "$broken_symlinks_file" "$absolute_symlinks_file" "$invalid_frontmatter_file" "$skill_names_file" "$catalog_names_file" "$missing_catalog_entries_file"' EXIT
 
 while IFS= read -r path; do
     if [[ -f "$path/SKILL.md" ]]; then
@@ -70,7 +105,7 @@ fi
 
 index_names_file="$(mktemp)"
 missing_index_entries_file="$(mktemp)"
-trap 'rm -f "$broken_symlinks_file" "$absolute_symlinks_file" "$skill_names_file" "$catalog_names_file" "$missing_catalog_entries_file" "$index_names_file" "$missing_index_entries_file"' EXIT
+trap 'rm -f "$broken_symlinks_file" "$absolute_symlinks_file" "$invalid_frontmatter_file" "$skill_names_file" "$catalog_names_file" "$missing_catalog_entries_file" "$index_names_file" "$missing_index_entries_file"' EXIT
 
 awk -F'|' '
     /^\|/ {

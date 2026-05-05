@@ -1,5 +1,5 @@
-<!-- last_updated: 2026-04-28 -->
-<!-- version: 2.3 -->
+<!-- last_updated: 2026-04-30 -->
+<!-- version: 2.4 -->
 # AI Agent Development Rules
 
 This document contains the universal development rules and guidelines for this project, applicable to all AI agents (Claude, Gemini, Codex, and others).
@@ -46,14 +46,8 @@ This document contains the universal development rules and guidelines for this p
 - **No Hidden-Reasoning Formats**: Do not require internal-monologue or chain-of-thought sections.
 - **No Moralizing**: Never include moralizing warnings.
 - **Progress Indicators**: When outlining plans, use numbered progress steps.
-- **Run Metadata (Required)**: End each response with a short metadata block for cross-tool calibration, especially in Auto mode.
-  - `Tool`: Tool or assistant name.
-  - `Mode`: `auto` or `manual`.
-  - `Model ID`: Exact model id if exposed, else `not exposed`.
-  - `Model Source`: `api/runtime`, `ui label`, or `inferred`.
-  - `Task Type`: Short category (e.g., `bugfix`, `review`, `refactor`, `planning`, `docs`).
-  - `Confidence`: `low`, `medium`, or `high`.
-  - `Verification`: Checks executed (tests/lint/typecheck) or `none`.
+- **Run Metadata (On Request Only)**: Do not append metadata blocks to responses by default. Include run metadata only when the user explicitly requests it.
+  - When requested, keep the block short and include: `Tool`, `Mode`, `Model ID`, `Model Source`, `Task Type`, `Confidence`, and `Verification`.
 
 ## 6. Process & Key Requirements
 
@@ -137,4 +131,4 @@ This document contains the universal development rules and guidelines for this p
 - Load only the vault guide, conventions, relevant maps, and exact target files needed for the task. Do not bulk-load the vault into context.
 - Keep this repository focused on executable agent behavior: rules, skills, workflows, commands, validation, and setup.
 
-@RTK.md
+@/Users/ignacio.viejo/saski/augmentedcode-configuration/.agents/rules/RTK.md
