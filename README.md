@@ -58,6 +58,9 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 ├── src/thoughts/               # Node/TS CLI for thoughts/ management
 ├── thoughts/                   # Research and plans (see thoughts/ tree below)
 ├── docs/                       # Pre-symlink structure, validation notes
+├── hooks/
+│   └── pre-commit              # Local Git hook template; runs make check
+├── Makefile                    # Canonical local healthcheck targets
 ├── setup-symlinks.sh           # Setup / validate / commit symlinks (home ↔ repo)
 ├── sync-skill-factory.sh       # Copy skill-factory output_skills into .agents/skills/
 ├── pull-and-sync-skills.sh     # Pull skill-factory + run sync (recommended one-liner)
@@ -107,11 +110,15 @@ Volatile runtime state (for example Claude `projects/` and `sessions/`, Cursor m
 ```bash
 cd ~/saski/augmentedcode-configuration
 ./setup-symlinks.sh setup
+make install-hooks
 ```
 
 ### Verifying Configuration
 
 ```bash
+# Run the canonical local healthcheck
+make check
+
 # Validate all symlinks are correct
 ./setup-symlinks.sh validate
 
@@ -124,6 +131,7 @@ cd ~/saski/augmentedcode-configuration
 All configuration edits (in Cursor, VS Code, or any editor) automatically modify the repository files. Commit changes with:
 
 ```bash
+make check
 ./setup-symlinks.sh commit
 ```
 

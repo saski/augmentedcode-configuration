@@ -1,11 +1,18 @@
 # Augmentedcode Configuration - Project Status
 
 **Last Updated**: 2026-05-06
-**Overall Status**: 🟢 Ready - skill validator, governance catalogs, and symlink layout verified
+**Overall Status**: 🟢 Ready - local healthcheck automation, skill validator, governance catalogs, and symlink layout verified
 
 ---
 
 ## Recent Changes
+
+### 2026-05-06: Local healthcheck automation ✅
+
+- Added root `Makefile` with canonical `make check`, test, shell lint, skill validation, symlink validation, tracked-ignored reporting, and hook installation targets.
+- Added tracked `hooks/pre-commit` template that runs `make check` before commits.
+- Added `tests/healthcheck-automation-test.sh` to keep the healthcheck and hook contract explicit.
+- Documented the workflow in `README.md` and `docs/development-guide.md`.
 
 ### 2026-05-06: Vault artifact toolchain awareness ✅
 
@@ -96,6 +103,7 @@
 | Shared rules | ✅ Complete | Canonical under `.agents/rules/` |
 | Shared skills | ✅ Complete | Self-contained and tracked in repo |
 | Skill governance | ✅ Complete | Index and catalogs are validated |
+| Local healthchecks | ✅ Complete | `make check` covers tests, shell syntax, skill validation, symlink validation, and tracked-ignored reporting |
 | Local setup scripts | ✅ Complete | Path-portable defaults in place |
 | Maintainer docs | ✅ Complete | Split from the user-facing README |
 
