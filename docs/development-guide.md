@@ -32,17 +32,42 @@ Governance lives in:
 
 ```bash
 ./setup-symlinks.sh setup
-./setup-symlinks.sh validate
-./validate-skill-library.sh
+make install-hooks
+make check
 ```
 
-Recommended script checks after changes:
+`make check` is the canonical local healthcheck and runs:
+
+- `make test`
+- `make lint-shell`
+- `make validate-skills`
+- `make validate-symlinks`
+- `make check-tracked-ignored`
+
+Recommended direct checks when diagnosing a specific failure:
 
 ```bash
-bash -n setup-symlinks.sh sync-skill-factory.sh pull-and-sync-skills.sh backup-cursor-config.sh validate-skill-library.sh tests/validate-skill-library-test.sh
+make lint-shell
+make test
 ./tests/validate-skill-library-test.sh
 ./validate-skill-library.sh
 ```
+
+`check-tracked-ignored` is report-only. It surfaces tracked files that match `.gitignore` so maintainers can decide whether a path is intentional or should be removed from version control.
+
+The TypeScript CLI under `src/thoughts/` is not part of mandatory `make check` until dependency installation is reproducible for this repository.
+
+## Pre-Commit Hook
+
+The tracked pre-commit template lives at `hooks/pre-commit` and delegates to `make check`.
+
+Install it with:
+
+```bash
+make install-hooks
+```
+
+The install target uses `git rev-parse --git-path hooks/pre-commit`, so it works from linked worktrees as well as the main checkout.
 
 ## Syncing Imported Skills
 
