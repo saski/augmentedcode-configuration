@@ -1,16 +1,28 @@
 # Augmentedcode Configuration - Project Status
 
-**Last Updated**: 2026-05-05
+**Last Updated**: 2026-05-06
 **Overall Status**: 🟢 Ready - skill validator, governance catalogs, and symlink layout verified
 
 ---
 
 ## Recent Changes
 
+### 2026-05-06: Vault artifact toolchain awareness ✅
+
+- Added `vault-artifact-toolchain` as a shared skill for Mermaid, Marp, Excalidraw, `notebooklm-py`, `yt-dlp`, `markitdown`, and Makefile-wrapped vault workflows.
+- Registered the skill in the discovery index and engineering governance catalog.
+
+### 2026-05-05: small-safe-steps frontmatter remediation ✅
+
+- Fixed `.agents/skills/small-safe-steps/SKILL.md` by converting the YAML `description` value to a folded scalar, preserving the trigger text while making the embedded colon parser-safe.
+- Verified `./validate-skill-library.sh`, `./tests/validate-skill-library-test.sh`, and shell syntax checks pass after the fix.
+- Documented the remaining upstream `skill-factory` source follow-up because the sibling checkout is outside this workspace's writable roots and has unrelated local modifications.
+
 ### 2026-05-05: Skill validator frontmatter check ✅
 
 - Added `SKILL.md` YAML frontmatter parsing to `validate-skill-library.sh` so loader-breaking skill metadata errors fail validation.
 - Added a regression test for unquoted colon values in skill descriptions.
+- Added a domain routing guide for shared skills with tags and usage notes.
 
 ### 2026-04-29: Matt Pocock skills compatibility pass ✅
 

@@ -632,6 +632,24 @@ skills:
       - wiki-update
     notes: "Routes personal context and durable knowledge between agent config and the personal vault."
 
+  - name: vault-artifact-toolchain
+    category: workflow-automation
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - creating-process-files
+      - data-ingest
+      - personal-knowledge-routing
+      - wiki-ingest
+    notes: "Text-first vault artifact and ingest tooling for Mermaid, Marp, Excalidraw, notebooklm-py, yt-dlp, markitdown, and Makefile wrappers."
+
   # --- Workflow skills ---
 
   - name: fic-create-plan

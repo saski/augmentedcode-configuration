@@ -2,6 +2,8 @@
 
 Use this file to match user requests to a skill **before** opening `SKILL.md`. Purposes mirror each skill’s `description` in frontmatter.
 
+For domain-first routing, tags, and short usage notes, use [skill-domain-routing.md](skill-domain-routing.md).
+
 Imported and local sources land in the same tree:
 
 - **[skill-factory](https://github.com/saski/skill-factory)** — imported into this repo via `./pull-and-sync-skills.sh` / `./sync-skill-factory.sh`
@@ -117,6 +119,7 @@ Imported and local sources land in the same tree:
 | corporate-aws-cli | developer-tools | Use when using the AWS CLI against a corporate AWS account after SAML/OIDC federation (e.g. saml2aws, aws sso login), when STS fails with invalid XML or empty responses, when selecting profiles or regions for Terraform or CI/CD stacks, or when validating RDS engine versions with describe-orderable-db-instance-options in the target account and region. |
 | lean-ai-adoption-coach | ai | Guide AI adoption decisions in software development using Lean, Extreme Programming, and pragmatic simplicity. Use when evaluating AI tools, agents, workflows, prompts, automations, or rollout guardrails. |
 | personal-knowledge-routing | workflow | Route durable personal context and reusable knowledge between agent configuration and the personal knowledge vault without bloating always-loaded rules. |
+| vault-artifact-toolchain | workflow | Use text-first tooling for vault artifacts and source ingest: Mermaid .mmd to PNG via mmdc, Marp decks to PDF/PPTX, Excalidraw Markdown JSON sketches, notebooklm-py summaries, yt-dlp talk metadata/captions, markitdown document conversion, and Makefile-wrapped workflows. |
 | pbt-pragmatic-adoption | testing | Pragmatic property-based testing review and first-wave adoption for this listings-webapp monorepo (Jest + fast-check, unit tests only). |
 | skill-foundry | skill-governance | Design, organize, evaluate, benchmark, and improve portable Agent Skills. Use when creating a new skill, auditing a skill library, comparing a skill against baseline, optimizing descriptions, or retiring outdated skills. |
 | google-adk-setup | developer-tools | Bootstrap a Google ADK project from zero to a running local dev UI. Use when setting up a new ADK agent project, configuring Vertex AI credentials, scaffolding the agent folder with `uv run adk create agent`, or launching the ADK dev UI. |
