@@ -7,6 +7,13 @@
 
 ## Recent Changes
 
+### 2026-05-06: Symlink/docs hygiene follow-up ✅
+
+- Revalidated the global symlink layout, including `~/.agents`, Codex, Claude, Cursor, Gemini, Antigravity, and Langflow paths.
+- Corrected Gemini documentation so `~/.gemini/GEMINI.md` points to the repo-root `GEMINI.md` shim.
+- Restored the shared Claude RTK hook expected by the Claude settings template.
+- Moved generated Cursor manifests and Claude project logs out of version control while keeping shared `thoughts/` artifacts trackable.
+
 ### 2026-05-06: Local healthcheck automation ✅
 
 - Added root `Makefile` with canonical `make check`, test, shell lint, skill validation, symlink validation, tracked-ignored reporting, and hook installation targets.

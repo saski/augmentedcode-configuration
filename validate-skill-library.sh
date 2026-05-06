@@ -28,10 +28,11 @@ find "$SKILLS_DIR" -maxdepth 1 -mindepth 1 -type l ! -exec test -e {} \; -print 
 ) > "$absolute_symlinks_file"
 (
     ruby -ryaml -e '
+Encoding.default_external = Encoding::UTF_8
 skills_dir = ARGV.fetch(0)
 
 Dir.glob(File.join(skills_dir, "*", "SKILL.md")).sort.each do |path|
-  text = File.read(path)
+  text = File.read(path, mode: "r:UTF-8")
   unless text.start_with?("---\n")
     puts "#{path}\tmissing YAML frontmatter"
     next

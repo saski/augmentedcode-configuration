@@ -95,7 +95,7 @@ SKILL_FACTORY=/path/to/skill-factory ./sync-skill-factory.sh --dry-run
 `setup-symlinks.sh` manages these local links:
 
 - `~/.cursor/rules` -> repo `.cursor/rules`
-- `~/.cursor/commands` -> repo `.agents/commands`
+- `~/.cursor/commands` -> repo `.cursor/commands` -> repo `.agents/commands`
 - `~/.cursor/skills` -> repo `.agents/skills`
 - `~/.cursor/skills-cursor` -> repo `.cursor/skills-cursor`
 - `~/.cursor/.agents` -> repo `.agents`
@@ -107,6 +107,7 @@ SKILL_FACTORY=/path/to/skill-factory ./sync-skill-factory.sh --dry-run
 - `~/.claude/skills` -> repo `.agents/skills`
 - `~/.claude/hooks` -> repo `.claude/hooks`
 - `~/.gemini/antigravity/mcp_config.json` -> repo `.agents/mcp.json`
+- `~/.gemini/GEMINI.md` -> repo `GEMINI.md`
 - `~/.agents` -> repo `.agents`
 
 Mutable local config such as `~/.codex/config.toml` and `~/.claude/settings.json` is seeded from `templates/` and intentionally not symlinked back into the repo.

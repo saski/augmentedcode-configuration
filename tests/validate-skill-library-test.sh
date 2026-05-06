@@ -211,8 +211,33 @@ EOF
     assert_contains "$output" "invalid-yaml-skill"
 }
 
+test_validates_utf8_frontmatter_under_ascii_locale() {
+    local fixture_dir
+    fixture_dir="$(mktemp -d)"
+    trap 'rm -rf "$fixture_dir"' RETURN
+
+    create_local_skill_fixture "$fixture_dir" "utf8-skill" "yes" "yes"
+    printf -- '---\nname: utf8-skill\ndescription: Caf\303\251 workflow\n---\n' > "$fixture_dir/.agents/skills/utf8-skill/SKILL.md"
+
+    local output
+    set +e
+    output="$(LC_ALL=C "$VALIDATOR" "$fixture_dir" 2>&1)"
+    local exit_code=$?
+    set -e
+
+    if [[ $exit_code -ne 0 ]]; then
+        echo "expected validator to accept UTF-8 skill frontmatter under ASCII locale" >&2
+        echo "--- output ---" >&2
+        echo "$output" >&2
+        exit 1
+    fi
+
+    assert_contains "$output" "skill library validation passed"
+}
+
 test_detects_broken_skill_symlink
 test_detects_missing_catalog_entry
 test_detects_missing_index_entry
 test_detects_absolute_symlink
 test_detects_invalid_skill_frontmatter
+test_validates_utf8_frontmatter_under_ascii_locale

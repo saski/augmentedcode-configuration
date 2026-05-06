@@ -1,6 +1,12 @@
 .cursorindexingignore
 .specstory/
-thoughts/
+/thoughts/*
+!/thoughts/shared/
+!/thoughts/shared/plans/
+!/thoughts/shared/research/
+!/thoughts/shared/plans/*.md
+!/thoughts/shared/research/*.md
+/thoughts/shared/.DS_Store
 .DS_Store
 .vscode/
 
@@ -10,6 +16,7 @@ thoughts/
 .cursor/skills/**/*.pyc
 .cursor/skills-cursor/**/.venv/
 .cursor/skills-cursor/.cursor-managed-skills-manifest.json
+.cursor/skills-cursor/.sync-manifest.json
 
 .agents/gemini/
 

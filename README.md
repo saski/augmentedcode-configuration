@@ -50,8 +50,7 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │   ├── hooks/                  # Canonical Claude hook scripts
 │   └── CLAUDE.md / RTK.md      # Canonical Claude-local helper files
 ├── .gemini/
-│   ├── mcp_config.json         # Symlink → ../.agents/mcp.json
-│   └── GEMINI.md               # Symlink → ../GEMINI.md
+│   └── mcp_config.json         # Symlink → ../.agents/mcp.json
 ├── templates/
 │   ├── claude/settings.json    # Seed for local Claude settings (copied, not symlinked)
 │   └── codex/config.toml       # Seed for local Codex config (copied, not symlinked)
@@ -96,7 +95,7 @@ This repository is the **single source of truth** for AI tool configuration. Con
 ~/.claude/RTK.md → ~/saski/augmentedcode-configuration/.claude/RTK.md
 ~/.claude/settings.json ← copied from ~/saski/augmentedcode-configuration/templates/claude/settings.json
 ~/.gemini/antigravity/mcp_config.json → ~/saski/augmentedcode-configuration/.agents/mcp.json
-~/.gemini/GEMINI.md → ~/saski/augmentedcode-configuration/.gemini/GEMINI.md
+~/.gemini/GEMINI.md → ~/saski/augmentedcode-configuration/GEMINI.md
 ~/CLAUDE.md         → ~/saski/augmentedcode-configuration/CLAUDE.md
 ~/AGENTS.md         → ~/saski/augmentedcode-configuration/AGENTS.md
 ~/GEMINI.md         → ~/saski/augmentedcode-configuration/GEMINI.md

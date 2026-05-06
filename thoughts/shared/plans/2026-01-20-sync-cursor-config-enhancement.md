@@ -100,7 +100,7 @@ get_file_mtime() {
         echo "0"
         return
     fi
-    
+
     # macOS: use stat -f %m
     # Linux: use stat -c %Y
     if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -114,10 +114,10 @@ get_file_mtime() {
 get_newer_file() {
     local file1="$1"
     local file2="$2"
-    
+
     local mtime1=$(get_file_mtime "$file1")
     local mtime2=$(get_file_mtime "$file2")
-    
+
     if [ "$mtime1" -gt "$mtime2" ]; then
         echo "$file1"
     elif [ "$mtime2" -gt "$mtime1" ]; then
@@ -155,12 +155,12 @@ sync_file_bidirectional() {
     local source="$1"
     local target="$2"
     local filename=$(basename "$source")
-    
+
     # If source doesn't exist, skip
     if [ ! -f "$source" ]; then
         return 0
     fi
-    
+
     # If target doesn't exist, copy source to target
     if [ ! -f "$target" ]; then
         mkdir -p "$(dirname "$target")"
@@ -168,10 +168,10 @@ sync_file_bidirectional() {
         echo "  ✓ Created: $filename"
         return 0
     fi
-    
+
     # Both exist, compare timestamps
     local newer=$(get_newer_file "$source" "$target")
-    
+
     if [ "$newer" = "$source" ]; then
         # Source is newer, copy to target
         cp "$source" "$target"
@@ -197,23 +197,23 @@ sync_directory_bidirectional() {
     local source_dir="$1"
     local target_dir="$2"
     local description="$3"
-    
+
     if [ ! -d "$source_dir" ] && [ ! -d "$target_dir" ]; then
         echo "⚠️  Both directories missing: $description"
         return 1
     fi
-    
+
     mkdir -p "$source_dir" "$target_dir"
-    
+
     echo "🔄 Syncing $description..."
-    
+
     local synced=0
     local created=0
     local skipped=0
-    
+
     # Get all files from both directories
     local all_files=$(find "$source_dir" "$target_dir" -type f 2>/dev/null | sort -u)
-    
+
     for file in $all_files; do
         # Determine relative path
         local rel_path=""
@@ -222,19 +222,19 @@ sync_directory_bidirectional() {
         else
             rel_path="${file#$target_dir/}"
         fi
-        
+
         local source_file="$source_dir/$rel_path"
         local target_file="$target_dir/$rel_path"
-        
+
         sync_file_bidirectional "$source_file" "$target_file"
     done
-    
+
     # Clean up orphaned files in target (files that don't exist in source)
     if [ -d "$target_dir" ]; then
         find "$target_dir" -type f | while read target_file; do
             local rel_path="${target_file#$target_dir/}"
             local source_file="$source_dir/$rel_path"
-            
+
             if [ ! -f "$source_file" ]; then
                 # File exists in target but not in source
                 # Check if we should remove it or copy it back
@@ -243,7 +243,7 @@ sync_directory_bidirectional() {
             fi
         done
     fi
-    
+
     echo "✅ $description sync complete"
 }
 ```
@@ -271,7 +271,7 @@ Replace existing `sync_repo_to_global` and `sync_global_to_repo` with bidirectio
 ```bash
 sync_repo_to_global() {
     echo "🔄 Syncing repository → global config..."
-    
+
     # Sync .agents/commands → .cursor/commands (bidirectional)
     if [ -d "$REPO_DIR/.agents/commands" ] || [ -d "$REPO_DIR/.cursor/commands" ]; then
         sync_directory_bidirectional \
@@ -279,7 +279,7 @@ sync_repo_to_global() {
             "$REPO_DIR/.cursor/commands" \
             ".agents/commands ↔ .cursor/commands"
     fi
-    
+
     # Sync .cursor/commands → ~/.cursor/commands (bidirectional)
     if [ -d "$REPO_DIR/.cursor/commands" ] || [ -d "$GLOBAL_COMMANDS" ]; then
         sync_directory_bidirectional \
@@ -287,7 +287,7 @@ sync_repo_to_global() {
             "$GLOBAL_COMMANDS" \
             ".cursor/commands ↔ ~/.cursor/commands"
     fi
-    
+
     # Sync .cursor/rules → ~/.cursor/rules (bidirectional)
     if [ -d "$REPO_DIR/.cursor/rules" ] || [ -d "$GLOBAL_RULES" ]; then
         sync_directory_bidirectional \
@@ -295,7 +295,7 @@ sync_repo_to_global() {
             "$GLOBAL_RULES" \
             ".cursor/rules ↔ ~/.cursor/rules"
     fi
-    
+
     echo "✅ Repository ↔ global sync complete"
 }
 ```
@@ -376,13 +376,13 @@ watch_and_sync() {
     echo ""
     echo "   Press Ctrl+C to stop"
     echo ""
-    
+
     # Check if fswatch is available (macOS)
     if ! command -v fswatch &> /dev/null; then
         echo "❌ fswatch not found. Install with: brew install fswatch"
         exit 1
     fi
-    
+
     # Watch both directories
     fswatch -o "$REPO_DIR/.agents/commands" "$GLOBAL_COMMANDS" | while read; do
         echo ""
@@ -390,7 +390,7 @@ watch_and_sync() {
         echo ""
         read -p "Sync now? (y/n): " -n 1 -r
         echo ""
-        
+
         if [[ $REPLY =~ ^[Yy]$ ]]; then
             echo ""
             sync_repo_to_global
