@@ -254,6 +254,7 @@ Reusable project-level skills live in **`.agents/skills/`** and are exposed to C
 | `code-notify` | Recognize and use the local code-notify integration for end-of-task notifications across supported AI tools after verifying the installed command or hook. |
 | `lean-ai-adoption-coach` | Evaluate AI tools, agents, workflows, and automations with a Lean/XP simplicity lens; recommend the smallest useful experiment and guardrails. |
 | `planning-with-files` | Use file-based planning for complex multi-step work with persistent `task_plan.md`, `findings.md`, and `progress.md` tracking. |
+| `openspec` | Use OpenSpec/OPSX for spec-driven development with proposals, delta specs, designs, task lists, implementation, verification, and archive flows. |
 | `github-host-alias` | Ensure correct SSH host alias is used when authenticating via SSH, based on local paths (~/eventbrite vs ~/saski). |
 | `personal-knowledge-routing` | Route durable personal context and reusable knowledge to the personal knowledge vault while keeping shared agent rules small. |
 | `documentation-lookup` | Use live Context7 docs for library and framework questions instead of stale model memory. Imported from ECC under the explicit upstream intake lane. |

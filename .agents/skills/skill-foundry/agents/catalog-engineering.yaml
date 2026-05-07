@@ -669,6 +669,24 @@ skills:
 
   # --- Workflow skills ---
 
+  - name: openspec
+    category: workflow-automation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - fic-create-plan
+      - fic-implement-plan
+      - planning-with-files
+      - small-safe-steps
+    notes: "Spec-driven development workflow for OpenSpec and OPSX artifacts. FIC skills are repo-native planning flows; planning-with-files is generic persistent planning; small-safe-steps guides risky execution slices."
+
   - name: fic-create-plan
     category: workflow-automation
     pattern: generator

@@ -1,11 +1,17 @@
 # Augmentedcode Configuration - Project Status
 
-**Last Updated**: 2026-05-06
-**Overall Status**: 🟢 Ready - local healthcheck automation, skill validator, governance catalogs, and symlink layout verified
+**Last Updated**: 2026-05-07
+**Overall Status**: 🟢 Ready - OpenSpec skill availability, local healthcheck automation, skill validator, governance catalogs, and symlink layout verified
 
 ---
 
 ## Recent Changes
+
+### 2026-05-07: OpenSpec shared skill availability ✅
+
+- Added native `openspec` skill guidance for OpenSpec/OPSX spec-driven development workflows.
+- Registered the skill in the discovery index, domain routing guide, README, and engineering governance catalog.
+- Confirmed the existing `~/.agents` symlink path exposes repo `.agents/skills/` to the configured tools.
 
 ### 2026-05-06: Symlink/docs hygiene follow-up ✅
 
