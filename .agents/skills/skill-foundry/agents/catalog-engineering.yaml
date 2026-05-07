@@ -543,6 +543,23 @@ skills:
     overlap_with: []
     notes: "Fetches current framework and library docs through Context7 instead of relying on stale model memory."
 
+  - name: obsidian-cli
+    category: tool-reference
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: false
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - llm-wiki
+      - wiki-query
+      - wiki-update
+    notes: "Obsidian CLI operations for vault notes, tasks, properties, plugin reloads, DOM inspection, screenshots, and app-context debugging."
+
   # --- AI tooling skills ---
 
   - name: creating-hooks
