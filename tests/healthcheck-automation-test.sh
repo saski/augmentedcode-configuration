@@ -52,4 +52,16 @@ test_healthcheck_automation_contract() {
     assert_contains "$hook" "make check"
 }
 
+test_skill_inventory_guidance_contract() {
+    local rules="$REPO_DIR/.agents/rules/base.md"
+
+    assert_file_exists "$rules"
+    assert_contains "$rules" "Adding, removing, renaming, or moving any skill"
+    assert_contains "$rules" ".agents/docs/skill-factory-skills.md"
+    assert_contains "$rules" ".agents/skills/skill-foundry/agents/catalog-engineering.yaml"
+    assert_contains "$rules" ".agents/skills/skill-foundry/agents/catalog-product-management.yaml"
+    assert_contains "$rules" "./validate-skill-library.sh"
+}
+
 test_healthcheck_automation_contract
+test_skill_inventory_guidance_contract

@@ -13,6 +13,12 @@
 - Registered the skill in the discovery index, domain routing guide, README, and engineering governance catalog.
 - Confirmed the existing `~/.agents` symlink path exposes repo `.agents/skills/` to the configured tools.
 
+### 2026-05-07: Skill inventory maintenance guidance ✅
+
+- Updated the base agent rules so skill additions, removals, renames, and moves require same-change updates to the discovery index and relevant governance catalog.
+- Added a healthcheck regression to keep that always-loaded guidance present.
+- Clarified maintainer docs for routing, README, status, and provenance updates when skill inventory changes affect those surfaces.
+
 ### 2026-05-06: Symlink/docs hygiene follow-up ✅
 
 - Revalidated the global symlink layout, including `~/.agents`, Codex, Claude, Cursor, Gemini, Antigravity, and Langflow paths.

@@ -1,5 +1,5 @@
-<!-- last_updated: 2026-04-30 -->
-<!-- version: 2.4 -->
+<!-- last_updated: 2026-05-07 -->
+<!-- version: 2.5 -->
 # AI Agent Development Rules
 
 This document contains the universal development rules and guidelines for this project, applicable to all AI agents (Claude, Gemini, Codex, and others).
@@ -80,6 +80,7 @@ This document contains the universal development rules and guidelines for this p
 - **Canonical location**: Shared skills live in `.agents/skills/` in this repository, one directory per skill with at least `SKILL.md`.
 - **Sources**: Skills in `.agents/skills/` may be native, synced from [skill-factory](https://github.com/saski/skill-factory), or synced from other packages (e.g. product-management skills; see `skills-lock.json`).
 - **Discovery index**: Use [.agents/docs/skill-factory-skills.md](.agents/docs/skill-factory-skills.md) to match user requests to skills before reading the skill's `SKILL.md`. Product-management entries use skill-foundry governance in [.agents/skills/skill-foundry/agents/catalog-product-management.yaml](.agents/skills/skill-foundry/agents/catalog-product-management.yaml) (category, pattern, overlaps); routing text remains in each `SKILL.md` frontmatter.
+- **Inventory maintenance**: Adding, removing, renaming, or moving any skill must update [.agents/docs/skill-factory-skills.md](.agents/docs/skill-factory-skills.md) and the relevant skill-foundry governance catalog in the same change: [.agents/skills/skill-foundry/agents/catalog-engineering.yaml](.agents/skills/skill-foundry/agents/catalog-engineering.yaml), [.agents/skills/skill-foundry/agents/catalog-product-management.yaml](.agents/skills/skill-foundry/agents/catalog-product-management.yaml), or [.agents/skills/skill-foundry/agents/catalog.yaml](.agents/skills/skill-foundry/agents/catalog.yaml). Also update `.agents/docs/skill-domain-routing.md`, `README.md`, `PROJECT_STATUS.md`, and provenance lock files when routing, user-facing inventory, status, or source ownership changes. Run `./validate-skill-library.sh` before committing skill inventory changes.
 - **Trigger-based use**: When the user's request matches a skill's description, read that skill's `SKILL.md` and follow its instructions.
 - **Skill format**: Each skill has frontmatter `name` and `description`; the description states when to use it.
 
