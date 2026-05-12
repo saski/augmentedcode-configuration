@@ -10,6 +10,7 @@ SHELL_SCRIPTS := \
 	tests/openspec-install-test.sh \
 	tests/validate-skill-library-test.sh \
 	tests/healthcheck-automation-test.sh \
+	tests/rtk-global-contract-test.sh \
 	hooks/pre-commit
 
 check: test lint-shell validate-skills validate-openspec validate-symlinks check-tracked-ignored
@@ -18,6 +19,7 @@ test:
 	./tests/openspec-install-test.sh
 	./tests/validate-skill-library-test.sh
 	./tests/healthcheck-automation-test.sh
+	./tests/rtk-global-contract-test.sh
 
 lint-shell:
 	bash -n $(SHELL_SCRIPTS)

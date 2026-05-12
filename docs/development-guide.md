@@ -8,6 +8,7 @@ This document covers repository-internal structure, sync workflows, and validati
 - `.agents/skills/` is the canonical shared skill library.
 - `.agents/commands/` is the canonical shared command library.
 - `.agents/mcp.json` is the shared MCP configuration.
+- `.agents/hooks/` is the canonical shared hook location (including RTK rewrite hook).
 - `docs/openspec/` is the OpenSpec artifact root for this tooling repo, exposed through the root `openspec` symlink for CLI compatibility.
 - `.cursor/skills-cursor/` contains Cursor-only local skills. `.cursor/skills/` is not tracked in this repo.
 
@@ -106,12 +107,16 @@ SKILL_FACTORY=/path/to/skill-factory ./sync-skill-factory.sh --dry-run
 - `~/.cursor/cli-config.json` -> repo `.cursor/cli-config.json`
 - `~/.codex/skills/skills` -> repo `.agents/skills`
 - `~/.codex/rules/default.rules` -> repo `.agents/rules/codex-default.rules`
+- `~/.codex/RTK.md` -> repo `.agents/rules/RTK.md`
 - `~/.claude/commands` -> repo `.agents/commands`
 - `~/.claude/skills` -> repo `.agents/skills`
 - `~/.claude/hooks` -> repo `.claude/hooks`
+- `~/.claude/hooks/rtk-rewrite.sh` -> repo `.claude/hooks/rtk-rewrite.sh` -> repo `.agents/hooks/rtk-rewrite.sh`
+- `~/.claude/RTK.md` -> repo `.claude/RTK.md` -> repo `.agents/rules/RTK.md`
 - `~/.gemini/antigravity/mcp_config.json` -> repo `.agents/mcp.json`
 - `~/.gemini/GEMINI.md` -> repo `GEMINI.md`
 - `~/.agents` -> repo `.agents`
+- `~/.agents/bin/rtk` -> `/opt/homebrew/bin/rtk` when Homebrew RTK is present
 
 Mutable local config such as `~/.codex/config.toml` and `~/.claude/settings.json` is seeded from `templates/` and intentionally not symlinked back into the repo.
 

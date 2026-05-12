@@ -2,6 +2,14 @@
 
 Use `rtk` as the default command wrapper for shell operations whenever available.
 
+## Resolution Order
+
+When a tool hook needs to find RTK, resolve binaries in this order:
+
+1. `rtk` from `PATH`
+2. `~/.agents/bin/rtk`
+3. `/opt/homebrew/bin/rtk`
+
 ## Quick Check
 
 Run this once per session if shell usage is expected:
@@ -24,3 +32,4 @@ If `rtk` is not available, continue with normal shell commands.
 ## Notes
 
 - This file is intentionally tool-agnostic so shared rule loaders (Cursor, Codex, Claude) can all consume the same guidance.
+- If no compatible RTK binary is available, hooks should fail open and continue with normal shell commands.

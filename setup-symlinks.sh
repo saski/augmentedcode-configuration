@@ -63,6 +63,11 @@ check_environment() {
         exit 1
     fi
 
+    if [ ! -f "$REPO_DIR/.agents/hooks/rtk-rewrite.sh" ]; then
+        echo "❌ .agents/hooks/rtk-rewrite.sh not found in repo"
+        exit 1
+    fi
+
     if [ ! -f "$REPO_DIR/GEMINI.md" ]; then
         echo "❌ GEMINI.md not found in repo"
         exit 1
@@ -174,6 +179,10 @@ setup_symlinks() {
         exit 1
     fi
     ln -sfn "$REPO_DIR/.agents" "$HOME/.agents"
+    mkdir -p "$HOME/.agents/bin"
+    if [ -x "/opt/homebrew/bin/rtk" ]; then
+        ln -sfn "/opt/homebrew/bin/rtk" "$HOME/.agents/bin/rtk"
+    fi
 
     setup_claude_config
 
@@ -393,6 +402,24 @@ validate_symlinks() {
         echo "✓ $claude_settings_path is a local managed file"
     fi
 
+    local claude_hook_path="$HOME/.claude/hooks/rtk-rewrite.sh"
+    if [ ! -L "$claude_hook_path" ]; then
+        echo "❌ $claude_hook_path is not a symlink"
+        errors=$((errors + 1))
+    elif [ ! -e "$claude_hook_path" ]; then
+        echo "❌ $claude_hook_path is a broken symlink"
+        errors=$((errors + 1))
+    else
+        local claude_hook_target
+        claude_hook_target=$(readlink "$claude_hook_path")
+        if [[ "$claude_hook_target" != *".agents/hooks/rtk-rewrite.sh" ]]; then
+            echo "❌ $claude_hook_path should point to .agents/hooks/rtk-rewrite.sh, got: $claude_hook_target"
+            errors=$((errors + 1))
+        else
+            echo "✓ $claude_hook_path → $claude_hook_target"
+        fi
+    fi
+
     # Check Gemini MCP config symlink
     local gemini_mcp_path="$HOME/.gemini/antigravity/mcp_config.json"
     if [ ! -L "$gemini_mcp_path" ]; then
@@ -467,6 +494,32 @@ validate_symlinks() {
             errors=$((errors + 1))
         else
             echo "✓ ~/.agents → $agents_target"
+        fi
+    fi
+
+    local agents_bin_path="$HOME/.agents/bin"
+    if [ ! -d "$agents_bin_path" ]; then
+        echo "⚠️  $agents_bin_path is missing (run ./setup-symlinks.sh setup to create it)"
+    else
+        echo "✓ $agents_bin_path exists"
+    fi
+
+    if [ -x "/opt/homebrew/bin/rtk" ]; then
+        local agents_rtk_path="$HOME/.agents/bin/rtk"
+        if [ ! -L "$agents_rtk_path" ]; then
+            echo "⚠️  $agents_rtk_path is not a symlink (run ./setup-symlinks.sh setup to link Homebrew RTK)"
+        elif [ ! -e "$agents_rtk_path" ]; then
+            echo "❌ $agents_rtk_path is a broken symlink"
+            errors=$((errors + 1))
+        else
+            local agents_rtk_target
+            agents_rtk_target=$(readlink "$agents_rtk_path")
+            if [ "$agents_rtk_target" != "/opt/homebrew/bin/rtk" ]; then
+                echo "❌ $agents_rtk_path should point to /opt/homebrew/bin/rtk, got: $agents_rtk_target"
+                errors=$((errors + 1))
+            else
+                echo "✓ $agents_rtk_path → $agents_rtk_target"
+            fi
         fi
     fi
 

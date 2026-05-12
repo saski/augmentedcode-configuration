@@ -23,6 +23,7 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │   │   ├── github-host-alias/
 │   │   └── (imports)           # From skill-factory, mattpocock/skills, product-management, etc.
 │   ├── mcp.json                # Canonical MCP servers config (shared across tools)
+│   ├── hooks/                  # Canonical shared hook scripts (including RTK)
 │   ├── upstreams/              # Explicit upstream intake metadata (for example ECC pilot imports)
 │   ├── workflows/              # Canonical workflows (Antigravity and related structured flows)
 │   └── commands/               # Slash commands (FIC + project workflows); .cursor/commands → here
@@ -47,8 +48,8 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │   ├── cli-config.json         # Canonical Cursor model/agent config
 │   └── skills-cursor/          # Cursor-only skills (create-skill, create-rule, update-cursor-settings, etc.)
 ├── .claude/
-│   ├── hooks/                  # Canonical Claude hook scripts
-│   └── CLAUDE.md / RTK.md      # Canonical Claude-local helper files
+│   ├── hooks/                  # Claude-local symlinks to canonical shared hooks
+│   └── CLAUDE.md / RTK.md      # Claude-local shims (RTK.md symlink to .agents/rules/RTK.md)
 ├── .gemini/
 │   └── mcp_config.json         # Symlink → ../.agents/mcp.json
 ├── templates/
@@ -84,6 +85,7 @@ This repository is the **single source of truth** for AI tool configuration. Con
 ~/.cursor/mcp.json  → ~/saski/augmentedcode-configuration/.agents/mcp.json
 ~/.cursor/cli-config.json → ~/saski/augmentedcode-configuration/.cursor/cli-config.json
 ~/.agents           → ~/saski/augmentedcode-configuration/.agents/
+~/.agents/bin/rtk  → /opt/homebrew/bin/rtk (created by setup when Homebrew RTK exists)
 ~/.codex/skills/skills → ~/saski/augmentedcode-configuration/.agents/skills/ (Codex keeps system skills in ~/.codex/skills/.system)
 ~/.codex/rules/default.rules → ~/saski/augmentedcode-configuration/.agents/rules/codex-default.rules
 ~/.codex/AGENTS.md → ~/saski/augmentedcode-configuration/AGENTS.md
@@ -94,7 +96,7 @@ This repository is the **single source of truth** for AI tool configuration. Con
 ~/.claude/skills → ~/saski/augmentedcode-configuration/.agents/skills/
 ~/.claude/hooks → ~/saski/augmentedcode-configuration/.claude/hooks/
 ~/.claude/CLAUDE.md → ~/saski/augmentedcode-configuration/.claude/CLAUDE.md
-~/.claude/RTK.md → ~/saski/augmentedcode-configuration/.claude/RTK.md
+~/.claude/RTK.md → ~/saski/augmentedcode-configuration/.claude/RTK.md → ../.agents/rules/RTK.md
 ~/.claude/settings.json ← copied from ~/saski/augmentedcode-configuration/templates/claude/settings.json
 ~/.gemini/antigravity/mcp_config.json → ~/saski/augmentedcode-configuration/.agents/mcp.json
 ~/.gemini/GEMINI.md → ~/saski/augmentedcode-configuration/GEMINI.md
@@ -103,7 +105,7 @@ This repository is the **single source of truth** for AI tool configuration. Con
 ~/GEMINI.md         → ~/saski/augmentedcode-configuration/GEMINI.md
 ```
 
-Shared skills live in **`.agents/skills/`** (canonical). Cursor and other dev tools (Codex, Antigravity, etc.) point their `skills` directory at this repo path so all tools use the same XP and project skills. Shared MCP servers config is also canonicalized at **`.agents/mcp.json`** and reused across tools. Codex approval defaults are centralized at **`.agents/rules/codex-default.rules`**.
+Shared skills live in **`.agents/skills/`** (canonical). Cursor and other dev tools (Codex, Antigravity, etc.) point their `skills` directory at this repo path so all tools use the same XP and project skills. Shared MCP servers config is also canonicalized at **`.agents/mcp.json`** and reused across tools. Codex approval defaults are centralized at **`.agents/rules/codex-default.rules`**. RTK guidance lives in **`.agents/rules/RTK.md`**, and hook resolution prefers `rtk` from `PATH`, then `~/.agents/bin/rtk`, then `/opt/homebrew/bin/rtk`.
 Volatile runtime state (for example Claude `projects/` and `sessions/`, Cursor managed manifests, Codex mutable local config, and Obsidian workspace state) intentionally remains local and outside the canonical config scope. Canonical defaults for mutable files live under `templates/` and are copied into place during setup instead of being symlinked back into the repo.
 
 ### Setup on New Machine

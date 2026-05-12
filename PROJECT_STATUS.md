@@ -7,6 +7,14 @@
 
 ## Recent Changes
 
+### 2026-05-12: RTK global availability via `~/.agents` ✅
+
+- Added canonical shared RTK hook at `.agents/hooks/rtk-rewrite.sh` with deterministic binary resolution order: `PATH` -> `~/.agents/bin/rtk` -> `/opt/homebrew/bin/rtk`.
+- Converted `.claude/hooks/rtk-rewrite.sh` and `.claude/RTK.md` to symlinks pointing at canonical RTK sources under `.agents`.
+- Extended `setup-symlinks.sh` to manage `~/.agents/bin` and link `~/.agents/bin/rtk` to Homebrew RTK when available; validation now reports status for this link.
+- Added `tests/rtk-global-contract-test.sh` and wired it into `Makefile` to enforce the RTK global contract and fallback behavior under constrained `PATH`.
+- Updated README architecture docs to document the shared RTK layout and hook resolution behavior.
+
 ### 2026-05-12: OpenSpec docs-first installation ✅
 
 - Initialized this tooling repo with OpenSpec artifacts under `docs/openspec/` and a root `openspec` symlink for CLI compatibility.
