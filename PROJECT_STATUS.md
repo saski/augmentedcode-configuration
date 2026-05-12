@@ -1,11 +1,17 @@
 # Augmentedcode Configuration - Project Status
 
-**Last Updated**: 2026-05-07
-**Overall Status**: 🟢 Ready - OpenSpec skill availability, local healthcheck automation, skill validator, governance catalogs, and symlink layout verified
+**Last Updated**: 2026-05-12
+**Overall Status**: 🟢 Ready - OpenSpec docs-first installation, shared skill availability, local healthcheck automation, skill validator, governance catalogs, and symlink layout verified
 
 ---
 
 ## Recent Changes
+
+### 2026-05-12: OpenSpec docs-first installation ✅
+
+- Initialized this tooling repo with OpenSpec artifacts under `docs/openspec/` and a root `openspec` symlink for CLI compatibility.
+- Added a shared `openspec` skill installer that projects can run through `~/.agents/skills/openspec/scripts/install-openspec`.
+- Updated healthchecks, skill routing docs, README, development guide, and governance notes so docs/thoughts-first OpenSpec placement is explicit and validated.
 
 ### 2026-05-07: OpenSpec shared skill availability ✅
 

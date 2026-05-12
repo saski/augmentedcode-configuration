@@ -56,7 +56,9 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │   └── codex/config.toml       # Seed for local Codex config (copied, not symlinked)
 ├── src/thoughts/               # Node/TS CLI for thoughts/ management
 ├── thoughts/                   # Research and plans (see thoughts/ tree below)
-├── docs/                       # Pre-symlink structure, validation notes
+├── docs/                       # Pre-symlink structure, validation notes, OpenSpec artifacts
+│   └── openspec/               # OpenSpec changes, specs, and archives
+├── openspec                    # Symlink → docs/openspec for OpenSpec CLI compatibility
 ├── hooks/
 │   └── pre-commit              # Local Git hook template; runs make check
 ├── Makefile                    # Canonical local healthcheck targets
@@ -243,6 +245,18 @@ XP behaviors are provided as **trigger-based skills** under `.agents/skills/`. T
 | `/review-pr` | Interactive PR review workflow with walkthrough, comments, and optional fixes |
 | `/install-command` | Install and customize command templates for the current repository |
 
+## OpenSpec
+
+OpenSpec is initialized in this tooling repo at `docs/openspec/`, with root `openspec` symlinked to that directory so the CLI works from the repository root.
+
+For any project consuming shared skills through `~/.agents`, initialize OpenSpec with:
+
+```bash
+~/.agents/skills/openspec/scripts/install-openspec
+```
+
+The installer places generated OpenSpec artifacts under `docs/openspec/` when the target repository already has `docs/`. If the repository has `thoughts/` but no `docs/`, it uses `thoughts/openspec/`; otherwise it uses the standard root `openspec/` directory.
+
 ## Shared Project Skills (from `.agents/skills/`)
 
 Reusable project-level skills live in **`.agents/skills/`** and are exposed to Cursor, Codex, Claude, Gemini, Antigravity, and other configured tools via symlinks to repo `.agents/skills/`. They are applied when user prompts match the skill description (trigger-based).
@@ -254,7 +268,7 @@ Reusable project-level skills live in **`.agents/skills/`** and are exposed to C
 | `code-notify` | Recognize and use the local code-notify integration for end-of-task notifications across supported AI tools after verifying the installed command or hook. |
 | `lean-ai-adoption-coach` | Evaluate AI tools, agents, workflows, and automations with a Lean/XP simplicity lens; recommend the smallest useful experiment and guardrails. |
 | `planning-with-files` | Use file-based planning for complex multi-step work with persistent `task_plan.md`, `findings.md`, and `progress.md` tracking. |
-| `openspec` | Use OpenSpec/OPSX for spec-driven development with proposals, delta specs, designs, task lists, implementation, verification, and archive flows. |
+| `openspec` | Use OpenSpec/OPSX for spec-driven development with a shared installer, proposals, delta specs, designs, task lists, implementation, verification, and archive flows. |
 | `github-host-alias` | Ensure correct SSH host alias is used when authenticating via SSH, based on local paths (~/eventbrite vs ~/saski). |
 | `personal-knowledge-routing` | Route durable personal context and reusable knowledge to the personal knowledge vault while keeping shared agent rules small. |
 | `documentation-lookup` | Use live Context7 docs for library and framework questions instead of stale model memory. Imported from ECC under the explicit upstream intake lane. |

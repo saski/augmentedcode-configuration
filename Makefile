@@ -1,4 +1,4 @@
-.PHONY: check test lint-shell validate-skills validate-symlinks check-tracked-ignored install-hooks
+.PHONY: check test lint-shell validate-skills validate-openspec validate-symlinks check-tracked-ignored install-hooks
 
 SHELL_SCRIPTS := \
 	setup-symlinks.sh \
@@ -6,13 +6,16 @@ SHELL_SCRIPTS := \
 	pull-and-sync-skills.sh \
 	backup-cursor-config.sh \
 	validate-skill-library.sh \
+	.agents/skills/openspec/scripts/install-openspec \
+	tests/openspec-install-test.sh \
 	tests/validate-skill-library-test.sh \
 	tests/healthcheck-automation-test.sh \
 	hooks/pre-commit
 
-check: test lint-shell validate-skills validate-symlinks check-tracked-ignored
+check: test lint-shell validate-skills validate-openspec validate-symlinks check-tracked-ignored
 
 test:
+	./tests/openspec-install-test.sh
 	./tests/validate-skill-library-test.sh
 	./tests/healthcheck-automation-test.sh
 
@@ -21,6 +24,10 @@ lint-shell:
 
 validate-skills:
 	./validate-skill-library.sh
+
+validate-openspec:
+	@command -v openspec >/dev/null 2>&1 || { printf '%s\n' "openspec CLI is required; install OpenSpec before running make check"; exit 1; }
+	OPENSPEC_TELEMETRY=0 openspec validate --all
 
 validate-symlinks:
 	./setup-symlinks.sh validate

@@ -41,6 +41,7 @@ test_healthcheck_automation_contract() {
     assert_contains "$makefile" "test:"
     assert_contains "$makefile" "lint-shell:"
     assert_contains "$makefile" "validate-skills:"
+    assert_contains "$makefile" "validate-openspec:"
     assert_contains "$makefile" "validate-symlinks:"
     assert_contains "$makefile" "check-tracked-ignored:"
     assert_contains "$makefile" "install-hooks:"

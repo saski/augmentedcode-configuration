@@ -8,6 +8,7 @@ This document covers repository-internal structure, sync workflows, and validati
 - `.agents/skills/` is the canonical shared skill library.
 - `.agents/commands/` is the canonical shared command library.
 - `.agents/mcp.json` is the shared MCP configuration.
+- `docs/openspec/` is the OpenSpec artifact root for this tooling repo, exposed through the root `openspec` symlink for CLI compatibility.
 - `.cursor/skills-cursor/` contains Cursor-only local skills. `.cursor/skills/` is not tracked in this repo.
 
 ## Skill Library Model
@@ -41,6 +42,7 @@ make check
 - `make test`
 - `make lint-shell`
 - `make validate-skills`
+- `make validate-openspec`
 - `make validate-symlinks`
 - `make check-tracked-ignored`
 
@@ -51,6 +53,7 @@ make lint-shell
 make test
 ./tests/validate-skill-library-test.sh
 ./validate-skill-library.sh
+OPENSPEC_TELEMETRY=0 openspec validate --all
 ```
 
 `check-tracked-ignored` is report-only. It surfaces tracked files that match `.gitignore` so maintainers can decide whether a path is intentional or should be removed from version control.

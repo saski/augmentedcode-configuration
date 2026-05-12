@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+OPENSPEC_BIN="${OPENSPEC_BIN:-openspec}"
+
+usage() {
+    cat << EOF
+Usage: $(basename "$0") [repo-dir]
+
+Initialize OpenSpec for a repository.
+
+If the repository already has docs/, OpenSpec artifacts are placed in
+docs/openspec/. If it has thoughts/ but no docs/, artifacts are placed in
+thoughts/openspec/. Otherwise, artifacts are placed in openspec/.
+When using a nested location, a root openspec symlink is created for CLI
+compatibility.
+EOF
+}
+
+if [ "${1:-}" = "--help" ] || [ "${1:-}" = "-h" ]; then
+    usage
+    exit 0
+fi
+
+REPO_DIR="${1:-$(pwd)}"
+
+if [ ! -d "$REPO_DIR" ]; then
+    printf 'repository directory not found: %s\n' "$REPO_DIR" >&2
+    exit 1
+fi
+
+REPO_DIR="$(cd "$REPO_DIR" && pwd)"
+
+if [ -e "$REPO_DIR/openspec" ] && [ ! -L "$REPO_DIR/openspec" ]; then
+    printf 'OpenSpec already exists at %s/openspec\n' "$REPO_DIR"
+    exit 0
+fi
+
+if [ -d "$REPO_DIR/docs" ]; then
+    INIT_PARENT="$REPO_DIR/docs"
+    OPENSPEC_DIR="$REPO_DIR/docs/openspec"
+    OPENSPEC_LINK_TARGET="docs/openspec"
+elif [ -d "$REPO_DIR/thoughts" ]; then
+    INIT_PARENT="$REPO_DIR/thoughts"
+    OPENSPEC_DIR="$REPO_DIR/thoughts/openspec"
+    OPENSPEC_LINK_TARGET="thoughts/openspec"
+else
+    INIT_PARENT="$REPO_DIR"
+    OPENSPEC_DIR="$REPO_DIR/openspec"
+    OPENSPEC_LINK_TARGET=""
+fi
+
+if [ ! -d "$OPENSPEC_DIR" ]; then
+    OPENSPEC_TELEMETRY=0 "$OPENSPEC_BIN" init --tools none "$INIT_PARENT"
+fi
+
+if [ -n "$OPENSPEC_LINK_TARGET" ]; then
+    ln -sfn "$OPENSPEC_LINK_TARGET" "$REPO_DIR/openspec"
+fi
+
+printf 'OpenSpec ready at %s\n' "$OPENSPEC_DIR"

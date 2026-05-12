@@ -39,7 +39,7 @@ Skills:
 - `hamburger-method` - Use to build vertical slices across product, UI, domain, and infrastructure layers.
 - `shape-up` - Use for fixed-appetite product shaping with variable scope.
 - `planning-with-files` - Use for multi-step projects that need persistent task, findings, and progress files.
-- `openspec` - Use for OpenSpec, OPSX, spec-driven development, change proposals, delta specs, and durable feature planning.
+- `openspec` - Use for OpenSpec, OPSX, spec-driven development, change proposals, delta specs, durable feature planning, and docs/thoughts-first OpenSpec initialization.
 - `fic-create-plan` - Use to turn research or a task description into a phased implementation plan.
 - `fic-implement-plan` - Use to execute an approved plan phase by phase.
 - `to-issues` - Use to turn a plan or PRD into independently grabbable issues.

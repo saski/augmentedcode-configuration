@@ -685,7 +685,7 @@ skills:
       - fic-implement-plan
       - planning-with-files
       - small-safe-steps
-    notes: "Spec-driven development workflow for OpenSpec and OPSX artifacts. FIC skills are repo-native planning flows; planning-with-files is generic persistent planning; small-safe-steps guides risky execution slices."
+    notes: "Spec-driven development workflow for OpenSpec and OPSX artifacts, including the shared docs/thoughts-first installer. FIC skills are repo-native planning flows; planning-with-files is generic persistent planning; small-safe-steps guides risky execution slices."
 
   - name: fic-create-plan
     category: workflow-automation

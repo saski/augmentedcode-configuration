@@ -26,11 +26,27 @@ Use OpenSpec as the planning layer when work needs durable requirements, reviewa
 
 ## Before You Start
 
-1. Check whether the current repository already has an `openspec/` directory.
+1. Check whether the current repository already has an `openspec/` directory or `docs/openspec/`.
 2. Check whether the CLI is available with `openspec --version`.
-3. If OpenSpec is missing and the user asked to adopt it, initialize only after confirming the target repository and tool set.
-4. If OpenSpec is present, read `openspec/config.yaml`, relevant `openspec/specs/*/spec.md`, and any active `openspec/changes/<change>/` artifacts before proposing edits.
+3. If OpenSpec is missing and the user asked to adopt it, initialize it with the shared installer after confirming the target repository.
+4. If OpenSpec is present, read the relevant `openspec/specs/*/spec.md` and active `openspec/changes/<change>/` artifacts before proposing edits. If `openspec/` is a symlink to `docs/openspec/`, keep using `openspec/...` paths for CLI compatibility while recognizing that the physical files live under `docs/openspec/`.
 5. Treat OpenSpec artifacts as source files: update them with the same care as code, keep language precise, and include them in validation.
+
+## Shared Installer
+
+This tooling repo exposes a portable installer through the shared `~/.agents` symlink:
+
+```bash
+~/.agents/skills/openspec/scripts/install-openspec
+~/.agents/skills/openspec/scripts/install-openspec /path/to/repo
+```
+
+The installer uses this placement policy:
+
+- If the target repository already has `docs/`, create `docs/openspec/` and a root `openspec -> docs/openspec` symlink so `openspec` CLI commands work from the repo root.
+- If the target repository has `thoughts/` but no `docs/`, create `thoughts/openspec/` and a root `openspec -> thoughts/openspec` symlink.
+- If the target repository does not have `docs/` or `thoughts/`, create the normal root `openspec/` directory.
+- Do not move an existing real root `openspec/` directory automatically; treat it as an existing installation.
 
 ## Default Workflow
 
@@ -52,7 +68,7 @@ If slash commands are available in the active tool, prefer:
 - `/opsx:sync <change>` to merge delta specs into canonical specs when needed.
 - `/opsx:archive <change>` to finalize completed work.
 
-If the tool does not expose slash commands, perform the same workflow directly in files under `openspec/changes/<change>/`.
+If the tool does not expose slash commands, perform the same workflow directly in files under `openspec/changes/<change>/`. In docs-first repositories, that path may resolve through the root symlink to `docs/openspec/changes/<change>/`.
 
 ## CLI Use
 
@@ -86,9 +102,7 @@ OpenSpec works incrementally. Do not try to generate a full specification librar
 When initializing OpenSpec, choose the smallest tool scope that matches the user's request:
 
 ```bash
-openspec init
-openspec init --tools claude,cursor,codex
-openspec init --tools all
+~/.agents/skills/openspec/scripts/install-openspec
 openspec update
 ```
 
