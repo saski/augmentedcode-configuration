@@ -117,6 +117,67 @@ link_managed_path() {
     ln -sfn "$source_path" "$destination_path"
 }
 
+link_managed_binary() {
+    local name="$1"
+    shift
+    local destination_path="$HOME/.agents/bin/$name"
+    local candidate
+
+    for candidate in "$@"; do
+        if [ -z "$candidate" ] || [ "$candidate" = "$destination_path" ]; then
+            continue
+        fi
+
+        if [ -x "$candidate" ]; then
+            ln -sfn "$candidate" "$destination_path"
+            echo "✓ $destination_path → $candidate"
+            return 0
+        fi
+    done
+
+    echo "⚠️  $name executable not found; $destination_path was not linked"
+    return 1
+}
+
+validate_managed_binary() {
+    local name="$1"
+    shift
+    local destination_path="$HOME/.agents/bin/$name"
+    local found_candidate=0
+    local candidate
+
+    for candidate in "$@"; do
+        if [ -n "$candidate" ] && [ "$candidate" != "$destination_path" ] && [ -x "$candidate" ]; then
+            found_candidate=1
+            break
+        fi
+    done
+
+    if [ "$found_candidate" -eq 0 ]; then
+        echo "⚠️  $name executable not found in known locations; skipping $destination_path validation"
+        return 0
+    fi
+
+    if [ ! -L "$destination_path" ]; then
+        echo "❌ $destination_path is not a symlink (run ./setup-symlinks.sh setup to repair managed tool shims)"
+        return 1
+    fi
+
+    if [ ! -e "$destination_path" ]; then
+        echo "❌ $destination_path is a broken symlink"
+        return 1
+    fi
+
+    local target
+    target=$(readlink "$destination_path")
+    if [ ! -x "$target" ]; then
+        echo "❌ $destination_path points to a non-executable target: $target"
+        return 1
+    fi
+
+    echo "✓ $destination_path → $target"
+}
+
 setup_claude_config() {
     ensure_local_directory "$HOME/.claude"
 
@@ -180,9 +241,15 @@ setup_symlinks() {
     fi
     ln -sfn "$REPO_DIR/.agents" "$HOME/.agents"
     mkdir -p "$HOME/.agents/bin"
-    if [ -x "/opt/homebrew/bin/rtk" ]; then
-        ln -sfn "/opt/homebrew/bin/rtk" "$HOME/.agents/bin/rtk"
-    fi
+    link_managed_binary "rtk" \
+        "/opt/homebrew/bin/rtk" \
+        "/usr/local/bin/rtk" \
+        "$(command -v rtk 2>/dev/null || true)" || true
+    link_managed_binary "openspec" \
+        "/opt/homebrew/bin/openspec" \
+        "$HOME/.bun/bin/openspec" \
+        "/usr/local/bin/openspec" \
+        "$(command -v openspec 2>/dev/null || true)" || true
 
     setup_claude_config
 
@@ -499,29 +566,21 @@ validate_symlinks() {
 
     local agents_bin_path="$HOME/.agents/bin"
     if [ ! -d "$agents_bin_path" ]; then
-        echo "⚠️  $agents_bin_path is missing (run ./setup-symlinks.sh setup to create it)"
+        echo "❌ $agents_bin_path is missing (run ./setup-symlinks.sh setup to create it)"
+        errors=$((errors + 1))
     else
         echo "✓ $agents_bin_path exists"
     fi
 
-    if [ -x "/opt/homebrew/bin/rtk" ]; then
-        local agents_rtk_path="$HOME/.agents/bin/rtk"
-        if [ ! -L "$agents_rtk_path" ]; then
-            echo "⚠️  $agents_rtk_path is not a symlink (run ./setup-symlinks.sh setup to link Homebrew RTK)"
-        elif [ ! -e "$agents_rtk_path" ]; then
-            echo "❌ $agents_rtk_path is a broken symlink"
-            errors=$((errors + 1))
-        else
-            local agents_rtk_target
-            agents_rtk_target=$(readlink "$agents_rtk_path")
-            if [ "$agents_rtk_target" != "/opt/homebrew/bin/rtk" ]; then
-                echo "❌ $agents_rtk_path should point to /opt/homebrew/bin/rtk, got: $agents_rtk_target"
-                errors=$((errors + 1))
-            else
-                echo "✓ $agents_rtk_path → $agents_rtk_target"
-            fi
-        fi
-    fi
+    validate_managed_binary "rtk" \
+        "/opt/homebrew/bin/rtk" \
+        "/usr/local/bin/rtk" \
+        "$(command -v rtk 2>/dev/null || true)" || errors=$((errors + 1))
+    validate_managed_binary "openspec" \
+        "/opt/homebrew/bin/openspec" \
+        "$HOME/.bun/bin/openspec" \
+        "/usr/local/bin/openspec" \
+        "$(command -v openspec 2>/dev/null || true)" || errors=$((errors + 1))
 
     # Check root configs
     for config in CLAUDE.md AGENTS.md GEMINI.md; do

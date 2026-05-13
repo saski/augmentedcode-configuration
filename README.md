@@ -14,6 +14,7 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │   │   ├── makefile-project.md
 │   │   ├── react-best-practices.md
 │   │   └── codex-default.rules # Shared Codex approval defaults
+│   ├── bin/                    # Local ignored tool shims created by setup
 │   ├── skills/                 # Canonical skills (native + imported packs + sibling repo refs)
 │   │   ├── xp-*/               # Native: xp-code-review, xp-increase-coverage, xp-mikado-method, etc.
 │   │   ├── test-doubles-first/
@@ -44,13 +45,12 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │   │   ├── makefile-dev.mdc
 │   │   ├── react-best-practices.mdc
 │   │   └── tlz-connection.mdc
-│   ├── skills/                 # Symlink → .agents/skills/
 │   ├── mcp.json                # Symlink → ../.agents/mcp.json
 │   ├── cli-config.json         # Canonical Cursor model/agent config
 │   └── skills-cursor/          # Cursor-only skills (create-skill, create-rule, update-cursor-settings, etc.)
 ├── .claude/
 │   ├── hooks/                  # Claude-local symlinks to canonical shared hooks
-│   └── CLAUDE.md / RTK.md      # Claude-local shims (RTK.md symlink to .agents/rules/RTK.md)
+│   └── CLAUDE.md / RTK.md      # Claude-local RTK include shims
 ├── .gemini/
 │   └── mcp_config.json         # Symlink → ../.agents/mcp.json
 ├── templates/
@@ -58,7 +58,7 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │   └── codex/config.toml       # Seed for local Codex config (copied, not symlinked)
 ├── src/thoughts/               # Node/TS CLI for thoughts/ management
 ├── thoughts/                   # Research and plans (see thoughts/ tree below)
-├── docs/                       # Pre-symlink structure, validation notes, OpenSpec artifacts
+├── docs/                       # Maintainer docs, validation notes, OpenSpec artifacts
 │   └── openspec/               # OpenSpec changes, specs, and archives
 ├── openspec                    # Symlink → docs/openspec for OpenSpec CLI compatibility
 ├── hooks/
@@ -87,6 +87,7 @@ This repository is the **single source of truth** for AI tool configuration. Con
 ~/.cursor/cli-config.json → ~/saski/augmentedcode-configuration/.cursor/cli-config.json
 ~/.agents           → ~/saski/augmentedcode-configuration/.agents/
 ~/.agents/bin/rtk  → /opt/homebrew/bin/rtk (created by setup when Homebrew RTK exists)
+~/.agents/bin/openspec → /opt/homebrew/bin/openspec or ~/.bun/bin/openspec (created by setup when available)
 ~/.codex/skills/skills → ~/saski/augmentedcode-configuration/.agents/skills/ (Codex keeps system skills in ~/.codex/skills/.system)
 ~/.codex/rules/default.rules → ~/saski/augmentedcode-configuration/.agents/rules/codex-default.rules
 ~/.codex/AGENTS.md → ~/saski/augmentedcode-configuration/AGENTS.md
@@ -106,7 +107,8 @@ This repository is the **single source of truth** for AI tool configuration. Con
 ~/GEMINI.md         → ~/saski/augmentedcode-configuration/GEMINI.md
 ```
 
-Shared skills live in **`.agents/skills/`** (canonical). Cursor and other dev tools (Codex, Antigravity, etc.) point their `skills` directory at this repo path so all tools use the same XP and project skills. Selected sibling repo skills are exposed there as relative symlinks, including `~/saski/augmented-lean-delivery` and `~/saski/augmentedcode-skills`. Shared MCP servers config is also canonicalized at **`.agents/mcp.json`** and reused across tools. Codex approval defaults are centralized at **`.agents/rules/codex-default.rules`**. RTK guidance lives in **`.agents/rules/RTK.md`**, and hook resolution prefers `rtk` from `PATH`, then `~/.agents/bin/rtk`, then `/opt/homebrew/bin/rtk`.
+Shared skills live in **`.agents/skills/`** (canonical). Cursor and other dev tools (Codex, Antigravity, etc.) point their `skills` directory at this repo path so all tools use the same XP and project skills. Selected sibling repo skills are exposed there as relative symlinks, including `~/saski/augmented-lean-delivery` and `~/saski/augmentedcode-skills`. Shared MCP servers config is also canonicalized at **`.agents/mcp.json`** and reused across tools. Codex approval defaults are centralized at **`.agents/rules/codex-default.rules`**. RTK guidance lives in **`.agents/rules/RTK.md`**, and hook resolution prefers `rtk` from `PATH`, then `~/.agents/bin/rtk`, then `/opt/homebrew/bin/rtk`. Local tool shims under `~/.agents/bin` are intentionally ignored by git and are recreated by `./setup-symlinks.sh setup`.
+`.agents/rules/base.md` is the compact universal entry point for shared rules. Contextual rule modules such as `.agents/rules/python-project.md` and `.agents/rules/makefile-project.md` extend it only when the repository shape requires them.
 Volatile runtime state (for example Claude `projects/` and `sessions/`, Cursor managed manifests, Codex mutable local config, and Obsidian workspace state) intentionally remains local and outside the canonical config scope. Canonical defaults for mutable files live under `templates/` and are copied into place during setup instead of being symlinked back into the repo.
 
 ### Setup on New Machine
@@ -141,9 +143,10 @@ make check
 
 ### Troubleshooting
 
-**Symlinks broken**: Run `./setup-symlinks.sh setup` to recreate  
-**Config not loading**: Run `./setup-symlinks.sh validate` to diagnose  
-**Restore backup**: See `~/.cursor-backups/` for timestamped backups
+- **Symlinks broken**: Run `./setup-symlinks.sh setup` to recreate.
+- **Missing `rtk` or `openspec` in checks**: Run `./setup-symlinks.sh setup` to recreate `~/.agents/bin/rtk` and `~/.agents/bin/openspec`.
+- **Config not loading**: Run `./setup-symlinks.sh validate` to diagnose.
+- **Restore backup**: See `~/.cursor-backups/` for timestamped backups.
 
 ## FIC Workflow (Context Engineering)
 
@@ -289,7 +292,7 @@ Selective ECC imports are tracked in `.agents/upstreams/ecc/components.lock.json
 
 ### Syncing skills from skill-factory
 
-Skills from the [skill-factory](https://github.com/saski/skill-factory) repo can be made available here by copying them into the canonical `.agents/skills/` library. Run the sync script after pulling skill-factory (or on first setup). All skills in `.agents/skills/` (skill-factory, Matt Pocock, product-management pack, Obsidian wiki stack, and native) are listed for request-matching in [.agents/docs/skill-factory-skills.md](.agents/docs/skill-factory-skills.md); usage is defined in [.agents/rules/base.md](.agents/rules/base.md) §10.
+Skills from the [skill-factory](https://github.com/saski/skill-factory) repo can be made available here by copying them into the canonical `.agents/skills/` library. Run the sync script after pulling skill-factory (or on first setup). All skills in `.agents/skills/` (skill-factory, Matt Pocock, product-management pack, Obsidian wiki stack, and native) are listed for request-matching in [.agents/docs/skill-factory-skills.md](.agents/docs/skill-factory-skills.md); usage is defined in [.agents/rules/base.md](.agents/rules/base.md) and the matching skill's `SKILL.md`.
 
 **Recommended one-liner**: `./pull-and-sync-skills.sh` — pulls skill-factory then runs sync; respects `SKILL_FACTORY`. For a preview without writing changes: `./pull-and-sync-skills.sh --dry-run`.
 
@@ -305,7 +308,7 @@ Skills from the [skill-factory](https://github.com/saski/skill-factory) repo can
 
 ## Cursor Rules
 
-Development rules live in `.agents/rules/` (canonical). `base.md` is the universal rulebook, and `python-project.md` / `makefile-project.md` extend it for those repository contexts. Cursor rules in `.cursor/rules/` point to the canonical files or add Cursor-specific behavior.
+Development rules live in `.agents/rules/` (canonical). `base.md` is the compact universal entry point, and `python-project.md` / `makefile-project.md` extend it for those repository contexts. Cursor rules in `.cursor/rules/` point to the canonical files or add Cursor-specific behavior.
 
 | Rule | Purpose | Activation |
 |------|---------|------------|
@@ -362,11 +365,11 @@ ln -s .agents/rules/base.md GEMINI.md
 
 These configurations enforce:
 
-- **TDD**: Test-first, one failing test at a time
-- **Baby Steps**: Small, incremental changes
-- **Simple Design**: Clarity over cleverness
-- **High Quality**: Strict validation before commits
-- **Context Engineering**: Manage AI context effectively
+- **Think Before Acting**: State assumptions, read before writing, and stop when unclear.
+- **Simplest Surgical Change**: Prefer the smallest working change and avoid unrelated churn.
+- **Goal-Driven Verification**: Define success criteria and run canonical checks.
+- **Checkpoint and Escalate**: Surface conflicts, skipped checks, and unresolved risks.
+- **Context Engineering**: Manage AI context through research, plans, and phase boundaries.
 
 ## References
 

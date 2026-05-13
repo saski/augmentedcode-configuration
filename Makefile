@@ -1,5 +1,7 @@
 .PHONY: check test lint-shell validate-skills validate-openspec validate-symlinks check-tracked-ignored install-hooks
 
+export PATH := $(HOME)/.agents/bin:$(HOME)/.bun/bin:/opt/homebrew/bin:/usr/local/bin:$(PATH)
+
 SHELL_SCRIPTS := \
 	setup-symlinks.sh \
 	sync-skill-factory.sh \

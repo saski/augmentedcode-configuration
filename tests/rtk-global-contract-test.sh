@@ -77,8 +77,12 @@ test_agents_bin_policy_when_homebrew_rtk_exists() {
         echo "expected setup-symlinks.sh to manage ~/.agents/bin" >&2
         exit 1
     fi
-    if ! grep -Fq 'ln -sfn "/opt/homebrew/bin/rtk" "$HOME/.agents/bin/rtk"' "$REPO_DIR/setup-symlinks.sh"; then
-        echo "expected setup-symlinks.sh to link ~/.agents/bin/rtk to /opt/homebrew/bin/rtk" >&2
+    if ! grep -Fq 'link_managed_binary "rtk"' "$REPO_DIR/setup-symlinks.sh"; then
+        echo "expected setup-symlinks.sh to link ~/.agents/bin/rtk through the managed binary helper" >&2
+        exit 1
+    fi
+    if ! grep -Fq '"/opt/homebrew/bin/rtk"' "$REPO_DIR/setup-symlinks.sh"; then
+        echo "expected setup-symlinks.sh to include /opt/homebrew/bin/rtk as a managed binary candidate" >&2
         exit 1
     fi
 
@@ -134,9 +138,14 @@ test_fail_open_when_rtk_too_old() {
 
     local input='{"tool_input":{"command":"echo hi"}}'
     local output
-    output="$(env -i HOME="$home_dir" PATH="$path_bin:/usr/bin:/bin" bash "$HOOK" <<< "$input")"
+    local stderr_path="$tmp_dir/stderr.log"
+    output="$(env -i HOME="$home_dir" PATH="$path_bin:/usr/bin:/bin" bash "$HOOK" <<< "$input" 2>"$stderr_path")"
     if [[ -n "$output" ]]; then
         echo "expected no rewrite output for old rtk binary, got: $output" >&2
+        exit 1
+    fi
+    if ! grep -Fq "rtk 0.22.0 is too old" "$stderr_path"; then
+        echo "expected old RTK warning in stderr" >&2
         exit 1
     fi
 }

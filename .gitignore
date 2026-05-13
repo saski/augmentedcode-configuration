@@ -19,6 +19,7 @@
 .cursor/skills-cursor/.sync-manifest.json
 
 .agents/gemini/
+.agents/bin/
 
 .claude/notifications/
 .claude/backups/

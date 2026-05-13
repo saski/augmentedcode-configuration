@@ -1,11 +1,23 @@
 # Augmentedcode Configuration - Project Status
 
 **Last Updated**: 2026-05-13
-**Overall Status**: 🟢 Ready - OpenSpec docs-first installation, shared skill availability, local healthcheck automation, skill validator, governance catalogs, local sibling skill references, and symlink layout verified
+**Overall Status**: 🟢 Ready - OpenSpec docs-first installation, shared skill availability, managed tool PATH shims, local healthcheck automation, skill validator, governance catalogs, local sibling skill references, and symlink layout verified
 
 ---
 
 ## Recent Changes
+
+### 2026-05-13: Managed tool PATH shims and README structure review ✅
+
+- Added ignored `~/.agents/bin` tool shims for RTK and OpenSpec through `setup-symlinks.sh`.
+- Updated Makefile PATH bootstrap so `make check` can find `rtk` and `openspec` from non-login shells.
+- Reviewed README structure, symlink, folder, and skill references to match the current repo layout.
+
+### 2026-05-13: Compact four-principle base rules ✅
+
+- Consolidated `.agents/rules/base.md` around four operating principles: Think Before Acting, Simplest Surgical Change, Goal-Driven Verification, and Checkpoint and Escalate.
+- Kept repo-specific contracts for contextual rule loading, GitHub SSH aliases, skill inventory governance, RTK, Context7, and personal knowledge routing.
+- Added a healthcheck contract so the compact base-rule shape and retained routing strings stay verified.
 
 ### 2026-05-13: Context7 CLI documentation routing ✅
 
@@ -145,7 +157,7 @@
 
 | Component | Status | Notes |
 | ----- | ----- | ----- |
-| Shared rules | ✅ Complete | Canonical under `.agents/rules/` |
+| Shared rules | ✅ Complete | Compact base rules plus contextual modules under `.agents/rules/` |
 | Shared skills | ✅ Complete | Self-contained and tracked in repo |
 | Skill governance | ✅ Complete | Index and catalogs are validated |
 | Local healthchecks | ✅ Complete | `make check` covers tests, shell syntax, skill validation, symlink validation, and tracked-ignored reporting |
