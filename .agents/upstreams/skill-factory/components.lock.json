@@ -46,14 +46,6 @@
       "computedHash": "fb0dd53643babc5d5a9f56710177ed1470ae0e6f5bf4b6f7fee70114376b6d3d",
       "syncedAt": "2026-05-05T11:48:11Z"
     },
-    "complexity-review": {
-      "source": "saski/skill-factory",
-      "sourceType": "github",
-      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
-      "sourcePath": "output_skills/practices/complexity-review",
-      "computedHash": "94c517fc2cc24549fd9ed928d6725d162497f070bd164b8b38e27083d89e7b34",
-      "syncedAt": "2026-05-05T11:48:11Z"
-    },
     "creating-hooks": {
       "source": "saski/skill-factory",
       "sourceType": "github",
@@ -92,14 +84,6 @@
       "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
       "sourcePath": "output_skills/developer-tools/git-worktrees",
       "computedHash": "c5eea126af4f7bccb031aad2b5f865a4de35a56448de0a7a6dc5476264882ca9",
-      "syncedAt": "2026-05-05T11:48:11Z"
-    },
-    "hamburger-method": {
-      "source": "saski/skill-factory",
-      "sourceType": "github",
-      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
-      "sourcePath": "output_skills/practices/hamburger-method",
-      "computedHash": "ede1e88cee8c7ad035aaf670fa4de521863d438f0e9bd23f22d6f679ae3de94f",
       "syncedAt": "2026-05-05T11:48:11Z"
     },
     "hexagonal-architecture": {
@@ -156,22 +140,6 @@
       "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
       "sourcePath": "output_skills/practices/small-safe-steps",
       "computedHash": "ef176fe52e1091b63e9e3f281a9eac910c4ca5ea7827f5be8556e6fcfa32ebd6",
-      "syncedAt": "2026-05-05T11:48:11Z"
-    },
-    "story-splitting": {
-      "source": "saski/skill-factory",
-      "sourceType": "github",
-      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
-      "sourcePath": "output_skills/practices/story-splitting",
-      "computedHash": "5baedd05bcfbf58bb8fe34185a24f29513b8391b17b90fce74b66021b7018580",
-      "syncedAt": "2026-05-05T11:48:11Z"
-    },
-    "test-desiderata": {
-      "source": "saski/skill-factory",
-      "sourceType": "github",
-      "sourceCommit": "69036a4fa4bd5eb6fda1c3b834b13dee0b2477b3",
-      "sourcePath": "output_skills/testing/test-desiderata",
-      "computedHash": "79284ae4f3d8b9a0dba3fc0da3f97b73d13bd6b45dbdded32ca7c194baa80b67",
       "syncedAt": "2026-05-05T11:48:11Z"
     },
     "thin-wrappers": {

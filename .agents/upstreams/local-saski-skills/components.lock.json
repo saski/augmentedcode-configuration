@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "sources": {
+    "augmented-lean-delivery": {
+      "repository": "saski/augmented-lean-delivery",
+      "sourceType": "local-git",
+      "localPath": "~/saski/augmented-lean-delivery",
+      "sourceCommit": "e60dba69ecaf799e786a96fd27dccf2e5e216ee3"
+    },
+    "augmentedcode-skills": {
+      "repository": "saski/augmentedcode-skills",
+      "sourceType": "local-git",
+      "localPath": "~/saski/augmentedcode-skills",
+      "sourceCommit": "3e0c39814ae041c92a5c52e01c79994f42a309ea"
+    }
+  },
+  "skills": {
+    "complexity-review": {
+      "source": "saski/augmented-lean-delivery",
+      "sourceType": "local-git",
+      "sourcePath": "complexity-review",
+      "symlinkTarget": "../../../augmented-lean-delivery/complexity-review",
+      "computedHash": "98d401cdf3087a61471bc39ca4eb365a1ab77b7d60b342e58919527e987adeb6"
+    },
+    "hamburger-method": {
+      "source": "saski/augmented-lean-delivery",
+      "sourceType": "local-git",
+      "sourcePath": "hamburger-method",
+      "symlinkTarget": "../../../augmented-lean-delivery/hamburger-method",
+      "computedHash": "a08c2331d46929f45f26276679494adb3382ac71a0134abb1c2557f68ced07cf"
+    },
+    "micro-steps-coach": {
+      "source": "saski/augmented-lean-delivery",
+      "sourceType": "local-git",
+      "sourcePath": "micro-steps-coach",
+      "symlinkTarget": "../../../augmented-lean-delivery/micro-steps-coach",
+      "computedHash": "3ec2040030b5f34d1c03d5967ac0b1bca7c87fbcab1167fa1ae448d7776a8753"
+    },
+    "story-splitting": {
+      "source": "saski/augmented-lean-delivery",
+      "sourceType": "local-git",
+      "sourcePath": "story-splitting",
+      "symlinkTarget": "../../../augmented-lean-delivery/story-splitting",
+      "computedHash": "62d9983df5efdf006309866b753c7bf5371420ba16a8a676c5445091fc882158"
+    },
+    "mutation-testing-js": {
+      "source": "saski/augmentedcode-skills",
+      "sourceType": "local-git",
+      "sourcePath": "mutation-testing-js",
+      "symlinkTarget": "../../../augmentedcode-skills/mutation-testing-js",
+      "computedHash": "1b90384c62194d0cd20c81ffd0c80a0b3ec8ed1a93745f9b86115630927f9d04"
+    },
+    "mutation-testing-python": {
+      "source": "saski/augmentedcode-skills",
+      "sourceType": "local-git",
+      "sourcePath": "mutation-testing-python",
+      "symlinkTarget": "../../../augmentedcode-skills/mutation-testing-python",
+      "computedHash": "66e6c741d3f9ccbd74e22f5f1f1e3f2b9bb14794e2d857a8b563fc61e6fa648c"
+    },
+    "test-desiderata": {
+      "source": "saski/augmentedcode-skills",
+      "sourceType": "local-git",
+      "sourcePath": "test-desiderata",
+      "symlinkTarget": "../../../augmentedcode-skills/test-desiderata",
+      "computedHash": "df67d19001c2679074bc3778e87809bfd791baf0a37270529479af517cdd3c01"
+    }
+  }
+}

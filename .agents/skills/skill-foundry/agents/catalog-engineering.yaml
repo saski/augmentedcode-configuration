@@ -82,6 +82,36 @@ skills:
     overlap_with: []
     notes: "Verifies test effectiveness by mutating code. Complements tdd and test-desiderata."
 
+  - name: mutation-testing-js
+    category: verification-testing
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - mutation-testing
+    notes: "JavaScript/TypeScript mutation testing with Stryker. Sourced from local sibling repo augmentedcode-skills."
+
+  - name: mutation-testing-python
+    category: verification-testing
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - mutation-testing
+    notes: "Python mutation testing with mutmut. Sourced from local sibling repo augmentedcode-skills."
+
   - name: approval-tests
     category: verification-testing
     pattern: tool-wrapper
@@ -242,6 +272,23 @@ skills:
       - hamburger-method
       - story-splitting
     notes: "1-3h implementation steps with expand-contract for risky changes. story-splitting breaks stories first; hamburger-method picks vertical slices; small-safe-steps plans execution."
+
+  - name: micro-steps-coach
+    category: workflow-automation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - small-safe-steps
+      - hamburger-method
+      - story-splitting
+    notes: "1-3h safe execution steps from augmented-lean-delivery. story-splitting and hamburger-method choose slices; micro-steps-coach plans execution."
 
   - name: hamburger-method
     category: workflow-automation

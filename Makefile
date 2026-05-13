@@ -9,6 +9,7 @@ SHELL_SCRIPTS := \
 	.agents/skills/openspec/scripts/install-openspec \
 	tests/openspec-install-test.sh \
 	tests/validate-skill-library-test.sh \
+	tests/external-skill-references-test.sh \
 	tests/healthcheck-automation-test.sh \
 	tests/rtk-global-contract-test.sh \
 	hooks/pre-commit
@@ -18,6 +19,7 @@ check: test lint-shell validate-skills validate-openspec validate-symlinks check
 test:
 	./tests/openspec-install-test.sh
 	./tests/validate-skill-library-test.sh
+	./tests/external-skill-references-test.sh
 	./tests/healthcheck-automation-test.sh
 	./tests/rtk-global-contract-test.sh
 

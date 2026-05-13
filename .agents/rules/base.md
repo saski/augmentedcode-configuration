@@ -84,6 +84,12 @@ This document contains the universal development rules and guidelines for this p
 - **Trigger-based use**: When the user's request matches a skill's description, read that skill's `SKILL.md` and follow its instructions.
 - **Skill format**: Each skill has frontmatter `name` and `description`; the description states when to use it.
 
+### Quality Skill References
+
+- **Complexity avoidance**: use `~/.agents/skills/complexity-review/SKILL.md` to challenge complexity drivers before committing to technical direction.
+- **Plan and task slicing**: use `~/.agents/skills/story-splitting/SKILL.md` for oversized stories and `~/.agents/skills/hamburger-method/SKILL.md` for vertical delivery slices.
+- **Small safe steps**: use `~/.agents/skills/micro-steps-coach/SKILL.md` to turn decided work into 1-3 hour, reversible implementation increments.
+
 ## 11. Development Best Practices
 
 - **Error Handling & Debugging**: Always implement proper error handling with meaningful error messages.

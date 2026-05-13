@@ -7,28 +7,37 @@ For domain-first routing, tags, and short usage notes, use [skill-domain-routing
 Imported and local sources land in the same tree:
 
 - **[skill-factory](https://github.com/saski/skill-factory)** — imported into this repo via `./pull-and-sync-skills.sh` / `./sync-skill-factory.sh`
+- **Local sibling skill repos** — referenced by symlink from `.agents/skills/` to `~/saski/augmented-lean-delivery` and `~/saski/augmentedcode-skills`
 - **Product management pack** — `pmprompt/claude-plugin-product-management` (integrity: repo-root `skills-lock.json`; taxonomy and overlaps: [.agents/skills/skill-foundry/agents/catalog-product-management.yaml](../skills/skill-foundry/agents/catalog-product-management.yaml))
 - **Matt Pocock skills** — `mattpocock/skills` (integrity: repo-root `skills-lock.json`; governance: [.agents/skills/skill-foundry/agents/catalog-engineering.yaml](../skills/skill-foundry/agents/catalog-engineering.yaml))
 - **Native and local skills** — authored, maintained, or locally installed into this repository
+
+## Local sibling skill references
+
+| Skill | Source | Purpose |
+|-------|--------|---------|
+| complexity-review | augmented-lean-delivery | Reviews technical proposals and architectural decisions against 30 complexity dimensions. Use to challenge complexity drivers and push for the simplest viable approach. |
+| hamburger-method | augmented-lean-delivery | Applies the Hamburger Method to slice features into vertical deliverable pieces. Use when work needs incremental delivery across layers. |
+| micro-steps-coach | augmented-lean-delivery | Breaks decided work into 1-3 hour micro-steps with zero downtime and reversible change sequencing. |
+| story-splitting | augmented-lean-delivery | Detects oversized stories and applies splitting heuristics based on linguistic red flags and bundled requirements. |
+| mutation-testing-js | augmentedcode-skills | Mutation testing patterns for JavaScript and TypeScript using Stryker. Use to find weak or missing JS/TS tests. |
+| mutation-testing-python | augmentedcode-skills | Mutation testing patterns for Python using mutmut. Use to find weak or missing pytest coverage. |
+| test-desiderata | augmentedcode-skills | Analyze and improve test code quality using Kent Beck's Test Desiderata framework. |
 
 ## Skill-Factory (synced)
 
 | Skill | Category | Purpose |
 |-------|----------|---------|
 | traductor-bilingue | tools | Translates technical text between English and Spanish preserving tone and format. Keeps technical terms in English when common in Spanish dev teams (deploy, pull request, pipeline, staging). Use when translating technical documentation, code comments, or team communication. |
-| test-desiderata | testing | Analyze and improve test code quality using Kent Beck's Test Desiderata framework. Use when analyzing test files, reviewing test code, identifying test quality issues, suggesting test improvements, or when asked to evaluate tests against best practices. Applies to unit tests, integration tests, and any automated test code. |
 | nullables | testing | Writes tests without mocks using Nullables. Use when writing tests, especially testing code with external I/O (HTTP, files, databases, clocks, random numbers), designing infrastructure wrappers or replacing mocking libraries. |
 | mutation-testing | testing | Finds weak or missing tests by analyzing if code changes would be caught. Use when verifying test effectiveness, strengthening test suites, or validating TDD workflows. |
 | bdd-with-approvals | testing | Write executable BDD specifications as approval-test fixtures in domain language. Use when doing BDD, writing Given/When/Then specs, creating human-scannable test fixtures, or turning event model slices into executable tests. Pairs with event-modeling and approval-tests skills. Not for unit test mechanics or mock setup. |
 | approval-tests | testing | Writes approval tests (snapshot/golden master testing) for Python, JavaScript/TypeScript, or Java. Use when verifying complex output, characterization testing legacy code, testing combinations, or working with .approved/.received files. |
 | thinkies | practices | Applies Kent Beck's Thinkies—pattern-based thinking habits that generate ideas. Use when stuck, exploring alternatives, or reframing decisions. |
 | thin-wrappers | practices | Encapsulates infrastructure SDKs behind minimal domain-aligned interfaces. Use when accessing any external infrastructure to keep SDK usage contained, testing simple, and changes easy. |
-| story-splitting | practices | Detects stories that are too big and applies splitting heuristics. Identifies linguistic red flags (and, or, manage, handle, including) and suggests concrete splitting strategies. Use when breaking down requirements or splitting large work. |
 | small-safe-steps | practices | Small Safe Steps (S3): breaks work into 1-3h increments with zero downtime. Use when asking "how do I implement/migrate/refactor", "what steps to do X", "plan safe migration", or handling risky DB/API changes. Applies expand-contract pattern for migrations, refactorings, schema changes. |
 | refinement-loop | practices | Iterative refinement through multiple passes. Use when the user asks to 'meditate on', 'distill', 'refine', or 'iterate on' something, or proactively when a problem benefits from multiple passes rather than a single attempt. |
 | refactoring | practices | Structured refactoring process with prep, main refactoring, final evaluation, and summary phases. Use when asked to "refactor", "clean up code", "improve readability", or proactively when code gets too complex or messy. For XP simple-design refactoring with ROI prioritization use xp-simple-design-refactor; for safe large-scale refactoring use xp-mikado-method. |
-| hamburger-method | practices | Slices features into vertical deliverable pieces using the Hamburger Method. Generates 4-5 implementation options per layer and composes minimal end-to-end slices. Use when slicing work, breaking down features into layers, or delivering incrementally. |
-| complexity-review | practices | Reviews technical proposals against 30 complexity dimensions. Questions necessity of scale, consistency, and resilience. Use when proposing technologies (Kafka, microservices, event sourcing) or designing systems. Pushes for simplest viable approach. |
 | code-simplifier | practices | Simplifies and refines code for clarity, readability, and maintainability. Reduces complexity without changing behavior. Use when simplifying, cleaning up, or reducing complexity in code. |
 | writing-bash-scripts | developer-tools | Bash script style guide. Always use when writing bash scripts, shell scripts, or CLI bash tools. |
 | using-uv | developer-tools | Python package and project management with UV. Use when creating Python scripts, initializing projects, or managing dependencies. |

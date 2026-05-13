@@ -19,6 +19,8 @@ Skills:
 - `bdd-with-approvals` - Use for executable Given/When/Then specs and domain-readable examples.
 - `test-desiderata` - Use to review existing tests for quality and maintainability.
 - `mutation-testing` - Use after tests exist to find weak assertions.
+- `mutation-testing-js` - Use for Stryker-focused mutation testing in JavaScript and TypeScript.
+- `mutation-testing-python` - Use for mutmut-focused mutation testing in Python.
 - `xp-increase-coverage` - Use when the user asks to add high-value missing tests.
 - `xp-plan-untested-code` - Use before writing tests for a risky untested area.
 - `xp-code-review` - Use to review pending changes for tests, maintainability, and rule alignment.
@@ -35,6 +37,7 @@ Use when the user wants to break down work, plan an implementation, migrate safe
 Skills:
 
 - `small-safe-steps` - Use for risky implementation, migrations, refactors, and 1-3 hour increments.
+- `micro-steps-coach` - Use after deciding what to build to turn work into 1-3 hour safe implementation steps.
 - `story-splitting` - Use when requirements are too large or contain linguistic split signals.
 - `hamburger-method` - Use to build vertical slices across product, UI, domain, and infrastructure layers.
 - `shape-up` - Use for fixed-appetite product shaping with variable scope.

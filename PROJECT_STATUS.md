@@ -1,11 +1,17 @@
 # Augmentedcode Configuration - Project Status
 
-**Last Updated**: 2026-05-12
-**Overall Status**: 🟢 Ready - OpenSpec docs-first installation, shared skill availability, local healthcheck automation, skill validator, governance catalogs, and symlink layout verified
+**Last Updated**: 2026-05-13
+**Overall Status**: 🟢 Ready - OpenSpec docs-first installation, shared skill availability, local healthcheck automation, skill validator, governance catalogs, local sibling skill references, and symlink layout verified
 
 ---
 
 ## Recent Changes
+
+### 2026-05-13: Local sibling skill references ✅
+
+- Exposed selected skills from `~/saski/augmented-lean-delivery` and `~/saski/augmentedcode-skills` through relative symlinks in `.agents/skills/`, which are available via the canonical `~/.agents/skills` layout.
+- Added base rule references for complexity avoidance, plan/task slicing, and small safe implementation steps using the four `augmented-lean-delivery` skills.
+- Registered the sibling skill references in the discovery index, domain routing guide, engineering governance catalog, README, provenance lock, and a contract test.
 
 ### 2026-05-12: RTK global availability via `~/.agents` ✅
 
