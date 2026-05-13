@@ -55,7 +55,7 @@ This document contains the universal development rules and guidelines for this p
 - **Persistence**: Persist through multiple attempts until resolution.
 - **Thorough Iteration**: Break complex changes into incremental steps.
 - **Sequential Questions**: Only one question at a time; each question should build on previous answers.
-- **Workspace-Aware GitHub SSH**: Before suggesting or running GitHub SSH commands (`git clone`, `git fetch`, `git pull`, `git push`, `git remote add`, `git remote set-url`), choose the SSH host alias from the local workspace path. Use `git@github.com-eventbrite:` for repositories under `~/eventbrite/*` and `git@github.com-saski:` for repositories under `~/saski/*`. Never use bare `git@github.com:` in this environment. If the correct alias is unclear, load the `github-host-alias` skill and verify against `~/.ssh/config`.
+- **Workspace-Aware GitHub SSH And CLI Auth**: Before suggesting or running GitHub SSH commands (`git clone`, `git fetch`, `git pull`, `git push`, `git remote add`, `git remote set-url`), choose the SSH host alias from the local workspace path. Use `git@github.com-eventbrite:` for repositories under `~/eventbrite/*` and `git@github.com-saski:` for repositories under `~/saski/*`. Never use bare `git@github.com:` in this environment. Treat `github.com-eventbrite` and `github.com-saski` as SSH routing only; do not use `gh auth login` to pick between them. Only suggest `gh auth login` when GitHub CLI API auth is actually needed. Before suggesting `gh auth login`, check whether `GITHUB_TOKEN` is set. If stored interactive login is required, run `env -u GITHUB_TOKEN gh auth login` or unset `GITHUB_TOKEN` in that shell first, because `gh` will otherwise authenticate from the environment variable instead of storing credentials. Verify CLI auth with `gh auth status`. If the correct alias or credential source is unclear, load the `github-host-alias` skill and verify against `~/.ssh/config` and the active shell environment.
 
 ## 7. Mental Preparation
 
@@ -139,3 +139,22 @@ This document contains the universal development rules and guidelines for this p
 - Keep this repository focused on executable agent behavior: rules, skills, workflows, commands, validation, and setup.
 
 @/Users/ignacio.viejo/saski/augmentedcode-configuration/.agents/rules/RTK.md
+
+<!-- context7 -->
+Use the `ctx7` CLI to fetch current documentation whenever the user asks about a library, framework, SDK, API, CLI tool, or cloud service -- even well-known ones like React, Next.js, Prisma, Express, Tailwind, Django, or Spring Boot. This includes API syntax, configuration, version migration, library-specific debugging, setup instructions, and CLI tool usage. Use even when you think you know the answer -- your training data may not reflect recent changes. Prefer this over web search for library docs.
+
+Do not use for: refactoring, writing scripts from scratch, debugging business logic, code review, or general programming concepts.
+
+## Steps
+
+1. Resolve library: `npx ctx7@latest library <name> "<user's question>"` — use the official library name with proper punctuation (e.g., "Next.js" not "nextjs", "Customer.io" not "customerio", "Three.js" not "threejs")
+2. Pick the best match (ID format: `/org/project`) by: exact name match, description relevance, code snippet count, source reputation (High/Medium preferred), and benchmark score (higher is better). If results don't look right, try alternate names or queries (e.g., "next.js" not "nextjs", or rephrase the question)
+3. Fetch docs: `npx ctx7@latest docs <libraryId> "<user's question>"`
+4. Answer using the fetched documentation
+
+You MUST call `library` first to get a valid ID unless the user provides one directly in `/org/project` format. Use the user's full question as the query -- specific and detailed queries return better results than vague single words. Do not run more than 3 commands per question. Do not include sensitive information (API keys, passwords, credentials) in queries.
+
+For version-specific docs, use `/org/project/version` from the `library` output (e.g., `/vercel/next.js/v14.3.0`).
+
+If a command fails with a quota error, inform the user and suggest `npx ctx7@latest login` or setting `CONTEXT7_API_KEY` env var for higher limits. Do not silently fall back to training data.
+<!-- context7 -->

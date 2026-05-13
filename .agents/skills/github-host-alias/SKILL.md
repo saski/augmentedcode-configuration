@@ -7,7 +7,7 @@ description: Use when running git clone, git remote add, or suggesting git comma
 
 ## Goal
 
-Ensure the correct GitHub account is used when authenticating via SSH, by applying the appropriate host alias configured in the user's `~/.ssh/config`.
+Ensure the correct GitHub account is used for Git-over-SSH by applying the appropriate host alias configured in the user's `~/.ssh/config`, and avoid confusing SSH alias selection with GitHub CLI (`gh`) authentication.
 
 ## Use This Skill When
 
@@ -15,6 +15,7 @@ Ensure the correct GitHub account is used when authenticating via SSH, by applyi
 - Adding or modifying a git remote.
 - Suggesting or running `git` commands that involve fetching, pulling, pushing, or cloning over SSH.
 - Working in a work-related directory versus a personal one.
+- Troubleshooting GitHub auth where SSH aliases and `gh auth login` are being conflated.
 
 ## SSH Host Aliases Context
 
@@ -32,12 +33,24 @@ The environment has multiple GitHub accounts configured via `~/.ssh/config`:
 
 > **Note**: There is NO bare `github.com` alias configured. Always use the explicit alias for the matching path.
 
+## GitHub CLI Caveat
+
+- `github.com-eventbrite` and `github.com-saski` are SSH aliases from `~/.ssh/config`, not separate GitHub CLI hosts.
+- Do not use `gh auth login` to choose the SSH identity for `git clone`, `git fetch`, `git pull`, or `git push`.
+- Only use `gh auth login` when a GitHub CLI command on `github.com` truly requires API authentication.
+- Before suggesting `gh auth login`, inspect whether `GITHUB_TOKEN` is set.
+- If `GITHUB_TOKEN` is set, `gh auth login` will authenticate from that environment variable and will not store interactive credentials. For a stored login, run `env -u GITHUB_TOKEN gh auth login` or unset `GITHUB_TOKEN` in that shell first.
+- Confirm CLI auth separately with `gh auth status`.
+
 ## Workflow & Examples
 
 1. **Check the local path**: Identify whether the target directory for the repository is under the `eventbrite` folder or the `saski` folder.
 2. **Format the SSH URL**:
    - If under `~/eventbrite/*`, the SSH URL must use `@github.com-eventbrite:`.
    - If under `~/saski/*`, the SSH URL must use `@github.com-saski:`.
+3. **Separate SSH from CLI auth**:
+   - Use the SSH alias to choose the Git identity for `git`.
+   - Use `gh auth login` only for GitHub CLI API access, and only after checking for `GITHUB_TOKEN`.
 
 ### Example: Cloning
 

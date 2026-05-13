@@ -93,6 +93,7 @@ Skills:
 
 - `diagnose` - Use for disciplined debugging of failures, broken behavior, or regressions.
 - `fic-research` - Use to investigate the existing codebase and capture findings without proposing changes.
+- `find-docs` - Use for current library, framework, SDK, API, CLI tool, or cloud service documentation via the Context7 CLI.
 - `documentation-lookup` - Use when up-to-date framework or library docs are needed.
 - `corporate-aws-cli` - Use for AWS CLI work in federated corporate accounts and account-region validation.
 - `thinking-in-bets` - Use when decisions must be made under uncertainty.

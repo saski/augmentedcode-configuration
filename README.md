@@ -34,6 +34,7 @@ Reusable AI agent configurations for development workflows. Designed for XP/TDD 
 │   │   ├── use-base-rules.mdc
 │   │   ├── ai-feedback-learning-loop.mdc
 │   │   ├── cursor-config-management.mdc
+│   │   ├── context7.mdc
 │   │   ├── project-status-maintenance.mdc
 │   │   ├── fic-workflow.mdc
 │   │   ├── tdd-workflow.mdc
@@ -273,6 +274,7 @@ Reusable project-level skills live in **`.agents/skills/`** and are exposed to C
 | `openspec` | Use OpenSpec/OPSX for spec-driven development with a shared installer, proposals, delta specs, designs, task lists, implementation, verification, and archive flows. |
 | `github-host-alias` | Ensure correct SSH host alias is used when authenticating via SSH, based on local paths (~/eventbrite vs ~/saski). |
 | `personal-knowledge-routing` | Route durable personal context and reusable knowledge to the personal knowledge vault while keeping shared agent rules small. |
+| `find-docs` | Use the Context7 CLI for current library, framework, SDK, API, CLI tool, and cloud service documentation. |
 | `documentation-lookup` | Use live Context7 docs for library and framework questions instead of stale model memory. Imported from ECC under the explicit upstream intake lane. |
 | `verification-loop` | Run a structured build, typecheck, lint, test, and security verification pass after meaningful changes. Imported from ECC under the explicit upstream intake lane. |
 | `strategic-compact` | Suggest context compaction at logical phase boundaries instead of arbitrary auto-compaction. Imported from ECC under the explicit upstream intake lane. |

@@ -108,6 +108,7 @@ Imported and local sources land in the same tree:
 | fic-implement-plan | workflow | Execute an approved implementation plan phase by phase with verification. Use when the user asks to implement a plan file from thoughts/shared/plans. |
 | fic-research | workflow | Research and document the current codebase state without proposing changes. Use when the user asks to investigate existing behavior, architecture, or implementation details and capture findings. |
 | fic-validate-plan | workflow | Validate that an implementation plan was executed correctly. Use when the user asks to verify completion, compare code changes to a plan, or produce a validation report. |
+| find-docs | developer-tools | Retrieves up-to-date documentation, API references, and code examples for developer technologies using the Context7 CLI. Use for library, framework, SDK, API, CLI tool, or cloud service questions. |
 | documentation-lookup | developer-tools | Use up-to-date library and framework docs via Context7 MCP instead of training data. Activates for setup questions, API references, code examples, or when the user names a framework (e.g. React, Next.js, Prisma). |
 | verification-loop | workflow | A comprehensive verification system for Claude Code sessions. |
 | strategic-compact | workflow | Suggests manual context compaction at logical intervals to preserve context through task phases rather than arbitrary auto-compaction. |

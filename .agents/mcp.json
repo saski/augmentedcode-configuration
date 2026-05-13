@@ -10,13 +10,6 @@
         "AWS_DOCUMENTATION_PARTITION": "aws"
       }
     },
-    "context7": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@upstash/context7-mcp@latest"
-      ]
-    },
     "Figma": {
       "url": "https://mcp.figma.com/mcp"
     },
@@ -32,10 +25,14 @@
       "url": "https://eventbrite-be.glean.com/mcp/default",
       "headers": {}
     },
+    "context7": {
+      "command": "/opt/homebrew/bin/npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
+    },
     "chrome-devtools": {
-      "command": "npx -y chrome-devtools-mcp@latest",
-      "env": {},
-      "args": []
+      "command": "/opt/homebrew/bin/npx",
+      "args": ["-y", "chrome-devtools-mcp@latest"],
+      "env": {}
     }
   }
 }

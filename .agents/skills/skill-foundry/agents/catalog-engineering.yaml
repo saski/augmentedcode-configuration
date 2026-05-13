@@ -587,8 +587,24 @@ skills:
       - claude
       - codex
       - cursor
-    overlap_with: []
-    notes: "Fetches current framework and library docs through Context7 instead of relying on stale model memory."
+    overlap_with:
+      - find-docs
+    notes: "Fetches current framework and library docs through Context7 MCP instead of relying on stale model memory. find-docs uses the Context7 CLI path."
+
+  - name: find-docs
+    category: tool-reference
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - documentation-lookup
+    notes: "Fetches current developer documentation through the Context7 CLI. documentation-lookup is the MCP-oriented variant."
 
   - name: obsidian-cli
     category: tool-reference

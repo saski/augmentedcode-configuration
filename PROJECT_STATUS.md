@@ -7,6 +7,12 @@
 
 ## Recent Changes
 
+### 2026-05-13: Context7 CLI documentation routing ✅
+
+- Added `find-docs` as a shared Context7 CLI skill and registered it in the skill discovery index, domain routing guide, README, and engineering governance catalog.
+- Added a Cursor `context7.mdc` always-applied rule and mirrored the Context7 CLI guidance in the base rules.
+- Updated shared MCP configuration to use explicit `npx` command/args for Context7 and Chrome DevTools MCP servers.
+
 ### 2026-05-13: Local sibling skill references ✅
 
 - Exposed selected skills from `~/saski/augmented-lean-delivery` and `~/saski/augmentedcode-skills` through relative symlinks in `.agents/skills/`, which are available via the canonical `~/.agents/skills` layout.
