@@ -1,5 +1,5 @@
-<!-- last_updated: 2026-05-13 -->
-<!-- version: 2.6 -->
+<!-- last_updated: 2026-05-14 -->
+<!-- version: 2.7 -->
 # AI Agent Development Rules
 
 This is the compact universal rulebook for this project. It applies to every AI agent unless a narrower project, tool, or user instruction explicitly overrides it.
@@ -64,6 +64,8 @@ This is the compact universal rulebook for this project. It applies to every AI 
 
 - Shared skills live in `.agents/skills/`, one directory per skill with at least `SKILL.md`.
 - Use `.agents/docs/skill-factory-skills.md` to route user requests to skills before reading the matching `SKILL.md`.
+- Shared workflows live in `.agents/workflows/`; load the matching workflow when the user explicitly asks for a named workflow or the task clearly matches one of the repo's canonical delivery flows.
+- Shared command prompts live in `.agents/commands/`; treat them as the canonical source when the user explicitly invokes or asks about a repo command mirrored into tool-specific command folders.
 - Product-management entries use `.agents/skills/skill-foundry/agents/catalog-product-management.yaml`; engineering entries use `.agents/skills/skill-foundry/agents/catalog-engineering.yaml`; general entries may use `.agents/skills/skill-foundry/agents/catalog.yaml`.
 - Adding, removing, renaming, or moving any skill must update `.agents/docs/skill-factory-skills.md` and the relevant skill-foundry governance catalog in the same change: `.agents/skills/skill-foundry/agents/catalog-engineering.yaml`, `.agents/skills/skill-foundry/agents/catalog-product-management.yaml`, or `.agents/skills/skill-foundry/agents/catalog.yaml`.
 - Also update `.agents/docs/skill-domain-routing.md`, `README.md`, `PROJECT_STATUS.md`, and provenance lock files when routing, user-facing inventory, status, or source ownership changes.
