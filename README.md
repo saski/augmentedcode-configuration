@@ -1,382 +1,236 @@
 # Augmented Code Configuration
 
-Reusable AI agent configurations for development workflows. Designed for XP/TDD practitioners who want consistent, high-quality AI assistance.
+Shared AI-agent configuration for Cursor, Codex, Claude, Gemini, Antigravity, and related development workflows.
 
-## Repository Structure
+This repository is the source of truth for portable rules, skills, commands, MCP configuration, hooks, and setup scripts. Local tools consume it through symlinks, while mutable machine-specific config stays outside the repo or is seeded from `templates/`.
 
-```text
-.
-├── .agents/
-│   ├── rules/                  # Canonical agent rules (shared across tools)
-│   │   ├── base.md
-│   │   ├── ai-feedback-learning-loop.md
-│   │   ├── python-project.md
-│   │   ├── makefile-project.md
-│   │   ├── react-best-practices.md
-│   │   └── codex-default.rules # Shared Codex approval defaults
-│   ├── bin/                    # Local ignored tool shims created by setup
-│   ├── skills/                 # Canonical skills (native + imported packs + sibling repo refs)
-│   │   ├── xp-*/               # Native: xp-code-review, xp-increase-coverage, xp-mikado-method, etc.
-│   │   ├── test-doubles-first/
-│   │   ├── cwv-improvement-planner/
-│   │   ├── code-notify/
-│   │   ├── lean-ai-adoption-coach/
-│   │   ├── github-host-alias/
-│   │   └── (imports)           # From skill-factory, mattpocock/skills, product-management, etc.
-│   ├── mcp.json                # Canonical MCP servers config (shared across tools)
-│   ├── hooks/                  # Canonical shared hook scripts (including RTK)
-│   ├── upstreams/              # Explicit upstream intake metadata (for example ECC pilot imports)
-│   ├── workflows/              # Canonical workflows (Antigravity and related structured flows)
-│   └── commands/               # Slash commands (FIC + project workflows); .cursor/commands → here
-│       ├── fic-*.md
-│       └── review-pr/install-command/bug-fixing-agent
-├── .cursor/
-│   ├── rules/                  # Cursor rules (.mdc); reference .agents/rules where applicable
-│   │   ├── use-base-rules.mdc
-│   │   ├── ai-feedback-learning-loop.mdc
-│   │   ├── cursor-config-management.mdc
-│   │   ├── context7.mdc
-│   │   ├── project-status-maintenance.mdc
-│   │   ├── fic-workflow.mdc
-│   │   ├── tdd-workflow.mdc
-│   │   ├── refactoring.mdc
-│   │   ├── debugging.mdc
-│   │   ├── python-dev.mdc
-│   │   ├── makefile-dev.mdc
-│   │   ├── react-best-practices.mdc
-│   │   └── tlz-connection.mdc
-│   ├── mcp.json                # Symlink → ../.agents/mcp.json
-│   ├── cli-config.json         # Canonical Cursor model/agent config
-│   └── skills-cursor/          # Cursor-only skills (create-skill, create-rule, update-cursor-settings, etc.)
-├── .claude/
-│   ├── hooks/                  # Claude-local symlinks to canonical shared hooks
-│   └── CLAUDE.md / RTK.md      # Claude-local RTK include shims
-├── .gemini/
-│   └── mcp_config.json         # Symlink → ../.agents/mcp.json
-├── templates/
-│   ├── claude/settings.json    # Seed for local Claude settings (copied, not symlinked)
-│   └── codex/config.toml       # Seed for local Codex config (copied, not symlinked)
-├── src/thoughts/               # Node/TS CLI for thoughts/ management
-├── thoughts/                   # Research and plans (see thoughts/ tree below)
-├── docs/                       # Maintainer docs, validation notes, OpenSpec artifacts
-│   └── openspec/               # OpenSpec changes, specs, and archives
-├── openspec                    # Symlink → docs/openspec for OpenSpec CLI compatibility
-├── hooks/
-│   └── pre-commit              # Local Git hook template; runs make check
-├── Makefile                    # Canonical local healthcheck targets
-├── setup-symlinks.sh           # Setup / validate / commit symlinks (home ↔ repo)
-├── sync-skill-factory.sh       # Copy skill-factory output_skills into .agents/skills/
-├── pull-and-sync-skills.sh     # Pull skill-factory + run sync (recommended one-liner)
-├── backup-cursor-config.sh     # Backup Cursor config before changes
-└── (optional) AGENTS.md / CLAUDE.md / GEMINI.md → .agents/rules/base.md
-```
-
-## Configuration Management
-
-### Architecture
-
-This repository is the **single source of truth** for AI tool configuration. Configuration is shared via symlinks:
-
-**Symlink structure:**
-```text
-~/.cursor/rules     → ~/saski/augmentedcode-configuration/.cursor/rules/
-~/.cursor/commands  → ~/saski/augmentedcode-configuration/.cursor/commands/
-~/.cursor/skills    → ~/saski/augmentedcode-configuration/.agents/skills/
-~/.cursor/.agents   → ~/saski/augmentedcode-configuration/.agents/
-~/.cursor/mcp.json  → ~/saski/augmentedcode-configuration/.agents/mcp.json
-~/.cursor/cli-config.json → ~/saski/augmentedcode-configuration/.cursor/cli-config.json
-~/.agents           → ~/saski/augmentedcode-configuration/.agents/
-~/.agents/bin/rtk  → /opt/homebrew/bin/rtk (created by setup when Homebrew RTK exists)
-~/.agents/bin/openspec → /opt/homebrew/bin/openspec or ~/.bun/bin/openspec (created by setup when available)
-~/.codex/skills/skills → ~/saski/augmentedcode-configuration/.agents/skills/ (Codex keeps system skills in ~/.codex/skills/.system)
-~/.codex/rules/default.rules → ~/saski/augmentedcode-configuration/.agents/rules/codex-default.rules
-~/.codex/AGENTS.md → ~/saski/augmentedcode-configuration/AGENTS.md
-~/.codex/RTK.md → ~/saski/augmentedcode-configuration/.agents/rules/RTK.md
-~/.codex/config.toml ← copied from ~/saski/augmentedcode-configuration/templates/codex/config.toml
-~/.antigravity/skills → ~/saski/augmentedcode-configuration/.agents/skills/ (if using Antigravity)
-~/.claude/commands → ~/saski/augmentedcode-configuration/.agents/commands/
-~/.claude/skills → ~/saski/augmentedcode-configuration/.agents/skills/
-~/.claude/hooks → ~/saski/augmentedcode-configuration/.claude/hooks/
-~/.claude/CLAUDE.md → ~/saski/augmentedcode-configuration/.claude/CLAUDE.md
-~/.claude/RTK.md → ~/saski/augmentedcode-configuration/.claude/RTK.md → ../.agents/rules/RTK.md
-~/.claude/settings.json ← copied from ~/saski/augmentedcode-configuration/templates/claude/settings.json
-~/.gemini/antigravity/mcp_config.json → ~/saski/augmentedcode-configuration/.agents/mcp.json
-~/.gemini/GEMINI.md → ~/saski/augmentedcode-configuration/GEMINI.md
-~/CLAUDE.md         → ~/saski/augmentedcode-configuration/CLAUDE.md
-~/AGENTS.md         → ~/saski/augmentedcode-configuration/AGENTS.md
-~/GEMINI.md         → ~/saski/augmentedcode-configuration/GEMINI.md
-```
-
-Shared skills live in **`.agents/skills/`** (canonical). Cursor and other dev tools (Codex, Antigravity, etc.) point their `skills` directory at this repo path so all tools use the same XP and project skills. Selected sibling repo skills are exposed there as relative symlinks, including `~/saski/augmented-lean-delivery` and `~/saski/augmentedcode-skills`. Shared MCP servers config is also canonicalized at **`.agents/mcp.json`** and reused across tools. Codex approval defaults are centralized at **`.agents/rules/codex-default.rules`**. RTK guidance lives in **`.agents/rules/RTK.md`**, and hook resolution prefers `rtk` from `PATH`, then `~/.agents/bin/rtk`, then `/opt/homebrew/bin/rtk`. Local tool shims under `~/.agents/bin` are intentionally ignored by git and are recreated by `./setup-symlinks.sh setup`.
-`.agents/rules/base.md` is the compact universal entry point for shared rules. Contextual rule modules such as `.agents/rules/python-project.md` and `.agents/rules/makefile-project.md` extend it only when the repository shape requires them.
-Volatile runtime state (for example Claude `projects/` and `sessions/`, Cursor managed manifests, Codex mutable local config, and Obsidian workspace state) intentionally remains local and outside the canonical config scope. Canonical defaults for mutable files live under `templates/` and are copied into place during setup instead of being symlinked back into the repo.
-
-### Setup on New Machine
+## Quick Start
 
 ```bash
 cd ~/saski/augmentedcode-configuration
 ./setup-symlinks.sh setup
 make install-hooks
-```
-
-### Verifying Configuration
-
-```bash
-# Run the canonical local healthcheck
 make check
-
-# Validate all symlinks are correct
-./setup-symlinks.sh validate
-
-# Check for uncommitted changes
-./setup-symlinks.sh status
 ```
 
-### Making Changes
+Use these checks while working:
 
-All configuration edits (in Cursor, VS Code, or any editor) automatically modify the repository files. Commit changes with:
+| Need | Command |
+|------|---------|
+| Full local validation | `make check` |
+| Symlink health | `./setup-symlinks.sh validate` |
+| Skill catalog/index validation | `make validate-skills` |
+| Shell syntax checks | `make lint-shell` |
+| OpenSpec validation | `make validate-openspec` |
+| Local config status | `./setup-symlinks.sh status` |
+
+## Architecture
+
+```mermaid
+flowchart LR
+    repo["augmentedcode-configuration"]
+    agents[".agents\nrules, skills, commands,\nMCP, hooks"]
+    cursor["Cursor"]
+    codex["Codex"]
+    claude["Claude"]
+    gemini["Gemini"]
+    templates["templates\ncopied local defaults"]
+    local["local mutable config"]
+
+    repo --> agents
+    agents --> cursor
+    agents --> codex
+    agents --> claude
+    agents --> gemini
+    templates --> local
+```
+
+## Repository Map
+
+```text
+.
+├── .agents/                  # Canonical shared agent assets
+│   ├── rules/                # Universal and contextual rules
+│   ├── skills/               # Native, imported, and sibling-repo skills
+│   ├── commands/             # Shared slash-command prompts
+│   ├── workflows/            # Structured delivery workflows
+│   ├── hooks/                # Shared hook scripts, including RTK
+│   ├── upstreams/            # Provenance for imported components
+│   └── mcp.json              # Shared MCP server configuration
+├── .cursor/                  # Cursor adapters and Cursor-only assets
+├── .claude/                  # Claude shims to canonical shared assets
+├── .gemini/                  # Gemini shims to canonical shared assets
+├── docs/                     # Maintainer docs and OpenSpec artifacts
+├── hooks/                    # Git hook templates
+├── templates/                # Copied defaults for mutable local config
+├── thoughts/                 # Shared research and implementation plans
+├── src/thoughts/             # Thoughts CLI source
+├── Makefile                  # Canonical validation targets
+└── setup-symlinks.sh         # Setup, validation, and status for local links
+```
+
+## Canonical Assets
+
+| Asset | Canonical path | Notes |
+|-------|----------------|-------|
+| Universal rules | `.agents/rules/base.md` | Also exposed through root `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` shims. |
+| Contextual rules | `.agents/rules/*.md` | Python, Makefile, React, RTK, Codex defaults, and feedback-loop rules. |
+| Skills | `.agents/skills/` | Native skills, imported packs, and sibling-repo skill references. |
+| Skill routing docs | `.agents/docs/` | Use `skill-domain-routing.md` for routing and `skill-factory-skills.md` for inventory. |
+| Commands | `.agents/commands/` | FIC commands plus project command prompts such as `review-pr`. |
+| Workflows | `.agents/workflows/` | Context-driven development and TDD cycle workflows. |
+| MCP config | `.agents/mcp.json` | Shared by configured tools. |
+| Local tool shims | `~/.agents/bin` | Ignored by git and recreated by `./setup-symlinks.sh setup`. |
+
+Maintainer details live in [docs/development-guide.md](docs/development-guide.md).
+
+## Tool Wiring
+
+`setup-symlinks.sh` connects local tool directories to the canonical assets:
+
+| Tool | Managed links |
+|------|---------------|
+| Cursor | Rules, commands, skills, `.agents`, MCP config, CLI config, and Cursor-only skills. |
+| Codex | Shared skills, Codex default rules, `AGENTS.md`, `RTK.md`, and copied `config.toml` defaults. |
+| Claude | Commands, skills, hooks, `CLAUDE.md`, `RTK.md`, and copied `settings.json` defaults. |
+| Gemini | Shared skills, `GEMINI.md`, and Antigravity MCP, command, and workflow links. |
+| Antigravity and Langflow | Shared skills. |
+| Global shell | `~/.agents`, `~/.agents/bin/rtk`, and `~/.agents/bin/openspec`. |
+
+Mutable runtime state, such as Claude sessions, Cursor-managed manifests, Codex local config, and editor workspace state, intentionally stays out of the canonical repo.
+
+## Daily Workflows
+
+### Change Shared Configuration
 
 ```bash
+./setup-symlinks.sh status
 make check
 ./setup-symlinks.sh commit
 ```
 
-### Troubleshooting
-
-- **Symlinks broken**: Run `./setup-symlinks.sh setup` to recreate.
-- **Missing `rtk` or `openspec` in checks**: Run `./setup-symlinks.sh setup` to recreate `~/.agents/bin/rtk` and `~/.agents/bin/openspec`.
-- **Config not loading**: Run `./setup-symlinks.sh validate` to diagnose.
-- **Restore backup**: See `~/.cursor-backups/` for timestamped backups.
-
-## FIC Workflow (Context Engineering)
-
-Based on [stepwise-dev](https://github.com/nikeyes/stepwise-dev) and the [FIC methodology](https://nikeyes.github.io/tu-claude-md-no-funciona-sin-context-engineering-es/).
-
-**Problem**: LLMs lose attention after ~60% context usage.
-
-**Solution**: Structured phases with intentional context clearing:
-
-```text
-📖 Research → Save to thoughts/ → Clear context
-📋 Plan → Save to thoughts/ → Clear context
-⚙️ Implement (phase by phase) → Clear between phases
-✅ Validate → Report
-```
-
-### FIC Commands
-
-| Command | Purpose |
-|---------|---------|
-| `/fic-research` | Document codebase comprehensively, save to thoughts/shared/research/ |
-| `/fic-create-plan` | Create detailed implementation plans iteratively |
-| `/fic-implement-plan` | Execute plans phase by phase with verification |
-| `/fic-validate-plan` | Verify implementation against plan |
-
-### FIC Skills (Cross-Tool)
-
-FIC workflows are also available as trigger-based skills in `.agents/skills/`:
-
-| Skill | Purpose |
-|-------|---------|
-| `fic-research` | Research current implementation and document findings only |
-| `fic-create-plan` | Build a phased implementation plan from research/task context |
-| `fic-implement-plan` | Execute approved plans phase by phase with verification |
-| `fic-validate-plan` | Validate implementation completeness against a plan |
-
-### Tool Evaluation: Commands vs Skills
-
-| Tool | `fic-*` Commands | `fic-*` Skills | Recommendation |
-|------|-------------------|----------------|----------------|
-| Codex | No native slash-command flow from this repo | Yes (via `~/.codex/skills/skills` symlink) | Use skills as primary FIC interface |
-| Cursor | Yes (`.agents/commands` exposed as commands) | Yes (`~/.cursor/skills`) | Keep both: commands for explicit invocation, skills for natural-language trigger |
-| Claude | Commands available through `.claude/commands` | Yes (`~/.claude/skills`) | Keep both; prefer skills for portability |
-| Gemini | Commands are not standardized in this repo setup | Yes (`~/.gemini/skills`) | Use skills |
-| Antigravity/Langflow | Commands not standardized here | Yes (`~/.antigravity/skills`, `~/.langflow/skills`) | Use skills |
-
-### thoughts/ Directory
-
-Persistent storage for research and plans (tracked in git). The repo contains `thoughts/shared/research/` and `thoughts/shared/plans/`. Run `npx thoughts init` to create the full structure:
-
-```text
-thoughts/
-├── {username}/           # Personal notes (you write); created by init
-│   ├── tickets/
-│   └── notes/
-├── shared/               # Team-shared (AI writes, tracked in git)
-│   ├── research/         # Research documents
-│   ├── plans/            # Implementation plans
-│   └── prs/              # PR descriptions; created by init
-└── searchable/           # Hardlinks for grep; created by init (gitignored)
-```
-
-Research documents and implementation plans in `thoughts/shared/` are committed to the repository to maintain project knowledge and enable collaboration.
-
-### thoughts CLI
-
-Node/TS CLI for managing thoughts/:
+### Refresh Skill-Factory Imports
 
 ```bash
-cd src/thoughts
-npm install
-npm run build
-
-# Commands
-npx thoughts init       # Initialize thoughts/ structure
-npx thoughts sync       # Sync hardlinks after adding files
-npx thoughts metadata   # Get git metadata for frontmatter
+./pull-and-sync-skills.sh --dry-run
+./pull-and-sync-skills.sh
+make validate-skills
 ```
 
-## XP Skills
+`sync-skill-factory.sh` only refreshes skills listed in `.agents/upstreams/skill-factory/components.lock.json`; native and other external-pack skills are not overwritten.
 
-XP behaviors are provided as **trigger-based skills** under `.agents/skills/`. They are applied when the user's request matches the skill description (e.g. "technical debt", "code review", "Mikado Method"). All tools (Cursor, Codex, Antigravity, etc.) resolve skills from repo `.agents/skills/` via symlinks (e.g. `~/.cursor/skills` → repo `.agents/skills/`).
-
-**Skills sources**: `.agents/skills/` contains **native skills** (tracked in this repo, e.g. `xp-*`, `test-doubles-first`, `cwv-improvement-planner`, `code-notify`, `lean-ai-adoption-coach`), **skill-factory skills** (copied from the [skill-factory](https://github.com/saski/skill-factory) repo after running `./pull-and-sync-skills.sh`), **local sibling skill references** (relative symlinks to `~/saski/augmented-lean-delivery` and `~/saski/augmentedcode-skills`; provenance in `.agents/upstreams/local-saski-skills/components.lock.json`), **Matt Pocock skills** (installed from `mattpocock/skills`; provenance in repo-root `skills-lock.json`, skill-foundry taxonomy in [.agents/skills/skill-foundry/agents/catalog-engineering.yaml](.agents/skills/skill-foundry/agents/catalog-engineering.yaml)), **product-management skills** (vendored or synced; provenance in repo-root `skills-lock.json`, skill-foundry taxonomy in [.agents/skills/skill-foundry/agents/catalog-product-management.yaml](.agents/skills/skill-foundry/agents/catalog-product-management.yaml)), and the **Obsidian wiki skill stack** (locally installed from `Ar9av/obsidian-wiki`; provenance in `.agents/.skill-lock.json`). AI agents should consider all skills in this directory and read the matching skill's `SKILL.md` when the user's request matches a skill description. The combined routing index is [.agents/docs/skill-factory-skills.md](.agents/docs/skill-factory-skills.md).
-
-| Skill | Purpose |
-|-------|---------|
-| `xp-code-review` | Review pending changes (tests, maintainability, project rules) |
-| `xp-increase-coverage` | Identify and test high-value untested code |
-| `xp-plan-untested-code` | Create actionable plan to cover untested code and coverage gaps |
-| `xp-predict-problems` | Predict likely production failures and edge cases |
-| `xp-mikado-method` | Guide safe refactoring via dependency graph (Mikado Method) |
-| `xp-technical-debt` | Catalog and prioritize technical debt; quick wins, strategic debt |
-| `xp-simple-design-refactor` | Maintainability & Simple Design refactoring with ROI focus |
-| `xp-security-analysis` | Pragmatic security risk analysis (OWASP, threat modeling) |
-
-## Project Commands
-
-| Command | Purpose |
-|---------|---------|
-| `/bug-fixing-agent` | Security-focused bug fixing workflow with OWASP, threat modeling, and cloud risk analysis |
-| `/review-pr` | Interactive PR review workflow with walkthrough, comments, and optional fixes |
-| `/install-command` | Install and customize command templates for the current repository |
-
-## OpenSpec
-
-OpenSpec is initialized in this tooling repo at `docs/openspec/`, with root `openspec` symlinked to that directory so the CLI works from the repository root.
-
-For any project consuming shared skills through `~/.agents`, initialize OpenSpec with:
+### Install OpenSpec in a Consuming Repo
 
 ```bash
 ~/.agents/skills/openspec/scripts/install-openspec
 ```
 
-The installer places generated OpenSpec artifacts under `docs/openspec/` when the target repository already has `docs/`. If the repository has `thoughts/` but no `docs/`, it uses `thoughts/openspec/`; otherwise it uses the standard root `openspec/` directory.
+The installer prefers `docs/openspec/`, then `thoughts/openspec/`, then root `openspec/`. This repo uses `docs/openspec/` with a root `openspec` symlink for CLI compatibility.
 
-## Shared Project Skills (from `.agents/skills/`)
+## FIC Workflow
 
-Reusable project-level skills live in **`.agents/skills/`** and are exposed to Cursor, Codex, Claude, Gemini, Antigravity, and other configured tools via symlinks to repo `.agents/skills/`. They are applied when user prompts match the skill description (trigger-based).
+FIC keeps long AI work understandable by moving through explicit phases and saving durable artifacts.
 
-| Skill | Purpose |
-|-------|---------|
-| `test-doubles-first` | Choose the lightest effective test double, preferring fake/stub/spy before mock. |
-| `cwv-improvement-planner` | Create prioritized Core Web Vitals plans for LCP/INP/TTFB, including edge caching/compression and safe experimentation. |
-| `code-notify` | Recognize and use the local code-notify integration for end-of-task notifications across supported AI tools after verifying the installed command or hook. |
-| `lean-ai-adoption-coach` | Evaluate AI tools, agents, workflows, and automations with a Lean/XP simplicity lens; recommend the smallest useful experiment and guardrails. |
-| `planning-with-files` | Use file-based planning for complex multi-step work with persistent `task_plan.md`, `findings.md`, and `progress.md` tracking. |
-| `openspec` | Use OpenSpec/OPSX for spec-driven development with a shared installer, proposals, delta specs, designs, task lists, implementation, verification, and archive flows. |
-| `github-host-alias` | Ensure correct SSH host alias is used when authenticating via SSH, based on local paths (~/eventbrite vs ~/saski). |
-| `personal-knowledge-routing` | Route durable personal context and reusable knowledge to the personal knowledge vault while keeping shared agent rules small. |
-| `find-docs` | Use the Context7 CLI for current library, framework, SDK, API, CLI tool, and cloud service documentation. |
-| `documentation-lookup` | Use live Context7 docs for library and framework questions instead of stale model memory. Imported from ECC under the explicit upstream intake lane. |
-| `verification-loop` | Run a structured build, typecheck, lint, test, and security verification pass after meaningful changes. Imported from ECC under the explicit upstream intake lane. |
-| `strategic-compact` | Suggest context compaction at logical phase boundaries instead of arbitrary auto-compaction. Imported from ECC under the explicit upstream intake lane. |
+```mermaid
+flowchart LR
+    research["Research\nthoughts/shared/research"]
+    plan["Plan\nthoughts/shared/plans"]
+    implement["Implement\nphase by phase"]
+    validate["Validate\nreport evidence"]
 
-### Obsidian Wiki Skills
-
-The Obsidian wiki stack supports vault setup, ingest, query, lint/status, update/export, URL ingest, conversation capture, dashboard generation, web research, synthesis, graph colorizing, and agent-history ingest. Discovery and collision boundaries are maintained in [.agents/docs/skill-factory-skills.md](.agents/docs/skill-factory-skills.md) and [.agents/skills/skill-foundry/agents/catalog-engineering.yaml](.agents/skills/skill-foundry/agents/catalog-engineering.yaml).
-
-### ECC Upstream Intake
-
-Selective ECC imports are tracked in `.agents/upstreams/ecc/components.lock.json`. This keeps imported components explicit, reviewable, and easy to retire without turning ECC into a second canonical config repo.
-
-### Syncing skills from skill-factory
-
-Skills from the [skill-factory](https://github.com/saski/skill-factory) repo can be made available here by copying them into the canonical `.agents/skills/` library. Run the sync script after pulling skill-factory (or on first setup). All skills in `.agents/skills/` (skill-factory, Matt Pocock, product-management pack, Obsidian wiki stack, and native) are listed for request-matching in [.agents/docs/skill-factory-skills.md](.agents/docs/skill-factory-skills.md); usage is defined in [.agents/rules/base.md](.agents/rules/base.md) and the matching skill's `SKILL.md`.
-
-**Recommended one-liner**: `./pull-and-sync-skills.sh` — pulls skill-factory then runs sync; respects `SKILL_FACTORY`. For a preview without writing changes: `./pull-and-sync-skills.sh --dry-run`.
-
-```bash
-# From augmentedcode-configuration repo root (skill-factory as sibling: ../skill-factory)
-./sync-skill-factory.sh
+    research --> plan --> implement --> validate
 ```
 
-- **What it does**: Copies each `skill-factory/output_skills/` skill into `.agents/skills/`, refreshing only skills listed in `.agents/upstreams/skill-factory/components.lock.json`. Native and other external-pack skills (for example `mattpocock/skills`) are not overwritten.
-- **When to run**: After `git pull` in skill-factory, or when you add new skills there. Re-running is safe for non-skill-factory skills because the lock file identifies which directories belong to skill-factory.
-- **Layout**: Clone skill-factory as a sibling of this repo (e.g. `saski/skill-factory` and `saski/augmentedcode-configuration`). Override with `SKILL_FACTORY=/path/to/skill-factory ./sync-skill-factory.sh`.
-- **Dry run**: `./sync-skill-factory.sh --dry-run` lists what would be imported or refreshed without writing changes.
+| Command or skill | Purpose |
+|------------------|---------|
+| `fic-research` | Capture current implementation facts without proposing changes. |
+| `fic-create-plan` | Turn research or task context into a phased plan. |
+| `fic-implement-plan` | Execute an approved plan with verification. |
+| `fic-validate-plan` | Compare implementation evidence against the plan. |
 
-## Cursor Rules
+Cursor and Claude can use command prompts from `.agents/commands/`. Codex, Gemini, and other tools should use the matching skills from `.agents/skills/`.
 
-Development rules live in `.agents/rules/` (canonical). `base.md` is the compact universal entry point, and `python-project.md` / `makefile-project.md` extend it for those repository contexts. Cursor rules in `.cursor/rules/` point to the canonical files or add Cursor-specific behavior.
+## Skills
 
-| Rule | Purpose | Activation |
-|------|---------|------------|
-| `use-base-rules.mdc` | Use `.agents/rules/base.md` as development rulebook | Always active |
-| `ai-feedback-learning-loop.mdc` | Points to `.agents/rules/ai-feedback-learning-loop.md` | Always active |
-| `cursor-config-management.mdc` | Symlink setup and config workflow | Always active |
-| `project-status-maintenance.mdc` | PROJECT_STATUS.md maintenance | Always active |
-| `fic-workflow.mdc` | FIC context management | Manual |
-| `tdd-workflow.mdc` | TDD-specific rules | Manual |
-| `refactoring.mdc` | Safe refactoring | Manual |
-| `debugging.mdc` | Systematic debugging | Manual |
-| `python-dev.mdc` | Python-specific | Auto on *.py |
-| `makefile-dev.mdc` | Makefile-specific | Auto on Makefile, *.mk, *.mak |
-| `react-best-practices.mdc` | React/TS rules (points to .agents/rules) | Auto on *.tsx, *.ts, *.jsx, *.js |
-| `tlz-connection.mdc` | TLZ/aws/setup context | Globs (package.json, setup*.sh, etc.) |
+All tools resolve shared skills from `.agents/skills/`. The README intentionally does not duplicate the full catalog.
 
-## Installation
+Use these canonical indexes instead:
 
-### Global (applies to all projects)
+| Need | File |
+|------|------|
+| Domain-first routing | [.agents/docs/skill-domain-routing.md](.agents/docs/skill-domain-routing.md) |
+| Full skill inventory | [.agents/docs/skill-factory-skills.md](.agents/docs/skill-factory-skills.md) |
+| Engineering governance catalog | [.agents/skills/skill-foundry/agents/catalog-engineering.yaml](.agents/skills/skill-foundry/agents/catalog-engineering.yaml) |
+| Product-management catalog | [.agents/skills/skill-foundry/agents/catalog-product-management.yaml](.agents/skills/skill-foundry/agents/catalog-product-management.yaml) |
 
-```bash
-cd ~/saski/augmentedcode-configuration
-./setup-symlinks.sh setup
+Important local skill families include XP/TDD skills, FIC skills, OpenSpec, Context7 documentation lookup, GitHub host alias routing, vault/wiki tooling, and AI adoption guidance.
 
-# Optional: pull skill-factory + sync skills into .agents/skills (no duplication)
-# ./pull-and-sync-skills.sh
+## Commands
 
-# Restart Cursor
+Shared command prompts live in `.agents/commands/` and are mirrored into tool-specific command folders where supported.
+
+| Command | Purpose |
+|---------|---------|
+| `/fic-research` | Research and document current codebase behavior. |
+| `/fic-create-plan` | Create an implementation plan. |
+| `/fic-implement-plan` | Execute a plan phase by phase. |
+| `/fic-validate-plan` | Verify implementation completeness. |
+| `/review-pr` | Guide an interactive PR review. |
+| `/bug-fixing-agent` | Investigate and plan security-aware bug fixes. |
+| `/install-command` | Install and customize command templates. |
+
+## Thoughts
+
+`thoughts/` stores durable research and plans:
+
+```text
+thoughts/
+├── shared/
+│   ├── research/
+│   ├── plans/
+│   └── prs/
+└── searchable/               # Gitignored hardlinks created by the CLI
 ```
 
-See **Configuration Management** above and `.cursor/rules/cursor-config-management.mdc` for symlink workflow.
-
-### Per-project
+The optional CLI lives in `src/thoughts/`:
 
 ```bash
-# Copy to your project
-cp -r .cursor /path/to/your/project/
+cd src/thoughts
+npm install
+npm run build
+npx thoughts init
+npx thoughts sync
 ```
 
-### For Other AI Tools
+## Troubleshooting
 
-Canonical rules are in `.agents/rules/base.md`. To use them in Claude Code, Codex, or Gemini, create a symlink in your project root:
-
-```bash
-# Symlink for Claude Code
-ln -s .agents/rules/base.md CLAUDE.md
-
-# Optional: for Codex or Gemini
-ln -s .agents/rules/base.md AGENTS.md
-ln -s .agents/rules/base.md GEMINI.md
-```
+| Symptom | Fix |
+|---------|-----|
+| Symlinks are broken | Run `./setup-symlinks.sh setup`, then `./setup-symlinks.sh validate`. |
+| `rtk` or `openspec` is missing in checks | Run `./setup-symlinks.sh setup` to recreate managed shims under `~/.agents/bin`. |
+| Config is not loading in a tool | Run `./setup-symlinks.sh validate` and inspect the tool-specific link from the table above. |
+| Skill validation fails after adding or moving a skill | Update the skill index, the relevant governance catalog, and routing docs in the same change. |
+| A local template-backed config drifted | Re-copy the relevant file from `templates/`; mutable configs are not symlinked back into the repo. |
 
 ## Philosophy
 
-These configurations enforce:
+These configurations optimize for:
 
-- **Think Before Acting**: State assumptions, read before writing, and stop when unclear.
-- **Simplest Surgical Change**: Prefer the smallest working change and avoid unrelated churn.
-- **Goal-Driven Verification**: Define success criteria and run canonical checks.
-- **Checkpoint and Escalate**: Surface conflicts, skipped checks, and unresolved risks.
-- **Context Engineering**: Manage AI context through research, plans, and phase boundaries.
+- Think before acting.
+- Make the simplest surgical change.
+- Verify against explicit success criteria.
+- Checkpoint, escalate, and disclose unresolved risks.
+- Keep durable AI context in files instead of long transient chats.
 
 ## References
 
+- [Development guide](docs/development-guide.md)
+- [Skill domain routing](.agents/docs/skill-domain-routing.md)
+- [Skill inventory](.agents/docs/skill-factory-skills.md)
 - [Context Engineering Article](https://nikeyes.github.io/tu-claude-md-no-funciona-sin-context-engineering-es/)
 - [stepwise-dev Plugin](https://github.com/nikeyes/stepwise-dev)
 - [Ashley Ha Workflow](https://medium.com/@ashleyha/i-mastered-the-claude-code-workflow-145d25e502cf)
 
 ## License
 
-[Unlicense](https://unlicense.org) — Public Domain
+[Unlicense](https://unlicense.org) - Public Domain
