@@ -1,5 +1,5 @@
-<!-- last_updated: 2026-05-14 -->
-<!-- version: 2.7 -->
+<!-- last_updated: 2026-05-19 -->
+<!-- version: 2.8 -->
 # AI Agent Development Rules
 
 This is the compact universal rulebook for this project. It applies to every AI agent unless a narrower project, tool, or user instruction explicitly overrides it.
@@ -25,6 +25,7 @@ This is the compact universal rulebook for this project. It applies to every AI 
 ### Goal-Driven Verification
 
 - Define success criteria before implementation and loop until they are verified.
+- For new functionality, use outside-in TDD: start with one behavior-level use-case test through the public interface, implement the smallest MVP path that makes it pass, then extend behavior through one verified iteration at a time.
 - Start with a failing test for new behavior or bug fixes whenever practical.
 - Tests should encode why behavior matters, not only what output happens today.
 - Run the repository's canonical automated checks for meaningful changes; use narrower checks while iterating.
