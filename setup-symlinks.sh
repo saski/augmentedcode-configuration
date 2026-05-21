@@ -231,6 +231,7 @@ setup_symlinks() {
     ln -sfn "$REPO_DIR/GEMINI.md" "$HOME/.gemini/GEMINI.md"
     ln -sfn "$REPO_DIR/.agents/workflows" "$HOME/.gemini/antigravity/workflows"
     ln -sfn "$REPO_DIR/.agents/commands" "$HOME/.gemini/antigravity/commands"
+    ln -sfn "$REPO_DIR/.agents/skills" "$HOME/.gemini/antigravity/skills"
 
     # Home-level .agents should always resolve to canonical repo .agents
     # so there is no divergent local skill source.
@@ -506,8 +507,8 @@ validate_symlinks() {
         fi
     fi
 
-    # Check Gemini commands and workflows symlinks
-    for dir in workflows commands; do
+    # Check Gemini commands, workflows, and skills symlinks
+    for dir in workflows commands skills; do
         local path="$HOME/.gemini/antigravity/$dir"
         if [ ! -L "$path" ]; then
             echo "❌ $path is not a symlink"
