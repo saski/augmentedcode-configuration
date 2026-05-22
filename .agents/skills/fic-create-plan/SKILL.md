@@ -12,6 +12,7 @@ Act as a senior XP engineer producing an implementation plan through iterative c
 1. Gather context:
    - Read referenced research docs, tickets, and existing code.
    - Identify constraints, patterns, and integration points.
+   - Work back and forth with me, starting with your open questions and outline before writing the plan
 2. Confirm understanding with a concise summary and focused questions.
 3. Propose 1-2 viable design options with tradeoffs.
 4. Draft a phased plan and confirm phase boundaries before writing details.
