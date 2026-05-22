@@ -31,7 +31,7 @@
     },
     "chrome-devtools": {
       "command": "/opt/homebrew/bin/npx",
-      "args": ["-y", "chrome-devtools-mcp@latest"],
+      "args": ["-y", "chrome-devtools-mcp@latest", "--autoConnect"],
       "env": {}
     }
   }
