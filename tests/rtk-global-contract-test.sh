@@ -5,8 +5,6 @@ set -euo pipefail
 REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 HOOK="$REPO_DIR/.agents/hooks/rtk-rewrite.sh"
 CLAUDE_HOOK="$REPO_DIR/.claude/hooks/rtk-rewrite.sh"
-CLAUDE_RTK="$REPO_DIR/.claude/RTK.md"
-CANONICAL_RTK_RULE="$REPO_DIR/.agents/rules/RTK.md"
 
 assert_file_exists() {
     local path="$1"
@@ -62,10 +60,8 @@ EOF
 }
 
 test_canonical_layout_contract() {
-    assert_file_exists "$CANONICAL_RTK_RULE"
     assert_file_exists "$HOOK"
     assert_symlink_target_contains "$CLAUDE_HOOK" ".agents/hooks/rtk-rewrite.sh"
-    assert_symlink_target_contains "$CLAUDE_RTK" ".agents/rules/RTK.md"
 }
 
 test_agents_bin_policy_when_homebrew_rtk_exists() {

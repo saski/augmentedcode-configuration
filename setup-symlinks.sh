@@ -184,8 +184,6 @@ setup_claude_config() {
     link_managed_path "$REPO_DIR/.agents/commands" "$HOME/.claude/commands"
     link_managed_path "$REPO_DIR/.agents/skills" "$HOME/.claude/skills"
     link_managed_path "$REPO_DIR/.claude/hooks" "$HOME/.claude/hooks"
-    link_managed_path "$REPO_DIR/.claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
-    link_managed_path "$REPO_DIR/.claude/RTK.md" "$HOME/.claude/RTK.md"
 
     install_template_file "$CLAUDE_SETTINGS_TEMPLATE" "$HOME/.claude/settings.json"
 }
@@ -209,7 +207,6 @@ setup_symlinks() {
     install_template_file "$CODEX_CONFIG_TEMPLATE" "$HOME/.codex/config.toml"
     ln -sfn "$REPO_DIR/.agents/rules/codex-default.rules" "$HOME/.codex/rules/default.rules"
     ln -sfn "$REPO_DIR/.agents/rules/base.md" "$HOME/.codex/AGENTS.md"
-    link_managed_path "$REPO_DIR/.agents/rules/RTK.md" "$HOME/.codex/RTK.md"
 
     # Other dev/AI tools: point skills at canonical .agents/skills
     for tool in $TOOLS_WITH_SKILLS; do
@@ -390,25 +387,6 @@ validate_symlinks() {
         fi
     fi
 
-    # Check Codex RTK instructions symlink (AGENTS.md embeds @RTK.md)
-    local codex_rtk_path="$HOME/.codex/RTK.md"
-    if [ ! -L "$codex_rtk_path" ]; then
-        echo "❌ $codex_rtk_path is not a symlink"
-        errors=$((errors + 1))
-    elif [ ! -e "$codex_rtk_path" ]; then
-        echo "❌ $codex_rtk_path is a broken symlink"
-        errors=$((errors + 1))
-    else
-        local codex_rtk_target
-        codex_rtk_target=$(readlink "$codex_rtk_path")
-        if [[ "$codex_rtk_target" != *".agents/rules/RTK.md" ]]; then
-            echo "❌ $codex_rtk_path should point to repo .agents/rules/RTK.md, got: $codex_rtk_target"
-            errors=$((errors + 1))
-        else
-            echo "✓ $codex_rtk_path → $codex_rtk_target"
-        fi
-    fi
-
     # Check skills symlinks for other dev tools (must point to repo .agents/skills)
     for tool in $TOOLS_WITH_SKILLS; do
         local path="$HOME/$tool/skills"
@@ -438,7 +416,7 @@ validate_symlinks() {
         echo "✓ ~/.claude is a local directory"
     fi
 
-    for path in commands skills hooks CLAUDE.md RTK.md; do
+    for path in commands skills hooks; do
         local claude_path="$HOME/.claude/$path"
         if [ ! -L "$claude_path" ]; then
             echo "❌ $claude_path is not a symlink"

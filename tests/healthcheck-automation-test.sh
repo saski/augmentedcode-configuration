@@ -90,7 +90,7 @@ test_base_rule_compaction_contract() {
     assert_contains "$rules" ".agents/skills/skill-foundry/agents/catalog-engineering.yaml"
     assert_contains "$rules" ".agents/skills/skill-foundry/agents/catalog-product-management.yaml"
     assert_contains "$rules" "./validate-skill-library.sh"
-    assert_contains "$rules" ".agents/rules/RTK.md"
+    assert_contains "$rules" "### RTK"
     assert_contains "$rules" "ctx7"
     assert_contains "$rules" "personal-knowledge-routing"
     assert_not_contains "$rules" ".agents/rules/pyth![[REDIS_AUTH_REMEDIATION_HANDOFF]]on-project.md"

@@ -169,8 +169,8 @@ Maintainer-facing details live in [docs/development-guide.md](docs/development-g
 | Tool | Managed links |
 |------|---------------|
 | Cursor | Rules, commands, skills, `.agents`, MCP config, CLI config, and Cursor-only skills. |
-| Codex | Shared skills, Codex default rules, `AGENTS.md`, `RTK.md`, and copied `config.toml` defaults. |
-| Claude | Commands, skills, hooks, `CLAUDE.md`, `RTK.md`, and copied `settings.json` defaults. |
+| Codex | Shared skills, Codex default rules, `AGENTS.md`, and copied `config.toml` defaults. RTK guidance is embedded in `base.md` §8. |
+| Claude | Commands, skills, hooks, and copied `settings.json` defaults. The universal rulebook (including RTK guidance) reaches Claude Code via `~/CLAUDE.md` → `base.md`. |
 | Gemini | Shared skills, `GEMINI.md`, plus Antigravity MCP, command, and workflow links. |
 | Antigravity and Langflow | Shared skills. |
 | Global shell | `~/.agents`, `~/.agents/bin/rtk`, and `~/.agents/bin/openspec`. |
