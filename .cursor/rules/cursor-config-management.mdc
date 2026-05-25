@@ -10,7 +10,7 @@ alwaysApply: true
 
 - **Repository**: the current clone of `augmentedcode-configuration`
 - **GitHub**: `github.com/saski/augmentedcode-configuration`
-- **Global Config**: `~/.cursor/rules/` and `~/.cursor/commands/` (symlinks to repo)
+- **Global Config**: `~/.cursor/commands/` (symlink to repo). Cursor rules in `.cursor/rules/` apply only when this repo is open; the universal rulebook reaches every Cursor workspace via `~/AGENTS.md` → `.agents/rules/base.md`.
 - **Managed Cursor Config**: `~/.cursor/mcp.json` and `~/.cursor/cli-config.json` (symlinked to repo)
 - **Managed Codex Config**: `~/.codex/rules/default.rules`, `~/.codex/AGENTS.md`, and `~/.codex/RTK.md` are symlinked to repo; `~/.codex/config.toml` is copied from `templates/codex/config.toml`
 - **Managed Gemini Config**: `~/.gemini/antigravity/mcp_config.json` and `~/.gemini/GEMINI.md` (symlinked to repo)

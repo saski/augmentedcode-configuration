@@ -193,16 +193,8 @@ setup_claude_config() {
 setup_symlinks() {
     echo "🔗 Setting up symlinks..."
 
-    # Backup existing if not symlinks
-    if [ -d ~/.cursor/rules ] && [ ! -L ~/.cursor/rules ]; then
-        echo "⚠️  Found existing ~/.cursor/rules (not a symlink)"
-        echo "   Create backup with: ./backup-cursor-config.sh"
-        exit 1
-    fi
-
     # Create .cursor symlinks (skills → canonical .agents/skills)
     mkdir -p ~/.cursor
-    ln -sfn "$REPO_DIR/.cursor/rules" ~/.cursor/rules
     ln -sfn "$REPO_DIR/.cursor/commands" ~/.cursor/commands
     ln -sfn "$REPO_DIR/.agents/skills" ~/.cursor/skills
     ln -sfn "$REPO_DIR/.cursor/skills-cursor" ~/.cursor/skills-cursor
@@ -269,7 +261,7 @@ validate_symlinks() {
     local errors=0
 
     # Check .cursor symlinks
-    for link in rules commands skills skills-cursor .agents; do
+    for link in commands skills skills-cursor .agents; do
         local path="$HOME/.cursor/$link"
         if [ ! -L "$path" ]; then
             echo "❌ $path is not a symlink"

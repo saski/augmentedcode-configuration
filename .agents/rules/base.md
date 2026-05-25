@@ -42,6 +42,7 @@ This is the compact universal rulebook for this project. It applies to every AI 
 
 - When the repo contains Python source or Python project markers, also read `.agents/rules/python-project.md` if that file exists.
 - When the repo contains a `Makefile`, also read `.agents/rules/makefile-project.md` if that file exists.
+- When the repo contains React/TSX source files, also read `.agents/rules/react-best-practices.md` if that file exists.
 - If a referenced contextual rule file is absent, treat it as optional, note that it is missing, and continue with the applicable rules that are available.
 - Contextual rules extend this file; they do not replace it.
 
@@ -78,6 +79,11 @@ This is the compact universal rulebook for this project. It applies to every AI 
 - Complexity avoidance: use `~/.agents/skills/complexity-review/SKILL.md` to challenge complexity drivers before committing to technical direction.
 - Plan and task slicing: use `~/.agents/skills/story-splitting/SKILL.md` for oversized stories and `~/.agents/skills/hamburger-method/SKILL.md` for vertical delivery slices.
 - Small safe steps: use `~/.agents/skills/micro-steps-coach/SKILL.md` to turn decided work into 1-3 hour, reversible implementation increments.
+- Test-driven development: use `~/.agents/skills/tdd/SKILL.md` for the red-green-refactor loop and outside-in TDD specifics.
+- Refactoring: use `~/.agents/skills/refactoring/SKILL.md` for structured prep/refactor/evaluate phases when code gets messy.
+- Debugging and diagnosis: use `~/.agents/skills/diagnose/SKILL.md` for systematic reproduce → minimise → hypothesise → fix loops on hard bugs and regressions.
+- Plan and execute large work: use `~/.agents/skills/fic-research/SKILL.md`, `~/.agents/skills/fic-create-plan/SKILL.md`, `~/.agents/skills/fic-implement-plan/SKILL.md`, and `~/.agents/skills/fic-validate-plan/SKILL.md` for the FIC research → plan → implement → validate workflow.
+- Project status maintenance: use `~/.agents/skills/project-status-maintenance/SKILL.md` to create or update `PROJECT_STATUS.md` files with the canonical structure.
 
 ## 6. Personal Knowledge Persistence
 
@@ -106,7 +112,9 @@ This is the compact universal rulebook for this project. It applies to every AI 
 
 - Use the `ctx7` CLI to fetch current documentation whenever the user asks about a library, framework, SDK, API, CLI tool, or cloud service.
 - Do not use Context7 for refactoring, writing scripts from scratch, debugging business logic, code review, or general programming concepts.
-- Resolve the library first with `npx ctx7@latest library <name> "<user's question>"`, unless the user provides a valid `/org/project` ID.
+- Resolve the library first with `npx ctx7@latest library <name> "<user's question>"`, unless the user provides a valid `/org/project` ID. Use the official library name with proper punctuation (for example "Next.js", "Customer.io", "Three.js"), and use the user's full question as the query.
+- Pick the best match by exact name match, description relevance, code snippet count, source reputation (High/Medium preferred), and benchmark score (higher is better). For version-specific docs, use `/org/project/version` (for example `/vercel/next.js/v14.3.0`).
 - Fetch docs with `npx ctx7@latest docs <libraryId> "<user's question>"`.
 - Use no more than three Context7 commands per question.
+- Do not include sensitive information (API keys, passwords, credentials) in queries.
 - If Context7 fails with a quota error, tell the user and suggest `npx ctx7@latest login` or `CONTEXT7_API_KEY`.

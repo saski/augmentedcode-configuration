@@ -813,6 +813,20 @@ skills:
       - fic-implement-plan
     notes: "Validates plan execution. Follows fic-implement-plan."
 
+  - name: project-status-maintenance
+    category: documentation
+    pattern: generator
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "Creates or updates PROJECT_STATUS.md with the canonical structure (Executive Summary, Completed Components, In Progress, Next Steps, Known Issues, Notes). Replaces the previous always-applied Cursor rule."
+
   - name: planning-with-files
     category: workflow-automation
     pattern: generator

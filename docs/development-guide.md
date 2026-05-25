@@ -107,7 +107,6 @@ SKILL_FACTORY=/path/to/skill-factory ./sync-skill-factory.sh --dry-run
 
 `setup-symlinks.sh` manages these local links:
 
-- `~/.cursor/rules` -> repo `.cursor/rules`
 - `~/.cursor/commands` -> repo `.cursor/commands` -> repo `.agents/commands`
 - `~/.cursor/skills` -> repo `.agents/skills`
 - `~/.cursor/skills-cursor` -> repo `.cursor/skills-cursor`
