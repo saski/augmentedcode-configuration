@@ -10,6 +10,8 @@ All AI agents working on this project must follow the universal development rule
 
 **📋 [.agents/rules/base.md](.agents/rules/base.md)**
 
+@.agents/rules/base.md
+
 ## Key Directive
 
 - **Universal Source**: `base.md` is the universal rulebook for every repository and tool.

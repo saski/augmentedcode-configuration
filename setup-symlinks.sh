@@ -216,7 +216,7 @@ setup_symlinks() {
     ln -sfn "$REPO_DIR/.agents/skills" "$HOME/.codex/skills/skills"
     install_template_file "$CODEX_CONFIG_TEMPLATE" "$HOME/.codex/config.toml"
     ln -sfn "$REPO_DIR/.agents/rules/codex-default.rules" "$HOME/.codex/rules/default.rules"
-    ln -sfn "$REPO_DIR/AGENTS.md" "$HOME/.codex/AGENTS.md"
+    ln -sfn "$REPO_DIR/.agents/rules/base.md" "$HOME/.codex/AGENTS.md"
     link_managed_path "$REPO_DIR/.agents/rules/RTK.md" "$HOME/.codex/RTK.md"
 
     # Other dev/AI tools: point skills at canonical .agents/skills
@@ -256,7 +256,7 @@ setup_symlinks() {
 
     # Create root-level config symlinks
     ln -sfn "$REPO_DIR/CLAUDE.md" ~/CLAUDE.md
-    ln -sfn "$REPO_DIR/AGENTS.md" ~/AGENTS.md
+    ln -sfn "$REPO_DIR/.agents/rules/base.md" ~/AGENTS.md
     ln -sfn "$REPO_DIR/GEMINI.md" ~/GEMINI.md
 
     echo "✅ Symlinks created"
@@ -390,8 +390,8 @@ validate_symlinks() {
     else
         local codex_agents_target
         codex_agents_target=$(readlink "$codex_agents_path")
-        if [[ "$codex_agents_target" != *"/AGENTS.md" ]]; then
-            echo "❌ $codex_agents_path should point to repo AGENTS.md, got: $codex_agents_target"
+        if [[ "$codex_agents_target" != *"/.agents/rules/base.md" ]]; then
+            echo "❌ $codex_agents_path should point to .agents/rules/base.md, got: $codex_agents_target"
             errors=$((errors + 1))
         else
             echo "✓ $codex_agents_path → $codex_agents_target"
