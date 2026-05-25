@@ -1,173 +1,87 @@
 # Augmentedcode Configuration - Project Status
 
-**Last Updated**: 2026-05-13
-**Overall Status**: 🟢 Ready - OpenSpec docs-first installation, shared skill availability, managed tool PATH shims, local healthcheck automation, skill validator, governance catalogs, local sibling skill references, and symlink layout verified
-
----
-
-## Recent Changes
-
-### 2026-05-13: Managed tool PATH shims and README structure review ✅
-
-- Added ignored `~/.agents/bin` tool shims for RTK and OpenSpec through `setup-symlinks.sh`.
-- Updated Makefile PATH bootstrap so `make check` can find `rtk` and `openspec` from non-login shells.
-- Reviewed README structure, symlink, folder, and skill references to match the current repo layout.
-
-### 2026-05-13: Compact four-principle base rules ✅
-
-- Consolidated `.agents/rules/base.md` around four operating principles: Think Before Acting, Simplest Surgical Change, Goal-Driven Verification, and Checkpoint and Escalate.
-- Kept repo-specific contracts for contextual rule loading, GitHub SSH aliases, skill inventory governance, RTK, Context7, and personal knowledge routing.
-- Added a healthcheck contract so the compact base-rule shape and retained routing strings stay verified.
-
-### 2026-05-13: Context7 CLI documentation routing ✅
-
-- Added `find-docs` as a shared Context7 CLI skill and registered it in the skill discovery index, domain routing guide, README, and engineering governance catalog.
-- Added a Cursor `context7.mdc` always-applied rule and mirrored the Context7 CLI guidance in the base rules.
-- Updated shared MCP configuration to use explicit `npx` command/args for Context7 and Chrome DevTools MCP servers.
-
-### 2026-05-13: Local sibling skill references ✅
-
-- Exposed selected skills from `~/saski/augmented-lean-delivery` and `~/saski/augmentedcode-skills` through relative symlinks in `.agents/skills/`, which are available via the canonical `~/.agents/skills` layout.
-- Added base rule references for complexity avoidance, plan/task slicing, and small safe implementation steps using the four `augmented-lean-delivery` skills.
-- Registered the sibling skill references in the discovery index, domain routing guide, engineering governance catalog, README, provenance lock, and a contract test.
-
-### 2026-05-12: RTK global availability via `~/.agents` ✅
-
-- Added canonical shared RTK hook at `.agents/hooks/rtk-rewrite.sh` with deterministic binary resolution order: `PATH` -> `~/.agents/bin/rtk` -> `/opt/homebrew/bin/rtk`.
-- Converted `.claude/hooks/rtk-rewrite.sh` and `.claude/RTK.md` to symlinks pointing at canonical RTK sources under `.agents`.
-- Extended `setup-symlinks.sh` to manage `~/.agents/bin` and link `~/.agents/bin/rtk` to Homebrew RTK when available; validation now reports status for this link.
-- Added `tests/rtk-global-contract-test.sh` and wired it into `Makefile` to enforce the RTK global contract and fallback behavior under constrained `PATH`.
-- Updated README architecture docs to document the shared RTK layout and hook resolution behavior.
-
-### 2026-05-12: OpenSpec docs-first installation ✅
-
-- Initialized this tooling repo with OpenSpec artifacts under `docs/openspec/` and a root `openspec` symlink for CLI compatibility.
-- Added a shared `openspec` skill installer that projects can run through `~/.agents/skills/openspec/scripts/install-openspec`.
-- Updated healthchecks, skill routing docs, README, development guide, and governance notes so docs/thoughts-first OpenSpec placement is explicit and validated.
-
-### 2026-05-07: OpenSpec shared skill availability ✅
-
-- Added native `openspec` skill guidance for OpenSpec/OPSX spec-driven development workflows.
-- Registered the skill in the discovery index, domain routing guide, README, and engineering governance catalog.
-- Confirmed the existing `~/.agents` symlink path exposes repo `.agents/skills/` to the configured tools.
-
-### 2026-05-07: Skill inventory maintenance guidance ✅
-
-- Updated the base agent rules so skill additions, removals, renames, and moves require same-change updates to the discovery index and relevant governance catalog.
-- Added a healthcheck regression to keep that always-loaded guidance present.
-- Clarified maintainer docs for routing, README, status, and provenance updates when skill inventory changes affect those surfaces.
-
-### 2026-05-06: Symlink/docs hygiene follow-up ✅
-
-- Revalidated the global symlink layout, including `~/.agents`, Codex, Claude, Cursor, Gemini, Antigravity, and Langflow paths.
-- Corrected Gemini documentation so `~/.gemini/GEMINI.md` points to the repo-root `GEMINI.md` shim.
-- Restored the shared Claude RTK hook expected by the Claude settings template.
-- Moved generated Cursor manifests and Claude project logs out of version control while keeping shared `thoughts/` artifacts trackable.
-
-### 2026-05-06: Local healthcheck automation ✅
-
-- Added root `Makefile` with canonical `make check`, test, shell lint, skill validation, symlink validation, tracked-ignored reporting, and hook installation targets.
-- Added tracked `hooks/pre-commit` template that runs `make check` before commits.
-- Added `tests/healthcheck-automation-test.sh` to keep the healthcheck and hook contract explicit.
-- Documented the workflow in `README.md` and `docs/development-guide.md`.
-
-### 2026-05-06: Vault artifact toolchain awareness ✅
-
-- Added `vault-artifact-toolchain` as a shared skill for Mermaid, Marp, Excalidraw, `notebooklm-py`, `yt-dlp`, `markitdown`, and Makefile-wrapped vault workflows.
-- Registered the skill in the discovery index and engineering governance catalog.
-
-### 2026-05-05: small-safe-steps frontmatter remediation ✅
-
-- Fixed `.agents/skills/small-safe-steps/SKILL.md` by converting the YAML `description` value to a folded scalar, preserving the trigger text while making the embedded colon parser-safe.
-- Verified `./validate-skill-library.sh`, `./tests/validate-skill-library-test.sh`, and shell syntax checks pass after the fix.
-- Documented the remaining upstream `skill-factory` source follow-up because the sibling checkout is outside this workspace's writable roots and has unrelated local modifications.
-
-### 2026-05-05: Skill validator frontmatter check ✅
-
-- Added `SKILL.md` YAML frontmatter parsing to `validate-skill-library.sh` so loader-breaking skill metadata errors fail validation.
-- Added a regression test for unquoted colon values in skill descriptions.
-- Added a domain routing guide for shared skills with tags and usage notes.
-
-### 2026-04-29: Matt Pocock skills compatibility pass ✅
-
-- Registered `mattpocock/skills` in the shared discovery index and engineering governance catalog.
-- Kept `tdd` owned by the Matt Pocock provenance in `skills-lock.json` and removed it from the skill-factory upstream lock so future skill-factory syncs skip it instead of overwriting it.
-- Verified the global `~` symlink layout still exposes repo `.agents/skills/` to Cursor, Codex, Claude, Gemini, Antigravity, and Langflow.
-
-### 2026-04-28: Personal knowledge vault routing ✅
-
-- Added `personal-knowledge-routing` so durable personal context and reusable knowledge are stored in the personal vault instead of always-loaded rules.
-- Updated base rules with a small persistence pointer and context-loading boundary for the vault.
-- Registered the routing skill in the discovery index, README, and skill governance catalog.
-
-### 2026-04-28: Obsidian wiki skills compatibility pass ✅
-
-- Registered locally installed `Ar9av/obsidian-wiki` skills in the discovery index and engineering governance catalog.
-- Added overlap warnings for URL ingest, conversation capture, dashboards, web research, synthesis, and graph colorizing so routing collisions stay explicit.
-- Removed unsupported `hermes`/`openclaw` routes from `wiki-history-ingest`; only installed `claude` and `codex` history ingesters are advertised.
-- Preserved native `skill-creator` ownership by removing the generated `Ar9av/obsidian-wiki` lock entry for that existing skill.
-
-### 2026-04-27: Repo hygiene (tracked noise, portable defaults) ✅
-
-- Removed `.obsidian/workspace.json` from version control so it matches `.gitignore` and Obsidian UI state stays local.
-- Restored canonical `.agents/mcp.json`, `.agents/rules/codex-default.rules`, and `templates/codex/config.toml` (no machine-specific paths or personal Codex sandbox rules in the shared tree).
-- Quoted YAML `description` frontmatter in `google-adk-agent-patterns`, `google-adk-setup`, and `small-safe-steps` skills for safer parsing.
-
-### 2026-04-27: Maintenance pass (governance, symlinks, Cursor skills) ✅
-
-- Registered `corporate-aws-cli` in `.agents/skills/skill-foundry/agents/catalog-engineering.yaml` so `./validate-skill-library.sh` stays aligned with filesystem skills (index already listed it).
-- Ran `./setup-symlinks.sh setup` to restore `~/.cursor/cli-config.json` as a symlink to repo `.cursor/cli-config.json`; `./setup-symlinks.sh validate` is clean.
-- Tracked `.cursor/skills-cursor/` (canvas SDK stubs, split-to-prs, manifests, and existing Cursor-only skills) so the tree matches the documented `~/.cursor/skills-cursor` symlink target.
-
-### 2026-04-13: MCP, skill governance, and symlink hygiene ✅
-
-- Canonical `.agents/mcp.json` Atlassian endpoint updated to `https://mcp.atlassian.com/v1/mcp` (streamable HTTP per vendor guidance).
-- `catalog-engineering.yaml` and `.agents/docs/skill-factory-skills.md` now cover the Obsidian LLM Wiki stack, `skill-creator`, and Google ADK native skills so `validate-skill-library.sh` passes.
-- Re-ran `./setup-symlinks.sh setup` so `~/.cursor/cli-config.json` and `~/.gemini/skills` match the documented symlink layout on this machine.
-
-### 2026-04-13: Codex RTK symlink ✅
-
-- `setup-symlinks.sh` now links `~/.codex/RTK.md` to `.agents/rules/RTK.md` so `AGENTS.md` `@RTK.md` embeds resolve for Codex CLI.
-- Validation checks the new symlink; README and `cursor-config-management.mdc` document it.
-
-### 2026-04-06: Skill library made self-contained ✅
-
-- Replaced broken skill-factory symlinks in `.agents/skills/` with tracked local directories.
-- Added `.agents/upstreams/skill-factory/components.lock.json` to record upstream provenance for imported skills.
-- Removed tracked `.cursor/skills/` duplicates so `.agents/skills/` is the only shared skill source in the repo.
-- Replaced the absolute `.claude/skills` symlink with a relative repo-local symlink.
-
-### 2026-04-06: Repository validation and portability cleanup ✅
-
-- Added `validate-skill-library.sh` and `tests/validate-skill-library-test.sh`.
-- Validator now checks for broken imported skills, invalid `SKILL.md` frontmatter, missing governance catalog entries, missing discovery-index entries, and absolute skill symlinks.
-- `setup-symlinks.sh` now derives `REPO_DIR` from the script location by default.
-- `sync-skill-factory.sh` now imports tracked directories instead of creating external symlinks.
-
-### 2026-04-06: Docs aligned to current architecture ✅
-
-- Rewrote `README.md` as a user-focused quick-start document.
-- Added `docs/development-guide.md` for maintainer and infrastructure documentation.
-- Updated discovery/governance metadata for `documentation-lookup`, `strategic-compact`, and `verification-loop`.
-- Generalized path-specific guidance that assumed a `~/saski` clone layout.
+**Last Updated**: 2026-05-25
+**Overall Status**: 🟢 **Ready** - Universal rulebook is single-source and cross-tool verified; agent context reduced significantly after rule/skill reorganization
 
 ---
 
 ## Executive Summary
 
 | Component | Status | Notes |
-| ----- | ----- | ----- |
-| Shared rules | ✅ Complete | Compact base rules plus contextual modules under `.agents/rules/` |
-| Shared skills | ✅ Complete | Self-contained and tracked in repo |
-| Skill governance | ✅ Complete | Index and catalogs are validated |
-| Local healthchecks | ✅ Complete | `make check` covers tests, shell syntax, skill validation, symlink validation, and tracked-ignored reporting |
-| Local setup scripts | ✅ Complete | Path-portable defaults in place |
-| Maintainer docs | ✅ Complete | Split from the user-facing README |
+|---|---|---|
+| Universal rulebook (`base.md`) | ✅ Single source | Loaded once per Cursor session; cross-tool via `~/AGENTS.md`, `~/CLAUDE.md`, `~/.codex/AGENTS.md` |
+| Cursor `.cursor/rules/` | ✅ Reduced 13 → 3 | Workspace-only: `use-base-rules`, `cursor-config-management`, `ai-feedback-learning-loop` |
+| Workflows as skills | ✅ Migrated | `tdd`, `refactoring`, `diagnose`, `fic-*`, `project-status-maintenance` |
+| Conditional rules | ✅ Single source | `.agents/rules/{python,makefile,react}-project.md`, loaded on demand per `base.md §2` |
+| RTK guidance | ✅ Inline in `base.md §8` | Recursive `@-include` removed; cross-tool verified |
+| Skill governance | ✅ Aligned | Index, catalog, and provenance lock validated |
+| Local healthchecks | ✅ Passing | `make check` covers tests, shell lint, skill validation, symlink validation |
+| Marmalade team rules | ⚠️ Pending | Still loading via Eventbrite team config; awaiting admin removal |
+
+**Current Readiness**: Configuration is stable for daily use across Cursor, Codex, Claude Code, and Gemini. Cross-tool RTK access verified after the 2026-05-25 RTK inline change. Marmalade rules persist in Cursor team config and need an organizational follow-up.
+
+---
+
+## Recent Changes
+
+### 2026-05-25: Cross-tool rulebook deduplication and reorganization ✅
+
+Three commits delivering single-source-of-truth and on-demand-skills architecture.
+
+- **`c0355b1` Dedupe `base.md` sources**
+  - Drop workspace-level `AGENTS.md` symlink (Cursor was loading 4 copies of `base.md`).
+  - Re-point `~/AGENTS.md` and `~/.codex/AGENTS.md` directly to `.agents/rules/base.md`.
+  - Embed `base.md` into `use-base-rules.mdc` via `@-include` so Cursor loads the rulebook once.
+- **`6fc0c80` Reorganize agent rules**
+  - `.cursor/rules/`: 13 → 3 files. Universal workflows (TDD, refactoring, debugging, FIC, project-status) moved to skills; conditional rules (Python, Makefile, React) consolidated to single source in `.agents/rules/`; redundant `context7.mdc` absorbed into `base.md §8`; Eventbrite-only `tlz-connection.mdc` migrated to `cursor-prompts` repo.
+  - New skill `project-status-maintenance` registered in skill-factory index and catalog.
+  - `~/.cursor/rules` symlink removed: Cursor rules now apply only when the saski repo is the active workspace; the universal rulebook reaches every Cursor workspace via `~/AGENTS.md`.
+- **`bf6a4d2` Inline RTK into `base.md`**
+  - Validation in Cursor and Codex showed the recursive `@RTK.md` include never expanded — RTK guidance was missing from agent context. Inlined as `### RTK` subsection in `base.md §8`.
+  - Removed `.agents/rules/RTK.md`, `.claude/RTK.md`, `.claude/CLAUDE.md`, and the corresponding home-level symlinks.
+  - Updated tests (`rtk-global-contract-test.sh`, `healthcheck-automation-test.sh`) to match the new contract.
+
+**Validation**: All `make check` targets pass. Cursor + Codex CLI cross-tool functional tests confirm 4/4 rulebook sections accessible; RTK verified after the inline change.
+
+---
+
+### 2026-05-13: Healthcheck and four-principle base rules ✅
+
+Compact `base.md` around four operating principles; added healthcheck contract; added Context7 CLI routing; registered local sibling skill references; managed tool PATH shims via `setup-symlinks.sh`.
+
+### 2026-05-12: Shared RTK hook (`rtk-rewrite.sh`) and OpenSpec docs-first installation ✅
+
+Canonical RTK hook at `.agents/hooks/rtk-rewrite.sh`. OpenSpec artifacts under `docs/openspec/`. `~/.agents/bin/rtk` shim added to setup script.
+
+### 2026-04-13 → 2026-05-07: Skill governance and registration consolidation ✅
+
+OpenSpec shared skill, skill inventory governance rules, MCP/Atlassian endpoint update, Codex RTK symlink, several skill catalog updates.
+
+### Earlier (2026-04-06 → 2026-04-29) ✅
+
+Self-contained skill library, validator and contract tests, repository validation and portability cleanup, `mattpocock/skills` and `Ar9av/obsidian-wiki` registration, repo hygiene pass, `personal-knowledge-routing` skill.
 
 ---
 
 ## Next Steps
 
-1. Benchmark monitored skills (`pbt-pragmatic-adoption`, `creating-hooks`, `writing-statuslines`) after the next major model update.
-2. Upstream any skill-factory improvements that should be shared back to the source repository.
-3. Keep `components.lock.json`, the discovery index, and the skill-foundry catalogs aligned whenever skills change.
+1. **Marmalade team rules** — escalate to Eventbrite Engineering Cursor admin to remove the `marmalade-*` rules from team config (they are now available as a workspace skill in `~/eventbrite/listings-webapp/.cursor/skills/marmalade-design-system/`).
+2. **`tlz-connection` PR** — push the `add-tlz-connection-rule` branch in `~/eventbrite/cursor-prompts` and open a PR.
+3. **Benchmark monitored skills** (`pbt-pragmatic-adoption`, `creating-hooks`, `writing-statuslines`) after the next major model update.
+4. **Upstream skill-factory improvements** that should be shared back to the source repository.
+5. **Keep governance aligned**: `components.lock.json`, the discovery index, and the skill-foundry catalogs whenever skills change.
+
+---
+
+## Known Issues
+
+- **Marmalade team rules in Cursor**: the `marmalade-*` rules pushed by Eventbrite Engineering team config keep loading even when toggled off in the Cursor UI. Workaround in place (skill mirror in `listings-webapp/.cursor/skills/`); definitive fix requires removing the entries from team config upstream.
+- **`@-include` in `.mdc` files is non-recursive**: Cursor expands a top-level `@path` reference but does not re-expand `@path` references inside the included file. Codex CLI shows the same behavior. RTK content was inlined into `base.md` to work around this; future cross-tool inclusions should avoid relying on recursive `@-include`.
+
+---
+
+## Notes
+
+- This repo is the canonical source for AI agent configuration across Cursor, Codex, Claude Code, Gemini, Antigravity, and Langflow.
+- Mutable runtime state (sessions, caches, workspace state, mutable credentials) intentionally stays local; only rules, skills, commands, workflows, hooks, and validation are versioned.
+- After pulling, contributors must re-run `./setup-symlinks.sh setup` so the home-level symlinks are refreshed to the new targets (`~/AGENTS.md` → `base.md`, `~/.codex/AGENTS.md` → `base.md`, removal of `~/.cursor/rules`, `~/.codex/RTK.md`, `~/.claude/RTK.md`, `~/.claude/CLAUDE.md`).

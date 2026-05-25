@@ -154,7 +154,7 @@ Maintainer-facing details live in [docs/development-guide.md](docs/development-g
 | Asset | Canonical path | Notes |
 |-------|----------------|-------|
 | Universal rules | `.agents/rules/base.md` | Also exposed through root `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` shims. |
-| Contextual rules | `.agents/rules/*.md` | Python, Makefile, React, RTK, Codex defaults, feedback loop, and other scoped rules. |
+| Contextual rules | `.agents/rules/*.md` | Python, Makefile, React, Codex defaults, feedback loop, and other scoped rules. RTK guidance is embedded in `base.md` §8. |
 | Skills | `.agents/skills/` | Native skills, imported packs, and sibling-repo skill references. |
 | Skill routing docs | `.agents/docs/` | Start with `skill-domain-routing.md`; use `skill-factory-skills.md` for inventory. |
 | Commands | `.agents/commands/` | FIC commands plus project command prompts such as `review-pr`. |
