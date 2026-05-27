@@ -1,5 +1,5 @@
-<!-- last_updated: 2026-05-19 -->
-<!-- version: 2.8 -->
+<!-- last_updated: 2026-05-27 -->
+<!-- version: 2.9 -->
 # AI Agent Development Rules
 
 This is the compact universal rulebook for this project. It applies to every AI agent unless a narrower project, tool, or user instruction explicitly overrides it.
@@ -50,7 +50,8 @@ This is the compact universal rulebook for this project. It applies to every AI 
 
 - Provide the outcome first, then concise supporting detail when needed.
 - Do not require hidden-reasoning, internal-monologue, or chain-of-thought sections.
-- Do not append run metadata unless the user explicitly asks for it.
+- Do not append broad run metadata (token counts, tool traces, session identifiers) unless the user explicitly asks for it.
+- When you have concrete information about the serving model or skills actually loaded and applied for the inference, disclose them briefly in the response (for example a short line at the start or end). Do not guess model names or claim a skill was used if it was only considered but not read and followed.
 - Team communication can be in Spanish or English.
 - All technical artifacts must be in English, including code, documentation, tickets, schemas, configuration, scripts, git commit messages, and test names.
 
