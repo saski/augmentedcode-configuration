@@ -1,6 +1,6 @@
 ---
 name: refactoring
-description: Structured refactoring process with prep, main refactoring, final evaluation, and summary phases. Use when asked to "refactor", "clean up code", "improve readability", or proactively when code gets too complex or messy. For XP simple-design refactoring with ROI prioritization use xp-simple-design-refactor; for safe large-scale refactoring use xp-mikado-method.
+description: Refactoring process. Invoke immediately when user or document mentions refactoring, or proactively when code gets too complex or messy.
 ---
 
 # Refactoring Production Code

@@ -680,6 +680,48 @@ skills:
       - lean-ai-adoption-coach
     notes: "Reference collection of AI coding patterns. lean-ai-adoption-coach covers adoption decisions."
 
+  - name: align
+    category: artifact-creation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - collaborative-design
+      - grill-me
+    notes: "Progressive confirmable alignment on a plan or approach before implementation."
+
+  - name: launching-agent-teams
+    category: workflow-automation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+    overlap_with: []
+    notes: "Claude Code agent teams with structured roles; requires teammate APIs."
+
+  - name: refactoring-team
+    category: artifact-creation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+    overlap_with:
+      - refactoring
+      - xp-simple-design-refactor
+    notes: "Multi-agent refactoring through progressive lenses; manual invocation only."
+
   - name: lean-ai-adoption-coach
     category: team-process
     pattern: reviewer

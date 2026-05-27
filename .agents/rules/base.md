@@ -50,8 +50,8 @@ This is the compact universal rulebook for this project. It applies to every AI 
 
 - Provide the outcome first, then concise supporting detail when needed.
 - Do not require hidden-reasoning, internal-monologue, or chain-of-thought sections.
-- Do not append broad run metadata (token counts, tool traces, session identifiers) unless the user explicitly asks for it. Serving-model and applied-skill disclosure are excluded from this restriction.
-- When you have concrete information about the serving model or skills actually loaded and applied for the inference, disclose them briefly without waiting for the user to ask (for example a short line at the start or end). Do not guess model names or claim a skill was used if it was only considered but not read and followed.
+- Do not append broad run metadata (token counts, tool traces, session identifiers) unless the user explicitly asks for it.
+- When you have concrete information about the serving model or skills actually loaded and applied for the inference, disclose them briefly in the response (for example a short line at the start or end). Do not guess model names or claim a skill was used if it was only considered but not read and followed.
 - Team communication can be in Spanish or English.
 - All technical artifacts must be in English, including code, documentation, tickets, schemas, configuration, scripts, git commit messages, and test names.
 
@@ -70,9 +70,9 @@ This is the compact universal rulebook for this project. It applies to every AI 
 - Shared workflows live in `.agents/workflows/`; load the matching workflow when the user explicitly asks for a named workflow or the task clearly matches one of the repo's canonical delivery flows.
 - Shared command prompts live in `.agents/commands/`; treat them as the canonical source when the user explicitly invokes or asks about a repo command mirrored into tool-specific command folders.
 - Product-management entries use `.agents/skills/skill-foundry/agents/catalog-product-management.yaml`; engineering entries use `.agents/skills/skill-foundry/agents/catalog-engineering.yaml`; general entries may use `.agents/skills/skill-foundry/agents/catalog.yaml`.
-- Adding, removing, renaming, or moving any skill must update `.agents/docs/skill-factory-skills.md` and the relevant skill-foundry governance catalog in the same change: `.agents/skills/skill-foundry/agents/catalog-engineering.yaml`, `.agents/skills/skill-foundry/agents/catalog-product-management.yaml`, or `.agents/skills/skill-foundry/agents/catalog.yaml`.
-- Also update `.agents/docs/skill-domain-routing.md`, `README.md`, `PROJECT_STATUS.md`, and provenance lock files when routing, user-facing inventory, status, or source ownership changes.
-- Run `./validate-skill-library.sh` before committing skill inventory changes.
+- Adding, removing, renaming, or moving any skill must update `.agents/docs/skill-factory-skills.md`, a bullet in `.agents/docs/skill-domain-routing.md`, and the relevant skill-foundry governance catalog in the same change: `.agents/skills/skill-foundry/agents/catalog-engineering.yaml`, `.agents/skills/skill-foundry/agents/catalog-product-management.yaml`, or `.agents/skills/skill-foundry/agents/catalog.yaml`.
+- Also update `README.md`, `PROJECT_STATUS.md`, and provenance lock files when user-facing inventory, status, or source ownership changes.
+- Run `./validate-skill-library.sh` before committing skill inventory changes; `./pull-and-sync-skills.sh` runs it automatically after every skill-factory sync.
 - Use matching skills when the user's request matches a skill description.
 
 ### Quality Skill References

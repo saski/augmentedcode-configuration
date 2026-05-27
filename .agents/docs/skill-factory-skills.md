@@ -52,6 +52,11 @@ Imported and local sources land in the same tree:
 | writing-statuslines | ai | Writes Claude Code status line scripts. Use when creating, customizing, or debugging statusline configurations. |
 | creating-hooks | ai | Create and configure Claude Code hooks for lifecycle automation (pre/post tool use, session start, prompt submit, notifications). Use when asked to "add a hook", "auto-format on save", "block dangerous commands", "inject context on prompt", or "notify when done". Not for general shell scripting or CI/CD pipelines. |
 | ai-patterns | ai | Reference patterns for augmented coding with AI. Use when discussing AI coding patterns, anti-patterns, obstacles, context management, steering AI, or looking up Lexler's patterns collection. |
+| align | design | Presents a proposed approach in progressive confirmable chunks with recommended decisions and alternatives. Use when aligning on a design, plan, or technical approach before implementation. |
+| launching-agent-teams | ai | Launches agent teams with structured roles and task decomposition. Use when asked to create a team, spawn teammates, or coordinate multiple agents in parallel. |
+| refactoring-team | ai | Iterative code refactoring through progressive lenses via a worker-reviewer agent team. |
+| llm-council | strategy | Run a question or decision through multiple independent AI advisors with peer review and a synthesized verdict (Karpathy LLM Council style). Use for high-stakes tradeoffs and pressure-testing options. |
+| strategy-kernel | strategy | Coaches through Rumelt's Strategy Kernel to build sound strategy. Use when defining strategy, diagnosing strategic challenges, or creating strategic plans. |
 
 ## Product management (external sync)
 

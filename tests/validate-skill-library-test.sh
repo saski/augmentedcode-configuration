@@ -29,13 +29,22 @@ create_fixture() {
 |-------|----------|---------|
 | sample-skill | testing | Example |
 EOF
+    cat > "$fixture_dir/.agents/docs/skill-domain-routing.md" <<'EOF'
+# Routing
+
+- `sample-skill` - Example
+EOF
     cat > "$fixture_dir/.agents/skills/skill-foundry/agents/catalog.yaml" <<'EOF'
 skills:
   - name: sample-skill
     category: skill-governance
 EOF
-    : > "$fixture_dir/.agents/skills/skill-foundry/agents/catalog-engineering.yaml"
-    : > "$fixture_dir/.agents/skills/skill-foundry/agents/catalog-product-management.yaml"
+    cat > "$fixture_dir/.agents/skills/skill-foundry/agents/catalog-engineering.yaml" <<'EOF'
+skills: []
+EOF
+    cat > "$fixture_dir/.agents/skills/skill-foundry/agents/catalog-product-management.yaml" <<'EOF'
+skills: []
+EOF
 }
 
 create_local_skill_fixture() {
@@ -59,10 +68,18 @@ EOF
 |-------|----------|---------|
 | $skill_name | testing | Example |
 EOF
+        cat > "$fixture_dir/.agents/docs/skill-domain-routing.md" <<EOF
+# Routing
+
+- \`$skill_name\` - Example
+EOF
     else
         cat > "$fixture_dir/.agents/docs/skill-factory-skills.md" <<'EOF'
 | Skill | Category | Purpose |
 |-------|----------|---------|
+EOF
+        cat > "$fixture_dir/.agents/docs/skill-domain-routing.md" <<'EOF'
+# Routing
 EOF
     fi
     if [[ "$include_catalog" == "yes" ]]; then
@@ -126,6 +143,31 @@ test_detects_missing_catalog_entry() {
 
     assert_contains "$output" "missing from governance catalogs"
     assert_contains "$output" "uncataloged-skill"
+}
+
+test_detects_missing_routing_entry() {
+    local fixture_dir
+    fixture_dir="$(mktemp -d)"
+    trap 'rm -rf "$fixture_dir"' RETURN
+
+    create_local_skill_fixture "$fixture_dir" "unrouted-skill" "yes" "yes"
+    cat > "$fixture_dir/.agents/docs/skill-domain-routing.md" <<'EOF'
+# Routing
+EOF
+
+    local output
+    set +e
+    output="$("$VALIDATOR" "$fixture_dir" 2>&1)"
+    local exit_code=$?
+    set -e
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "expected validator to fail for missing routing entry" >&2
+        exit 1
+    fi
+
+    assert_contains "$output" "missing from domain routing guide"
+    assert_contains "$output" "unrouted-skill"
 }
 
 test_detects_missing_index_entry() {
@@ -237,6 +279,7 @@ test_validates_utf8_frontmatter_under_ascii_locale() {
 
 test_detects_broken_skill_symlink
 test_detects_missing_catalog_entry
+test_detects_missing_routing_entry
 test_detects_missing_index_entry
 test_detects_absolute_symlink
 test_detects_invalid_skill_frontmatter

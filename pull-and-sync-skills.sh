@@ -19,4 +19,7 @@ echo "📥 Pulling skill-factory..."
 echo ""
 echo "📦 Syncing skills..."
 cd "$REPO_DIR"
-exec ./sync-skill-factory.sh "$@"
+./sync-skill-factory.sh "$@"
+echo ""
+echo "🔍 Validating skill inventory, catalogs, and domain routing..."
+./validate-skill-library.sh

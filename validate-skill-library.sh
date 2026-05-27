@@ -6,6 +6,7 @@ REPO_DIR="${1:-$(cd "$(dirname "$0")" && pwd)}"
 SKILLS_DIR="$REPO_DIR/.agents/skills"
 SKILL_FOUNDRY_DIR="$SKILLS_DIR/skill-foundry/agents"
 INDEX_PATH="$REPO_DIR/.agents/docs/skill-factory-skills.md"
+ROUTING_PATH="$REPO_DIR/.agents/docs/skill-domain-routing.md"
 
 if [[ ! -d "$SKILLS_DIR" ]]; then
     echo "missing skills directory: $SKILLS_DIR" >&2
@@ -125,6 +126,24 @@ if [[ -s "$missing_index_entries_file" ]]; then
     echo "missing from skills index:"
     cat "$missing_index_entries_file"
     failed=1
+fi
+
+if [[ ! -f "$ROUTING_PATH" ]]; then
+    echo "missing domain routing guide: $ROUTING_PATH" >&2
+    failed=1
+else
+    routing_names_file="$(mktemp)"
+    missing_routing_entries_file="$(mktemp)"
+    trap 'rm -f "$broken_symlinks_file" "$absolute_symlinks_file" "$invalid_frontmatter_file" "$skill_names_file" "$catalog_names_file" "$missing_catalog_entries_file" "$index_names_file" "$missing_index_entries_file" "$routing_names_file" "$missing_routing_entries_file"' EXIT
+
+    { grep -oE '`[a-z0-9][a-z0-9-]*`' "$ROUTING_PATH" || true; } | tr -d '`' | sort -u > "$routing_names_file"
+    comm -23 "$index_names_file" "$routing_names_file" > "$missing_routing_entries_file"
+
+    if [[ -s "$missing_routing_entries_file" ]]; then
+        echo "missing from domain routing guide ($ROUTING_PATH):"
+        cat "$missing_routing_entries_file"
+        failed=1
+    fi
 fi
 
 if [[ $failed -ne 0 ]]; then

@@ -43,10 +43,12 @@ Skills:
 - `shape-up` - Use for fixed-appetite product shaping with variable scope.
 - `planning-with-files` - Use for multi-step projects that need persistent task, findings, and progress files.
 - `openspec` - Use for OpenSpec, OPSX, spec-driven development, change proposals, delta specs, durable feature planning, and docs/thoughts-first OpenSpec initialization.
+- `align` - Use to present and confirm a design, plan, or technical approach in progressive chunks before implementation.
 - `fic-create-plan` - Use to turn research or a task description into a phased implementation plan.
 - `fic-implement-plan` - Use to execute an approved plan phase by phase.
 - `to-issues` - Use to turn a plan or PRD into independently grabbable issues.
 - `triage` - Use for issue intake, bug or feature routing, and AFK-agent readiness.
+- `project-status-maintenance` - Use to create or update `PROJECT_STATUS.md` with the canonical structure.
 
 ## Refactoring, Maintainability, and Technical Debt
 
@@ -57,6 +59,7 @@ Use when behavior should stay stable while the code becomes simpler, safer, or e
 Skills:
 
 - `refactoring` - Use for general cleanup and structured refactoring.
+- `refactoring-team` - Use for multi-agent iterative refactoring through progressive lenses (Claude Code; manual invocation).
 - `xp-simple-design-refactor` - Use when the goal is simple design and ROI-ranked maintainability.
 - `xp-mikado-method` - Use for large refactors that need dependency graphs and safe sequencing.
 - `code-simplifier` - Use for local clarity and complexity reduction without behavior change.
@@ -132,6 +135,7 @@ Skills:
 - `write-a-skill` - Use to create portable agent skills with proper structure.
 - `find-skills` - Use to discover installable external skills.
 - `ai-patterns` - Use for augmented coding patterns, anti-patterns, and steering techniques.
+- `launching-agent-teams` - Use to create agent teams, spawn teammates, or coordinate parallel agents (Claude Code).
 - `lean-ai-adoption-coach` - Use for pragmatic AI adoption decisions and guardrails.
 
 ## Product Strategy, Discovery, and Prioritization
@@ -148,7 +152,9 @@ Skills:
 - `prd-writer` - Use for structured product requirements.
 - `to-prd` - Use to turn conversation context into a PRD for the project issue tracker.
 - `feature-prioritization-assistant` - Use for RICE scoring and roadmap prioritization.
+- `llm-council` - Use to pressure-test high-stakes decisions with multiple independent advisors and a synthesized verdict.
 - `okrs` - Use for objectives, key results, alignment, and progress cadence.
+- `strategy-kernel` - Use for Rumelt Strategy Kernel work: diagnosis, guiding policy, and coherent actions.
 - `positioning-canvas` - Use for category, alternatives, differentiation, and target customers.
 - `seven-powers` - Use for durable competitive advantage and moat analysis.
 - `monetizing-innovation` - Use for pricing, packaging, value metrics, and willingness to pay.
@@ -187,6 +193,7 @@ Skills:
 - `stakeholder-update-generator` - Use for progress updates and release notes.
 - `grill-me` - Use to stress-test a plan or design through questioning.
 - `grill-with-docs` - Use to challenge a plan against project docs and capture decisions.
+- `llm-council` - Use when a decision has real tradeoffs and needs multi-perspective pressure testing.
 - `caveman` - Use when the user requests ultra-short communication.
 - `thinkies` - Use to generate ideas or reframe a stuck problem.
 - `refinement-loop` - Use when the output needs multiple distillation passes.
@@ -202,6 +209,8 @@ Skills:
 
 - `personal-knowledge-routing` - Use to decide what belongs in the personal vault versus agent configuration.
 - `llm-wiki` - Use for the foundational raw to wiki to schema knowledge architecture.
+- `obsidian-cli` - Use for Obsidian vault CLI operations, note management, and plugin or theme development.
+- `vault-artifact-toolchain` - Use for Mermaid, Marp, Excalidraw, notebooklm-py, yt-dlp, markitdown, and Makefile vault artifact workflows.
 - `wiki-setup` - Use to initialize or repair wiki vault structure.
 - `wiki-ingest` - Use to ingest documents, folders, or raw staging content.
 - `wiki-update` - Use to distill the current project into the wiki.

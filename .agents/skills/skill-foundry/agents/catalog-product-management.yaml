@@ -351,7 +351,40 @@ skills:
     overlap_with:
       - trustworthy-experiments
       - ab-test-designer
+      - llm-council
     notes: "Decisions under uncertainty; complements experiment interpretation."
+
+  - name: llm-council
+    category: team-process
+    pattern: pipeline
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - thinking-in-bets
+      - grill-me
+    notes: "Multi-advisor pressure test for high-stakes decisions and tradeoffs."
+
+  - name: strategy-kernel
+    category: artifact-creation
+    pattern: generator
+    owner: product
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - opportunity-solution-trees
+      - shape-up
+    notes: "Rumelt diagnosis, guiding policy, and coherent actions; not goals-only strategy."
 
   - name: trustworthy-experiments
     category: verification-testing

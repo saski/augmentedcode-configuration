@@ -136,6 +136,7 @@ Mutable local config such as `~/.codex/config.toml` and `~/.claude/settings.json
 ## Repository Notes
 
 - The root shims `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` point to `.agents/rules/base.md`.
-- The validator only passes when filesystem inventory, catalogs, and the skills index are in sync.
-- Adding, removing, renaming, or moving a skill requires the same-change updates to `.agents/docs/skill-factory-skills.md` and the relevant skill-foundry governance catalog. Update `.agents/docs/skill-domain-routing.md`, `README.md`, `PROJECT_STATUS.md`, and provenance lock files when routing, user-facing inventory, status, or source ownership changes.
+- The validator only passes when filesystem inventory, catalogs, the skills index, and domain routing entries are in sync.
+- Adding, removing, renaming, or moving a skill requires the same-change updates to `.agents/docs/skill-factory-skills.md`, the relevant skill-foundry governance catalog, and a bullet in `.agents/docs/skill-domain-routing.md`. Update `README.md`, `PROJECT_STATUS.md`, and provenance lock files when user-facing inventory, status, or source ownership changes.
+- `./pull-and-sync-skills.sh` runs `./validate-skill-library.sh` after every sync so missing index, catalog, or routing updates fail immediately.
 - If a skill moves from skill-factory to another source, remove it from `.agents/upstreams/skill-factory/components.lock.json`; otherwise the skill-factory sync will refresh and overwrite it.

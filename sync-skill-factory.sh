@@ -7,14 +7,35 @@ SKILL_FACTORY="${SKILL_FACTORY:-$REPO_DIR/../skill-factory}"
 OUTPUT_SKILLS="$SKILL_FACTORY/output_skills"
 CANONICAL_SKILLS="$REPO_DIR/.agents/skills"
 LOCK_PATH="$REPO_DIR/.agents/upstreams/skill-factory/components.lock.json"
+LOCAL_SIBLING_LOCK="$REPO_DIR/.agents/upstreams/local-saski-skills/components.lock.json"
+
+is_managed_sibling_symlink() {
+    local name="$1"
+
+    if [[ ! -f "$LOCAL_SIBLING_LOCK" ]]; then
+        return 1
+    fi
+
+    python3 - <<'PY' "$LOCAL_SIBLING_LOCK" "$name"
+import json
+import sys
+from pathlib import Path
+
+lock_path = Path(sys.argv[1])
+name = sys.argv[2]
+payload = json.loads(lock_path.read_text())
+raise SystemExit(0 if name in payload.get("skills", {}) else 1)
+PY
+}
 
 usage() {
     cat << EOF
 Usage: $(basename "$0") [--dry-run]
 
 Imports skill-factory output_skills into this repo's .agents/skills/ as tracked
-directories. Native skills are preserved. Previously imported skill-factory
-skills are refreshed in place and the provenance lock file is regenerated.
+directories. Native skills and sibling-repo symlinks (see local-saski-skills lock)
+are preserved. Previously imported skill-factory skills are refreshed in place
+and the provenance lock file is regenerated.
 
   SKILL_FACTORY  Default: \$REPO/../skill-factory (sibling directory)
   --dry-run      List what would be refreshed or imported without writing files
@@ -73,6 +94,16 @@ while IFS= read -r -d '' skill_md; do
     skill_dir="$(dirname "$skill_md")"
     name="$(basename "$skill_dir")"
     target="$CANONICAL_SKILLS/$name"
+
+    if [[ -L "$target" ]] || is_managed_sibling_symlink "$name"; then
+        ((skipped++)) || true
+        if [[ "$DRY_RUN" == true ]]; then
+            echo "  skip (sibling symlink) $name"
+        else
+            echo "  = $name (sibling symlink preserved)"
+        fi
+        continue
+    fi
 
     if [[ -e "$target" && ! -L "$target" ]] && ! grep -qx "$name" "$previous_imports_file"; then
         ((skipped++)) || true
@@ -161,3 +192,9 @@ PY
 
 echo ""
 echo "✅ Synced: imported $added skill(s), refreshed $refreshed, skipped $skipped."
+
+if [[ "$DRY_RUN" == false && $added -gt 0 ]]; then
+    echo ""
+    echo "ℹ️  New skills imported: update .agents/docs/skill-domain-routing.md before commit."
+    echo "   Run ./validate-skill-library.sh to verify index, catalogs, and routing stay in sync."
+fi

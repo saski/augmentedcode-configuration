@@ -1,6 +1,6 @@
 ---
 name: creating-hooks
-description: Create and configure Claude Code hooks for lifecycle automation (pre/post tool use, session start, prompt submit, notifications). Use when asked to "add a hook", "auto-format on save", "block dangerous commands", "inject context on prompt", or "notify when done". Not for general shell scripting or CI/CD pipelines.
+description: Creates Claude Code hooks.
 ---
 
 STARTER_CHARACTER = 🪝

@@ -1,6 +1,6 @@
 ---
 name: event-modeling
-description: Design systems using Event Modeling with vertical slices (STATE_CHANGE, STATE_VIEW, AUTOMATION). Use when asked to "model a domain", "design event-driven system", "map commands and events", "create system slices", or doing domain-driven design from scratch or over existing code. Not for infrastructure event buses or message broker configuration.
+description: Designs systems using Event Modeling.
 ---
 
 STARTER_CHARACTER = 🗺️

@@ -1,6 +1,6 @@
 ---
 name: bdd-with-approvals
-description: Write executable BDD specifications as approval-test fixtures in domain language. Use when doing BDD, writing Given/When/Then specs, creating human-scannable test fixtures, or turning event model slices into executable tests. Pairs with event-modeling and approval-tests skills. Not for unit test mechanics or mock setup.
+description: Scannable BDD tests written in domain language. Use when doing BDD.
 ---
 
 # BDD with Approval Tests
