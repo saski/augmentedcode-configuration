@@ -11,7 +11,8 @@ This document covers repository-internal structure, sync workflows, and validati
 - `.agents/hooks/` is the canonical shared hook location (including RTK rewrite hook).
 - `.agents/bin/` contains ignored local tool shims created by `setup-symlinks.sh`.
 - `docs/openspec/` is the OpenSpec artifact root for this tooling repo, exposed through the root `openspec` symlink for CLI compatibility.
-- `.cursor/skills-cursor/` contains Cursor-only local skills. `.cursor/skills/` is not tracked in this repo.
+- `.cursor/skills-cursor/` contains Cursor-only skills (Canvas, SDK, meta-skills). Inventory: `.agents/docs/cursor-skills.md`. Not part of skill-factory sync or `validate-skill-library.sh`.
+- `~/.cursor/skills` points at `.agents/skills/`; it is not a separate tracked tree under `.cursor/skills/`.
 
 ## Rule Model
 
@@ -30,12 +31,17 @@ The skill library is self-contained:
 - Skill-factory provenance is tracked in `.agents/upstreams/skill-factory/components.lock.json`.
 - ECC upstream components are tracked in `.agents/upstreams/ecc/components.lock.json`.
 
-Governance lives in:
+Shared skill governance lives in:
 
 - `.agents/docs/skill-factory-skills.md`
 - `.agents/skills/skill-foundry/agents/catalog.yaml`
 - `.agents/skills/skill-foundry/agents/catalog-engineering.yaml`
 - `.agents/skills/skill-foundry/agents/catalog-product-management.yaml`
+
+Cursor-only skills are inventoried separately:
+
+- `.agents/docs/cursor-skills.md`
+- validated by `./validate-cursor-skills.sh` (frontmatter + index only; no skill-foundry catalogs)
 
 ## Setup and Validation
 
@@ -50,6 +56,7 @@ make check
 - `make test`
 - `make lint-shell`
 - `make validate-skills`
+- `make validate-cursor-skills`
 - `make validate-openspec`
 - `make validate-symlinks`
 - `make check-tracked-ignored`
@@ -61,6 +68,7 @@ make lint-shell
 make test
 ./tests/validate-skill-library-test.sh
 ./validate-skill-library.sh
+./validate-cursor-skills.sh
 OPENSPEC_TELEMETRY=0 openspec validate --all
 ```
 

@@ -100,7 +100,8 @@ For narrower checks:
 |------|---------|
 | Full local validation | `make check` |
 | Symlink health | `./setup-symlinks.sh validate` |
-| Skill catalog/index validation | `make validate-skills` |
+| Shared skill catalog/index validation | `make validate-skills` |
+| Cursor-only skills validation | `make validate-cursor-skills` |
 | Shell syntax checks | `make lint-shell` |
 | OpenSpec validation | `make validate-openspec` |
 | Local config status | `./setup-symlinks.sh status` |
@@ -135,7 +136,7 @@ Imported `skill-factory` components are refreshed only from `.agents/upstreams/s
 │   ├── hooks/                # Shared hook scripts, including RTK
 │   ├── upstreams/            # Provenance for imported components
 │   └── mcp.json              # Shared MCP server configuration
-├── .cursor/                  # Cursor adapters and Cursor-only assets
+├── .cursor/                  # Cursor adapters; skills-cursor/ for IDE-only skills
 ├── .claude/                  # Claude shims to canonical shared assets
 ├── .gemini/                  # Gemini shims to canonical shared assets
 ├── docs/                     # Maintainer docs and OpenSpec artifacts
@@ -155,8 +156,9 @@ Maintainer-facing details live in [docs/development-guide.md](docs/development-g
 |-------|----------------|-------|
 | Universal rules | `.agents/rules/base.md` | Also exposed through root `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` shims. |
 | Contextual rules | `.agents/rules/*.md` | Python, Makefile, React, Codex defaults, feedback loop, and other scoped rules. RTK guidance is embedded in `base.md` §8. |
-| Skills | `.agents/skills/` | Native skills, imported packs, and sibling-repo skill references. |
-| Skill routing docs | `.agents/docs/` | Start with `skill-domain-routing.md`; use `skill-factory-skills.md` for inventory. |
+| Shared skills | `.agents/skills/` | Native skills, imported packs, and sibling-repo skill references. |
+| Cursor-only skills | `.cursor/skills-cursor/` | Canvas, SDK, loops, and meta-skills; see `cursor-skills.md`. |
+| Skill routing docs | `.agents/docs/` | `skill-domain-routing.md` and `skill-factory-skills.md` for shared skills; `cursor-skills.md` for Cursor-only. |
 | Commands | `.agents/commands/` | FIC commands plus project command prompts such as `review-pr`. |
 | Workflows | `.agents/workflows/` | Context-driven development and TDD cycle workflows. |
 | MCP config | `.agents/mcp.json` | Shared by configured tools. |

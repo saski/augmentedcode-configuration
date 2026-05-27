@@ -114,6 +114,35 @@ export declare const chartPalette: {
     readonly neutralLine: "#888899D0";
 };
 /**
+ * Shared category palette for canvas primitives that show categorical tints
+ * (`Swatch`, `UsageBar` segments, etc.). Uses a coherent subset of
+ * `chartPalette` so a category's color reads consistently across any
+ * primitive that consumes it.
+ *
+ * The insertion order here is the canonical category order — primitives
+ * that auto-assign colors (e.g. `UsageBar` segments without an explicit
+ * `color`) cycle through these keys in order.
+ */
+export declare const colorPalette: {
+    readonly gray: "#8888A8E0";
+    readonly purple: "#7B64B8F0";
+    readonly green: "#1F8A65E8";
+    readonly yellow: "#E8C030E0";
+    readonly pink: "#C85898E0";
+    readonly blue: "#2E79B5E0";
+    readonly orange: "#F0A040E0";
+};
+export type Color = keyof typeof colorPalette;
+/**
+ * Auto-color rotation for `UsageBar` segments without an explicit `color`.
+ * Decoupled from `colorPalette`'s declaration order so the palette can grow
+ * or be reordered without changing how unspecified segments cycle.
+ *
+ * Matches the original `packages/ui` `ContextUsageTray` order so the same
+ * segment index lands on the same hue as the source.
+ */
+export declare const usageColorSequence: readonly Color[];
+/**
  * Ordered array for automatic series coloring — alternates dark/light across
  * distinct hue families for maximum perceptual separation.
  */

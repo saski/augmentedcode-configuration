@@ -51,6 +51,14 @@ The trigger is **user intent**, not response shape. Ask: would the user benefit 
 - Default-export the top-level component.
 - Embed all data inline. **No `fetch()`, no network calls.**
 
+**Never render empty states.** A canvas exists to show real content. If a section, chart, table, or component has no data to display, **omit it** — do not render it with placeholder text ("Add header here", "TODO", "Example"), a "No data" message, an empty array, zeroed rows, or an empty chart frame. If the entire canvas would be empty because you don't have the underlying data, do not produce a canvas — tell the user what's missing and ask for it instead.
+
+**Label every plot.** Charts and tables must be self-describing — a reader looking at the canvas alone should know exactly what they're seeing. For every plot include:
+- A title naming the **specific metric** (not "Metrics" — "API error rate by service").
+- **Axis labels with units** on both axes (e.g. "Date", "Latency (ms)").
+- A **legend** when more than one series is shown, with the exact series names from the source data.
+- The **source and time range** in a small caption (e.g. "Source: Datadog · last 7 days"). If a value is a transformation (mean, p95, normalized, smoothed), say so in the label.
+
 **Component discovery:** prefer built-in `cursor/canvas` components over hand-rolled markup. The full public surface (components, hooks, prop types, tokens) is declared in `~/.cursor/skills-cursor/canvas/sdk/index.d.ts` and its sibling `.d.ts` files — read them when you need exact exports, prop shapes, or hook signatures rather than guessing. Referencing an export that does not exist is the most common runtime error.
 
 Apply the Canvas generation policy below as you write, and complete its pre-delivery self-check (section 6) before returning the canvas.
@@ -96,50 +104,3 @@ Both can apply at once; one or two sentences total is enough. Skip the intro for
 ## Troubleshooting
 
 If a canvas appears blank or missing, the most common cause is that it was not written under `/Users/<user>/.cursor/projects/<workspace>/canvases/` exactly — re-save it to that path. Do not debug this by trying to create the managed directory manually; focus on correcting the file path instead. Users can click the canvas file path in the response to open it, just like any other file path in Cursor. When present, the canvas server writes a `<name>.canvas.status.json` sidecar after each build with `status`, `diagnostics`, or `error` fields you can read; the file is best-effort and may not exist, so don't block on it.
-
-## Good example
-
-```tsx
-import { Divider, Grid, H1, H2, Stack, Stat, Table, Text } from 'cursor/canvas';
-
-export default function ServiceOverview() {
-  return (
-    <Stack gap={20}>
-      <H1>Service Overview</H1>
-      <Grid columns={3} gap={16}>
-        <Stat value="6" label="Total Services" />
-        <Stat value="5" label="Healthy" tone="success" />
-        <Stat value="1" label="Degraded" tone="warning" />
-      </Grid>
-      <Divider />
-      <H2>Service Status</H2>
-      <Table
-        headers={["Service", "Status", "Uptime", "Latency"]}
-        rows={[
-          ["api-gateway", "Operational", "99.99%", "12ms"],
-          ["auth-service", "Degraded", "99.2%", "340ms"],
-          ["billing", "Operational", "99.8%", "45ms"],
-        ]}
-        rowTone={[undefined, "warning", undefined]}
-      />
-      <Divider />
-      <H2>Recent Changes</H2>
-      <Text>Auth service latency increased after the 14:30 deploy.</Text>
-      <Text tone="secondary" size="small">Last checked: Apr 7, 2026 14:52 UTC</Text>
-    </Stack>
-  );
-}
-```
-
-Stats in a Grid, Table directly under H2, text sections without cards.
-
-## Bad example — do not imitate
-
-```tsx
-// BAD — every section wrapped in Card, no hierarchy, Table unnecessarily boxed
-<Stack gap={12}>
-  <Card><CardHeader>Summary</CardHeader><CardBody><Text>6 services.</Text></CardBody></Card>
-  <Card><CardHeader>Status</CardHeader><CardBody><Table headers={[...]} rows={[...]} /></CardBody></Card>
-  <Card><CardHeader>Changes</CardHeader><CardBody><Text>Latency increased.</Text></CardBody></Card>
-</Stack>
-```

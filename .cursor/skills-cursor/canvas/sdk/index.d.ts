@@ -10,9 +10,15 @@
  * - Don't wrap every section in Card — mix open sections with cards.
  * - Run the pre-delivery self-check before returning code.
  */
+/** Shared category color palette used by `Swatch`, `UsageBar`, etc. */
+export type { Color } from "./canvas-tokens.js";
+export { colorPalette, usageColorSequence } from "./canvas-tokens.js";
 /** Charts. */
 export type { BarChartProps, ChartDataPoint, ChartSeries, ChartTone, LineChartProps, PieChartProps, } from "./chart-primitives.js";
 export { BarChart, LineChart, PieChart } from "./chart-primitives.js";
+/** Borderless collapsible disclosure row with a structured header. */
+export type { CollapsibleSectionProps } from "./collapsible-section.js";
+export { CollapsibleSection } from "./collapsible-section.js";
 /** DAG layout. */
 export type { DAGLayoutEdge, DAGLayoutNode, DAGLayoutOptions, DAGLayoutRank, DAGLayoutResult, } from "./dag-layout.js";
 export { computeDAGLayout } from "./dag-layout.js";
@@ -29,6 +35,9 @@ export { Checkbox, IconButton, Select, TextArea, TextInput, Toggle, } from "./fo
 /** Host state hooks. */
 export type { CanvasAction, CanvasHostTheme, SetCanvasState } from "./hooks.js";
 export { useCanvasAction, useCanvasState, useHostTheme } from "./hooks.js";
+/** Colored category swatch (uses the shared `Color` palette). */
+export type { SwatchProps } from "./swatch.js";
+export { Swatch } from "./swatch.js";
 /** Semantic design tokens for custom styling. */
 export type { CanvasPalette, CanvasTokens } from "./theme.js";
 export { canvasPaletteDark, canvasPaletteLight, canvasTokens, canvasTokensLight, } from "./theme.js";
@@ -44,4 +53,7 @@ export type { ButtonProps, CalloutProps, CalloutTone, CardBodyProps, CardHeaderP
 export { Button, Callout, Card, CardBody, CardHeader, Code, Divider, Grid, H1, H2, H3, Link, 
 /** Shallow-merge two style objects. Useful for combining tokens with overrides. */
 mergeStyle, Pill, Row, Spacer, Stack, Stat, Table, Text, } from "./ui-primitives.js";
+/** Usage bar — segmented progress meter with optional labels above. */
+export type { UsageBarProps, UsageBarSegment } from "./usage-bar.js";
+export { UsageBar } from "./usage-bar.js";
 //# sourceMappingURL=index.d.ts.map

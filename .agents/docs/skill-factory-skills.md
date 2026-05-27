@@ -4,6 +4,8 @@ Use this file to match user requests to a skill **before** opening `SKILL.md`. P
 
 For domain-first routing, tags, and short usage notes, use [skill-domain-routing.md](skill-domain-routing.md).
 
+Cursor-only skills (Canvas, SDK, `/loop`, meta-skills) live in `.cursor/skills-cursor/` and are listed in [cursor-skills.md](cursor-skills.md), not here.
+
 Imported and local sources land in the same tree:
 
 - **[skill-factory](https://github.com/saski/skill-factory)** — imported into this repo via `./pull-and-sync-skills.sh` / `./sync-skill-factory.sh`
