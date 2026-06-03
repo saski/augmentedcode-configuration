@@ -1,50 +1,38 @@
 ---
-description: Structured development cycle (Research -> Plan -> Implement -> Verify) adapted for Antigravity.
+description: Structured development cycle (Research -> Plan -> Implement -> Verify) aligned with the repo's FIC workflow.
 ---
 
 # Context-Driven Development Workflow
 
-This workflow implements the Frequent Intentional Compaction (FIC) strategy, adapted for Antigravity's Agentic Mode.
+This workflow implements the Frequent Intentional Compaction (FIC) strategy used in this repository.
 
 ## Core Principle
-Maintain strict separation of concerns to preserve context quality. Use `task_boundary` to define phases and `implementation_plan.md` / `walkthrough.md` for persistence.
+Keep research, planning, implementation, and verification as separate phases. Persist durable artifacts in `thoughts/shared/` so long-running work does not depend on one chat window.
 
-## Phase 1: Research (Mode: PLANNING)
+## Phase 1: Research
 **Goal**: Understand the current state.
 
-1.  **Start Task**: Call `task_boundary` with `Mode: PLANNING`, `TaskName: Researching [Topic]`.
-2.  **Explore**: Use `search_web`, `grep_search`, `view_file` to gather context.
-3.  **Document**: Create or update `task.md` with findings.
-    -   *Optional*: Create a research note in `thoughts/shared/research/` if deep architectural documentation is needed.
+1. Use the `fic-research` skill when the task is primarily investigation.
+2. Read the current code, tests, docs, exports, and callers before proposing changes.
+3. Save durable findings in `thoughts/shared/research/` when the investigation should survive context compaction or handoff.
 
-## Phase 2: Plan (Mode: PLANNING)
+## Phase 2: Plan
 **Goal**: Design the change.
 
-1.  **Update Task**: Call `task_boundary` with `Mode: PLANNING`, `TaskName: Planning [Topic]`.
-2.  **Draft Plan**: Create `implementation_plan.md`.
-    -   **Context**: What calls for this change?
-    -   **Proposed Changes**: File-level breakdown.
-    -   **Verification Plan**: How it will be tested.
-3.  **Review**: logic check your plan. If complex, use `notify_user` to request approval.
+1. Use `fic-create-plan` when the work needs a phased implementation plan.
+2. Capture the context, proposed changes, and verification approach in `thoughts/shared/plans/`.
+3. Keep the plan small, testable, and reversible. If the work is already obvious and low risk, skip formal planning and proceed directly to implementation.
 
-## Phase 3: Implement (Mode: EXECUTION)
+## Phase 3: Implement
 **Goal**: Execute the plan in baby steps.
 
-1.  **Start Implementation**: Call `task_boundary` with `Mode: EXECUTION`, `TaskName: Implementing [Topic]`.
-2.  **TDD Cycle**:
-    -   Create a failing test.
-    -   Run test (fail).
-    -   Implement feature.
-    -   Run test (pass).
-    -   Refactor.
-3.  **Update Progress**: Update `task.md` as items are completed.
+1. Use `fic-implement-plan` when following an approved plan.
+2. Prefer outside-in TDD for new behavior and bug fixes whenever practical.
+3. Make the smallest change that satisfies the goal, and update the relevant research or plan artifact if the implementation changes the original approach.
 
-## Phase 4: Verify (Mode: VERIFICATION)
+## Phase 4: Verify
 **Goal**: Prove it works.
 
-1.  **Start Verification**: Call `task_boundary` with `Mode: VERIFICATION`, `TaskName: Verifying [Topic]`.
-2.  **Run Tests**: Execute full test suite `make validate`.
-3.  **Create Walkthrough**: Create `walkthrough.md` documenting:
-    -   What changed.
-    -   Evidence of verification (screenshots, logs).
-4.  **Finalize**: Call `notify_user` to inform the user of completion.
+1. Run the narrowest useful checks while iterating, then run the repo's canonical validation command, `make check`, for meaningful changes.
+2. Use `fic-validate-plan` when the task needs plan-versus-implementation evidence.
+3. Record what changed, what was verified, and any remaining gaps or risks before closing the work.

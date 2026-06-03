@@ -9,7 +9,7 @@ Follow the Red-Green-Refactor cycle for every functional change.
 
 ### 1. RED (Failing Test)
 -   **Step**: Write a SINGLE test case that targets the new functionality.
--   **Action**: Run the test using the appropriate `make` target (e.g., `make test-unit`).
+-   **Action**: Run the narrowest relevant test command for the affected area.
 -   **Verify**: Ensure the test fails *for the expected reason*.
 
 ### 2. GREEN (Passing Test)
@@ -25,4 +25,4 @@ Follow the Red-Green-Refactor cycle for every functional change.
 ## Rules
 -   **Baby Steps**: One test at a time.
 -   **No Cheating**: Do not write source code before the failing test.
--   **Validation**: Always run `make validate` before committing.
+-   **Validation**: Run the repo's canonical validation command, `make check`, before committing meaningful changes.
