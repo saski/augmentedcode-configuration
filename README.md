@@ -105,6 +105,7 @@ For narrower checks:
 | Shell syntax checks | `make lint-shell` |
 | OpenSpec validation | `make validate-openspec` |
 | Local config status | `./setup-symlinks.sh status` |
+| Local GitHub repo sync report | `make sync-saski-repos` |
 
 ### Change shared configuration
 
@@ -123,6 +124,16 @@ make validate-skills
 ```
 
 Imported `skill-factory` components are refreshed only from `.agents/upstreams/skill-factory/components.lock.json`. Native skills and other external skill packs are not overwritten by that sync.
+
+### Sync local GitHub repos
+
+```bash
+make sync-saski-repos
+make sync-saski-repos-apply
+./sync-saski-repos.sh --discover
+```
+
+The sync script uses [saski-github-repos.tsv](saski-github-repos.tsv) as an explicit manifest for GitHub repos under `~/saski`. It fetches source refs and fast-forwards only clean matching branches; dirty, detached, wrong-branch, and diverged worktrees are reported and left untouched. Forks can be pushed back to their fork remotes only when `--push` is passed explicitly.
 
 ## Repository map
 
@@ -145,6 +156,8 @@ Imported `skill-factory` components are refreshed only from `.agents/upstreams/s
 ├── thoughts/                 # Shared research and implementation plans
 ├── src/thoughts/             # Optional thoughts CLI source
 ├── Makefile                  # Canonical validation targets
+├── saski-github-repos.tsv    # Manifest for local GitHub repo sync
+├── sync-saski-repos.sh       # Safe fast-forward sync for ~/saski repos
 └── setup-symlinks.sh         # Setup, validation, and status for local links
 ```
 

@@ -1,0 +1,47 @@
+# GitHub repos under /Users/ignacio.viejo/saski.
+#
+# Format:
+# path source_remote source_branch update_branch push_remote
+#
+# - path is relative to /Users/ignacio.viejo/saski.
+# - source_remote/source_branch is the branch to fetch from.
+# - update_branch is the local branch that may be fast-forwarded.
+# - push_remote is normally "-" unless this is a fork and optional --push
+#   should update the fork after a successful fast-forward.
+#
+# Repos without a GitHub remote are listed at the bottom as comments.
+
+transcrpter origin main main -
+saskiweb origin master master -
+everything-claude-code origin main main -
+net-art-studies origin main main -
+bugmagnet-ai-assistant origin master master -
+augmentedcode-skills origin main main -
+cursor-madrid-hack3 origin main main -
+back-to-the-basics-workshop origin main main -
+personal-knowledge-vault origin main main -
+dril-is-strange origin master master -
+backlogmd origin main main -
+skill-factory upstream main main origin
+manual-SDD origin main main -
+backlogmd-utils origin main main -
+frontend-clean-architecture origin master master -
+mybroworld origin eb/plan-catalog-commerce-roadmap eb/plan-catalog-commerce-roadmap -
+obsidian-wiki origin main main -
+backlogmd-playground origin main main -
+google-calendar-plugin origin main main -
+augmentedcode-configuration upstream main main origin
+ai-adoption-map origin main main -
+skills origin main main -
+chatgpt-knowledge-export origin main main -
+tdd/curso-tdd-java origin main master -
+tdd/GildedRose-Refactoring-Kata origin master master -
+tdd/curso-tdd-js origin master master -
+augmented-lean-delivery origin main main -
+
+# No GitHub remote currently configured:
+# playground
+# google-workshop/agent-project
+# nextjs/listings-experiments
+# cdk_workshop
+# clean-frontend-architecture-template

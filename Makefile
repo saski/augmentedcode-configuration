@@ -1,9 +1,10 @@
-.PHONY: check test lint-shell validate-skills validate-cursor-skills validate-openspec validate-symlinks check-tracked-ignored install-hooks
+.PHONY: check test lint-shell validate-skills validate-cursor-skills validate-openspec validate-symlinks check-tracked-ignored install-hooks sync-saski-repos sync-saski-repos-apply discover-saski-repos
 
 export PATH := $(HOME)/.agents/bin:$(HOME)/.bun/bin:/opt/homebrew/bin:/usr/local/bin:$(PATH)
 
 SHELL_SCRIPTS := \
 	setup-symlinks.sh \
+	sync-saski-repos.sh \
 	sync-skill-factory.sh \
 	pull-and-sync-skills.sh \
 	backup-cursor-config.sh \
@@ -56,3 +57,12 @@ check-tracked-ignored:
 install-hooks:
 	install -d "$$(dirname "$$(git rev-parse --git-path hooks/pre-commit)")"
 	install -m 0755 hooks/pre-commit "$$(git rev-parse --git-path hooks/pre-commit)"
+
+sync-saski-repos:
+	./sync-saski-repos.sh
+
+sync-saski-repos-apply:
+	./sync-saski-repos.sh --apply
+
+discover-saski-repos:
+	./sync-saski-repos.sh --discover
