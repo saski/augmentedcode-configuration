@@ -94,12 +94,14 @@ Before returning canvas code, verify:
 
 ## Introducing the canvas
 
-When you create a canvas, add a short note in your chat response telling the user you created a canvas they can open beside the chat:
+Whenever you mention a canvas to the user — one you created, updated, or want them to open — **always** include a markdown link to that `.canvas.tsx` file using its full absolute path (for example, `[billing-review](/Users/<user>/.cursor/projects/<workspace>/canvases/billing-review.canvas.tsx)`). Use a short descriptive label as the link text; do not refer to a canvas by name or path alone without the link.
+
+When you create a canvas, add a short note in your chat response telling the user they can open it beside the chat, with that link:
 
 - **First canvas** — if no other `.canvas.tsx` files exist in the workspace's `canvases/` directory, include one sentence explaining what a canvas is.
 - **Unsolicited canvas** — if the user didn't ask for a canvas, include one sentence explaining why you chose it over plain text.
 
-Both can apply at once; one or two sentences total is enough. Skip the intro for subsequent canvases.
+Both can apply at once; one or two sentences total is enough. Skip the intro for subsequent canvases unless you are mentioning that canvas again (still link it).
 
 ## Troubleshooting
 

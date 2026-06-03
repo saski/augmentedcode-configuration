@@ -462,6 +462,23 @@ skills:
       - xp-simple-design-refactor
     notes: "Catalogs and prioritizes tech debt. xp-simple-design-refactor acts on the findings."
 
+  - name: lustra
+    category: verification-testing
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - xp-code-review
+      - xp-security-analysis
+      - xp-technical-debt
+    notes: "Unified code-health due diligence across security, dependencies, tests, linting, dead code, design, observability, performance, docs, CI, and structure."
+
   # --- Developer tools ---
 
   - name: writing-bash-scripts
@@ -622,6 +639,314 @@ skills:
       - wiki-query
       - wiki-update
     notes: "Obsidian CLI operations for vault notes, tasks, properties, plugin reloads, DOM inspection, screenshots, and app-context debugging."
+
+  # --- Google Cloud data skills ---
+
+  - name: accidental-data-loss-prevention
+    category: verification-testing
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with: []
+    notes: "Safety guardrail for irreversible SQL, Cloud Storage, and GCP resource deletion commands."
+
+  - name: bigquery-data-transfer-service
+    category: tool-reference
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - gcp-data-pipelines
+      - gcp-pipeline-resource-provisioning
+    notes: "Discovery and inspection guidance for BigQuery Data Transfer Service configurations."
+
+  - name: building-data-apps
+    category: artifact-creation
+    pattern: generator
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - developing-with-bigquery
+      - notebook-guidance
+    notes: "Data app, dashboard, and interactive report guidance for React/Vite or Streamlit with GCP data sources."
+
+  - name: data-autocleaning
+    category: data-analysis
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - dataform-bigquery
+      - dbt-bigquery
+      - discovering-gcp-data-assets
+    notes: "Automated data profiling, cleaning, and transformation workflow for BigQuery and GCS sources."
+
+  - name: dataform-bigquery
+    category: tool-reference
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - dbt-bigquery
+      - developing-with-bigquery
+    notes: "Dataform SQLX and BigQuery ELT guidance for projects, actions, source declarations, and workflow settings."
+
+  - name: dbt-bigquery
+    category: tool-reference
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - dataform-bigquery
+      - developing-with-bigquery
+      - managing-python-dependencies
+    notes: "dbt BigQuery guidance for model creation, project setup, troubleshooting, and SQL optimization."
+
+  - name: developing-with-bigquery
+    category: tool-reference
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - dataform-bigquery
+      - dbt-bigquery
+      - notebook-guidance
+    notes: "BigQuery optimization, BigFrames, BigQuery ML, AI functions, and vector search reference routing."
+
+  - name: discovering-gcp-data-assets
+    category: data-analysis
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - developing-with-bigquery
+      - gcp-data-pipelines
+    notes: "Finds and inspects GCP data assets, schemas, metadata, and governance policies."
+
+  - name: gcloud-auth-verification
+    category: tool-reference
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - corporate-aws-cli
+    notes: "Verification and recovery guidance for Google Cloud CLI and ADC authentication failures."
+
+  - name: gcp-composer-troubleshooting
+    category: workflow-automation
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - gcp-pipeline-orchestration
+    notes: "Cloud Composer and Airflow RCA workflow for failed DAGs, tasks, and orchestration pipelines."
+
+  - name: gcp-data-pipelines
+    category: workflow-automation
+    pattern: inversion
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - dataform-bigquery
+      - dbt-bigquery
+      - gcp-dataflow
+      - gcp-spark
+    notes: "Primary router for building, managing, and orchestrating GCP data pipelines."
+
+  - name: gcp-dataflow
+    category: tool-reference
+    pattern: generator
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - gcp-data-pipelines
+      - gcp-pipeline-resource-provisioning
+    notes: "Apache Beam pipeline and Flex Template guidance for Google Cloud Dataflow."
+
+  - name: gcp-pipeline-orchestration
+    category: artifact-creation
+    pattern: generator
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - gcp-composer-troubleshooting
+      - gcp-data-pipelines
+    notes: "Generates and updates Cloud Composer orchestration pipeline definitions and deployment wiring."
+
+  - name: gcp-pipeline-resource-provisioning
+    category: artifact-creation
+    pattern: generator
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - bigquery-data-transfer-service
+      - gcp-pipeline-orchestration
+    notes: "Declarative resource provisioning through deployment.yaml for supported GCP data pipeline resources."
+
+  - name: gcp-spark
+    category: data-analysis
+    pattern: generator
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - gcp-data-pipelines
+      - ml-best-practices
+    notes: "Spark on Dataproc guidance for ETL, ML tasks, schema inspection, and execution troubleshooting."
+
+  - name: managing-python-dependencies
+    category: tool-reference
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - using-uv
+      - notebook-guidance
+    notes: "Python dependency management guardrail that detects project tooling before installing or running third-party packages."
+
+  - name: ml-best-practices
+    category: data-analysis
+    pattern: reviewer
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - notebook-guidance
+      - gcp-spark
+    notes: "Machine learning and data analysis workflow guidance for clustering, classification, regression, forecasting, and statistical testing."
+
+  - name: notebook-guidance
+    category: data-analysis
+    pattern: pipeline
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - managing-python-dependencies
+      - developing-with-bigquery
+      - ml-best-practices
+    notes: "Jupyter notebook execution, validation, BigQuery SQL magic, data cleaning, plotting, and analysis guidance."
+
+  - name: skill-repair
+    category: skill-governance
+    pattern: pipeline
+    owner: platform-ai
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - skill-foundry
+      - skill-creator
+    notes: "Repair workflow for failed skill installations and installer manifests."
 
   # --- AI tooling skills ---
 

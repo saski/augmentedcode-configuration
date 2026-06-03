@@ -236,6 +236,7 @@ Common command entry points:
 | `/fic-create-plan` | Create an implementation plan. |
 | `/fic-implement-plan` | Execute a plan phase by phase. |
 | `/fic-validate-plan` | Verify implementation completeness. |
+| `/lustra` | Run structured code-health and due-diligence checks across security, dependencies, tests, design, docs, CI, and structure. |
 | `/review-pr` | Guide an interactive PR review. |
 | `/bug-fixing-agent` | Investigate and plan security-aware bug fixes. |
 | `/install-command` | Install and customize command templates. |

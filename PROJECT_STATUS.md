@@ -1,6 +1,6 @@
 # Augmentedcode Configuration - Project Status
 
-**Last Updated**: 2026-05-25
+**Last Updated**: 2026-05-28
 **Overall Status**: 🟢 **Ready** - Universal rulebook is single-source and cross-tool verified; agent context reduced significantly after rule/skill reorganization
 
 ---
@@ -23,6 +23,13 @@
 ---
 
 ## Recent Changes
+
+### 2026-05-28: Lustra governance and routing registration ✅
+
+- Added `lustra` governance metadata to `.agents/skills/skill-foundry/agents/catalog-engineering.yaml`.
+- Added `lustra` to the shared skill inventory index in `.agents/docs/skill-factory-skills.md`.
+- Added `lustra` routing guidance in `.agents/docs/skill-domain-routing.md`.
+- Added `/lustra` command entry to `README.md` so user-facing command docs match the registered skill set.
 
 ### 2026-05-25: Cross-tool rulebook deduplication and reorganization ✅
 

@@ -27,11 +27,13 @@ export type CollapsibleSectionProps = {
     trailing?: ReactNode;
     /** Body shown when expanded. */
     children?: ReactNode;
+    /** When true, the section starts expanded (uncontrolled). */
+    defaultOpen?: boolean;
     style?: CSSProperties;
 };
 /**
- * Borderless collapsible row with a structured header. Always starts closed
- * (uncontrolled, no `defaultOpen`).
+ * Borderless collapsible row with a structured header. Starts closed unless
+ * `defaultOpen` is set.
  *
  * Compose with `<Swatch>` in the `leading` slot for a colored category icon,
  * and put a token readout / pill / button in `trailing`. Body content is
@@ -61,5 +63,5 @@ export type CollapsibleSectionProps = {
  * </CollapsibleSection>
  * ```
  */
-export declare function CollapsibleSection({ title, leading, count, trailing, children, style }: CollapsibleSectionProps): JSX.Element;
+export declare function CollapsibleSection({ title, leading, count, trailing, children, defaultOpen, style }: CollapsibleSectionProps): JSX.Element;
 //# sourceMappingURL=collapsible-section.d.ts.map

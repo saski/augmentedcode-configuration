@@ -12,6 +12,7 @@ Imported and local sources land in the same tree:
 - **Local sibling skill repos** — referenced by symlink from `.agents/skills/` to `~/saski/augmented-lean-delivery` and `~/saski/augmentedcode-skills`
 - **Product management pack** — `pmprompt/claude-plugin-product-management` (integrity: repo-root `skills-lock.json`; taxonomy and overlaps: [.agents/skills/skill-foundry/agents/catalog-product-management.yaml](../skills/skill-foundry/agents/catalog-product-management.yaml))
 - **Matt Pocock skills** — `mattpocock/skills` (integrity: repo-root `skills-lock.json`; governance: [.agents/skills/skill-foundry/agents/catalog-engineering.yaml](../skills/skill-foundry/agents/catalog-engineering.yaml))
+- **Google Data Cloud skills** — installed with `.agents/skills/.datacloud_skills_manifest`; governance: [.agents/skills/skill-foundry/agents/catalog-engineering.yaml](../skills/skill-foundry/agents/catalog-engineering.yaml)
 - **Native and local skills** — authored, maintained, or locally installed into this repository
 
 ## Local sibling skill references
@@ -90,6 +91,30 @@ Imported and local sources land in the same tree:
 | user-feedback-synthesizer | product-management | Analyze collections of user feedback to identify patterns and themes. Use when you have user feedback from multiple sources that needs synthesis. |
 | working-backwards | product-management | Use when asked to "working backwards", "PR/FAQ", "Amazon PR/FAQ", "write a press release", "define a new product", or "write a customer-focused PRD". Helps define products by starting with the customer problem and desired outcome before building. The Working Backwards process (developed at Amazon) forces clarity on customer value before committing engineering resources. |
 
+## Google Data Cloud skills (external sync)
+
+| Skill | Category | Purpose |
+|-------|----------|---------|
+| accidental-data-loss-prevention | safety | Require explicit user consent before irreversible SQL, Cloud Storage, or GCP resource deletion commands. |
+| bigquery-data-transfer-service | developer-tools | Discover and inspect BigQuery Data Transfer Service configurations and ingestion metadata. |
+| building-data-apps | developer-tools | Build data apps, dashboards, and interactive reports with React/Vite or Streamlit over GCP data sources. |
+| data-autocleaning | data-analysis | Profile, clean, and transform data sourced from BigQuery or Cloud Storage in Dataform, dbt, or BigQuery pipelines. |
+| dataform-bigquery | developer-tools | Create, modify, and optimize Dataform SQLX projects and BigQuery ELT pipelines. |
+| dbt-bigquery | developer-tools | Create, modify, troubleshoot, and optimize dbt projects and BigQuery models. |
+| developing-with-bigquery | developer-tools | Route BigQuery query optimization, BigFrames, BigQuery ML, AI functions, and vector search work. |
+| discovering-gcp-data-assets | data-analysis | Find and inspect Google Cloud data assets, schemas, metadata, and governance policies. |
+| gcloud-auth-verification | developer-tools | Diagnose missing Google Cloud authentication and Application Default Credentials issues. |
+| gcp-composer-troubleshooting | developer-tools | Produce evidence-based RCA for Cloud Composer and Airflow DAG or task failures. |
+| gcp-data-pipelines | developer-tools | Primary router for building, managing, and orchestrating data pipelines on Google Cloud. |
+| gcp-dataflow | developer-tools | Write, package, and execute Apache Beam pipelines on Google Cloud Dataflow. |
+| gcp-pipeline-orchestration | developer-tools | Generate, update, deploy, and trigger Cloud Composer orchestration pipeline definitions. |
+| gcp-pipeline-resource-provisioning | developer-tools | Provision supported GCP data-pipeline resources declaratively through deployment.yaml. |
+| gcp-spark | data-analysis | Develop and troubleshoot Spark ETL and ML work on Dataproc clusters or serverless Spark. |
+| managing-python-dependencies | developer-tools | Detect and use the project dependency manager before installing packages or running Python code. |
+| ml-best-practices | data-analysis | Guide machine learning and data analysis workflows, including clustering, classification, regression, forecasting, and statistical testing. |
+| notebook-guidance | data-analysis | Structure, execute, and validate Jupyter notebooks for data analysis, visualization, and BigQuery SQL. |
+| skill-repair | skill-governance | Repair failed skill installations and update installer manifests after fixes. |
+
 ## Matt Pocock skills (external sync)
 
 | Skill | Category | Purpose |
@@ -142,6 +167,7 @@ Imported and local sources land in the same tree:
 | obsidian-cli | developer-tools | Interact with Obsidian vaults using the Obsidian CLI to read, create, search, and manage notes, tasks, properties, and more. Also supports plugin and theme development with commands to reload plugins, run JavaScript, capture errors, take screenshots, and inspect the DOM. Use when the user asks to interact with their Obsidian vault, manage notes, search vault content, perform vault operations from the command line, or develop and debug Obsidian plugins and themes. |
 | pbt-pragmatic-adoption | testing | Pragmatic property-based testing review and first-wave adoption for this listings-webapp monorepo (Jest + fast-check, unit tests only). |
 | skill-foundry | skill-governance | Design, organize, evaluate, benchmark, and improve portable Agent Skills. Use when creating a new skill, auditing a skill library, comparing a skill against baseline, optimizing descriptions, or retiring outdated skills. |
+| lustra | developer-tools | Run a structured code-health and due-diligence workflow across security, license, dependencies, types, tests, dead code, design, observability, performance, docs, CI, and project structure. |
 | google-adk-setup | developer-tools | Bootstrap a Google ADK project from zero to a running local dev UI. Use when setting up a new ADK agent project, configuring Vertex AI credentials, scaffolding the agent folder with `uv run adk create agent`, or launching the ADK dev UI. |
 | google-adk-agent-patterns | ai | Define ADK agents with function tools and compose multi-agent systems (SequentialAgent, LoopAgent, ParallelAgent, AgentTool). Use when writing agent definitions, adding Python tools, building pipelines, or designing router/delegation patterns. |
 | llm-wiki | workflow | Foundational LLM Wiki (Karpathy-style) pattern for Obsidian: raw → wiki → schema; use for wiki architecture and knowledge strategy. |

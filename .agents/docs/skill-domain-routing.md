@@ -24,6 +24,7 @@ Skills:
 - `xp-increase-coverage` - Use when the user asks to add high-value missing tests.
 - `xp-plan-untested-code` - Use before writing tests for a risky untested area.
 - `xp-code-review` - Use to review pending changes for tests, maintainability, and rule alignment.
+- `lustra` - Use for technical due diligence and code-health audits across security, dependencies, reliability, maintainability, CI, docs, and structure.
 - `pbt-pragmatic-adoption` - Use for first-wave property-based testing in suitable JS/Jest code.
 - `verification-loop` - Use for broad session verification and completion checks.
 - `fic-validate-plan` - Use to compare completed implementation against an approved plan.
@@ -85,6 +86,7 @@ Skills:
 - `dockerfile-review` - Use for container build performance, image size, and security.
 - `cwv-improvement-planner` - Use for Core Web Vitals, Lighthouse, and web performance work.
 - `modern-cli-design` - Use for scalable command-line interface design.
+- `accidental-data-loss-prevention` - Use before irreversible SQL, Cloud Storage, or GCP resource deletion commands.
 
 ## Debugging, Investigation, and Research
 
@@ -99,6 +101,9 @@ Skills:
 - `find-docs` - Use for current library, framework, SDK, API, CLI tool, or cloud service documentation via the Context7 CLI.
 - `documentation-lookup` - Use when up-to-date framework or library docs are needed.
 - `corporate-aws-cli` - Use for AWS CLI work in federated corporate accounts and account-region validation.
+- `gcloud-auth-verification` - Use for Google Cloud CLI, BigQuery CLI, Dataform, or ADC authentication failures.
+- `gcp-composer-troubleshooting` - Use for Cloud Composer or Airflow DAG and task RCA.
+- `discovering-gcp-data-assets` - Use to find schemas, metadata, tables, datasets, and other GCP data assets.
 - `thinking-in-bets` - Use when decisions must be made under uncertainty.
 
 ## Developer Tooling, Runtimes, and Automation
@@ -121,6 +126,32 @@ Skills:
 - `setup-matt-pocock-skills` - Use to configure per-repo support for Matt Pocock skills.
 - `google-adk-setup` - Use to bootstrap Google ADK projects and local dev UI.
 - `google-adk-agent-patterns` - Use to build ADK agents, tools, and multi-agent flows.
+- `managing-python-dependencies` - Use before installing Python packages, creating notebooks, or running Python code that depends on third-party libraries.
+
+## Google Cloud Data, BigQuery, and ML
+
+Tags: `gcp`, `bigquery`, `data-pipelines`, `dataflow`, `dataform`, `dbt`, `spark`, `notebooks`, `ml`
+
+Use when the work involves Google Cloud data assets, BigQuery, data pipeline development, Dataproc/Spark, Dataflow, Cloud Composer, notebooks, or ML/data-analysis workflows.
+
+Skills:
+
+- `gcp-data-pipelines` - Start here for ambiguous GCP data-pipeline build, update, orchestration, or tool-selection requests.
+- `developing-with-bigquery` - Use for BigQuery optimization, BigFrames, BigQuery ML, AI functions, and vector search.
+- `dataform-bigquery` - Use for Dataform SQLX projects, actions, source declarations, workflow settings, and BigQuery ELT.
+- `dbt-bigquery` - Use for dbt projects, BigQuery models, SQL optimization, and dbt troubleshooting.
+- `data-autocleaning` - Use for profiling, cleaning, moving, copying, or transforming BigQuery and GCS data sources.
+- `bigquery-data-transfer-service` - Use to discover or inspect BigQuery DTS transfer configurations and ingestion metadata.
+- `gcp-dataflow` - Use for Apache Beam pipelines and Google Cloud Dataflow Flex Templates.
+- `gcp-spark` - Use for Spark ETL, Spark ML, Dataproc clusters, and Dataproc Serverless work.
+- `gcp-pipeline-orchestration` - Use for Cloud Composer orchestration pipeline YAML and deployment wiring.
+- `gcp-pipeline-resource-provisioning` - Use for deployment.yaml-based provisioning of supported GCP data pipeline resources.
+- `building-data-apps` - Use for dashboards, interactive reports, React/Vite data apps, Streamlit apps, and chat-with-data interfaces over GCP data.
+- `notebook-guidance` - Use for Jupyter notebook analysis, visualization, BigQuery SQL magics, and notebook validation.
+- `ml-best-practices` - Use for ML and data-analysis tasks such as clustering, classification, regression, forecasting, and statistical testing.
+- `discovering-gcp-data-assets` - Use to locate and inspect GCP data assets before querying or pipeline generation.
+- `gcloud-auth-verification` - Use when GCP auth, bq, Dataform, or ADC credentials fail.
+- `gcp-composer-troubleshooting` - Use for failed Cloud Composer/Airflow DAGs and RCA reports.
 
 ## AI Agent Skills and Governance
 
@@ -132,6 +163,7 @@ Skills:
 
 - `skill-foundry` - Use to organize, evaluate, benchmark, and improve a skill library.
 - `skill-creator` - Use to create, edit, benchmark, and tune Agent Skills and evals.
+- `skill-repair` - Use to fix failed skill installations and update installer manifests.
 - `write-a-skill` - Use to create portable agent skills with proper structure.
 - `find-skills` - Use to discover installable external skills.
 - `ai-patterns` - Use for augmented coding patterns, anti-patterns, and steering techniques.
