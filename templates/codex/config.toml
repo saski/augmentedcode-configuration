@@ -2,12 +2,6 @@ model = "gpt-5.4"
 model_reasoning_effort = "medium"
 personality = "pragmatic"
 
-[projects."/Users/ignacio.viejo/eventbrite/core"]
-trust_level = "trusted"
-
-[projects."/Users/ignacio.viejo/eventbrite/listings-webapp"]
-trust_level = "trusted"
-
 [mcp_servers.playwright]
 command = "npx"
 args = ["@playwright/mcp@latest"]

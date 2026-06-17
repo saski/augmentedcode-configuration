@@ -11,7 +11,7 @@ Systematically reduce and resolve the 240 issues reported in the IDE Problems ta
   - ESLint (or other JS/TS linters)
   - Markdown linters (e.g. markdownlint, markdownlint-cli)
   - Other extensions (Python, JSON, YAML, etc.)
-- **Workspace**: Workspace root is `/Users/ignacio.viejo`; likely target is a specific project (e.g. `saski/augmentedcode-configuration` or another repo).
+- **Workspace**: Workspace root is `/Users/saski`; likely target is a specific project (e.g. `saski/augmentedcode-configuration` or another repo).
 - **Constraint**: Plan is written without direct access to the 240 issues; **reproducing them** is Phase 0.
 
 ## Desired End State

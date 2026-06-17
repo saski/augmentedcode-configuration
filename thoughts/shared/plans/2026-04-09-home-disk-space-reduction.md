@@ -2,14 +2,14 @@
 
 ## Overview
 
-Reduce disk usage under `/Users/ignacio.viejo` in a conservative-first sequence that prioritizes redownloadable caches and regenerated developer artifacts before touching application state, repository working copies, or personal media.
+Reduce disk usage under `/Users/saski` in a conservative-first sequence that prioritizes redownloadable caches and regenerated developer artifacts before touching application state, repository working copies, or personal media.
 
-This plan is based on the measured audit in `/Users/ignacio.viejo/saski/augmentedcode-configuration/thoughts/shared/research/2026-04-09-home-disk-usage.md`.
+This plan is based on the measured audit in `/Users/saski/Code/augmentedcode-configuration/thoughts/shared/research/2026-04-09-home-disk-usage.md`.
 
 ## Progress
 
-- [x] Phase 1 completed on 2026-04-22. Verification: `/Users/ignacio.viejo/Library/Caches` `7.9G`, `/Users/ignacio.viejo/.cache` `3.6G`, `/Users/ignacio.viejo/.npm` `196M`, `/System/Volumes/Data` available space `94Gi`. Adaptation: `/Users/ignacio.viejo/Library/Caches/Google` was live during deletion and was reduced but not fully absent.
-- [x] Phase 2 completed on 2026-04-22. Verification: `/Users/ignacio.viejo/Library/Developer/Xcode/DerivedData` removed, `/Users/ignacio.viejo/Library/Developer/CoreSimulator/Devices` `1.1G`, `/System/Volumes/Data` available space `97Gi`. Adaptation: `/Users/ignacio.viejo/.colima/_lima` was not touched because the phase thresholds were already met without resetting Colima.
+- [x] Phase 1 completed on 2026-04-22. Verification: `/Users/saski/Library/Caches` `7.9G`, `/Users/saski/.cache` `3.6G`, `/Users/saski/.npm` `196M`, `/System/Volumes/Data` available space `94Gi`. Adaptation: `/Users/saski/Library/Caches/Google` was live during deletion and was reduced but not fully absent.
+- [x] Phase 2 completed on 2026-04-22. Verification: `/Users/saski/Library/Developer/Xcode/DerivedData` removed, `/Users/saski/Library/Developer/CoreSimulator/Devices` `1.1G`, `/System/Volumes/Data` available space `97Gi`. Adaptation: `/Users/saski/.colima/_lima` was not touched because the phase thresholds were already met without resetting Colima.
 - [x] Phase 3 skipped on 2026-04-22 because the gated cleanup was not needed after free space reached `97Gi`.
 - [x] Phase 4 skipped on 2026-04-22 because the gated cleanup was not needed after free space reached `97Gi`.
 
@@ -17,16 +17,16 @@ This plan is based on the measured audit in `/Users/ignacio.viejo/saski/augmente
 
 - `/System/Volumes/Data` currently reports `382Gi` used and `48Gi` available.
 - The largest measured non-repository buckets are:
-  - `/Users/ignacio.viejo/Library/Application Support`: `50G`
-  - `/Users/ignacio.viejo/Library/Developer`: `33G`
-  - `/Users/ignacio.viejo/Library/Caches`: `27G`
-  - `/Users/ignacio.viejo/.cache`: `12G`
+  - `/Users/saski/Library/Application Support`: `50G`
+  - `/Users/saski/Library/Developer`: `33G`
+  - `/Users/saski/Library/Caches`: `27G`
+  - `/Users/saski/.cache`: `12G`
 - The largest measured repository buckets are:
-  - `/Users/ignacio.viejo/eventbrite`: `24G`
-  - `/Users/ignacio.viejo/saski`: `5.0G`
+  - `/Users/saski/Code/eventbrite`: `24G`
+  - `/Users/saski/Code`: `5.0G`
 - The largest measured media buckets are:
-  - `/Users/ignacio.viejo/Music`: `7.9G`
-  - `/Users/ignacio.viejo/Movies`: `1.1G`
+  - `/Users/saski/Music`: `7.9G`
+  - `/Users/saski/Movies`: `1.1G`
 
 ## Desired End State
 
@@ -39,7 +39,7 @@ This plan is based on the measured audit in `/Users/ignacio.viejo/saski/augmente
 ## Out Of Scope
 
 - Uninstalling applications from `/Applications`.
-- Modifying macOS system-owned storage outside `/Users/ignacio.viejo`.
+- Modifying macOS system-owned storage outside `/Users/saski`.
 - Rewriting git history or deleting repository source code by default.
 - Emptying protected Trash locations that require additional macOS permissions.
 - Moving files to iCloud or changing iCloud storage settings.
@@ -69,40 +69,40 @@ Reclaim space from caches that are expected to be rebuilt or redownloaded withou
 ### Expected Modifications
 
 ```text
-/Users/ignacio.viejo/Library/Caches/Yarn
-/Users/ignacio.viejo/Library/Caches/org.swift.swiftpm
-/Users/ignacio.viejo/Library/Caches/Google
-/Users/ignacio.viejo/Library/Caches/com.spotify.client
-/Users/ignacio.viejo/Library/Caches/Homebrew
-/Users/ignacio.viejo/Library/Caches/aws
-/Users/ignacio.viejo/Library/Caches/Cypress
-/Users/ignacio.viejo/Library/Caches/ms-playwright
-/Users/ignacio.viejo/Library/Caches/Firefox
-/Users/ignacio.viejo/Library/Caches/pypoetry
-/Users/ignacio.viejo/Library/Caches/SiriTTS
-/Users/ignacio.viejo/Library/Caches/pip
-/Users/ignacio.viejo/Library/Caches/node-gyp
-/Users/ignacio.viejo/.cache/uv/archive-v0
-/Users/ignacio.viejo/.cache/chrome-devtools-mcp
-/Users/ignacio.viejo/.npm/_cacache
-/Users/ignacio.viejo/.npm/_npx
+/Users/saski/Library/Caches/Yarn
+/Users/saski/Library/Caches/org.swift.swiftpm
+/Users/saski/Library/Caches/Google
+/Users/saski/Library/Caches/com.spotify.client
+/Users/saski/Library/Caches/Homebrew
+/Users/saski/Library/Caches/aws
+/Users/saski/Library/Caches/Cypress
+/Users/saski/Library/Caches/ms-playwright
+/Users/saski/Library/Caches/Firefox
+/Users/saski/Library/Caches/pypoetry
+/Users/saski/Library/Caches/SiriTTS
+/Users/saski/Library/Caches/pip
+/Users/saski/Library/Caches/node-gyp
+/Users/saski/.cache/uv/archive-v0
+/Users/saski/.cache/chrome-devtools-mcp
+/Users/saski/.npm/_cacache
+/Users/saski/.npm/_npx
 ```
 
 ### Automated Success Criteria
 
 ```bash
-du -sh /Users/ignacio.viejo/Library/Caches
-du -sh /Users/ignacio.viejo/.cache
-du -sh /Users/ignacio.viejo/.npm
-df -h /Users/ignacio.viejo
+du -sh /Users/saski/Library/Caches
+du -sh /Users/saski/.cache
+du -sh /Users/saski/.npm
+df -h /Users/saski
 ```
 
 Phase 1 is successful when:
 
-- `du -sh /Users/ignacio.viejo/Library/Caches` reports `10G` or less.
-- `du -sh /Users/ignacio.viejo/.cache` reports `4G` or less.
-- `du -sh /Users/ignacio.viejo/.npm` reports `1G` or less.
-- `df -h /Users/ignacio.viejo` shows more available space than the current `48Gi` baseline.
+- `du -sh /Users/saski/Library/Caches` reports `10G` or less.
+- `du -sh /Users/saski/.cache` reports `4G` or less.
+- `du -sh /Users/saski/.npm` reports `1G` or less.
+- `df -h /Users/saski` shows more available space than the current `48Gi` baseline.
 
 ## Phase 2: Remove Regenerated Developer Artifacts
 
@@ -113,31 +113,31 @@ Reclaim space from Xcode build output, simulator device storage, and local VM/ru
 ### Expected Modifications
 
 ```text
-/Users/ignacio.viejo/Library/Developer/Xcode/DerivedData
-/Users/ignacio.viejo/Library/Developer/CoreSimulator/Devices/51F75A4D-49A1-4575-8CDB-41C783F02241/data
-/Users/ignacio.viejo/Library/Developer/CoreSimulator/Devices/4E035F0E-D222-4241-AEAA-563B49DE3BE5/data
-/Users/ignacio.viejo/Library/Developer/CoreSimulator/Devices/3BF997DA-04EA-4B31-A3C6-BDEF6A96EBF8/data
-/Users/ignacio.viejo/Library/Developer/CoreSimulator/Devices/4E2AAA24-E599-41BC-9291-B11226DA68B9/data
-/Users/ignacio.viejo/Library/Developer/CoreSimulator/Devices/C96B24E1-27C3-4965-9BEB-6F013A29FE4B/data
-/Users/ignacio.viejo/Library/Developer/CoreSimulator/Devices/80ED5B73-1FF9-4D78-A38C-E9ABCCCF6616/data
-/Users/ignacio.viejo/.colima/_lima
+/Users/saski/Library/Developer/Xcode/DerivedData
+/Users/saski/Library/Developer/CoreSimulator/Devices/51F75A4D-49A1-4575-8CDB-41C783F02241/data
+/Users/saski/Library/Developer/CoreSimulator/Devices/4E035F0E-D222-4241-AEAA-563B49DE3BE5/data
+/Users/saski/Library/Developer/CoreSimulator/Devices/3BF997DA-04EA-4B31-A3C6-BDEF6A96EBF8/data
+/Users/saski/Library/Developer/CoreSimulator/Devices/4E2AAA24-E599-41BC-9291-B11226DA68B9/data
+/Users/saski/Library/Developer/CoreSimulator/Devices/C96B24E1-27C3-4965-9BEB-6F013A29FE4B/data
+/Users/saski/Library/Developer/CoreSimulator/Devices/80ED5B73-1FF9-4D78-A38C-E9ABCCCF6616/data
+/Users/saski/.colima/_lima
 ```
 
 ### Automated Success Criteria
 
 ```bash
-du -sh /Users/ignacio.viejo/Library/Developer/Xcode/DerivedData 2>/dev/null || echo "DerivedData removed"
-du -sh /Users/ignacio.viejo/Library/Developer/CoreSimulator/Devices
-test ! -e /Users/ignacio.viejo/.colima/_lima && echo ".colima/_lima removed"
-df -h /Users/ignacio.viejo
+du -sh /Users/saski/Library/Developer/Xcode/DerivedData 2>/dev/null || echo "DerivedData removed"
+du -sh /Users/saski/Library/Developer/CoreSimulator/Devices
+test ! -e /Users/saski/.colima/_lima && echo ".colima/_lima removed"
+df -h /Users/saski
 ```
 
 Phase 2 is successful when:
 
-- `du -sh /Users/ignacio.viejo/Library/Developer/Xcode/DerivedData` reports `2G` or less, or the directory has been removed.
-- `du -sh /Users/ignacio.viejo/Library/Developer/CoreSimulator/Devices` reports `2G` or less.
-- `test ! -e /Users/ignacio.viejo/.colima/_lima` succeeds if Colima reset is part of the phase execution.
-- `df -h /Users/ignacio.viejo` shows more available space than after Phase 1.
+- `du -sh /Users/saski/Library/Developer/Xcode/DerivedData` reports `2G` or less, or the directory has been removed.
+- `du -sh /Users/saski/Library/Developer/CoreSimulator/Devices` reports `2G` or less.
+- `test ! -e /Users/saski/.colima/_lima` succeeds if Colima reset is part of the phase execution.
+- `df -h /Users/saski` shows more available space than after Phase 1.
 
 ## Phase 3: Reduce Heavyweight App-Owned State
 
@@ -148,29 +148,29 @@ Remove oversized browser, editor, and assistant data that is not required for so
 ### Expected Modifications
 
 ```text
-/Users/ignacio.viejo/Library/Application Support/Google/Chrome/OptGuideOnDeviceModel
-/Users/ignacio.viejo/Library/Application Support/Google/Chrome/Snapshots
-/Users/ignacio.viejo/Library/Application Support/Google/Chrome Beta/OptGuideOnDeviceModel
-/Users/ignacio.viejo/Library/Application Support/Google/Chrome Beta/Snapshots
-/Users/ignacio.viejo/Library/Application Support/Cursor/CachedData
-/Users/ignacio.viejo/Library/Application Support/Cursor/Cache
-/Users/ignacio.viejo/Library/Application Support/Cursor/Partitions
-/Users/ignacio.viejo/Library/Application Support/Cursor/User/workspaceStorage/43b7871efccd35dacf7d4f52a01637f7
-/Users/ignacio.viejo/Library/Application Support/Claude/vm_bundles/claudevm.bundle/rootfs.img
-/Users/ignacio.viejo/Library/Application Support/Claude/vm_bundles/claudevm.bundle/rootfs.img.zst
+/Users/saski/Library/Application Support/Google/Chrome/OptGuideOnDeviceModel
+/Users/saski/Library/Application Support/Google/Chrome/Snapshots
+/Users/saski/Library/Application Support/Google/Chrome Beta/OptGuideOnDeviceModel
+/Users/saski/Library/Application Support/Google/Chrome Beta/Snapshots
+/Users/saski/Library/Application Support/Cursor/CachedData
+/Users/saski/Library/Application Support/Cursor/Cache
+/Users/saski/Library/Application Support/Cursor/Partitions
+/Users/saski/Library/Application Support/Cursor/User/workspaceStorage/43b7871efccd35dacf7d4f52a01637f7
+/Users/saski/Library/Application Support/Claude/vm_bundles/claudevm.bundle/rootfs.img
+/Users/saski/Library/Application Support/Claude/vm_bundles/claudevm.bundle/rootfs.img.zst
 ```
 
 ### Automated Success Criteria
 
 ```bash
-test ! -e "/Users/ignacio.viejo/Library/Application Support/Google/Chrome/OptGuideOnDeviceModel" && echo "Chrome model removed"
-test ! -e "/Users/ignacio.viejo/Library/Application Support/Google/Chrome Beta/OptGuideOnDeviceModel" && echo "Chrome Beta model removed"
-test ! -e "/Users/ignacio.viejo/Library/Application Support/Cursor/User/workspaceStorage/43b7871efccd35dacf7d4f52a01637f7" && echo "Cursor workspace removed"
-test ! -e "/Users/ignacio.viejo/Library/Application Support/Claude/vm_bundles/claudevm.bundle/rootfs.img" && echo "Claude rootfs removed"
-du -sh "/Users/ignacio.viejo/Library/Application Support/Google"
-du -sh "/Users/ignacio.viejo/Library/Application Support/Cursor"
-du -sh "/Users/ignacio.viejo/Library/Application Support/Claude"
-df -h /Users/ignacio.viejo
+test ! -e "/Users/saski/Library/Application Support/Google/Chrome/OptGuideOnDeviceModel" && echo "Chrome model removed"
+test ! -e "/Users/saski/Library/Application Support/Google/Chrome Beta/OptGuideOnDeviceModel" && echo "Chrome Beta model removed"
+test ! -e "/Users/saski/Library/Application Support/Cursor/User/workspaceStorage/43b7871efccd35dacf7d4f52a01637f7" && echo "Cursor workspace removed"
+test ! -e "/Users/saski/Library/Application Support/Claude/vm_bundles/claudevm.bundle/rootfs.img" && echo "Claude rootfs removed"
+du -sh "/Users/saski/Library/Application Support/Google"
+du -sh "/Users/saski/Library/Application Support/Cursor"
+du -sh "/Users/saski/Library/Application Support/Claude"
+df -h /Users/saski
 ```
 
 Phase 3 is successful when:
@@ -178,10 +178,10 @@ Phase 3 is successful when:
 - The targeted Chrome and Chrome Beta model directories no longer exist.
 - The targeted Cursor cache paths no longer exist.
 - The targeted Claude VM bundle images no longer exist if the assistant VM reset is part of the phase execution.
-- `du -sh "/Users/ignacio.viejo/Library/Application Support/Google"` reports `14G` or less.
-- `du -sh "/Users/ignacio.viejo/Library/Application Support/Cursor"` reports `3G` or less.
-- `du -sh "/Users/ignacio.viejo/Library/Application Support/Claude"` reports `1G` or less if the VM bundle reset is executed.
-- `df -h /Users/ignacio.viejo` shows more available space than after Phase 2.
+- `du -sh "/Users/saski/Library/Application Support/Google"` reports `14G` or less.
+- `du -sh "/Users/saski/Library/Application Support/Cursor"` reports `3G` or less.
+- `du -sh "/Users/saski/Library/Application Support/Claude"` reports `1G` or less if the VM bundle reset is executed.
+- `df -h /Users/saski` shows more available space than after Phase 2.
 
 ## Phase 4: Remove Repository-Generated Output And Optional Cold Data
 
@@ -192,35 +192,35 @@ Free additional space without deleting source code by removing measured generate
 ### Expected Modifications
 
 ```text
-/Users/ignacio.viejo/eventbrite/eb-ui/node_modules
-/Users/ignacio.viejo/eventbrite/eb-ui/coverage
-/Users/ignacio.viejo/eventbrite/eb-ui/bundles
-/Users/ignacio.viejo/Music/Stereolab - Switched On Volumes 1-5 - flac
-/Users/ignacio.viejo/Music/Music
-/Users/ignacio.viejo/Music/Stereolab - Switched On Volumes 1-5 - mp3
-/Users/ignacio.viejo/Movies/UMBRALIA_TEST_05.mp4
-/Users/ignacio.viejo/Movies/CapCut
+/Users/saski/Code/eventbrite/eb-ui/node_modules
+/Users/saski/Code/eventbrite/eb-ui/coverage
+/Users/saski/Code/eventbrite/eb-ui/bundles
+/Users/saski/Music/Stereolab - Switched On Volumes 1-5 - flac
+/Users/saski/Music/Music
+/Users/saski/Music/Stereolab - Switched On Volumes 1-5 - mp3
+/Users/saski/Movies/UMBRALIA_TEST_05.mp4
+/Users/saski/Movies/CapCut
 ```
 
 ### Automated Success Criteria
 
 ```bash
-test ! -e /Users/ignacio.viejo/eventbrite/eb-ui/node_modules && echo "eb-ui node_modules removed"
-test ! -e /Users/ignacio.viejo/eventbrite/eb-ui/coverage && echo "eb-ui coverage removed"
-test ! -e /Users/ignacio.viejo/eventbrite/eb-ui/bundles && echo "eb-ui bundles removed"
-du -sh /Users/ignacio.viejo/eventbrite/eb-ui
-du -sh /Users/ignacio.viejo/Music
-du -sh /Users/ignacio.viejo/Movies
-df -h /Users/ignacio.viejo
+test ! -e /Users/saski/Code/eventbrite/eb-ui/node_modules && echo "eb-ui node_modules removed"
+test ! -e /Users/saski/Code/eventbrite/eb-ui/coverage && echo "eb-ui coverage removed"
+test ! -e /Users/saski/Code/eventbrite/eb-ui/bundles && echo "eb-ui bundles removed"
+du -sh /Users/saski/Code/eventbrite/eb-ui
+du -sh /Users/saski/Music
+du -sh /Users/saski/Movies
+df -h /Users/saski
 ```
 
 Phase 4 is successful when:
 
-- The targeted generated paths under `/Users/ignacio.viejo/eventbrite/eb-ui` no longer exist.
-- `du -sh /Users/ignacio.viejo/eventbrite/eb-ui` reports `4G` or less.
-- `du -sh /Users/ignacio.viejo/Music` reports `4G` or less if the optional media portion is executed.
-- `du -sh /Users/ignacio.viejo/Movies` reports `200M` or less if the optional media portion is executed.
-- `df -h /Users/ignacio.viejo` shows more available space than after Phase 3.
+- The targeted generated paths under `/Users/saski/Code/eventbrite/eb-ui` no longer exist.
+- `du -sh /Users/saski/Code/eventbrite/eb-ui` reports `4G` or less.
+- `du -sh /Users/saski/Music` reports `4G` or less if the optional media portion is executed.
+- `du -sh /Users/saski/Movies` reports `200M` or less if the optional media portion is executed.
+- `df -h /Users/saski` shows more available space than after Phase 3.
 
 ## Execution Order
 
@@ -242,15 +242,15 @@ Phase 4 is successful when:
 Run these commands after the last executed phase:
 
 ```bash
-df -h /Users/ignacio.viejo
-du -sh /Users/ignacio.viejo/Library/Application\ Support
-du -sh /Users/ignacio.viejo/Library/Developer
-du -sh /Users/ignacio.viejo/Library/Caches
-du -sh /Users/ignacio.viejo/.cache
-du -sh /Users/ignacio.viejo/eventbrite
-du -sh /Users/ignacio.viejo/saski
-du -sh /Users/ignacio.viejo/Music
-du -sh /Users/ignacio.viejo/Movies
+df -h /Users/saski
+du -sh /Users/saski/Library/Application\ Support
+du -sh /Users/saski/Library/Developer
+du -sh /Users/saski/Library/Caches
+du -sh /Users/saski/.cache
+du -sh /Users/saski/Code/eventbrite
+du -sh /Users/saski/Code
+du -sh /Users/saski/Music
+du -sh /Users/saski/Movies
 ```
 
 The overall plan is successful when:

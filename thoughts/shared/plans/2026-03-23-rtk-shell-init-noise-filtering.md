@@ -14,7 +14,7 @@ Enable RTK across all AI tools configured from `~/saski/augmentedcode-configurat
   - `.gemini` (`~/.gemini/*` symlinked)
 - Claude RTK integration already exists (hook + `RTK.md`).
 - Codex RTK is not configured yet (`rtk init --codex --show` reports missing global RTK artifacts).
-- Active interactive shell is `zsh`; primary user shell config is `/Users/ignacio.viejo/.zshrc`.
+- Active interactive shell is `zsh`; primary user shell config is `/Users/saski/.zshrc`.
 
 ## Desired End State
 - Claude: existing RTK integration remains healthy.
@@ -72,7 +72,7 @@ Implementation notes:
 
 Automated success criteria:
 - `readlink ~/.codex/AGENTS.md ~/.codex/config.toml ~/.cursor/cli-config.json ~/.gemini/GEMINI.md`
-- `/Users/ignacio.viejo/saski/augmentedcode-configuration/setup-symlinks.sh validate`
+- `/Users/saski/Code/augmentedcode-configuration/setup-symlinks.sh validate`
 
 ### Phase 2: Preserve and Verify Claude RTK
 Goal: Ensure existing Claude RTK remains functional and unchanged by later steps.
@@ -86,15 +86,15 @@ Implementation notes:
 
 Automated success criteria:
 - `rtk init --show | rg -n "Hook:|RTK.md:|settings.json: RTK hook configured"`
-- `test -f /Users/ignacio.viejo/saski/augmentedcode-configuration/.claude/hooks/rtk-rewrite.sh`
-- `test -f /Users/ignacio.viejo/saski/augmentedcode-configuration/.claude/RTK.md`
+- `test -f /Users/saski/Code/augmentedcode-configuration/.claude/hooks/rtk-rewrite.sh`
+- `test -f /Users/saski/Code/augmentedcode-configuration/.claude/RTK.md`
 
 ### Phase 3: Codex RTK Initialization (Symlink-Safe)
 Goal: Enable Codex RTK while preserving shared AGENTS symlink behavior.
 
 Expected modifications:
-- `/Users/ignacio.viejo/.codex/RTK.md` (or repo-equivalent target if RTK writes through symlinked path)
-- Possible update to `/Users/ignacio.viejo/saski/augmentedcode-configuration/AGENTS.md` only if explicitly accepted
+- `/Users/saski/.codex/RTK.md` (or repo-equivalent target if RTK writes through symlinked path)
+- Possible update to `/Users/saski/Code/augmentedcode-configuration/AGENTS.md` only if explicitly accepted
 
 Implementation notes:
 - Prefer non-destructive init path first (`rtk init -g --codex --show`, dry inspection).
@@ -104,9 +104,9 @@ Implementation notes:
 
 Automated success criteria:
 - `rtk init --codex --show | rg -n "Global RTK.md: exists"`
-- `test -f /Users/ignacio.viejo/.codex/RTK.md`
-- `test -L /Users/ignacio.viejo/.codex/AGENTS.md`
-- `/Users/ignacio.viejo/saski/augmentedcode-configuration/setup-symlinks.sh validate`
+- `test -f /Users/saski/.codex/RTK.md`
+- `test -L /Users/saski/.codex/AGENTS.md`
+- `/Users/saski/Code/augmentedcode-configuration/setup-symlinks.sh validate`
 
 ### Phase 4: Cursor and Gemini RTK Coverage
 Goal: Ensure non-Claude tools managed by this repo also benefit from RTK when supported.
@@ -128,14 +128,14 @@ Implementation notes:
 Automated success criteria:
 - `rtk init --agent cursor --show | rg -n "Cursor hook:|Cursor hooks.json:"`
 - `rtk init --gemini --show` (command succeeds)
-- `/Users/ignacio.viejo/saski/augmentedcode-configuration/setup-symlinks.sh validate`
+- `/Users/saski/Code/augmentedcode-configuration/setup-symlinks.sh validate`
 
 ### Phase 5: Add Minimal Shell RTK Bootstrap
 Goal: Provide explicit, tool-agnostic RTK commands for any agent or manual shell usage.
 
 Expected modifications:
-- `/Users/ignacio.viejo/.zshrc`
-- Optional: `/Users/ignacio.viejo/.bashrc` and `/Users/ignacio.viejo/.bash_profile` if bash parity is requested.
+- `/Users/saski/.zshrc`
+- Optional: `/Users/saski/.bashrc` and `/Users/saski/.bash_profile` if bash parity is requested.
 
 Implementation notes:
 - Add an isolated `RTK` block near end of `.zshrc`:
@@ -148,9 +148,9 @@ Implementation notes:
 - Do not override built-in/common commands.
 
 Automated success criteria:
-- `zsh -n /Users/ignacio.viejo/.zshrc`
+- `zsh -n /Users/saski/.zshrc`
 - `zsh -ic 'alias rtk-err >/dev/null && alias rtk-test >/dev/null && echo ok'`
-- If bash mirrored: `bash -n /Users/ignacio.viejo/.bashrc && bash -lc 'type rtk-err >/dev/null && echo ok'`
+- If bash mirrored: `bash -n /Users/saski/.bashrc && bash -lc 'type rtk-err >/dev/null && echo ok'`
 
 ### Phase 6: End-to-End Verification
 Goal: Confirm noise-filtering benefit and no config drift across managed tools.
@@ -167,8 +167,8 @@ Automated success criteria:
 - `rtk err -- ls /tmp >/dev/null`
 - `rtk summary -- echo 'build ok' | rg -n ".+"`
 - `rtk gain`
-- `/Users/ignacio.viejo/saski/augmentedcode-configuration/setup-symlinks.sh validate`
-- `git -C /Users/ignacio.viejo/saski/augmentedcode-configuration status --short`
+- `/Users/saski/Code/augmentedcode-configuration/setup-symlinks.sh validate`
+- `git -C /Users/saski/Code/augmentedcode-configuration status --short`
 
 ## Risks and Mitigations
 - Risk: RTK init breaks symlinked managed config.
@@ -181,12 +181,12 @@ Automated success criteria:
 - Mitigation: Add explicit per-tool status checks and fallback path via shell wrappers.
 
 ## Rollback
-- Remove shell RTK block from `/Users/ignacio.viejo/.zshrc` (and optional bash files).
+- Remove shell RTK block from `/Users/saski/.zshrc` (and optional bash files).
 - Run tool-specific uninstall where available:
   - `rtk init -g --codex --uninstall`
   - `rtk init -g --uninstall` (Claude path)
   - Cursor/Gemini uninstall if supported by installed RTK version.
-- Re-run `/Users/ignacio.viejo/saski/augmentedcode-configuration/setup-symlinks.sh setup` then `validate` to restore canonical links.
+- Re-run `/Users/saski/Code/augmentedcode-configuration/setup-symlinks.sh setup` then `validate` to restore canonical links.
 
 ## Implementation Progress (2026-03-23)
 
@@ -201,6 +201,6 @@ Automated success criteria:
 
 - `rtk init -g --codex` created `~/.codex/RTK.md` but replaced `~/.codex/AGENTS.md` symlink with a regular file.
 - Symlink-safe recovery applied:
-  - Added `@RTK.md` to repo-managed `/Users/ignacio.viejo/saski/augmentedcode-configuration/.agents/rules/base.md` (target of `AGENTS.md` symlink).
-  - Re-ran `/Users/ignacio.viejo/saski/augmentedcode-configuration/setup-symlinks.sh setup` to restore canonical symlinks.
+  - Added `@RTK.md` to repo-managed `/Users/saski/Code/augmentedcode-configuration/.agents/rules/base.md` (target of `AGENTS.md` symlink).
+  - Re-ran `/Users/saski/Code/augmentedcode-configuration/setup-symlinks.sh setup` to restore canonical symlinks.
 - Final validation confirms all managed symlinks are valid and Codex RTK is active.

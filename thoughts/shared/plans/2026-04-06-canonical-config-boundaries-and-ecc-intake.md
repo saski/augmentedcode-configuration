@@ -29,7 +29,7 @@ Reinforce `augmentedcode-configuration` as the canonical personal AI development
 
 2. **Some tracked files are tool-mutated rather than canonical**
    - `.claude/plugins/blocklist.json` changes `fetchedAt` on refresh.
-   - `.claude/settings.json` contains machine-specific absolute paths under `/Users/ignacio.viejo/...`.
+   - `.claude/settings.json` contains machine-specific absolute paths under `/Users/saski/...`.
    - `.codex/config.toml` mixes canonical defaults with machine-local trust and plugin state.
 
 3. **Docs and rules have drift**

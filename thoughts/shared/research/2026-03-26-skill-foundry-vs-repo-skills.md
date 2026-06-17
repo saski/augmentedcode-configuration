@@ -1,6 +1,6 @@
 ---
 date: 2026-03-26
-researcher: ignacio.viejo
+researcher: saski
 topic: "Skill-foundry proposal vs current .agents/skills library"
 tags: [research, skills, skill-foundry, governance]
 status: complete

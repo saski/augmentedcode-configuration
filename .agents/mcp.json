@@ -40,20 +40,6 @@
         "--autoConnect"
       ],
       "env": {}
-    },
-    "notebooks": {
-      "command": "node",
-      "args": [
-        "/Users/ignacio.viejo/.cursor/extensions/googlecloudtools.datacloud-0.3.1-universal/mcp_servers/cli/mcp_proxy_bundle.js",
-        "notebooks-cursor"
-      ]
-    },
-    "visualization": {
-      "command": "node",
-      "args": [
-        "/Users/ignacio.viejo/.cursor/extensions/googlecloudtools.datacloud-0.3.1-universal/mcp_servers/cli/mcp_proxy_bundle.js",
-        "visualization-cursor"
-      ]
     }
   }
 }

@@ -344,11 +344,11 @@ ln -s ~/saski/augmentedcode-configuration/.agents .agents
 ```bash
 ls -la ~/.cursor/ | grep '^l'
 # Expected output:
-# lrwxr-xr-x ... .agents -> /Users/ignacio.viejo/saski/augmentedcode-configuration/.agents
-# lrwxr-xr-x ... commands -> /Users/ignacio.viejo/saski/augmentedcode-configuration/.cursor/commands
-# lrwxr-xr-x ... rules -> /Users/ignacio.viejo/saski/augmentedcode-configuration/.cursor/rules
-# lrwxr-xr-x ... skills -> /Users/ignacio.viejo/saski/augmentedcode-configuration/.cursor/skills
-# lrwxr-xr-x ... skills-cursor -> /Users/ignacio.viejo/saski/augmentedcode-configuration/.cursor/skills-cursor
+# lrwxr-xr-x ... .agents -> /Users/saski/Code/augmentedcode-configuration/.agents
+# lrwxr-xr-x ... commands -> /Users/saski/Code/augmentedcode-configuration/.cursor/commands
+# lrwxr-xr-x ... rules -> /Users/saski/Code/augmentedcode-configuration/.cursor/rules
+# lrwxr-xr-x ... skills -> /Users/saski/Code/augmentedcode-configuration/.cursor/skills
+# lrwxr-xr-x ... skills-cursor -> /Users/saski/Code/augmentedcode-configuration/.cursor/skills-cursor
 ```
 
 #### 4. Test Symlink Access
