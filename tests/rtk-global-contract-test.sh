@@ -5,6 +5,7 @@ set -euo pipefail
 REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 HOOK="$REPO_DIR/.agents/hooks/rtk-rewrite.sh"
 CLAUDE_HOOK="$REPO_DIR/.claude/hooks/rtk-rewrite.sh"
+CODEX_HOOK_TEMPLATE="$REPO_DIR/templates/codex/hooks.json"
 
 assert_file_exists() {
     local path="$1"
@@ -28,6 +29,26 @@ assert_symlink_target_contains() {
     target="$(readlink "$path")"
     if [[ "$target" != *"$expected" ]]; then
         echo "expected symlink target for $path to contain '$expected', got '$target'" >&2
+        exit 1
+    fi
+}
+
+assert_file_contains() {
+    local path="$1"
+    local expected="$2"
+
+    if ! grep -Fq "$expected" "$path"; then
+        echo "expected $path to contain: $expected" >&2
+        exit 1
+    fi
+}
+
+assert_file_not_contains() {
+    local path="$1"
+    local unexpected="$2"
+
+    if grep -Fq "$unexpected" "$path"; then
+        echo "expected $path not to contain: $unexpected" >&2
         exit 1
     fi
 }
@@ -62,6 +83,16 @@ EOF
 test_canonical_layout_contract() {
     assert_file_exists "$HOOK"
     assert_symlink_target_contains "$CLAUDE_HOOK" ".agents/hooks/rtk-rewrite.sh"
+    assert_file_exists "$CODEX_HOOK_TEMPLATE"
+    assert_file_contains "$CODEX_HOOK_TEMPLATE" '$HOME/.codex/hooks/rtk-rewrite.sh'
+    assert_file_contains "$REPO_DIR/setup-symlinks.sh" 'ln -sfn "$REPO_DIR/.agents/hooks/rtk-rewrite.sh" "$HOME/.codex/hooks/rtk-rewrite.sh"'
+    assert_file_contains "$REPO_DIR/setup-symlinks.sh" 'install_template_file "$CODEX_HOOKS_TEMPLATE" "$HOME/.codex/hooks.json"'
+    assert_file_not_contains "$REPO_DIR/.cursor/rules/cursor-config-management.mdc" "RTK.md"
+
+    local live_codex_hook="$HOME/.codex/hooks/rtk-rewrite.sh"
+    if [[ -e "$live_codex_hook" || -L "$live_codex_hook" ]]; then
+        assert_symlink_target_contains "$live_codex_hook" ".agents/hooks/rtk-rewrite.sh"
+    fi
 }
 
 test_agents_bin_policy_when_homebrew_rtk_exists() {

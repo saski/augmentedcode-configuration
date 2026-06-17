@@ -123,6 +123,8 @@ SKILL_FACTORY=/path/to/skill-factory ./sync-skill-factory.sh --dry-run
 - `~/.cursor/cli-config.json` -> repo `.cursor/cli-config.json`
 - `~/.codex/skills/skills` -> repo `.agents/skills`
 - `~/.codex/rules/default.rules` -> repo `.agents/rules/codex-default.rules`
+- `~/.codex/hooks/rtk-rewrite.sh` -> repo `.agents/hooks/rtk-rewrite.sh`
+- `~/.codex/hooks.json` is seeded from `templates/codex/hooks.json`
 - `~/.claude/commands` -> repo `.agents/commands`
 - `~/.claude/skills` -> repo `.agents/skills`
 - `~/.claude/hooks` -> repo `.claude/hooks`
@@ -133,7 +135,7 @@ SKILL_FACTORY=/path/to/skill-factory ./sync-skill-factory.sh --dry-run
 - `~/.agents/bin/rtk` -> `/opt/homebrew/bin/rtk` when Homebrew RTK is present
 - `~/.agents/bin/openspec` -> `/opt/homebrew/bin/openspec` or `~/.bun/bin/openspec` when OpenSpec is present
 
-Mutable local config such as `~/.codex/config.toml` and `~/.claude/settings.json` is seeded from `templates/` and intentionally not symlinked back into the repo.
+Mutable local config such as `~/.codex/config.toml`, `~/.codex/hooks.json`, and `~/.claude/settings.json` is seeded from `templates/` and intentionally not symlinked back into the repo.
 
 ## Thoughts and Workflow Assets
 

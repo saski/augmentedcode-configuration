@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash /Users/ignacio.viejo/.claude/hooks/rtk-rewrite.sh"
+            "command": "bash \"$HOME/.claude/hooks/rtk-rewrite.sh\""
           }
         ]
       }

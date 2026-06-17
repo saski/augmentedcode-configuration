@@ -5,6 +5,7 @@ set -euo pipefail
 REPO_DIR="${REPO_DIR:-$HOME/Code/augmentedcode-configuration}"
 TEMPLATES_DIR="$REPO_DIR/templates"
 CODEX_CONFIG_TEMPLATE="$TEMPLATES_DIR/codex/config.toml"
+CODEX_HOOKS_TEMPLATE="$TEMPLATES_DIR/codex/hooks.json"
 CLAUDE_SETTINGS_TEMPLATE="$TEMPLATES_DIR/claude/settings.json"
 
 # Dev/AI tools under ~ that get a direct "$HOME/$tool/skills" symlink.
@@ -55,6 +56,11 @@ check_environment() {
 
     if [ ! -f "$CODEX_CONFIG_TEMPLATE" ]; then
         echo "❌ templates/codex/config.toml not found in repo"
+        exit 1
+    fi
+
+    if [ ! -f "$CODEX_HOOKS_TEMPLATE" ]; then
+        echo "❌ templates/codex/hooks.json not found in repo"
         exit 1
     fi
 
@@ -202,9 +208,11 @@ setup_symlinks() {
 
     # Codex keeps local system skills under ~/.codex/skills/.system.
     # Link shared skills and shared rules into ~/.codex.
-    mkdir -p "$HOME/.codex/skills" "$HOME/.codex/rules"
+    mkdir -p "$HOME/.codex/skills" "$HOME/.codex/rules" "$HOME/.codex/hooks"
     ln -sfn "$REPO_DIR/.agents/skills" "$HOME/.codex/skills/skills"
     install_template_file "$CODEX_CONFIG_TEMPLATE" "$HOME/.codex/config.toml"
+    install_template_file "$CODEX_HOOKS_TEMPLATE" "$HOME/.codex/hooks.json"
+    ln -sfn "$REPO_DIR/.agents/hooks/rtk-rewrite.sh" "$HOME/.codex/hooks/rtk-rewrite.sh"
     ln -sfn "$REPO_DIR/.agents/rules/codex-default.rules" "$HOME/.codex/rules/default.rules"
     ln -sfn "$REPO_DIR/.agents/rules/base.md" "$HOME/.codex/AGENTS.md"
 
@@ -337,7 +345,7 @@ validate_symlinks() {
         fi
     fi
 
-    # Check Codex managed config file
+    # Check Codex managed config files
     local codex_config_path="$HOME/.codex/config.toml"
     if [ ! -f "$codex_config_path" ]; then
         echo "❌ $codex_config_path is missing"
@@ -347,6 +355,38 @@ validate_symlinks() {
         errors=$((errors + 1))
     else
         echo "✓ $codex_config_path is a local managed file"
+    fi
+
+    local codex_hooks_json_path="$HOME/.codex/hooks.json"
+    if [ ! -f "$codex_hooks_json_path" ]; then
+        echo "❌ $codex_hooks_json_path is missing"
+        errors=$((errors + 1))
+    elif [ -L "$codex_hooks_json_path" ]; then
+        echo "❌ $codex_hooks_json_path should be a local file, not a symlink"
+        errors=$((errors + 1))
+    elif ! grep -Fq "rtk-rewrite.sh" "$codex_hooks_json_path"; then
+        echo "❌ $codex_hooks_json_path should configure the RTK rewrite hook"
+        errors=$((errors + 1))
+    else
+        echo "✓ $codex_hooks_json_path is a local managed file with RTK hook wiring"
+    fi
+
+    local codex_hook_path="$HOME/.codex/hooks/rtk-rewrite.sh"
+    if [ ! -L "$codex_hook_path" ]; then
+        echo "❌ $codex_hook_path is not a symlink"
+        errors=$((errors + 1))
+    elif [ ! -e "$codex_hook_path" ]; then
+        echo "❌ $codex_hook_path is a broken symlink"
+        errors=$((errors + 1))
+    else
+        local codex_hook_target
+        codex_hook_target=$(readlink "$codex_hook_path")
+        if [[ "$codex_hook_target" != *".agents/hooks/rtk-rewrite.sh" ]]; then
+            echo "❌ $codex_hook_path should point to .agents/hooks/rtk-rewrite.sh, got: $codex_hook_target"
+            errors=$((errors + 1))
+        else
+            echo "✓ $codex_hook_path → $codex_hook_target"
+        fi
     fi
 
     # Check Codex shared rules symlink

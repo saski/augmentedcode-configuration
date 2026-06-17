@@ -13,7 +13,7 @@
 | Cursor `.cursor/rules/` | ✅ Reduced 13 → 3 | Workspace-only: `use-base-rules`, `cursor-config-management`, `ai-feedback-learning-loop` |
 | Workflows as skills | ✅ Migrated | `tdd`, `refactoring`, `diagnose`, `fic-*`, `project-status-maintenance` |
 | Conditional rules | ✅ Single source | `.agents/rules/{python,makefile,react}-project.md`, loaded on demand per `base.md §2` |
-| RTK guidance | ✅ Inline in `base.md §8` | Recursive `@-include` removed; cross-tool verified |
+| RTK guidance and hooks | ✅ Inline in `base.md §8`; shared hook wired | Recursive `@-include` removed; Codex and Claude Bash hooks use `.agents/hooks/rtk-rewrite.sh` |
 | Skill governance | ✅ Aligned | Index, catalog, and provenance lock validated |
 | Local healthchecks | ✅ Passing | `make check` covers tests, shell lint, skill validation, OpenSpec validation, symlink validation, and tracked-ignored reporting |
 | Marmalade team rules | ⚠️ Pending | Still loading via Eventbrite team config; awaiting admin removal |
@@ -23,6 +23,13 @@
 ---
 
 ## Recent Changes
+
+### 2026-06-17: Codex and Claude RTK hook wiring repaired ✅
+
+- Removed the stale operational reference to `~/.codex/RTK.md`; RTK guidance remains inline in `base.md §8`.
+- Added a Codex `hooks.json` template and taught `setup-symlinks.sh` to manage `~/.codex/hooks/rtk-rewrite.sh`.
+- Updated Claude and Codex hook commands to use `$HOME` paths instead of machine-specific legacy paths.
+- Extended the RTK contract test so Codex hook wiring and the absence of `RTK.md` references are checked.
 
 ### 2026-06-17: GitHub access simplified to the `saski` account ✅
 
@@ -124,4 +131,4 @@ Self-contained skill library, validator and contract tests, repository validatio
 
 - This repo is the canonical source for AI agent configuration across Cursor, Codex, Claude Code, Gemini, Antigravity, and Langflow.
 - Mutable runtime state (sessions, caches, workspace state, mutable credentials) intentionally stays local; only rules, skills, commands, workflows, hooks, and validation are versioned.
-- After pulling, contributors must re-run `./setup-symlinks.sh setup` so the home-level symlinks are refreshed to the new targets (`~/AGENTS.md` → `base.md`, `~/.codex/AGENTS.md` → `base.md`, removal of `~/.cursor/rules`, `~/.codex/RTK.md`, `~/.claude/RTK.md`, `~/.claude/CLAUDE.md`).
+- After pulling, contributors must re-run `./setup-symlinks.sh setup` so the home-level symlinks are refreshed to the current targets, including `~/AGENTS.md` -> `base.md`, `~/.codex/AGENTS.md` -> `base.md`, and `~/.codex/hooks/rtk-rewrite.sh` -> `.agents/hooks/rtk-rewrite.sh`.
