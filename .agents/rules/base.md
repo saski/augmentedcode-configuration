@@ -95,17 +95,16 @@ This is the compact universal rulebook for this project. It applies to every AI 
 - Load only the vault guide, conventions, relevant maps, and exact target files needed for the task.
 - Keep this repository focused on executable agent behavior: rules, skills, workflows, commands, validation, and setup.
 
-## 7. Workspace-Aware GitHub SSH And CLI Auth
+## 7. GitHub SSH And CLI Auth
 
-- Before suggesting or running GitHub SSH commands (`git clone`, `git fetch`, `git pull`, `git push`, `git remote add`, `git remote set-url`), choose the SSH host alias from the local workspace path.
-- Use `git@github.com-eventbrite:` for repositories under `~/eventbrite/*`.
-- Use `git@github.com-saski:` for repositories under `~/Code/*` that belong to the `saski` GitHub workspace.
+- Use the `saski` GitHub account for all GitHub access in this environment.
+- Before suggesting or running GitHub SSH commands (`git clone`, `git fetch`, `git pull`, `git push`, `git remote add`, `git remote set-url`), use the SSH host alias `git@github.com-saski:`.
 - Never use bare `git@github.com:` in this environment.
-- Treat `github.com-eventbrite` and `github.com-saski` as SSH routing only; do not use `gh auth login` to pick between them.
+- Treat `github.com-saski` as SSH routing only; do not use `gh auth login` to choose Git-over-SSH identity.
 - Only suggest `gh auth login` when GitHub CLI API auth is actually needed.
 - Before suggesting `gh auth login`, check whether `GITHUB_TOKEN` is set. If stored interactive login is required, run `env -u GITHUB_TOKEN gh auth login` or unset `GITHUB_TOKEN` in that shell first, because `gh` will otherwise authenticate from the environment variable instead of storing credentials.
 - Verify CLI auth with `gh auth status`.
-- If the correct alias or credential source is unclear, load the `github-host-alias` skill and verify against `~/.ssh/config` and the active shell environment.
+- If the SSH alias or credential source is unclear, load the `github-host-alias` skill and verify against `~/.ssh/config` and the active shell environment.
 
 ## 8. Tool Routing
 

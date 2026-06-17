@@ -24,6 +24,13 @@
 
 ## Recent Changes
 
+### 2026-06-17: GitHub access simplified to the `saski` account ✅
+
+- Simplified GitHub SSH rules so all GitHub access uses `git@github.com-saski:`.
+- Removed path-based personal/work account selection from `base.md` and `github-host-alias`.
+- Updated the healthcheck contract to reject `git@github.com-eventbrite:` in the universal rulebook.
+- Updated local GitHub remotes for this checkout so both `origin` and `upstream` use the `github.com-saski` SSH alias.
+
 ### 2026-06-17: Canonical repo root migrated to `~/Code` ✅
 
 - Moved local GitHub repositories from `~/saski` into `~/Code`.

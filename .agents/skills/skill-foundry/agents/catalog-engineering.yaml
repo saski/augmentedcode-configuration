@@ -1502,7 +1502,7 @@ skills:
       - codex
       - cursor
     overlap_with: []
-    notes: "SSH host alias routing for multi-account GitHub."
+    notes: "Single-account GitHub SSH host alias routing through github.com-saski."
 
   # --- Google ADK (native) ---
 

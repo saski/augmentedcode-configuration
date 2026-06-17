@@ -9,7 +9,7 @@ Cursor-only skills (Canvas, SDK, `/loop`, meta-skills) live in `.cursor/skills-c
 Imported and local sources land in the same tree:
 
 - **[skill-factory](https://github.com/saski/skill-factory)** — imported into this repo via `./pull-and-sync-skills.sh` / `./sync-skill-factory.sh`
-- **Local sibling skill repos** — referenced by symlink from `.agents/skills/` to `~/saski/augmented-lean-delivery` and `~/saski/augmentedcode-skills`
+- **Local sibling skill repos** — referenced by symlink from `.agents/skills/` to `~/Code/augmented-lean-delivery` and `~/Code/augmentedcode-skills`
 - **Product management pack** — `pmprompt/claude-plugin-product-management` (integrity: repo-root `skills-lock.json`; taxonomy and overlaps: [.agents/skills/skill-foundry/agents/catalog-product-management.yaml](../skills/skill-foundry/agents/catalog-product-management.yaml))
 - **Matt Pocock skills** — `mattpocock/skills` (integrity: repo-root `skills-lock.json`; governance: [.agents/skills/skill-foundry/agents/catalog-engineering.yaml](../skills/skill-foundry/agents/catalog-engineering.yaml))
 - **Google Data Cloud skills** — installed with `.agents/skills/.datacloud_skills_manifest`; governance: [.agents/skills/skill-foundry/agents/catalog-engineering.yaml](../skills/skill-foundry/agents/catalog-engineering.yaml)
@@ -159,7 +159,7 @@ Imported and local sources land in the same tree:
 | openspec | workflow | Spec-driven development with OpenSpec. Use when the user mentions OpenSpec, OPSX, spec-driven development, SDD, change proposals, delta specs, /opsx commands, docs/thoughts-first OpenSpec initialization, or wants structured planning for features, migrations, refactors, or bug fixes. |
 | find-skills | ai | Helps users discover and install agent skills when they ask questions like "how do I do X", "find a skill for X", "is there a skill that can...", or express interest in extending capabilities. |
 | code-notify | developer-tools | Use when a task should trigger a local completion notification through code-notify, or when configuring cross-tool notification behavior for Codex, Cursor, Claude, Gemini, or similar agent workflows. |
-| github-host-alias | developer-tools | Use when running git clone, git remote add, or suggesting git commands interacting with GitHub to ensure the correct SSH host alias is used based on the local workspace path (~/eventbrite vs ~/saski). |
+| github-host-alias | developer-tools | Use when running git clone, git remote add, git remote set-url, or suggesting GitHub SSH commands to ensure all GitHub access uses the saski SSH host alias. |
 | corporate-aws-cli | developer-tools | Use when using the AWS CLI against a corporate AWS account after SAML/OIDC federation (e.g. saml2aws, aws sso login), when STS fails with invalid XML or empty responses, when selecting profiles or regions for Terraform or CI/CD stacks, or when validating RDS engine versions with describe-orderable-db-instance-options in the target account and region. |
 | lean-ai-adoption-coach | ai | Guide AI adoption decisions in software development using Lean, Extreme Programming, and pragmatic simplicity. Use when evaluating AI tools, agents, workflows, prompts, automations, or rollout guardrails. |
 | personal-knowledge-routing | workflow | Route durable personal context and reusable knowledge between agent configuration and the personal knowledge vault without bloating always-loaded rules. |
