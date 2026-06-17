@@ -1,5 +1,7 @@
 # Karpathy-Inspired Rule Consolidation - Implementation Plan
 
+> Superseded note added on 2026-06-17: references in this historical plan to `RTK.md` describe the older include-based design. Current RTK guidance lives inline in `.agents/rules/base.md` §8, with hooks managed from `.agents/hooks/rtk-rewrite.sh`.
+
 ## Overview
 
 Consolidate the always-loaded agent rules around four compact operating principles inspired by the Karpathy-style rule set, without making `.agents/rules/base.md` heavier. The change should preserve the repo-specific contracts that matter in this configuration repository while deprecating generic or duplicated guidance that current models already handle well.

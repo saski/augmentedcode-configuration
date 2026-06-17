@@ -1,5 +1,7 @@
 # Canonical Config Boundaries and ECC Intake - Implementation Plan
 
+> Superseded note added on 2026-06-17: references in this historical plan to `.claude/RTK.md` describe the older include-based design. Current RTK guidance lives inline in `.agents/rules/base.md` §8, with hooks managed from `.agents/hooks/rtk-rewrite.sh`.
+
 ## Overview
 
 Reinforce `augmentedcode-configuration` as the canonical personal AI development configuration while removing runtime-state bleed and creating a small, explicit intake path for selected ECC assets. The implementation keeps the repo opinionated around Lean/Agile/XP values, reduces daily config churn, and makes ECC an upstream reference library rather than a competing operating system.

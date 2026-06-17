@@ -1,5 +1,7 @@
 # RTK Activation Across Configured AI Tools for Noise Filtering
 
+> Superseded on 2026-06-17: `RTK.md` is no longer part of the active configuration. Current RTK guidance lives inline in `.agents/rules/base.md` §8, and Codex/Claude Bash command rewriting is wired through `.agents/hooks/rtk-rewrite.sh` via `setup-symlinks.sh`.
+
 ## Overview
 Enable RTK across all AI tools configured from `~/saski/augmentedcode-configuration` so command output is consistently noise-filtered in agent sessions while preserving existing symlink-managed configuration.
 
