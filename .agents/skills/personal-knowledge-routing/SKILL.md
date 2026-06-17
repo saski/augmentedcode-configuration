@@ -9,9 +9,9 @@ Use this skill to keep agent instructions small while preserving durable knowled
 
 ## Repositories
 
-- Agent configuration: `/Users/ignacio.viejo/saski/augmentedcode-configuration`
-- Personal vault: `/Users/ignacio.viejo/saski/personal-knowledge-vault`
-- Vault content root: `/Users/ignacio.viejo/saski/personal-knowledge-vault/vault`
+- Agent configuration: `/Users/saski/Code/augmentedcode-configuration`
+- Personal vault: `/Users/saski/Code/personal-knowledge-vault`
+- Vault content root: `/Users/saski/Code/personal-knowledge-vault/vault`
 
 ## First Files To Read
 
@@ -62,7 +62,7 @@ Do not read the whole vault unless the user explicitly asks for a full audit.
 
 - Before writing an Obsidian wikilink, verify that the target note exists.
 - If the target is uncertain, write plain text or a relative Markdown path instead of creating a broken wikilink.
-- After vault edits, run `make check` from `/Users/ignacio.viejo/saski/personal-knowledge-vault`.
+- After vault edits, run `make check` from `/Users/saski/Code/personal-knowledge-vault`.
 - The vault pre-commit hook and scheduled GitHub workflow also run `make check`.
 
 ## Good Defaults

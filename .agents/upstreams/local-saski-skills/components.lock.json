@@ -4,13 +4,13 @@
     "augmented-lean-delivery": {
       "repository": "saski/augmented-lean-delivery",
       "sourceType": "local-git",
-      "localPath": "~/saski/augmented-lean-delivery",
+      "localPath": "~/Code/augmented-lean-delivery",
       "sourceCommit": "e60dba69ecaf799e786a96fd27dccf2e5e216ee3"
     },
     "augmentedcode-skills": {
       "repository": "saski/augmentedcode-skills",
       "sourceType": "local-git",
-      "localPath": "~/saski/augmentedcode-skills",
+      "localPath": "~/Code/augmentedcode-skills",
       "sourceCommit": "3e0c39814ae041c92a5c52e01c79994f42a309ea"
     }
   },

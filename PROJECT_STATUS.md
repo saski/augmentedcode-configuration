@@ -30,6 +30,7 @@
 - Removed path-based personal/work account selection from `base.md` and `github-host-alias`.
 - Updated the healthcheck contract to reject `git@github.com-eventbrite:` in the universal rulebook.
 - Updated local GitHub remotes for this checkout so both `origin` and `upstream` use the `github.com-saski` SSH alias.
+- Updated related repository documentation and active routing metadata to use `~/Code` and `github.com-saski`.
 
 ### 2026-06-17: Canonical repo root migrated to `~/Code` ✅
 
