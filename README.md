@@ -66,8 +66,8 @@ The important boundary: `.agents/` is canonical. Local runtime state, editor sta
 Clone this repository to the default location expected by the setup script:
 
 ```bash
-git clone git@github.com-saski:saski/augmentedcode-configuration.git ~/saski/augmentedcode-configuration
-cd ~/saski/augmentedcode-configuration
+git clone git@github.com-saski:saski/augmentedcode-configuration.git ~/Code/augmentedcode-configuration
+cd ~/Code/augmentedcode-configuration
 ```
 
 Set up local tool links and checks:
@@ -133,7 +133,7 @@ make sync-saski-repos-apply
 ./sync-saski-repos.sh --discover
 ```
 
-The sync script uses [saski-github-repos.tsv](saski-github-repos.tsv) as an explicit manifest for GitHub repos under `~/saski`. It fetches source refs and fast-forwards only clean matching branches; dirty, detached, wrong-branch, and diverged worktrees are reported and left untouched. Forks can be pushed back to their fork remotes only when `--push` is passed explicitly.
+The sync script uses [saski-github-repos.tsv](saski-github-repos.tsv) as an explicit manifest for GitHub repos under `~/Code`. It fetches source refs and fast-forwards only clean matching branches; dirty, detached, wrong-branch, and diverged worktrees are reported and left untouched. Forks can be pushed back to their fork remotes only when `--push` is passed explicitly.
 
 ## Repository map
 
@@ -157,7 +157,7 @@ The sync script uses [saski-github-repos.tsv](saski-github-repos.tsv) as an expl
 ├── src/thoughts/             # Optional thoughts CLI source
 ├── Makefile                  # Canonical validation targets
 ├── saski-github-repos.tsv    # Manifest for local GitHub repo sync
-├── sync-saski-repos.sh       # Safe fast-forward sync for ~/saski repos
+├── sync-saski-repos.sh       # Safe fast-forward sync for ~/Code repos
 └── setup-symlinks.sh         # Setup, validation, and status for local links
 ```
 

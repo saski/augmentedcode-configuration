@@ -99,7 +99,7 @@ This is the compact universal rulebook for this project. It applies to every AI 
 
 - Before suggesting or running GitHub SSH commands (`git clone`, `git fetch`, `git pull`, `git push`, `git remote add`, `git remote set-url`), choose the SSH host alias from the local workspace path.
 - Use `git@github.com-eventbrite:` for repositories under `~/eventbrite/*`.
-- Use `git@github.com-saski:` for repositories under `~/saski/*`.
+- Use `git@github.com-saski:` for repositories under `~/Code/*` that belong to the `saski` GitHub workspace.
 - Never use bare `git@github.com:` in this environment.
 - Treat `github.com-eventbrite` and `github.com-saski` as SSH routing only; do not use `gh auth login` to pick between them.
 - Only suggest `gh auth login` when GitHub CLI API auth is actually needed.

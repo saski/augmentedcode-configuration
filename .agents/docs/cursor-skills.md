@@ -19,6 +19,9 @@ For shared skills, use [skill-factory-skills.md](skill-factory-skills.md) and [s
 | babysit | ide | Keep a PR merge-ready by triaging comments, resolving clear conflicts, and fixing CI in a loop. |
 | canvas | ide | Live React Canvas beside the chat for analytical artifacts, charts, tables, and MCP-heavy deliverables; also required when editing `.canvas.tsx` files. |
 | loop | ide | Run a prompt or skill on a recurring local interval using monitored background shell output (`/loop`, polling, local cron-like loops). |
+| review | ide | Route a code review request to either Bugbot or Security Review. |
+| review-bugbot | ide | Review code changes with the Bugbot subagent. |
+| review-security | ide | Review code changes with the Security Review subagent. |
 | sdk | ide | Build on the Cursor SDK (`@cursor/sdk`, `cursor-sdk`) from scripts, CI, or backends; agents, streaming, MCP, and errors. |
 | shell | ide | Run the rest of a `/shell` request as a literal shell command when the user explicitly invokes it. |
 | split-to-prs | ide | Split current work into small reviewable PRs from a chat, branch, or PR. |

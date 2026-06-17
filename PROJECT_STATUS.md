@@ -1,7 +1,7 @@
 # Augmentedcode Configuration - Project Status
 
-**Last Updated**: 2026-05-28
-**Overall Status**: 🟢 **Ready** - Universal rulebook is single-source and cross-tool verified; agent context reduced significantly after rule/skill reorganization
+**Last Updated**: 2026-06-17
+**Overall Status**: 🟢 **Ready** - Canonical local workspace is `~/Code`; home-level tool symlinks point at this checkout and `make check` passes.
 
 ---
 
@@ -15,14 +15,38 @@
 | Conditional rules | ✅ Single source | `.agents/rules/{python,makefile,react}-project.md`, loaded on demand per `base.md §2` |
 | RTK guidance | ✅ Inline in `base.md §8` | Recursive `@-include` removed; cross-tool verified |
 | Skill governance | ✅ Aligned | Index, catalog, and provenance lock validated |
-| Local healthchecks | ✅ Passing | `make check` covers tests, shell lint, skill validation, symlink validation |
+| Local healthchecks | ✅ Passing | `make check` covers tests, shell lint, skill validation, OpenSpec validation, symlink validation, and tracked-ignored reporting |
 | Marmalade team rules | ⚠️ Pending | Still loading via Eventbrite team config; awaiting admin removal |
 
-**Current Readiness**: Configuration is stable for daily use across Cursor, Codex, Claude Code, and Gemini. Cross-tool RTK access verified after the 2026-05-25 RTK inline change. Marmalade rules persist in Cursor team config and need an organizational follow-up.
+**Current Readiness**: Configuration is stable for daily use across Cursor, Codex, Claude Code, Gemini, Antigravity, and Langflow. Local saski repositories now live under `~/Code`; the old `~/saski` root has been retired to `~/saski.legacy-2026-06-17`.
 
 ---
 
 ## Recent Changes
+
+### 2026-06-17: Canonical repo root migrated to `~/Code` ✅
+
+- Moved local GitHub repositories from `~/saski` into `~/Code`.
+- Kept the active `/Users/saski/Code/augmentedcode-configuration` checkout as canonical because it already owned the live home symlinks and had local worktree changes.
+- Renamed the remaining clean duplicate checkout root from `~/saski` to `~/saski.legacy-2026-06-17`.
+- Updated `setup-symlinks.sh`, `README.md`, `base.md`, and `saski-github-repos.tsv` so new setup and sync workflows default to `~/Code`.
+- Refreshed managed home symlinks with `./setup-symlinks.sh setup`; `~/.agents/bin/openspec` now points at the current Node-managed OpenSpec executable.
+- Registered Cursor-only review skills in `.agents/docs/cursor-skills.md` so Cursor skill validation reflects the current tree.
+
+**Validation**: `make check` passes from `/Users/saski/Code/augmentedcode-configuration`.
+
+### 2026-06-08: Canonical home symlink setup repaired 🟡
+
+- Ran `REPO_DIR=/Users/saski/Code/augmentedcode-configuration ./setup-symlinks.sh setup`.
+- Verified managed links with `make validate-symlinks`; home-level links now point at `/Users/saski/Code/augmentedcode-configuration`.
+- Linked `~/.agents/bin/rtk` to `/opt/homebrew/bin/rtk`; `~/.agents/bin/rtk --version` reports `rtk 0.42.3`.
+- Updated `Makefile` so `make validate-symlinks` passes the current checkout path through `REPO_DIR="$(pwd)"` instead of relying on the setup script's previous default `~/saski/augmentedcode-configuration`.
+
+Remaining blockers:
+
+- `make test` and `make validate-skills` fail because seven local sibling skill symlinks are broken: `complexity-review`, `hamburger-method`, `micro-steps-coach`, `story-splitting`, `mutation-testing-js`, `mutation-testing-python`, and `test-desiderata`.
+- `make validate-openspec` fails because the `openspec` CLI is not installed in `/opt/homebrew/bin`, `~/.bun/bin`, `/usr/local/bin`, or the active shell `PATH`.
+- A root `AGENTS.md` file exists as untracked local drift; the tracked root shims are `CLAUDE.md` and `GEMINI.md`, while home-level `~/AGENTS.md` now points directly to `.agents/rules/base.md`.
 
 ### 2026-05-28: Lustra governance and routing registration ✅
 
@@ -72,16 +96,17 @@ Self-contained skill library, validator and contract tests, repository validatio
 
 ## Next Steps
 
-1. **Marmalade team rules** — escalate to Eventbrite Engineering Cursor admin to remove the `marmalade-*` rules from team config (they are now available as a workspace skill in `~/eventbrite/listings-webapp/.cursor/skills/marmalade-design-system/`).
-2. **`tlz-connection` PR** — push the `add-tlz-connection-rule` branch in `~/eventbrite/cursor-prompts` and open a PR.
-3. **Benchmark monitored skills** (`pbt-pragmatic-adoption`, `creating-hooks`, `writing-statuslines`) after the next major model update.
-4. **Upstream skill-factory improvements** that should be shared back to the source repository.
+1. **Resolve root `AGENTS.md` drift** — either remove the untracked local file or intentionally track the root shim again with matching documentation.
+2. **Marmalade team rules** — escalate to Eventbrite Engineering Cursor admin to remove the `marmalade-*` rules from team config (they are now available as a workspace skill in `~/eventbrite/listings-webapp/.cursor/skills/marmalade-design-system/`).
+3. **`tlz-connection` PR** — push the `add-tlz-connection-rule` branch in `~/eventbrite/cursor-prompts` and open a PR.
+4. **Benchmark monitored skills** (`pbt-pragmatic-adoption`, `creating-hooks`, `writing-statuslines`) after the next major model update.
 5. **Keep governance aligned**: `components.lock.json`, the discovery index, and the skill-foundry catalogs whenever skills change.
 
 ---
 
 ## Known Issues
 
+- **Root `AGENTS.md` untracked drift**: `/Users/saski/Code/augmentedcode-configuration/AGENTS.md` is currently an untracked regular file, while `~/AGENTS.md` correctly points to `.agents/rules/base.md`.
 - **Marmalade team rules in Cursor**: the `marmalade-*` rules pushed by Eventbrite Engineering team config keep loading even when toggled off in the Cursor UI. Workaround in place (skill mirror in `listings-webapp/.cursor/skills/`); definitive fix requires removing the entries from team config upstream.
 - **`@-include` in `.mdc` files is non-recursive**: Cursor expands a top-level `@path` reference but does not re-expand `@path` references inside the included file. Codex CLI shows the same behavior. RTK content was inlined into `base.md` to work around this; future cross-tool inclusions should avoid relying on recursive `@-include`.
 
