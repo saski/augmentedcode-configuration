@@ -3,11 +3,11 @@
  * list/row decoration (category badges, the leading slot of
  * `CollapsibleSection`, etc.).
  *
- * Pulls colors from the shared `Color` palette so a category's swatch and
- * its `UsageBar` segment for the same `color` stay visually coherent.
+ * Pulls colors from `useHostTheme().category` so a category's swatch and its
+ * `UsageBar` segment for the same `color` stay visually coherent.
  */
 import type { CSSProperties, JSX } from "react";
-import { type Color } from "./canvas-tokens.js";
+import type { Color } from "./canvas-tokens.js";
 export type SwatchProps = {
     /** One of the 7 shared category hues. Matches `UsageBar` segment colors. */
     color: Color;

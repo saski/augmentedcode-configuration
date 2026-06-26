@@ -106,6 +106,10 @@ export type { CanvasAction };
  * appended after the mention. The canvas file is resolved from the
  * action route's `canvasId`; do not pass the path from canvas UI.
  *
+ * **`openFile`** — Open an existing workspace file in the host IDE.
+ * `path` may be workspace-relative or absolute. Optional `selection`
+ * follows VS Code editor line/column fields.
+ *
  * @example
  * ```tsx
  * function AgentLink({ agentId, title }: { agentId: string; title: string }) {

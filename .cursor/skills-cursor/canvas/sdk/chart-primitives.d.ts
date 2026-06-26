@@ -32,7 +32,41 @@ export type ChartSeries = {
     data: number[];
     tone?: ChartTone;
 };
-export type BarChartProps = {
+/**
+ * A dashed marker line drawn across the plot at a fixed value — for targets,
+ * SLOs, budgets, means, or limits. Drawn horizontally on line / vertical-bar
+ * charts and vertically on `horizontal` bar charts; either way it marks the
+ * value axis and is folded into the auto domain so it stays on-canvas.
+ */
+export type ChartReferenceLine = {
+    /** Position on the value axis, in the same units as the series data. */
+    value: number;
+    /** Short label drawn in a chip at the line's end. */
+    label?: string;
+    /** Line color. Omit for a muted neutral; set to match other tonal elements. */
+    tone?: ChartTone;
+};
+/**
+ * Shared value-axis controls (the y-axis, or the x-axis on `horizontal` bar
+ * charts). By default the axis starts at zero; override to zoom into a tight
+ * range. On stacked / normalized bars these are ignored — those always start
+ * at zero.
+ */
+type ValueAxisProps = {
+    /**
+     * Start the value axis at zero. Defaults to `true`. Set `false` to
+     * auto-fit the axis to the data range — useful for tightly-clustered
+     * series (e.g. uptime 99.0–99.9%) that a zero baseline would flatten.
+     */
+    beginAtZero?: boolean;
+    /** Explicit axis minimum. Overrides `beginAtZero`. */
+    yMin?: number;
+    /** Explicit axis maximum. */
+    yMax?: number;
+    /** Horizontal marker lines for targets / thresholds / means. */
+    referenceLines?: ChartReferenceLine[];
+};
+export type BarChartProps = ValueAxisProps & {
     /** Category labels along the independent axis. */
     categories: string[];
     /** One or more data series. Values align by index with `categories`. */
@@ -44,24 +78,42 @@ export type BarChartProps = {
     horizontal?: boolean;
     /** Show as 100% stacked (implies `stacked`). */
     normalized?: boolean;
-    /** Suffix for y-axis tick labels (e.g. "%"). */
+    /** Suffix for value labels (e.g. "%", " ms"). */
     valueSuffix?: string;
+    /** Prefix for value labels (e.g. "$"). Ignored in `normalized` mode. */
+    valuePrefix?: string;
+    /**
+     * Print each bar's value as a label. Defaults to auto: on for a single
+     * series with ≤8 categories, off otherwise. Set `true` to force labels on
+     * (e.g. grouped multi-series), or `false` to force them off. No effect on
+     * `stacked` / `normalized` charts — use the hover tooltip there.
+     */
+    showValues?: boolean;
     style?: CSSProperties;
 };
-export type LineChartProps = {
+export type LineChartProps = ValueAxisProps & {
     categories: string[];
     series: ChartSeries[];
     height?: number;
     /** Fill the area under each line with a soft tint. */
     fill?: boolean;
+    /** Suffix for value labels (e.g. "%", " ms"). */
     valueSuffix?: string;
+    /** Prefix for value labels (e.g. "$"). */
+    valuePrefix?: string;
+    /** Print the value next to every data point (≤20 categories). */
+    showValues?: boolean;
+    /** Draw a vertical guide through the cursor while hovering. Defaults to `true`. */
+    showHoverGuide?: boolean;
     style?: CSSProperties;
 };
 export type PieChartProps = {
     data: Array<ChartDataPoint & {
         tone?: ChartTone;
     }>;
+    /** Diameter in px. Defaults to 200. */
     size?: number;
+    /** Render as a donut with the summed total shown in the hollow center. */
     donut?: boolean;
     style?: CSSProperties;
 };
@@ -112,16 +164,25 @@ export type PieChartProps = {
  *   ]}
  *   stacked
  * />
+ *
+ * // Mark a target with a reference line. Grouped/single bars also accept
+ * // `yMin` / `yMax` to frame the axis (stacked bars stay zero-based).
+ * <BarChart
+ *   categories={["Mon", "Tue", "Wed", "Thu", "Fri"]}
+ *   series={[{ name: "Latency", data: [180, 210, 240, 200, 220] }]}
+ *   valueSuffix=" ms"
+ *   referenceLines={[{ value: 200, label: "Budget", tone: "warning" }]}
+ * />
  * ```
  */
-export declare function BarChart({ categories, series, height, stacked, horizontal, normalized, valueSuffix, style }: BarChartProps): JSX.Element;
+export declare function BarChart({ categories, series, height, stacked, horizontal, normalized, valueSuffix, valuePrefix, showValues, beginAtZero, yMin, yMax, referenceLines, style }: BarChartProps): JSX.Element;
 /**
  * Multi-series line chart with optional area fill. Distilled from the
  * portal-website Highcharts analytics charts.
  *
  * Each series draws a polyline with dot markers at each data point.
  * Set `fill` to shade the area under every line. Hover over any category
- * column to see a tooltip with all series values at that point.
+ * column to see a tooltip with all series values and a vertical cursor guide.
  *
  * This is **not** a time-series component — it does not parse dates.
  * Pass pre-formatted date strings as `categories` if plotting over time.
@@ -157,9 +218,19 @@ export declare function BarChart({ categories, series, height, stacked, horizont
  *     { name: "errors", data: [2, 4, 9, 3], tone: "danger" },
  *   ]}
  * />
+ *
+ * // Zoom into a tight range and mark an SLO. `beginAtZero={false}`
+ * // auto-fits the axis; `referenceLines` draws the target.
+ * <LineChart
+ *   categories={["Mon", "Tue", "Wed", "Thu", "Fri"]}
+ *   series={[{ name: "Uptime", data: [99.91, 99.95, 99.7, 99.99, 99.96] }]}
+ *   valueSuffix="%"
+ *   beginAtZero={false}
+ *   referenceLines={[{ value: 99.9, label: "SLO", tone: "danger" }]}
+ * />
  * ```
  */
-export declare function LineChart({ categories, series, height, fill, valueSuffix, style }: LineChartProps): JSX.Element;
+export declare function LineChart({ categories, series, height, fill, valueSuffix, valuePrefix, showValues, showHoverGuide, beginAtZero, yMin, yMax, referenceLines, style }: LineChartProps): JSX.Element;
 /**
  * Pie (or donut) chart with hover highlighting. Distilled from the
  * portal-website Highcharts analytics charts.
@@ -171,7 +242,7 @@ export declare function LineChart({ categories, series, height, fill, valueSuffi
  *
  * Hovering a slice expands it outward and dims the others; hovering a legend
  * item does the same. A tooltip with value and percentage appears below the
- * chart. Set `donut` for a hollow center.
+ * chart. Set `donut` for a hollow center that shows the summed total.
  *
  * **Do not** use for bar-style comparisons — use `BarChart` instead.
  *
@@ -197,4 +268,5 @@ export declare function LineChart({ categories, series, height, fill, valueSuffi
  * ```
  */
 export declare function PieChart({ data, size, donut, style }: PieChartProps): JSX.Element;
+export {};
 //# sourceMappingURL=chart-primitives.d.ts.map

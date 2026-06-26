@@ -40,7 +40,7 @@ Tool permission rules. Each entry is a string pattern.
 - `showStatusIndicators`: boolean (default: false) — show status indicators in the UI
 
 ### `channel` (optional)
-Release channel: `"prod"` | `"staging"` | `"lab"` | `"static"`
+Release channel: `"prod"` | `"lab"` | `"static"`
 
 ### `maxMode` (optional)
 boolean (default: false) — enable max mode for higher-quality model responses
@@ -48,7 +48,7 @@ boolean (default: false) — enable max mode for higher-quality model responses
 ### `approvalMode` (optional)
 Controls tool approval behavior:
 - `"allowlist"` (default) — require approval for tools not in the allow list
-- `"unrestricted"` — auto-approve all tool calls (yolo mode)
+- Run Everything — auto-approve all tool calls (same as `--force` / `--yolo`; set approval mode to the non-allowlist value)
 
 ### `sandbox` (optional)
 Sandbox execution environment settings:

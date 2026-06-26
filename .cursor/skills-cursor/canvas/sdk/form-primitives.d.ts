@@ -134,7 +134,8 @@ export type SelectProps = {
  * Dropdown select (native `<select>` with themed styling).
  *
  * Uses a native `<select>` under the hood for reliable keyboard, screen-reader,
- * and mobile support. The dropdown list uses OS-native styling.
+ * and mobile support. The OS-rendered option list is themed for dark mode via
+ * `color-scheme` and per-option colors.
  *
  * @example
  * ```tsx

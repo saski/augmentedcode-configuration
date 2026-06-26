@@ -11,10 +11,10 @@
  * - Run the pre-delivery self-check before returning code.
  */
 /** Shared category color palette used by `Swatch`, `UsageBar`, etc. */
-export type { Color } from "./canvas-tokens.js";
-export { colorPalette, usageColorSequence } from "./canvas-tokens.js";
+export type { CategoryPalette, Color } from "./canvas-tokens.js";
+export { categoryPaletteDark, categoryPaletteLight, colorPalette, usageColorSequence, } from "./canvas-tokens.js";
 /** Charts. */
-export type { BarChartProps, ChartDataPoint, ChartSeries, ChartTone, LineChartProps, PieChartProps, } from "./chart-primitives.js";
+export type { BarChartProps, ChartDataPoint, ChartReferenceLine, ChartSeries, ChartTone, LineChartProps, PieChartProps, } from "./chart-primitives.js";
 export { BarChart, LineChart, PieChart } from "./chart-primitives.js";
 /** Borderless collapsible disclosure row with a structured header. */
 export type { CollapsibleSectionProps } from "./collapsible-section.js";

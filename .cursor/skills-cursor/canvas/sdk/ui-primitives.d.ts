@@ -108,7 +108,7 @@ export declare function Divider({ style }: DividerProps): JSX.Element;
 export declare function Spacer(): JSX.Element;
 /** Horizontal alignment for a table column. */
 export type TableColumnAlign = "left" | "center" | "right";
-/** Semantic tone for a table row — renders a translucent tinted background. */
+/** Semantic tone for a table row — marker dot in the first column. */
 export type TableRowTone = "success" | "danger" | "warning" | "info" | "neutral";
 export type TableProps = {
     /** Column titles, left to right. Column count is fixed by this array. */
@@ -121,9 +121,9 @@ export type TableProps = {
     /** Optional alignment per column index (headers/rows). Defaults to left. */
     columnAlign?: Array<TableColumnAlign | undefined>;
     /**
-     * Optional semantic tone per row index. Applies a translucent tinted
-     * background — use for status highlighting (e.g. failing services, warnings).
-     * Sparse: `undefined` entries are uncolored.
+     * Optional semantic tone per row index. Renders a small colored dot before
+     * the first column's content (no row fill or border). Sparse: `undefined`
+     * entries are unstyled.
      */
     rowTone?: Array<TableRowTone | undefined>;
     /** When true (default), bordered rounded shell with horizontal scroll if needed. */
@@ -451,17 +451,14 @@ export type ButtonProps = {
  * ```
  */
 export declare function Button({ children, variant, disabled, type, style, onClick }: ButtonProps): JSX.Element;
+/** @deprecated Pills always render neutral now; tones are ignored. */
 export type PillTone = "neutral" | "added" | "deleted" | "renamed" | "success" | "warning" | "info";
 export type PillSize = "sm" | "md";
 export type PillProps = {
     children?: ReactNode;
     /** Whether the pill is in its selected/active state (filled background). */
     active?: boolean;
-    /**
-     * Semantic tone. Recolors the border and text. When `active` is also
-     * set, fills the background with the tone color at low opacity.
-     * Defaults to `neutral` (current stroke/text tokens).
-     */
+    /** @deprecated Ignored — pills always render with neutral styling. */
     tone?: PillTone;
     /**
      * Visual size. `"md"` (default) is the standard pill. `"sm"` is a
@@ -497,7 +494,7 @@ export type PillProps = {
  * <Pill onClick={handlePlan} keyboardHint="⇧Tab">Plan new idea</Pill>
  * ```
  */
-export declare function Pill({ children, active, tone, size, leadingContent, keyboardHint, disabled, title, style, onClick }: PillProps): JSX.Element;
+export declare function Pill({ children, active, size, leadingContent, keyboardHint, disabled, title, style, onClick }: PillProps): JSX.Element;
 export type StatTone = "success" | "danger" | "warning" | "info";
 export type StatProps = {
     /** The primary metric value (number, percentage, short string). */
@@ -526,17 +523,17 @@ export type CalloutTone = "info" | "success" | "warning" | "danger" | "neutral";
 export type CalloutProps = {
     /** Body content. Plain strings, `<Text>`, `<Code>`, `<Link>`, or short lists. */
     children?: ReactNode;
-    /** Semantic tone. Recolors the border, background tint, and title text. */
+    /** Semantic tone. Selects a default leading icon when `icon` is omitted. */
     tone?: CalloutTone;
-    /** Optional bold title line, shown above the body in the tone color. */
+    /** Optional bold title line, shown above the body. */
     title?: ReactNode;
     /** Optional leading icon (emoji, inline SVG, or short text glyph). */
     icon?: ReactNode;
     style?: CSSProperties;
 };
 /**
- * Tinted, bordered notice block for warnings, tips, or short status messages
- * inline within a section.
+ * Inline notice for warnings, tips, or short status messages. Each `tone`
+ * renders a cursor icon matching `@anysphere/ui` toasts (override with `icon`).
  *
  * @example
  * ```tsx
