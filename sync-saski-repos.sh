@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -u
+set -euo pipefail
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 root_dir="$(cd "$script_dir/.." && pwd)"
@@ -109,7 +109,7 @@ current_branch_for() {
 
 discover_repos() {
     printf '# path source_remote source_branch update_branch push_remote\n'
-    find "$root_dir" -maxdepth "$max_depth" \( -name .git -type d -o -name .git -type f \) -print | while IFS= read -r git_marker; do
+    while IFS= read -r git_marker; do
         repo="${git_marker%/.git}"
         rel="${repo#"$root_dir"/}"
         branch="$(current_branch_for "$repo")"
@@ -125,7 +125,7 @@ discover_repos() {
         else
             printf '# %s # no GitHub remote found\n' "$rel"
         fi
-    done
+    done < <(find "$root_dir" -maxdepth "$max_depth" \( -name .git -type d -o -name .git -type f \) -print 2>/dev/null || true)
 }
 
 if [ "$discover" -eq 1 ]; then
@@ -231,8 +231,16 @@ sync_repo() {
         return
     fi
 
-    local_head="$(git -C "$repo" rev-parse HEAD)"
-    remote_head="$(git -C "$repo" rev-parse "$remote_ref")"
+    local_head="$(git -C "$repo" rev-parse HEAD 2>/dev/null)" || {
+        report 'error' "$rel_path" 'failed to resolve local HEAD'
+        failed=$((failed + 1))
+        return
+    }
+    remote_head="$(git -C "$repo" rev-parse "$remote_ref" 2>/dev/null)" || {
+        report 'error' "$rel_path" "failed to resolve $remote_ref"
+        failed=$((failed + 1))
+        return
+    }
 
     if [ "$local_head" = "$remote_head" ]; then
         report 'current' "$rel_path" "$update_branch matches $source_remote/$source_branch"
@@ -283,18 +291,13 @@ while IFS= read -r line || [ -n "$line" ]; do
             ;;
     esac
 
-    set -- $line
-    [ "$#" -ge 4 ] || {
+    IFS=$'\t' read -r rel_path source_remote source_branch update_branch push_remote extra <<< "$line" || true
+    if [ -z "${rel_path:-}" ] || [ -z "${update_branch:-}" ]; then
         report 'error' "$line" 'manifest row needs at least 4 columns'
         failed=$((failed + 1))
         continue
-    }
-
-    rel_path="$1"
-    source_remote="$2"
-    source_branch="$3"
-    update_branch="$4"
-    push_remote="${5:--}"
+    fi
+    push_remote="${push_remote:--}"
 
     sync_repo "$rel_path" "$source_remote" "$source_branch" "$update_branch" "$push_remote"
 done < "$manifest"

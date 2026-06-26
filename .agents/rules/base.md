@@ -119,6 +119,9 @@ When a tool hook needs to find RTK, resolve binaries in this order:
 1. `rtk` from `PATH`
 2. `~/.agents/bin/rtk`
 3. `/opt/homebrew/bin/rtk`
+4. `/usr/local/bin/rtk`
+
+`setup-symlinks.sh` links the `~/.agents/bin/rtk` shim to the first available real binary (`/opt/homebrew/bin`, then `/usr/local/bin`, then PATH). The hook resolves PATH-first at runtime; these orders differ by purpose (shim linking vs. runtime resolution) and are intentional.
 
 #### Quick Check
 

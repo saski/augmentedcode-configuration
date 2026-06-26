@@ -184,6 +184,20 @@ validate_managed_binary() {
     echo "✓ $destination_path → $target"
 }
 
+# Resolve a binary on PATH excluding the managed ~/.agents/bin directory,
+# so probes do not match the managed shim itself (circular self-match).
+resolve_path_binary() {
+    local name="$1"
+    local stripped=""
+    local IFS=':'
+    local entry
+    for entry in $PATH; do
+        [ "$entry" = "$HOME/.agents/bin" ] && continue
+        stripped="${stripped:+$stripped:}$entry"
+    done
+    PATH="$stripped" command -v "$name" 2>/dev/null || true
+}
+
 setup_claude_config() {
     ensure_local_directory "$HOME/.claude"
 
@@ -242,12 +256,12 @@ setup_symlinks() {
     link_managed_binary "rtk" \
         "/opt/homebrew/bin/rtk" \
         "/usr/local/bin/rtk" \
-        "$(command -v rtk 2>/dev/null || true)" || true
+        "$(resolve_path_binary rtk)" || true
     link_managed_binary "openspec" \
         "/opt/homebrew/bin/openspec" \
         "$HOME/.bun/bin/openspec" \
         "/usr/local/bin/openspec" \
-        "$(command -v openspec 2>/dev/null || true)" || true
+        "$(resolve_path_binary openspec)" || true
 
     setup_claude_config
 
@@ -586,12 +600,12 @@ validate_symlinks() {
     validate_managed_binary "rtk" \
         "/opt/homebrew/bin/rtk" \
         "/usr/local/bin/rtk" \
-        "$(command -v rtk 2>/dev/null || true)" || errors=$((errors + 1))
+        "$(resolve_path_binary rtk)" || errors=$((errors + 1))
     validate_managed_binary "openspec" \
         "/opt/homebrew/bin/openspec" \
         "$HOME/.bun/bin/openspec" \
         "/usr/local/bin/openspec" \
-        "$(command -v openspec 2>/dev/null || true)" || errors=$((errors + 1))
+        "$(resolve_path_binary openspec)" || errors=$((errors + 1))
 
     # Check root configs
     for config in CLAUDE.md AGENTS.md GEMINI.md; do

@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
+
 # Backup existing ~/.cursor/ configuration before symlink migration
 
 BACKUP_DIR="$HOME/.cursor-backups"
@@ -19,8 +21,8 @@ if [ -d "$BACKUP_PATH" ]; then
     echo "✅ Backup created: $BACKUP_PATH ($SIZE)"
     echo ""
     echo "📝 Backup retention: 7 days"
-    echo "   To restore: cp -R $BACKUP_PATH ~/.cursor/"
-    echo "   To clean old backups: find $BACKUP_DIR -type d -mtime +7 -exec rm -rf {} +"
+    echo "   To restore: cp -R \"$BACKUP_PATH\" ~/.cursor/"
+    echo "   To clean old backups: find \"$BACKUP_DIR\" -type d -mtime +7 -exec rm -rf {} +"
 else
     echo "❌ Backup failed"
     exit 1

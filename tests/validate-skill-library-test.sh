@@ -5,6 +5,12 @@ set -euo pipefail
 REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 VALIDATOR="$REPO_DIR/validate-skill-library.sh"
 
+_CLEANUP_DIRS=()
+_cleanup() {
+    for d in ${_CLEANUP_DIRS[@]+"${_CLEANUP_DIRS[@]}"}; do rm -rf "$d"; done
+}
+trap _cleanup EXIT
+
 assert_contains() {
     local haystack="$1"
     local needle="$2"
@@ -104,7 +110,7 @@ EOF
 test_detects_broken_skill_symlink() {
     local fixture_dir
     fixture_dir="$(mktemp -d)"
-    trap 'rm -rf "$fixture_dir"' RETURN
+    _CLEANUP_DIRS+=("$fixture_dir")
 
     create_fixture "$fixture_dir"
 
@@ -126,7 +132,7 @@ test_detects_broken_skill_symlink() {
 test_detects_missing_catalog_entry() {
     local fixture_dir
     fixture_dir="$(mktemp -d)"
-    trap 'rm -rf "$fixture_dir"' RETURN
+    _CLEANUP_DIRS+=("$fixture_dir")
 
     create_local_skill_fixture "$fixture_dir" "uncataloged-skill" "yes" "no"
 
@@ -148,7 +154,7 @@ test_detects_missing_catalog_entry() {
 test_detects_missing_routing_entry() {
     local fixture_dir
     fixture_dir="$(mktemp -d)"
-    trap 'rm -rf "$fixture_dir"' RETURN
+    _CLEANUP_DIRS+=("$fixture_dir")
 
     create_local_skill_fixture "$fixture_dir" "unrouted-skill" "yes" "yes"
     cat > "$fixture_dir/.agents/docs/skill-domain-routing.md" <<'EOF'
@@ -173,7 +179,7 @@ EOF
 test_detects_missing_index_entry() {
     local fixture_dir
     fixture_dir="$(mktemp -d)"
-    trap 'rm -rf "$fixture_dir"' RETURN
+    _CLEANUP_DIRS+=("$fixture_dir")
 
     create_local_skill_fixture "$fixture_dir" "unindexed-skill" "no" "yes"
 
@@ -196,7 +202,7 @@ test_detects_absolute_symlink() {
     local fixture_dir
     local target_dir
     fixture_dir="$(mktemp -d)"
-    trap 'rm -rf "$fixture_dir"' RETURN
+    _CLEANUP_DIRS+=("$fixture_dir")
 
     create_local_skill_fixture "$fixture_dir" "portable-skill" "yes" "yes"
     target_dir="$fixture_dir/portable-target"
@@ -228,7 +234,7 @@ EOF
 test_detects_invalid_skill_frontmatter() {
     local fixture_dir
     fixture_dir="$(mktemp -d)"
-    trap 'rm -rf "$fixture_dir"' RETURN
+    _CLEANUP_DIRS+=("$fixture_dir")
 
     create_local_skill_fixture "$fixture_dir" "invalid-yaml-skill" "yes" "yes"
     cat > "$fixture_dir/.agents/skills/invalid-yaml-skill/SKILL.md" <<'EOF'
@@ -256,7 +262,7 @@ EOF
 test_validates_utf8_frontmatter_under_ascii_locale() {
     local fixture_dir
     fixture_dir="$(mktemp -d)"
-    trap 'rm -rf "$fixture_dir"' RETURN
+    _CLEANUP_DIRS+=("$fixture_dir")
 
     create_local_skill_fixture "$fixture_dir" "utf8-skill" "yes" "yes"
     printf -- '---\nname: utf8-skill\ndescription: Caf\303\251 workflow\n---\n' > "$fixture_dir/.agents/skills/utf8-skill/SKILL.md"
@@ -277,6 +283,98 @@ test_validates_utf8_frontmatter_under_ascii_locale() {
     assert_contains "$output" "skill library validation passed"
 }
 
+test_detects_stale_index_entry() {
+    local fixture_dir
+    fixture_dir="$(mktemp -d)"
+    _CLEANUP_DIRS+=("$fixture_dir")
+
+    create_local_skill_fixture "$fixture_dir" "real-skill" "yes" "yes"
+    printf -- '| ghost-skill | testing | Stale entry |\n' >> "$fixture_dir/.agents/docs/skill-factory-skills.md"
+    printf -- '- `ghost-skill` - Stale entry\n' >> "$fixture_dir/.agents/docs/skill-domain-routing.md"
+    cat >> "$fixture_dir/.agents/skills/skill-foundry/agents/catalog.yaml" <<'EOF'
+  - name: ghost-skill
+    category: skill-governance
+EOF
+
+    local output
+    set +e
+    output="$("$VALIDATOR" "$fixture_dir" 2>&1)"
+    local exit_code=$?
+    set -e
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "expected validator to fail for stale skills index entry" >&2
+        exit 1
+    fi
+
+    assert_contains "$output" "stale"
+    assert_contains "$output" "ghost-skill"
+}
+
+test_detects_stale_catalog_entry() {
+    local fixture_dir
+    fixture_dir="$(mktemp -d)"
+    _CLEANUP_DIRS+=("$fixture_dir")
+
+    create_local_skill_fixture "$fixture_dir" "real-skill" "yes" "yes"
+    cat >> "$fixture_dir/.agents/skills/skill-foundry/agents/catalog.yaml" <<'EOF'
+  - name: ghost-skill
+    category: skill-governance
+EOF
+
+    local output
+    set +e
+    output="$("$VALIDATOR" "$fixture_dir" 2>&1)"
+    local exit_code=$?
+    set -e
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "expected validator to fail for stale governance catalog entry" >&2
+        exit 1
+    fi
+
+    assert_contains "$output" "stale"
+    assert_contains "$output" "ghost-skill"
+}
+
+test_detects_untracked_skill_dir() {
+    local fixture_dir
+    fixture_dir="$(mktemp -d)"
+    _CLEANUP_DIRS+=("$fixture_dir")
+
+    create_local_skill_fixture "$fixture_dir" "tracked-skill" "yes" "yes"
+    mkdir -p "$fixture_dir/.agents/skills/rogue-skill"
+    cat > "$fixture_dir/.agents/skills/rogue-skill/SKILL.md" <<'EOF'
+---
+name: rogue-skill
+description: Example
+---
+EOF
+    printf -- '| rogue-skill | testing | Example |\n' >> "$fixture_dir/.agents/docs/skill-factory-skills.md"
+    printf -- '- `rogue-skill` - Example\n' >> "$fixture_dir/.agents/docs/skill-domain-routing.md"
+    cat >> "$fixture_dir/.agents/skills/skill-foundry/agents/catalog.yaml" <<'EOF'
+  - name: rogue-skill
+    category: skill-governance
+EOF
+
+    git -C "$fixture_dir" init -q
+    git -C "$fixture_dir" add .agents/skills/tracked-skill .agents/docs .agents/skills/skill-foundry
+
+    local output
+    set +e
+    output="$("$VALIDATOR" "$fixture_dir" 2>&1)"
+    local exit_code=$?
+    set -e
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "expected validator to fail for untracked skill directory" >&2
+        exit 1
+    fi
+
+    assert_contains "$output" "untracked"
+    assert_contains "$output" "rogue-skill"
+}
+
 test_detects_broken_skill_symlink
 test_detects_missing_catalog_entry
 test_detects_missing_routing_entry
@@ -284,3 +382,6 @@ test_detects_missing_index_entry
 test_detects_absolute_symlink
 test_detects_invalid_skill_frontmatter
 test_validates_utf8_frontmatter_under_ascii_locale
+test_detects_stale_index_entry
+test_detects_stale_catalog_entry
+test_detects_untracked_skill_dir

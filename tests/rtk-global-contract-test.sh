@@ -7,6 +7,12 @@ HOOK="$REPO_DIR/.agents/hooks/rtk-rewrite.sh"
 CLAUDE_HOOK="$REPO_DIR/.claude/hooks/rtk-rewrite.sh"
 CODEX_HOOK_TEMPLATE="$REPO_DIR/templates/codex/hooks.json"
 
+_CLEANUP_DIRS=()
+_cleanup() {
+    for d in ${_CLEANUP_DIRS[@]+"${_CLEANUP_DIRS[@]}"}; do rm -rf "$d"; done
+}
+trap _cleanup EXIT
+
 assert_file_exists() {
     local path="$1"
 
@@ -74,9 +80,9 @@ exit 1
 EOF
 
     # shellcheck disable=SC2016
-    sed -i '' "s/REPLACE_OUTPUT/$output/" "$path"
+    sed -i.bak "s/REPLACE_OUTPUT/$output/" "$path" && rm -f "$path.bak"
     # shellcheck disable=SC2016
-    sed -i '' "s/REPLACE_VERSION/$version/" "$path"
+    sed -i.bak "s/REPLACE_VERSION/$version/" "$path" && rm -f "$path.bak"
     chmod +x "$path"
 }
 
@@ -129,6 +135,7 @@ test_agents_bin_policy_when_homebrew_rtk_exists() {
 test_resolution_prefers_path_then_agents_home() {
     local tmp_dir
     tmp_dir="$(mktemp -d)"
+    _CLEANUP_DIRS+=("$tmp_dir")
     local home_dir="$tmp_dir/home"
     local path_bin="$tmp_dir/path-bin"
     mkdir -p "$home_dir/.agents/bin" "$path_bin"
@@ -157,6 +164,7 @@ test_resolution_prefers_path_then_agents_home() {
 test_fail_open_when_rtk_too_old() {
     local tmp_dir
     tmp_dir="$(mktemp -d)"
+    _CLEANUP_DIRS+=("$tmp_dir")
     local home_dir="$tmp_dir/home"
     local path_bin="$tmp_dir/path-bin"
     mkdir -p "$home_dir" "$path_bin"
@@ -177,7 +185,109 @@ test_fail_open_when_rtk_too_old() {
     fi
 }
 
+test_fail_open_when_rtk_version_command_fails() {
+    local tmp_dir
+    tmp_dir="$(mktemp -d)"
+    _CLEANUP_DIRS+=("$tmp_dir")
+    local home_dir="$tmp_dir/home"
+    local path_bin="$tmp_dir/path-bin"
+    mkdir -p "$home_dir" "$path_bin"
+
+    cat > "$path_bin/rtk" <<'EOF'
+#!/usr/bin/env bash
+if [[ "${1:-}" == "--version" ]]; then
+  exit 1
+fi
+if [[ "${1:-}" == "rewrite" ]]; then
+  shift
+  printf '%s rewritten\n' "$1"
+  exit 0
+fi
+exit 1
+EOF
+    chmod +x "$path_bin/rtk"
+
+    local input='{"tool_input":{"command":"echo hi"}}'
+    local output exit_code
+    set +e
+    output="$(env -i HOME="$home_dir" PATH="$path_bin:/usr/bin:/bin" bash "$HOOK" <<< "$input" 2>/dev/null)"
+    exit_code=$?
+    set -e
+
+    if [[ $exit_code -ne 0 ]]; then
+        echo "expected hook to fail-open (exit 0) when rtk --version exits non-zero, got exit $exit_code" >&2
+        exit 1
+    fi
+    if [[ -n "$output" ]]; then
+        echo "expected no rewrite output when rtk --version fails, got: $output" >&2
+        exit 1
+    fi
+}
+
+test_fail_open_when_stdin_malformed() {
+    local tmp_dir
+    tmp_dir="$(mktemp -d)"
+    _CLEANUP_DIRS+=("$tmp_dir")
+    local home_dir="$tmp_dir/home"
+    local path_bin="$tmp_dir/path-bin"
+    mkdir -p "$home_dir" "$path_bin"
+
+    create_fake_rtk "rewritten" "rtk 0.37.2" "$path_bin/rtk"
+
+    local output exit_code
+    set +e
+    output="$(env -i HOME="$home_dir" PATH="$path_bin:/usr/bin:/bin" bash "$HOOK" <<< "not-json" 2>/dev/null)"
+    exit_code=$?
+    set -e
+
+    if [[ $exit_code -ne 0 ]]; then
+        echo "expected hook to fail-open (exit 0) on malformed stdin, got exit $exit_code" >&2
+        exit 1
+    fi
+}
+
+test_no_empty_command_when_rewrite_output_empty() {
+    local tmp_dir
+    tmp_dir="$(mktemp -d)"
+    _CLEANUP_DIRS+=("$tmp_dir")
+    local home_dir="$tmp_dir/home"
+    local path_bin="$tmp_dir/path-bin"
+    mkdir -p "$home_dir" "$path_bin"
+
+    cat > "$path_bin/rtk" <<'EOF'
+#!/usr/bin/env bash
+if [[ "${1:-}" == "--version" ]]; then
+  echo "rtk 0.37.2"
+  exit 0
+fi
+if [[ "${1:-}" == "rewrite" ]]; then
+  exit 0
+fi
+exit 1
+EOF
+    chmod +x "$path_bin/rtk"
+
+    local input='{"tool_input":{"command":"echo hi"}}'
+    local output exit_code
+    set +e
+    output="$(env -i HOME="$home_dir" PATH="$path_bin:/usr/bin:/bin" bash "$HOOK" <<< "$input" 2>/dev/null)"
+    exit_code=$?
+    set -e
+
+    if [[ $exit_code -ne 0 ]]; then
+        echo "expected hook to exit 0 when rtk rewrite outputs empty, got exit $exit_code" >&2
+        exit 1
+    fi
+    if [[ -n "$output" ]]; then
+        echo "expected no output when rtk rewrite is empty, got: $output" >&2
+        exit 1
+    fi
+}
+
 test_canonical_layout_contract
 test_agents_bin_policy_when_homebrew_rtk_exists
 test_resolution_prefers_path_then_agents_home
 test_fail_open_when_rtk_too_old
+test_fail_open_when_rtk_version_command_fails
+test_fail_open_when_stdin_malformed
+test_no_empty_command_when_rewrite_output_empty

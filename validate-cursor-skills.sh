@@ -3,8 +3,17 @@
 set -euo pipefail
 
 REPO_DIR="${1:-$(cd "$(dirname "$0")" && pwd)}"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 CURSOR_SKILLS_DIR="$REPO_DIR/.cursor/skills-cursor"
 INDEX_PATH="$REPO_DIR/.agents/docs/cursor-skills.md"
+
+# shellcheck source=lib/validate-skill-frontmatter.sh
+. "$SCRIPT_DIR/lib/validate-skill-frontmatter.sh"
+
+if ! command -v ruby >/dev/null 2>&1; then
+    echo "ruby is required to validate SKILL.md frontmatter" >&2
+    exit 1
+fi
 
 if [[ ! -d "$CURSOR_SKILLS_DIR" ]]; then
     echo "missing Cursor skills directory: $CURSOR_SKILLS_DIR" >&2
@@ -19,55 +28,28 @@ fi
 invalid_frontmatter_file="$(mktemp)"
 skill_names_file="$(mktemp)"
 index_names_file="$(mktemp)"
-missing_index_entries_file="$(mktemp)"
-trap 'rm -f "$invalid_frontmatter_file" "$skill_names_file" "$index_names_file" "$missing_index_entries_file"' EXIT
+diff_file="$(mktemp)"
+untracked_skills_file="$(mktemp)"
+trap 'rm -f "$invalid_frontmatter_file" "$skill_names_file" "$index_names_file" "$diff_file" "$untracked_skills_file"' EXIT
 
-(
-    ruby -ryaml -e '
-Encoding.default_external = Encoding::UTF_8
-skills_dir = ARGV.fetch(0)
-
-Dir.glob(File.join(skills_dir, "*", "SKILL.md")).sort.each do |path|
-  text = File.read(path, mode: "r:UTF-8")
-  unless text.start_with?("---\n")
-    puts "#{path}\tmissing YAML frontmatter"
-    next
-  end
-
-  parts = text.split(/^---\s*$/, 3)
-  unless parts.length >= 3
-    puts "#{path}\tmissing closing YAML frontmatter delimiter"
-    next
-  end
-
-  begin
-    YAML.safe_load(parts.fetch(1), aliases: true)
-  rescue Psych::Exception => e
-    message = e.message.lines.first&.strip || e.class.name
-    puts "#{path}\t#{message}"
-  end
-end
-' "$CURSOR_SKILLS_DIR"
-) > "$invalid_frontmatter_file"
+validate_skill_frontmatter "$CURSOR_SKILLS_DIR" > "$invalid_frontmatter_file"
 
 while IFS= read -r path; do
     if [[ -f "$path/SKILL.md" ]]; then
         basename "$path"
     fi
-done < <(find "$CURSOR_SKILLS_DIR" -maxdepth 1 -mindepth 1 -type d | sort) > "$skill_names_file"
+done < <(find "$CURSOR_SKILLS_DIR" -maxdepth 1 -mindepth 1 \( -type d -o -type l \) | sort) > "$skill_names_file"
 
 awk -F'|' '
     /^\|/ {
         name = $2
         gsub(/`/, "", name)
         gsub(/^[[:space:]]+|[[:space:]]+$/, "", name)
-        if (name != "" && name != "Skill" && name != "-------") {
+        if (name ~ /^[a-z0-9][a-z0-9-]*$/) {
             print name
         }
     }
 ' "$INDEX_PATH" | sort -u > "$index_names_file"
-
-comm -23 "$skill_names_file" "$index_names_file" > "$missing_index_entries_file"
 
 failed=0
 
@@ -79,10 +61,34 @@ if [[ -s "$invalid_frontmatter_file" ]]; then
     failed=1
 fi
 
-if [[ -s "$missing_index_entries_file" ]]; then
+comm -23 "$skill_names_file" "$index_names_file" > "$diff_file"
+if [[ -s "$diff_file" ]]; then
     echo "missing from Cursor skills index ($INDEX_PATH):"
-    cat "$missing_index_entries_file"
+    cat "$diff_file"
     failed=1
+fi
+
+comm -13 "$skill_names_file" "$index_names_file" > "$diff_file"
+if [[ -s "$diff_file" ]]; then
+    echo "stale entries in Cursor skills index ($INDEX_PATH):"
+    cat "$diff_file"
+    failed=1
+fi
+
+if git -C "$REPO_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    : > "$untracked_skills_file"
+    while IFS= read -r name; do
+        if ! git -C "$REPO_DIR" ls-files --error-unmatch ".cursor/skills-cursor/$name" >/dev/null 2>&1; then
+            echo "$name"
+        fi
+    done < "$skill_names_file" >> "$untracked_skills_file"
+    if [[ -s "$untracked_skills_file" ]]; then
+        echo "untracked Cursor skill directories (not committed to git):"
+        cat "$untracked_skills_file"
+        failed=1
+    fi
+else
+    echo "not a git work tree; skipping git-tracking check" >&2
 fi
 
 if [[ $failed -ne 0 ]]; then

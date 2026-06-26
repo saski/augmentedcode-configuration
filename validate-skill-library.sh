@@ -3,10 +3,19 @@
 set -euo pipefail
 
 REPO_DIR="${1:-$(cd "$(dirname "$0")" && pwd)}"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 SKILLS_DIR="$REPO_DIR/.agents/skills"
 SKILL_FOUNDRY_DIR="$SKILLS_DIR/skill-foundry/agents"
 INDEX_PATH="$REPO_DIR/.agents/docs/skill-factory-skills.md"
 ROUTING_PATH="$REPO_DIR/.agents/docs/skill-domain-routing.md"
+
+# shellcheck source=lib/validate-skill-frontmatter.sh
+. "$SCRIPT_DIR/lib/validate-skill-frontmatter.sh"
+
+if ! command -v ruby >/dev/null 2>&1; then
+    echo "ruby is required to validate SKILL.md frontmatter" >&2
+    exit 1
+fi
 
 if [[ ! -d "$SKILLS_DIR" ]]; then
     echo "missing skills directory: $SKILLS_DIR" >&2
@@ -16,7 +25,15 @@ fi
 broken_symlinks_file="$(mktemp)"
 absolute_symlinks_file="$(mktemp)"
 invalid_frontmatter_file="$(mktemp)"
-trap 'rm -f "$broken_symlinks_file" "$absolute_symlinks_file" "$invalid_frontmatter_file"' EXIT
+skill_names_file="$(mktemp)"
+catalog_names_file="$(mktemp)"
+index_names_file="$(mktemp)"
+routing_names_file="$(mktemp)"
+diff_file="$(mktemp)"
+untracked_skills_file="$(mktemp)"
+trap 'rm -f "$broken_symlinks_file" "$absolute_symlinks_file" "$invalid_frontmatter_file" "$skill_names_file" "$catalog_names_file" "$index_names_file" "$routing_names_file" "$diff_file" "$untracked_skills_file"' EXIT
+
+failed=0
 
 find "$SKILLS_DIR" -maxdepth 1 -mindepth 1 -type l ! -exec test -e {} \; -print | sort > "$broken_symlinks_file"
 (
@@ -27,34 +44,7 @@ find "$SKILLS_DIR" -maxdepth 1 -mindepth 1 -type l ! -exec test -e {} \; -print 
         fi
     done < <(find "$SKILLS_DIR" -maxdepth 1 -mindepth 1 -type l | sort)
 ) > "$absolute_symlinks_file"
-(
-    ruby -ryaml -e '
-Encoding.default_external = Encoding::UTF_8
-skills_dir = ARGV.fetch(0)
-
-Dir.glob(File.join(skills_dir, "*", "SKILL.md")).sort.each do |path|
-  text = File.read(path, mode: "r:UTF-8")
-  unless text.start_with?("---\n")
-    puts "#{path}\tmissing YAML frontmatter"
-    next
-  end
-
-  parts = text.split(/^---\s*$/, 3)
-  unless parts.length >= 3
-    puts "#{path}\tmissing closing YAML frontmatter delimiter"
-    next
-  end
-
-  begin
-    YAML.safe_load(parts.fetch(1), aliases: true)
-  rescue Psych::Exception => e
-    message = e.message.lines.first&.strip || e.class.name
-    puts "#{path}\t#{message}"
-  end
-end
-' "$SKILLS_DIR"
-) > "$invalid_frontmatter_file"
-failed=0
+validate_skill_frontmatter "$SKILLS_DIR" > "$invalid_frontmatter_file"
 
 if [[ -s "$broken_symlinks_file" ]]; then
     echo "broken skill symlinks:"
@@ -80,70 +70,100 @@ if [[ -s "$invalid_frontmatter_file" ]]; then
     failed=1
 fi
 
-skill_names_file="$(mktemp)"
-catalog_names_file="$(mktemp)"
-missing_catalog_entries_file="$(mktemp)"
-trap 'rm -f "$broken_symlinks_file" "$absolute_symlinks_file" "$invalid_frontmatter_file" "$skill_names_file" "$catalog_names_file" "$missing_catalog_entries_file"' EXIT
-
 while IFS= read -r path; do
     if [[ -f "$path/SKILL.md" ]]; then
         basename "$path"
     fi
 done < <(find "$SKILLS_DIR" -maxdepth 1 -mindepth 1 \( -type d -o -type l \) | sort) > "$skill_names_file"
+
+catalog_files=(
+    "$SKILL_FOUNDRY_DIR/catalog.yaml"
+    "$SKILL_FOUNDRY_DIR/catalog-engineering.yaml"
+    "$SKILL_FOUNDRY_DIR/catalog-product-management.yaml"
+)
+for catalog in "${catalog_files[@]}"; do
+    if [[ ! -f "$catalog" ]]; then
+        echo "missing governance catalog: $catalog" >&2
+        failed=1
+    fi
+done
+
 (
-    grep -hE '^  - name: ' \
-        "$SKILL_FOUNDRY_DIR/catalog.yaml" \
-        "$SKILL_FOUNDRY_DIR/catalog-engineering.yaml" \
-        "$SKILL_FOUNDRY_DIR/catalog-product-management.yaml" || true
+    grep -hE '^  - name: ' "${catalog_files[@]}" 2>/dev/null || true
 ) | sed 's/^  - name: //' | sort -u > "$catalog_names_file"
 
-comm -23 "$skill_names_file" "$catalog_names_file" > "$missing_catalog_entries_file"
-
-if [[ -s "$missing_catalog_entries_file" ]]; then
+comm -23 "$skill_names_file" "$catalog_names_file" > "$diff_file"
+if [[ -s "$diff_file" ]]; then
     echo "missing from governance catalogs:"
-    cat "$missing_catalog_entries_file"
+    cat "$diff_file"
     failed=1
 fi
 
-index_names_file="$(mktemp)"
-missing_index_entries_file="$(mktemp)"
-trap 'rm -f "$broken_symlinks_file" "$absolute_symlinks_file" "$invalid_frontmatter_file" "$skill_names_file" "$catalog_names_file" "$missing_catalog_entries_file" "$index_names_file" "$missing_index_entries_file"' EXIT
-
-awk -F'|' '
-    /^\|/ {
-        name = $2
-        gsub(/`/, "", name)
-        gsub(/^[[:space:]]+|[[:space:]]+$/, "", name)
-        if (name != "" && name != "Skill" && name != "-------") {
-            print name
-        }
-    }
-' "$INDEX_PATH" | sort -u > "$index_names_file"
-
-comm -23 "$skill_names_file" "$index_names_file" > "$missing_index_entries_file"
-
-if [[ -s "$missing_index_entries_file" ]]; then
-    echo "missing from skills index:"
-    cat "$missing_index_entries_file"
+comm -13 "$skill_names_file" "$catalog_names_file" > "$diff_file"
+if [[ -s "$diff_file" ]]; then
+    echo "stale entries in governance catalogs:"
+    cat "$diff_file"
     failed=1
+fi
+
+if [[ ! -f "$INDEX_PATH" ]]; then
+    echo "missing skills index: $INDEX_PATH" >&2
+    failed=1
+else
+    awk -F'|' '
+        /^\|/ {
+            name = $2
+            gsub(/`/, "", name)
+            gsub(/^[[:space:]]+|[[:space:]]+$/, "", name)
+            if (name ~ /^[a-z0-9][a-z0-9-]*$/) {
+                print name
+            }
+        }
+    ' "$INDEX_PATH" | sort -u > "$index_names_file"
+
+    comm -23 "$skill_names_file" "$index_names_file" > "$diff_file"
+    if [[ -s "$diff_file" ]]; then
+        echo "missing from skills index:"
+        cat "$diff_file"
+        failed=1
+    fi
+
+    comm -13 "$skill_names_file" "$index_names_file" > "$diff_file"
+    if [[ -s "$diff_file" ]]; then
+        echo "stale entries in skills index:"
+        cat "$diff_file"
+        failed=1
+    fi
 fi
 
 if [[ ! -f "$ROUTING_PATH" ]]; then
     echo "missing domain routing guide: $ROUTING_PATH" >&2
     failed=1
 else
-    routing_names_file="$(mktemp)"
-    missing_routing_entries_file="$(mktemp)"
-    trap 'rm -f "$broken_symlinks_file" "$absolute_symlinks_file" "$invalid_frontmatter_file" "$skill_names_file" "$catalog_names_file" "$missing_catalog_entries_file" "$index_names_file" "$missing_index_entries_file" "$routing_names_file" "$missing_routing_entries_file"' EXIT
-
     { grep -oE '`[a-z0-9][a-z0-9-]*`' "$ROUTING_PATH" || true; } | tr -d '`' | sort -u > "$routing_names_file"
-    comm -23 "$index_names_file" "$routing_names_file" > "$missing_routing_entries_file"
 
-    if [[ -s "$missing_routing_entries_file" ]]; then
+    comm -23 "$index_names_file" "$routing_names_file" > "$diff_file"
+    if [[ -s "$diff_file" ]]; then
         echo "missing from domain routing guide ($ROUTING_PATH):"
-        cat "$missing_routing_entries_file"
+        cat "$diff_file"
         failed=1
     fi
+fi
+
+if git -C "$REPO_DIR" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    : > "$untracked_skills_file"
+    while IFS= read -r name; do
+        if ! git -C "$REPO_DIR" ls-files --error-unmatch ".agents/skills/$name" >/dev/null 2>&1; then
+            echo "$name"
+        fi
+    done < "$skill_names_file" >> "$untracked_skills_file"
+    if [[ -s "$untracked_skills_file" ]]; then
+        echo "untracked skill directories (not committed to git):"
+        cat "$untracked_skills_file"
+        failed=1
+    fi
+else
+    echo "not a git work tree; skipping git-tracking check" >&2
 fi
 
 if [[ $failed -ne 0 ]]; then

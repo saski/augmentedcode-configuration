@@ -6,6 +6,12 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 INSTALLER="$REPO_DIR/.agents/skills/openspec/scripts/install-openspec"
 
+_CLEANUP_DIRS=()
+_cleanup() {
+    for d in ${_CLEANUP_DIRS[@]+"${_CLEANUP_DIRS[@]}"}; do rm -rf "$d"; done
+}
+trap _cleanup EXIT
+
 fail() {
     printf 'FAIL: %s\n' "$1" >&2
     exit 1
@@ -38,6 +44,7 @@ test_installs_under_docs_when_docs_exists() {
     local fixture_dir fake_bin log_path
 
     fixture_dir="$(mktemp -d)"
+    _CLEANUP_DIRS+=("$fixture_dir")
     fake_bin="$fixture_dir/bin"
     log_path="$fixture_dir/openspec.log"
     mkdir -p "$fixture_dir/repo/docs" "$fake_bin"
@@ -69,6 +76,7 @@ test_installs_under_thoughts_when_docs_is_missing() {
     local fixture_dir fake_bin log_path
 
     fixture_dir="$(mktemp -d)"
+    _CLEANUP_DIRS+=("$fixture_dir")
     fake_bin="$fixture_dir/bin"
     log_path="$fixture_dir/openspec.log"
     mkdir -p "$fixture_dir/repo/thoughts" "$fake_bin"

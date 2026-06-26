@@ -1,4 +1,4 @@
-.PHONY: check test lint-shell validate-skills validate-cursor-skills validate-openspec validate-symlinks check-tracked-ignored install-hooks sync-saski-repos sync-saski-repos-apply discover-saski-repos
+.PHONY: check test lint-shell validate-skills validate-cursor-skills validate-openspec validate-symlinks check-tracked-ignored install-hooks sync-saski-repos sync-saski-repos-apply discover-saski-repos ci-check
 
 export PATH := $(HOME)/.agents/bin:$(HOME)/.bun/bin:/opt/homebrew/bin:/usr/local/bin:$(PATH)
 
@@ -10,6 +10,7 @@ SHELL_SCRIPTS := \
 	backup-cursor-config.sh \
 	validate-skill-library.sh \
 	validate-cursor-skills.sh \
+	lib/validate-skill-frontmatter.sh \
 	.agents/skills/openspec/scripts/install-openspec \
 	tests/openspec-install-test.sh \
 	tests/validate-skill-library-test.sh \
@@ -17,6 +18,8 @@ SHELL_SCRIPTS := \
 	tests/healthcheck-automation-test.sh \
 	tests/rtk-global-contract-test.sh \
 	tests/cursor-skills-validation-test.sh \
+	tests/sync-saski-repos-test.sh \
+	tests/sync-skill-factory-test.sh \
 	hooks/pre-commit
 
 check: test lint-shell validate-skills validate-cursor-skills validate-openspec validate-symlinks check-tracked-ignored
@@ -28,6 +31,8 @@ test:
 	./tests/healthcheck-automation-test.sh
 	./tests/rtk-global-contract-test.sh
 	./tests/cursor-skills-validation-test.sh
+	./tests/sync-saski-repos-test.sh
+	./tests/sync-skill-factory-test.sh
 
 lint-shell:
 	bash -n $(SHELL_SCRIPTS)
@@ -43,7 +48,7 @@ validate-openspec:
 	OPENSPEC_TELEMETRY=0 openspec validate --all
 
 validate-symlinks:
-	./setup-symlinks.sh validate
+	REPO_DIR="$$(pwd)" ./setup-symlinks.sh validate
 
 check-tracked-ignored:
 	@tracked_ignored="$$(git ls-files -ci --exclude-standard)"; \
@@ -66,3 +71,17 @@ sync-saski-repos-apply:
 
 discover-saski-repos:
 	./sync-saski-repos.sh --discover
+
+# CI-portable subset of `check`. Excludes checks that depend on the local
+# environment: validate-symlinks (HOME tool links), validate-openspec (openspec
+# CLI install), validate-skills (sibling-repo skill symlinks), and the
+# external-skill-references test (sibling repos). Runs on a stock runner with
+# ruby, jq, python3, and git preinstalled.
+ci-check: lint-shell validate-cursor-skills
+	./tests/openspec-install-test.sh
+	./tests/validate-skill-library-test.sh
+	./tests/healthcheck-automation-test.sh
+	./tests/rtk-global-contract-test.sh
+	./tests/cursor-skills-validation-test.sh
+	./tests/sync-saski-repos-test.sh
+	./tests/sync-skill-factory-test.sh

@@ -43,16 +43,29 @@ and the provenance lock file is regenerated.
 Example:
   SKILL_FACTORY=/path/to/skill-factory ./sync-skill-factory.sh
 EOF
-    exit 0
 }
 
-if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
-    usage
-fi
-
 DRY_RUN=false
-if [[ "${1:-}" == "--dry-run" ]]; then
-    DRY_RUN=true
+case "${1:-}" in
+    --help|-h)
+        usage
+        exit 0
+        ;;
+    --dry-run)
+        DRY_RUN=true
+        ;;
+    "")
+        ;;
+        *)
+        printf 'error: unknown option: %s\n\n' "$1" >&2
+        usage >&2
+        exit 1
+        ;;
+esac
+
+if ! command -v python3 >/dev/null 2>&1; then
+    echo "python3 is required to sync skill-factory" >&2
+    exit 1
 fi
 
 if [[ ! -d "$OUTPUT_SKILLS" ]]; then
@@ -178,16 +191,19 @@ for name in sorted(set(skill_names)):
         "syncedAt": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
     }
 
-payload = {
-    "version": 1,
-    "source": {
-        "repository": "saski/skill-factory",
-        "sourceType": "github",
-        "sourceCommit": source_commit,
-    },
-    "skills": skills,
-}
-lock_path.write_text(json.dumps(payload, indent=2) + "\n")
+    payload = {
+        "version": 1,
+        "source": {
+            "repository": "saski/skill-factory",
+            "sourceType": "github",
+            "sourceCommit": source_commit,
+        },
+        "skills": skills,
+    }
+    content = json.dumps(payload, indent=2) + "\n"
+    tmp_path = lock_path.with_name(lock_path.name + ".tmp")
+    tmp_path.write_text(content)
+    tmp_path.replace(lock_path)
 PY
 
 echo ""

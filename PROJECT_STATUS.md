@@ -1,7 +1,7 @@
 # Augmentedcode Configuration - Project Status
 
-**Last Updated**: 2026-06-17
-**Overall Status**: 🟢 **Ready** - Canonical local workspace is `~/Code`; home-level tool symlinks point at this checkout and `make check` passes.
+**Last Updated**: 2026-06-26
+**Overall Status**: 🟢 **Ready** - Canonical local workspace is `~/Code`; home-level tool symlinks point at this checkout and `make check` passes. Validation gaps, destructive-script bugs, and hook fail-open gaps closed; CI added.
 
 ---
 
@@ -23,6 +23,19 @@
 ---
 
 ## Recent Changes
+
+### 2026-06-26: Hardening and validation gap closure ✅
+
+Full review-driven remediation across validators, destructive sync scripts, the RTK hook, CI, and tests. Phased plan: `thoughts/shared/plans/2026-06-26-hardening-and-validation-gaps.md`.
+
+- **Phase 0 (stop the bleeding):** Registered the untracked `onboard` Cursor skill in `.agents/docs/cursor-skills.md`; replaced the untracked root `AGENTS.md` regular file with a tracked symlink to `.agents/rules/base.md` (matching `CLAUDE.md`/`GEMINI.md`); fixed managed-binary resolution in `setup-symlinks.sh` so the `command -v` probe excludes `~/.agents/bin` (eliminated the openspec shim false-warning).
+- **Phase 1 (validator blind spots):** `validate-skill-library.sh` and `validate-cursor-skills.sh` now do bidirectional `comm` (catch stale index/catalog entries, not just missing ones) and a git-tracking check (catch skill dirs on disk but not committed — the exact failure that broke `make check`). Awk index parser restricted to `[a-z0-9][a-z0-9-]*` skill names so wiring-table rows are no longer mis-parsed. Duplicated Ruby frontmatter block extracted into `lib/validate-skill-frontmatter.sh`. Consolidated the 4× accumulating EXIT trap to one.
+- **Phase 2 (destructive-script hardening):** `sync-saski-repos.sh` now uses `set -euo pipefail`, guards `git rev-parse` (broken HEAD reports `error` + `failed=1` instead of silently mis-reporting `skip`/`current`), and parses manifest rows with `IFS=$'\t' read` instead of `set -- $line` (no word-split/glob). `sync-skill-factory.sh` rejects unknown options (a typo'd `--dry-run` no longer performs destructive `rm -rf`/`cp -R`) and writes the provenance lock atomically (temp + rename). `backup-cursor-config.sh` got `set -euo pipefail`, `#!/usr/bin/env bash`, and quoted `$BACKUP_DIR` in printed cleanup.
+- **Phase 3 (hook fail-open):** `.agents/hooks/rtk-rewrite.sh` is now uniformly fail-open: a non-zero `--version` exit, malformed/empty stdin, and empty `rtk rewrite` output all exit 0 (passthrough) instead of aborting or emitting an empty command. Version probe switched to `grep -m1` to avoid `head` SIGPIPE under pipefail.
+- **Phase 4 (CI + deps + rtk reconciliation):** Added `.github/workflows/check.yml` running a new `make ci-check` target (CI-portable subset) on push/PR. Added `command -v ruby`/`command -v python3` guards with friendly errors. Reconciled the RTK resolution order across `rtk-rewrite.sh`, `setup-symlinks.sh`, and `base.md §8` (added `/usr/local/bin/rtk`; documented the intentional shim-linking vs. runtime-resolution difference).
+- **Phase 5 (test hygiene):** Temp-file leaks fixed via a shared global EXIT-trap cleanup pattern across all fixture-based tests; `sed -i ''` (BSD-only, would break ubuntu CI) replaced with portable `sed -i.bak`.
+
+**Validation**: `make check` and `make ci-check` both pass. New tests: `tests/sync-saski-repos-test.sh`, `tests/sync-skill-factory-test.sh`, plus stale-entry/untracked/git-tracking cases in the validator tests and three fail-open cases in `tests/rtk-global-contract-test.sh`.
 
 ### 2026-06-17: Codex and Claude RTK hook wiring repaired ✅
 
@@ -111,17 +124,16 @@ Self-contained skill library, validator and contract tests, repository validatio
 
 ## Next Steps
 
-1. **Resolve root `AGENTS.md` drift** — either remove the untracked local file or intentionally track the root shim again with matching documentation.
-2. **Marmalade team rules** — escalate to Eventbrite Engineering Cursor admin to remove the `marmalade-*` rules from team config (they are now available as a workspace skill in `~/eventbrite/listings-webapp/.cursor/skills/marmalade-design-system/`).
-3. **`tlz-connection` PR** — push the `add-tlz-connection-rule` branch in `~/eventbrite/cursor-prompts` and open a PR.
-4. **Benchmark monitored skills** (`pbt-pragmatic-adoption`, `creating-hooks`, `writing-statuslines`) after the next major model update.
-5. **Keep governance aligned**: `components.lock.json`, the discovery index, and the skill-foundry catalogs whenever skills change.
+1. **Marmalade team rules** — escalate to Eventbrite Engineering Cursor admin to remove the `marmalade-*` rules from team config (they are now available as a workspace skill in `~/eventbrite/listings-webapp/.cursor/skills/marmalade-design-system/`).
+2. **`tlz-connection` PR** — push the `add-tlz-connection-rule` branch in `~/eventbrite/cursor-prompts` and open a PR.
+3. **Benchmark monitored skills** (`pbt-pragmatic-adoption`, `creating-hooks`, `writing-statuslines`) after the next major model update.
+4. **Keep governance aligned**: `components.lock.json`, the discovery index, and the skill-foundry catalogs whenever skills change.
+5. **Monitor CI** once `.github/workflows/check.yml` runs on the first push/PR; expand `ci-check` toward the full `make check` if sibling-repo skill sources and the openspec CLI are provisioned on the runner.
 
 ---
 
 ## Known Issues
 
-- **Root `AGENTS.md` untracked drift**: `/Users/saski/Code/augmentedcode-configuration/AGENTS.md` is currently an untracked regular file, while `~/AGENTS.md` correctly points to `.agents/rules/base.md`.
 - **Marmalade team rules in Cursor**: the `marmalade-*` rules pushed by Eventbrite Engineering team config keep loading even when toggled off in the Cursor UI. Workaround in place (skill mirror in `listings-webapp/.cursor/skills/`); definitive fix requires removing the entries from team config upstream.
 - **`@-include` in `.mdc` files is non-recursive**: Cursor expands a top-level `@path` reference but does not re-expand `@path` references inside the included file. Codex CLI shows the same behavior. RTK content was inlined into `base.md` to work around this; future cross-tool inclusions should avoid relying on recursive `@-include`.
 
