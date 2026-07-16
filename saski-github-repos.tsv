@@ -11,23 +11,23 @@
 #
 # Repos without a GitHub remote are listed at the bottom as comments.
 
-ai-adoption-map origin main main -
-augmented-lean-delivery origin main main -
-augmentedcode-configuration upstream main main origin
-augmentedcode-skills origin main main -
-bugmagnet-ai-assistant origin master master -
-chatgpt-knowledge-export origin main main -
-everything-claude-code origin main main -
-frontend-clean-architecture origin master master -
-google-calendar-plugin origin main main -
-manual-SDD origin main main -
-mybroworld origin main main -
-net-art-studies origin main main -
-obsidian-wiki origin main main -
-personal-knowledge-vault origin main main -
-saskiweb origin master master -
-skill-factory origin main main -
-transcrpter origin main main -
+ai-adoption-map	origin	main	main	-
+augmented-lean-delivery	origin	main	main	-
+augmentedcode-configuration	upstream	main	main	origin
+augmentedcode-skills	origin	main	main	-
+bugmagnet-ai-assistant	origin	master	master	-
+chatgpt-knowledge-export	origin	main	main	-
+everything-claude-code	origin	main	main	-
+frontend-clean-architecture	origin	master	master	-
+google-calendar-plugin	origin	main	main	-
+manual-SDD	origin	main	main	-
+mybroworld	origin	main	main	-
+net-art-studies	origin	main	main	-
+obsidian-wiki	origin	main	main	-
+personal-knowledge-vault	origin	main	main	-
+saskiweb	origin	master	master	-
+skill-factory	origin	main	main	-
+transcrpter	origin	main	main	-
 
 # No GitHub remote currently configured:
 # none discovered under ~/Code
