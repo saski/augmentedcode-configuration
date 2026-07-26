@@ -8,7 +8,6 @@ Use this skill when the user asks to run `/review-bugbot`.
 
 Launch exactly one `bugbot` subagent with:
 
-- `readonly: true`
 - `run_in_background: false` unless explicitly asked to run in background
 - `description: "Bugbot"`
 - `subagent_type: "bugbot"`

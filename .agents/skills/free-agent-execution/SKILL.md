@@ -63,8 +63,20 @@ The adapter requires these values and types:
 - `validation.command`: a non-empty array of executable and argument strings. It is executed directly, without shell interpolation.
 - `model`: one of the verified models below.
 - `task_class`: a configured free-worker task class. Version one provides `bounded_code`.
+- `parent_run_id`: a non-empty string identifying the delegating frontier run.
+- `task_id`: a non-empty string identifying this task within the delegation tree.
+- `delegation_depth`: exactly `1` for a worker contract.
 
-The remaining fields in the example are trace metadata. Preserve them for auditability, but note that adapter version 1 does not currently validate or enforce them. In particular, `timeout_seconds` is informational and does not stop a long-running worker.
+The remaining fields in the example are informational. Preserve them for auditability. The adapter validates that `parent_run_id` and `task_id` are non-empty strings, `delegation_depth` is exactly `1`, and `timeout_seconds` is a positive integer. It stops and reports an OpenCode run that exceeds the declared timeout.
+
+## Role envelope
+
+The shared version-one role envelope distinguishes entry from worker contracts:
+
+- **Entry contracts** use `mode frontier` or `free`, `execution_role entry`, a non-empty `task_id`, `delegation_depth 0`, and omit `parent_role` and `parent_run_id`.
+- **Worker contracts** accepted by this adapter require `mode free`, `execution_role worker`, `parent_role frontier`, a non-empty `parent_run_id`, a non-empty `task_id`, and `delegation_depth 1`.
+
+A context that is already acting as an OpenCode worker must not re-enter as entry. The adapter rejects such contracts before opening another OpenCode invocation.
 
 ## Verified free models
 
@@ -121,6 +133,6 @@ A completed adapter run returns:
 - `allowed_files` is a post-execution check, not a write sandbox. An out-of-scope change fails the result but is not reverted.
 - The Git comparison is path-based. A worker change to a path that was already dirty before execution is not attributed or scope-checked. Use a clean worktree for stronger attribution, especially for allowed files.
 - The validation command is trusted local code and runs with the adapter caller's permissions even when the worker fails. Review the array before execution.
-- The adapter does not provide filesystem, network, process, resource, or time isolation. OpenCode and the selected external model remain outside this contract.
+- The adapter does not provide filesystem, network, or resource isolation. It enforces the declared process timeout, but OpenCode and the selected external model otherwise remain outside this contract.
 - Free-model prompts and accessible code must be non-sensitive. Stop if the task needs secrets, production data, private credentials, or broad repository access.
 - Review `changed_files`, the Git diff, the diagnostic, and validation evidence before accepting the worker's changes.

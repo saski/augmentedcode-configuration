@@ -33,7 +33,7 @@ export type TextInputProps = {
  * <TextInput value={name} onChange={setName} placeholder="Task title…" />
  * ```
  */
-export declare function TextInput({ value, onChange, placeholder, disabled, type, style }: TextInputProps): JSX.Element;
+export declare function TextInput({ value, onChange, placeholder, disabled, type, style, }: TextInputProps): JSX.Element;
 export type TextAreaProps = {
     value?: string;
     /** Called with the new string value on every keystroke. */
@@ -59,7 +59,7 @@ export type TextAreaProps = {
  * <TextArea value={notes} onChange={setNotes} placeholder="Add notes…" rows={4} />
  * ```
  */
-export declare function TextArea({ value, onChange, placeholder, disabled, rows, style }: TextAreaProps): JSX.Element;
+export declare function TextArea({ value, onChange, placeholder, disabled, rows, style, }: TextAreaProps): JSX.Element;
 export type CheckboxProps = {
     checked?: boolean;
     /** Called with the new boolean value when toggled. */
@@ -88,7 +88,7 @@ export type CheckboxProps = {
  * <Checkbox checked={item.done} onChange={(v) => toggleItem(item.id, v)} />
  * ```
  */
-export declare function Checkbox({ checked, onChange, disabled, label, style }: CheckboxProps): JSX.Element;
+export declare function Checkbox({ checked, onChange, disabled, label, style, }: CheckboxProps): JSX.Element;
 export type ToggleProps = {
     checked?: boolean;
     /** Called with the new boolean value when toggled. */
@@ -113,7 +113,7 @@ export type ToggleProps = {
  * </Row>
  * ```
  */
-export declare function Toggle({ checked, onChange, disabled, size, style }: ToggleProps): JSX.Element;
+export declare function Toggle({ checked, onChange, disabled, size, style, }: ToggleProps): JSX.Element;
 export type SelectOption = {
     value: string;
     label: string;
@@ -152,7 +152,7 @@ export type SelectProps = {
  * />
  * ```
  */
-export declare function Select({ value, onChange, options, placeholder, disabled, style }: SelectProps): JSX.Element;
+export declare function Select({ value, onChange, options, placeholder, disabled, style, }: SelectProps): JSX.Element;
 export type IconButtonProps = {
     /** Icon content: an SVG element, emoji, or unicode character. */
     children: ReactNode;
@@ -191,5 +191,5 @@ export type IconButtonProps = {
  * </IconButton>
  * ```
  */
-export declare function IconButton({ children, onClick, disabled, title, variant, size, style }: IconButtonProps): JSX.Element;
+export declare function IconButton({ children, onClick, disabled, title, variant, size, style, }: IconButtonProps): JSX.Element;
 //# sourceMappingURL=form-primitives.d.ts.map

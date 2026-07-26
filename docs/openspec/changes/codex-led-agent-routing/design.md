@@ -75,7 +75,7 @@ Codex -> free-worker adapter -> opencode run -> OmniRoute -> verified free model
 
 OpenCode is retained because this exact path has been verified locally and it already provides an agent runtime, model selection, working-directory control, and structured JSON events. It does not choose paid OpenAI models and does not spawn another orchestration tree.
 
-The adapter, not a second LLM, owns the mechanical boundary: input validation, output parsing, usage capture, and conversion to a stable handoff result. Process timeout enforcement remains a planned hardening step; the version-one `timeout_seconds` field is trace metadata only.
+The adapter, not a second LLM, owns the mechanical boundary: input validation, output parsing, usage capture, process timeout enforcement, per-worktree write exclusion, and conversion to a stable handoff result.
 
 ### 4. OmniRoute is the free-model data plane
 
@@ -83,10 +83,10 @@ OmniRoute owns access to free upstream providers and, after semantic health chec
 
 The first release uses direct verified model pins:
 
-| Task class | Initial model | Status |
-|---|---|---|
-| bounded code implementation | `omniroute/oc/deepseek-v4-flash-free` | Verified through OpenCode and local OmniRoute |
-| fallback or general worker | `omniroute/oc/big-pickle` | Verified through OpenCode and Hermes |
+| Model | Task class | Verification date | Status |
+|---|---|---|---|
+| `omniroute/oc/deepseek-v4-flash-free` | `bounded_code` | 2026-07-26 | passed |
+| `omniroute/oc/big-pickle` | `bounded_code` | 2026-07-26 | passed |
 
 The local catalog's other free models remain candidates, not production routes. Each candidate must pass the same conformance suite before it is added.
 
@@ -95,6 +95,14 @@ Broad built-in routes such as `auto/best-coding` and `auto/best-free` are exclud
 ### 5. Entry adapters are thin and do not form a new gateway
 
 The shared entry contract is implemented through commands, skills, and existing client capabilities rather than a new daemon or protocol gateway:
+
+| Contract use | `mode` | `execution_role` | `task_id` | `parent_role` | `parent_run_id` | `delegation_depth` |
+|---|---|---|---|---|---|---|
+| User starts a frontier run | `frontier` | `entry` | Required, non-empty | Omitted | Omitted | `0` |
+| User starts an explicit bounded free run | `free` | `entry` | Required, non-empty | Omitted | Omitted | `0` |
+| Codex delegates a bounded task | `free` | `worker` | Required, non-empty | `frontier` | Required, non-empty | `1` |
+
+These are the only valid version-one role transitions. A `worker` cannot use `frontier` mode, name an entry or another worker as its parent, or increase the delegation depth. Entry adapters must also retain the active execution role: when OpenCode is already running as a `worker`, an attempted `entry` transition is rejected before another OpenCode invocation. This contract-level guard complements the worker runtime's denied delegation and shell permissions.
 
 | Entry surface | `frontier` path | Explicit `free` path |
 |---|---|---|
@@ -174,7 +182,7 @@ The repository owns:
 - non-secret Codex, OpenCode, Hermes, and Cursor entry templates;
 - setup and validation logic.
 
-Local credentials and mutable provider health remain outside version control. Setup must preserve existing credential stores and unrelated user configuration. Timeout enforcement and expanded model conformance remain follow-up work.
+Local credentials and mutable provider health remain outside version control. Setup must preserve existing credential stores and unrelated user configuration. Expanded model conformance remains follow-up work.
 
 ### 12. Rollout is incremental
 
@@ -271,3 +279,11 @@ The simplest version adds four thin entry adapters but avoids a new service, dyn
 - the structured OpenCode adapter cannot express a required agent capability;
 - a stable OmniRoute semantic-health mechanism is available and verified against empty HTTP 200 responses.
 - users misroute more than 10% of requests despite explicit `frontier` and `free` commands, which would justify evaluating assisted classification.
+
+## Acceptance Evidence
+
+**2026-07-26 — Codex CLI Tracer Bullet (free-agent-execution):**
+
+The first bounded free-worker tracer bullet ran from a Codex session using the `free-agent-execution` skill. The user explicitly requested a bounded, non-sensitive task. Codex delegated bounded, non-sensitive work through free workers. The GREEN worker used `omniroute/oc/deepseek-v4-flash-free` to add the `.agents/rules/base.md` pointer and the focused `codex-free-entry` test passed. The README received a reviewed natural-language prompt. Adapter results were structured and frontier review rejected incorrect intermediate output before acceptance. The serving frontier model was not independently verified as `gpt-5.6-sol`. Clean-worktree scope attribution remains pending under 6.2. The retained loop-guard test did verify worker-to-entry re-entry rejection, consistent with completed 6.7.3.
+
+This confirms explicit contract construction, focused validation, structured handoff, and frontier review. Direct free entry without a frontier turn and remaining clients (Hermes, OpenCode, Cursor) remain pending and tracked in child tasks under 3.2 and 4.3.

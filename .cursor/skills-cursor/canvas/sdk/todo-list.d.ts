@@ -24,7 +24,7 @@ export type TodoListProps = {
  * />
  * ```
  */
-export declare function TodoList({ todos, dimmedTodoIds, onTodoClick, style }: TodoListProps): JSX.Element | null;
+export declare function TodoList({ todos, dimmedTodoIds, onTodoClick, style, }: TodoListProps): JSX.Element | null;
 export type TodoListCardProps = {
     todos: readonly TodoItem[];
     dimmedTodoIds?: ReadonlySet<string>;
@@ -45,5 +45,5 @@ export type TodoListCardProps = {
  * />
  * ```
  */
-export declare function TodoListCard({ todos, dimmedTodoIds, defaultExpanded, onTodoClick, style }: TodoListCardProps): JSX.Element | null;
+export declare function TodoListCard({ todos, dimmedTodoIds, defaultExpanded, onTodoClick, style, }: TodoListCardProps): JSX.Element | null;
 //# sourceMappingURL=todo-list.d.ts.map

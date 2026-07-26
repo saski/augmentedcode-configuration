@@ -14,7 +14,9 @@ SHELL_SCRIPTS := \
 	.agents/skills/openspec/scripts/install-openspec \
 	.agents/skills/free-agent-execution/scripts/run-free-worker \
 	.agents/skills/free-agent-execution/scripts/validate-routing-manifest \
+	.agents/skills/free-agent-execution/scripts/check-omniroute-catalog \
 	tests/free-agent-execution-test.sh \
+	tests/check-omniroute-catalog-test.sh \
 	tests/openspec-install-test.sh \
 	tests/validate-skill-library-test.sh \
 	tests/external-skill-references-test.sh \
@@ -23,12 +25,14 @@ SHELL_SCRIPTS := \
 	tests/cursor-skills-validation-test.sh \
 	tests/sync-saski-repos-test.sh \
 	tests/sync-skill-factory-test.sh \
+	tests/codex-free-entry-test.sh \
 	hooks/pre-commit
 
 check: test lint-shell validate-skills validate-cursor-skills validate-openspec validate-symlinks check-tracked-ignored
 
 test:
 	./tests/free-agent-execution-test.sh
+	./tests/check-omniroute-catalog-test.sh
 	./tests/openspec-install-test.sh
 	./tests/validate-skill-library-test.sh
 	./tests/external-skill-references-test.sh
@@ -37,6 +41,7 @@ test:
 	./tests/cursor-skills-validation-test.sh
 	./tests/sync-saski-repos-test.sh
 	./tests/sync-skill-factory-test.sh
+	./tests/codex-free-entry-test.sh
 
 lint-shell:
 	bash -n $(SHELL_SCRIPTS)
@@ -83,6 +88,7 @@ discover-saski-repos:
 # ruby, jq, python3, and git preinstalled.
 ci-check: lint-shell validate-cursor-skills
 	./tests/free-agent-execution-test.sh
+	./tests/check-omniroute-catalog-test.sh
 	./tests/openspec-install-test.sh
 	./tests/validate-skill-library-test.sh
 	./tests/healthcheck-automation-test.sh

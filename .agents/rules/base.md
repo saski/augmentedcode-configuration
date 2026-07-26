@@ -1,5 +1,9 @@
-<!-- last_updated: 2026-05-27 -->
-<!-- version: 2.9 -->
+---
+trigger: always_on
+---
+
+<!-- last_updated: 2026-07-16 -->
+<!-- version: 3.0 -->
 # AI Agent Development Rules
 
 This is the compact universal rulebook for this project. It applies to every AI agent unless a narrower project, tool, or user instruction explicitly overrides it.
@@ -12,15 +16,17 @@ This is the compact universal rulebook for this project. It applies to every AI 
 - State important assumptions explicitly; when ambiguity has multiple plausible interpretations, name them.
 - Read before writing: inspect exports, immediate callers, shared utilities, docs, and tests that can change the decision.
 - Use tools, code, tests, and docs for deterministic answers; reserve model judgment for classification, drafting, synthesis, and tradeoffs.
+- Spawn agents with smaller, lighter models to simpler, atomic tasks. Use Hermes for simpler, tactical changes when available.
 - Stop when confused. Name what is unclear and ask one focused question instead of guessing.
 
 ### Simplest Surgical Change
 
 - Prefer the smallest working change that satisfies the request.
+- Push back when a simpler, safer, or more reversible approach exists
 - Do not add speculative features, abstractions, cleanup, comments, or formatting churn.
 - Touch only files required for the goal. Clean up only the mess created by the current change.
 - Match the codebase's conventions even when you disagree. If a convention is harmful, surface it instead of silently forking the style.
-- Push back when a simpler, safer, or more reversible approach exists.
+
 
 ### Goal-Driven Verification
 
@@ -40,9 +46,9 @@ This is the compact universal rulebook for this project. It applies to every AI 
 
 ## 2. Contextual Rule Loading
 
-- When the repo contains Python source or Python project markers, also read `.agents/rules/python-project.md` if that file exists.
-- When the repo contains a `Makefile`, also read `.agents/rules/makefile-project.md` if that file exists.
-- When the repo contains React/TSX source files, also read `.agents/rules/react-best-practices.md` if that file exists.
+- When the repo contains Python source read `.agents/rules/python-project.md`.
+- When the repo contains a `Makefile`, read `.agents/rules/makefile-project.md` .
+- When the repo contains React/TSX source files, read `.agents/rules/react-best-practices.md`.
 - If a referenced contextual rule file is absent, treat it as optional, note that it is missing, and continue with the applicable rules that are available.
 - Contextual rules extend this file; they do not replace it.
 
@@ -50,10 +56,11 @@ This is the compact universal rulebook for this project. It applies to every AI 
 
 - Provide the outcome first, then concise supporting detail when needed.
 - Do not require hidden-reasoning, internal-monologue, or chain-of-thought sections.
-- Do not append broad run metadata (token counts, tool traces, session identifiers) unless the user explicitly asks for it. Serving-model and applied-skill disclosure are excluded from this restriction.
-- When you have concrete information about the serving model or skills actually loaded and applied for the inference, disclose them briefly without waiting for the user to ask (for example a short line at the start or end). Do not guess model names or claim a skill was used if it was only considered but not read and followed.
+- Do not append broad run metadata (token counts, tool traces, session identifiers) except if you have concrete information about the serving model or skills actually loaded and applied for the inference, disclose them briefly without waiting for the user to ask (for example a short line at the start or end). Do not guess model names or claim a skill was used if it was only considered but not read and followed.
 - Team communication can be in Spanish or English.
 - All technical artifacts must be in English, including code, documentation, tickets, schemas, configuration, scripts, git commit messages, and test names.
+- Favour making diagrams or visual explanations whenever they can ease the communication. The user is a visual thinker
+- Use HTML output when valuable for reacher output or dialog
 
 ## 4. Documentation Boundaries
 
@@ -87,6 +94,7 @@ This is the compact universal rulebook for this project. It applies to every AI 
 - Debugging and diagnosis: use `~/.agents/skills/diagnose/SKILL.md` for systematic reproduce → minimise → hypothesise → fix loops on hard bugs and regressions.
 - Plan and execute large work: use `~/.agents/skills/fic-research/SKILL.md`, `~/.agents/skills/fic-create-plan/SKILL.md`, `~/.agents/skills/fic-implement-plan/SKILL.md`, and `~/.agents/skills/fic-validate-plan/SKILL.md` for the FIC research → plan → implement → validate workflow.
 - Project status maintenance: use `~/.agents/skills/project-status-maintenance/SKILL.md` to create or update `PROJECT_STATUS.md` files with the canonical structure.
+- When the user explicitly requests a bounded, non-sensitive free worker, the agent loads and follows the free-agent-execution skill; the frontier agent retains scope preparation and final review.
 
 ## 6. Personal Knowledge Persistence
 

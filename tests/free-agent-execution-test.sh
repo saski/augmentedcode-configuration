@@ -250,9 +250,282 @@ test_legacy_model_identifier_rejected() {
     fi
 }
 
+test_loop_guard_rejects_invalid_role_transitions() {
+    local fixture_dir
+    fixture_dir="$(mktemp -d)"
+    _CLEANUP_DIRS+=("$fixture_dir")
+
+    local fake_bin="$fixture_dir/bin"
+    local capture="$fixture_dir/opencode-invocation.txt"
+    local manifest="$fixture_dir/routing-manifest.json"
+    local workspace="$fixture_dir/workspace"
+
+    mkdir -p "$fake_bin" "$workspace"
+    git -C "$workspace" init -q
+    git -C "$workspace" config user.email "test@example.com"
+    git -C "$workspace" config user.name "Test User"
+    touch "$workspace/.gitkeep"
+    printf '%s\n' "committed" >"$workspace/preexisting.txt"
+    git -C "$workspace" add .gitkeep preexisting.txt
+    git -C "$workspace" commit -qm "Initial fixture"
+
+    cat >"$fake_bin/opencode" <<'EOF'
+#!/usr/bin/env bash
+printf '%s\n' "invoked" >"$FAKE_CAPTURE"
+printf '%s\n' '{"type":"text","part":{"text":"FREE_AGENT_RESULT: {\"status\":\"completed\",\"summary\":\"done\"}"}}'
+printf '%s\n' '{"type":"step_finish","part":{"tokens":{"input":1,"output":1}}}'
+EOF
+    chmod +x "$fake_bin/opencode"
+
+    write_valid_manifest "$manifest" "omniroute/oc/deepseek-v4-flash-free"
+
+    assert_loop_guard_rejection() {
+        local contract="$1"
+        local label="$2"
+
+        rm -f "$capture"
+        local result
+        result="$(
+            PATH="$fake_bin:$PATH" \
+            FAKE_CAPTURE="$capture" \
+            FREE_AGENT_ROUTING_MANIFEST="$manifest" \
+            "$ADAPTER" "$contract"
+        )"
+
+        assert_json_equals "$result" '.status' '"failed"'
+
+        local diagnostic
+        diagnostic="$(jq -r '.diagnostic // ""' <<<"$result")"
+        if [[ -z "$diagnostic" ]]; then
+            echo "expected non-empty diagnostic for $label, got empty" >&2
+            exit 1
+        fi
+
+        if [[ -f "$capture" ]]; then
+            echo "opencode was invoked for $label but should have been blocked by loop guard" >&2
+            exit 1
+        fi
+    }
+
+    local base_contract="$fixture_dir/base.json"
+    jq -n \
+        --arg workspace "$workspace" \
+        '{
+            contract_version: "1",
+            mode: "free",
+            execution_role: "worker",
+            parent_role: "frontier",
+            parent_run_id: "run-123",
+            delegation_depth: 1,
+            task_id: "task-loop",
+            task_class: "bounded_code",
+            sensitivity: "non_sensitive",
+            working_directory: $workspace,
+            requirement: "Test loop guard.",
+            allowed_files: ["result.txt"],
+            validation: {command: ["true"]},
+            model: "omniroute/oc/deepseek-v4-flash-free",
+            timeout_seconds: 30
+        }' >"$base_contract"
+
+    local entry_contract="$fixture_dir/entry-role.json"
+    jq '.execution_role = "entry"' "$base_contract" >"$entry_contract"
+    assert_loop_guard_rejection "$entry_contract" "entry-role contract"
+}
+
+test_worker_timeout_fails_without_paid_fallback() {
+    local fixture_dir
+    fixture_dir="$(mktemp -d)"
+    _CLEANUP_DIRS+=("$fixture_dir")
+
+    local fake_bin="$fixture_dir/bin"
+    local manifest="$fixture_dir/routing-manifest.json"
+    local workspace="$fixture_dir/workspace"
+    local contract="$fixture_dir/contract.json"
+
+    mkdir -p "$fake_bin" "$workspace"
+    git -C "$workspace" init -q
+    git -C "$workspace" config user.email "test@example.com"
+    git -C "$workspace" config user.name "Test User"
+    touch "$workspace/.gitkeep"
+    git -C "$workspace" add .gitkeep
+    git -C "$workspace" commit -qm "Initial fixture"
+
+    cat >"$fake_bin/opencode" <<'EOF'
+#!/usr/bin/env bash
+sleep 2
+printf '%s\n' '{"type":"text","part":{"text":"FREE_AGENT_RESULT: {\"status\":\"completed\",\"summary\":\"too late\"}"}}'
+EOF
+    chmod +x "$fake_bin/opencode"
+
+    write_valid_manifest "$manifest" "omniroute/oc/deepseek-v4-flash-free"
+    jq -n --arg workspace "$workspace" '
+        {
+            contract_version: "1",
+            mode: "free",
+            execution_role: "worker",
+            parent_role: "frontier",
+            parent_run_id: "run-timeout",
+            delegation_depth: 1,
+            task_id: "task-timeout",
+            task_class: "bounded_code",
+            sensitivity: "non_sensitive",
+            working_directory: $workspace,
+            requirement: "Complete quickly.",
+            allowed_files: [],
+            validation: {command: ["true"]},
+            model: "omniroute/oc/deepseek-v4-flash-free",
+            timeout_seconds: 1
+        }' >"$contract"
+
+    local result
+    result="$(
+        PATH="$fake_bin:$PATH" \
+        FREE_AGENT_ROUTING_MANIFEST="$manifest" \
+        "$ADAPTER" "$contract"
+    )"
+
+    assert_json_equals "$result" '.status' '"failed"'
+    assert_json_equals "$result" '.diagnostic' '"OpenCode timed out after 1 seconds"'
+}
+
+test_worker_failure_modes_return_structured_failures() {
+    local fixture_dir
+    fixture_dir="$(mktemp -d)"
+    _CLEANUP_DIRS+=("$fixture_dir")
+
+    local fake_bin="$fixture_dir/bin"
+    local manifest="$fixture_dir/routing-manifest.json"
+    local workspace="$fixture_dir/workspace"
+    local contract="$fixture_dir/contract.json"
+    local capture="$fixture_dir/opencode-invocation.txt"
+
+    mkdir -p "$fake_bin" "$workspace"
+    git -C "$workspace" init -q
+    git -C "$workspace" config user.email "test@example.com"
+    git -C "$workspace" config user.name "Test User"
+    touch "$workspace/.gitkeep"
+    git -C "$workspace" add .gitkeep
+    git -C "$workspace" commit -qm "Initial fixture"
+
+    cat >"$fake_bin/opencode" <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+
+printf '%s\n' "$*" >"$FAKE_CAPTURE"
+case "$FAKE_FAILURE_MODE" in
+    provider_error)
+        exit 7
+        ;;
+    empty_completion)
+        printf '%s\n' '{"type":"step_finish","part":{"tokens":{"input":0,"output":0}}}'
+        ;;
+    missing_final)
+        printf '%s\n' '{"type":"step_finish","part":{"tokens":{"input":1,"output":1}}}'
+        ;;
+    out_of_scope)
+        workspace=""
+        while [[ $# -gt 0 ]]; do
+            if [[ "$1" == "--dir" ]]; then
+                workspace="$2"
+                break
+            fi
+            shift
+        done
+        printf '%s\n' "outside allowed scope" >"$workspace/unexpected.txt"
+        printf '%s\n' '{"type":"text","part":{"text":"FREE_AGENT_RESULT: {\"status\":\"completed\",\"summary\":\"done\"}"}}'
+        ;;
+esac
+EOF
+    chmod +x "$fake_bin/opencode"
+
+    write_valid_manifest "$manifest" "omniroute/oc/deepseek-v4-flash-free"
+    jq -n --arg workspace "$workspace" '
+        {
+            contract_version: "1",
+            mode: "free",
+            execution_role: "worker",
+            parent_role: "frontier",
+            parent_run_id: "run-failure",
+            delegation_depth: 1,
+            task_id: "task-failure",
+            task_class: "bounded_code",
+            sensitivity: "non_sensitive",
+            working_directory: $workspace,
+            requirement: "Exercise adapter failure handling.",
+            allowed_files: ["result.txt"],
+            validation: {command: ["true"]},
+            model: "omniroute/oc/deepseek-v4-flash-free",
+            timeout_seconds: 30
+        }' >"$contract"
+
+    assert_failure_mode() {
+        local mode="$1"
+        local expected_diagnostic="$2"
+        local result
+
+        rm -f "$capture" "$workspace/unexpected.txt"
+        result="$(
+            PATH="$fake_bin:$PATH" \
+            FAKE_CAPTURE="$capture" \
+            FAKE_FAILURE_MODE="$mode" \
+            FREE_AGENT_ROUTING_MANIFEST="$manifest" \
+            "$ADAPTER" "$contract"
+        )"
+
+        assert_json_equals "$result" '.status' '"failed"'
+        assert_json_equals "$result" '.diagnostic' "\"$expected_diagnostic\""
+    }
+
+    assert_failure_mode "provider_error" "OpenCode exited with status 7"
+    assert_failure_mode "empty_completion" "OpenCode returned no usable completion result"
+    assert_failure_mode "missing_final" "OpenCode returned no usable completion result"
+    assert_failure_mode "out_of_scope" "OpenCode changed files outside the allowed scope"
+
+    jq '.model = "omniroute/oc/unverified-free"' "$contract" >"$fixture_dir/unsupported-contract.json"
+    rm -f "$capture"
+    local unsupported_result
+    unsupported_result="$(
+        PATH="$fake_bin:$PATH" \
+        FAKE_CAPTURE="$capture" \
+        FREE_AGENT_ROUTING_MANIFEST="$manifest" \
+        "$ADAPTER" "$fixture_dir/unsupported-contract.json"
+    )"
+    assert_json_equals "$unsupported_result" '.status' '"failed"'
+    assert_json_equals "$unsupported_result" '.diagnostic' '"Model is not verified for the requested free-worker task class"'
+    if [[ -f "$capture" ]]; then
+        echo "opencode was invoked for an unverified model" >&2
+        exit 1
+    fi
+
+    local worktree_lock_id
+    worktree_lock_id="$(printf '%s' "$workspace" | shasum -a 256 | awk '{print $1}')"
+    local lock_dir="/private/tmp/free-agent-worktree-lock-$worktree_lock_id"
+    mkdir "$lock_dir"
+    rm -f "$capture"
+    local locked_result
+    locked_result="$(
+        PATH="$fake_bin:$PATH" \
+        FAKE_CAPTURE="$capture" \
+        FAKE_FAILURE_MODE="missing_final" \
+        FREE_AGENT_ROUTING_MANIFEST="$manifest" \
+        "$ADAPTER" "$contract"
+    )"
+    rmdir "$lock_dir"
+    assert_json_equals "$locked_result" '.status' '"failed"'
+    assert_json_equals "$locked_result" '.diagnostic' '"Another free worker already owns this worktree"'
+    if [[ -f "$capture" ]]; then
+        echo "opencode was invoked while another worker owned the worktree" >&2
+        exit 1
+    fi
+}
+
 test_frontier_principal_delegates_one_bounded_task
 test_changed_files_ignores_preexisting_git_changes
 test_worker_accepts_generic_completion_text
 test_worker_uses_verified_model_from_routing_manifest
 test_routing_manifest_rejects_unsafe_or_incomplete_policy
 test_legacy_model_identifier_rejected
+test_loop_guard_rejects_invalid_role_transitions
+test_worker_timeout_fails_without_paid_fallback
+test_worker_failure_modes_return_structured_failures

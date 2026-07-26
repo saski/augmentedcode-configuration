@@ -56,7 +56,7 @@ export type RowProps = {
  * </Row>
  * ```
  */
-export declare function Row({ children, gap, align, justify, wrap, style }: RowProps): JSX.Element;
+export declare function Row({ children, gap, align, justify, wrap, style, }: RowProps): JSX.Element;
 /**
  * CSS Grid with tokenized gap. Prefer this over `Row` + `wrap` when you need a
  * fixed number of equal-width columns: wrapped flex items can land on their
@@ -74,7 +74,7 @@ export type GridProps = {
     align?: "start" | "center" | "end" | "stretch";
     style?: CSSProperties;
 };
-export declare function Grid({ children, columns, gap, align, style }: GridProps): JSX.Element;
+export declare function Grid({ children, columns, gap, align, style, }: GridProps): JSX.Element;
 export type DividerProps = {
     style?: CSSProperties;
 };
@@ -162,7 +162,7 @@ export type TableProps = {
  * </Card>
  * ```
  */
-export declare function Table({ headers, rows, columnAlign, rowTone, framed, striped, stickyHeader, style, emptyMessage }: TableProps): JSX.Element;
+export declare function Table({ headers, rows, columnAlign, rowTone, framed, striped, stickyHeader, style, emptyMessage, }: TableProps): JSX.Element;
 export type TextWeight = "normal" | "medium" | "semibold" | "bold";
 export type TextProps = {
     children?: ReactNode;
@@ -210,7 +210,7 @@ export type TextProps = {
  * <Text>See the <Link href="https://example.com">docs</Link> for details.</Text>
  * ```
  */
-export declare function Text({ children, tone, size, as, weight, italic, truncate, style }: TextProps): JSX.Element;
+export declare function Text({ children, tone, size, as, weight, italic, truncate, style, }: TextProps): JSX.Element;
 export type H1Props = {
     children?: ReactNode;
     style?: CSSProperties;
@@ -305,7 +305,7 @@ export type CardVariant = "default" | "borderless";
  * expandable list items, etc.). Shared by `Card` and `todo-list.tsx` so
  * every disclosure in the canvas SDK uses the same glyph.
  */
-export declare function CanvasChevron({ expanded }: {
+export declare function CanvasChevron({ expanded, }: {
     expanded: boolean;
 }): JSX.Element;
 export type CardProps = {
@@ -377,7 +377,7 @@ export type CardProps = {
  * // Use <H2>Overview</H2><Text>…</Text> instead.
  * ```
  */
-export declare function Card({ children, variant, size, stickyHeader, collapsible, defaultOpen, open: openProp, onOpenChange, style }: CardProps): JSX.Element;
+export declare function Card({ children, variant, size, stickyHeader, collapsible, defaultOpen, open: openProp, onOpenChange, style, }: CardProps): JSX.Element;
 export type CardHeaderProps = {
     /** Plain text title. Do **not** pass headings, buttons, pills, or layout rows. */
     children?: ReactNode;
@@ -411,7 +411,7 @@ export type CardHeaderProps = {
  * // Bad — multiple pills in header (use trailing for one, or move to CardBody)
  * ```
  */
-export declare function CardHeader({ children, trailing, style }: CardHeaderProps): JSX.Element;
+export declare function CardHeader({ children, trailing, style, }: CardHeaderProps): JSX.Element;
 export type CardBodyProps = {
     children?: ReactNode;
     style?: CSSProperties;
@@ -428,7 +428,7 @@ export type CardBodyProps = {
  * </Card>
  * ```
  */
-export declare function CardBody({ children, style }: CardBodyProps): JSX.Element | null;
+export declare function CardBody({ children, style, }: CardBodyProps): JSX.Element | null;
 export type ButtonProps = {
     children?: ReactNode;
     variant?: "primary" | "secondary" | "ghost";
@@ -450,7 +450,7 @@ export type ButtonProps = {
  * </Row>
  * ```
  */
-export declare function Button({ children, variant, disabled, type, style, onClick }: ButtonProps): JSX.Element;
+export declare function Button({ children, variant, disabled, type, style, onClick, }: ButtonProps): JSX.Element;
 /** @deprecated Pills always render neutral now; tones are ignored. */
 export type PillTone = "neutral" | "added" | "deleted" | "renamed" | "success" | "warning" | "info";
 export type PillSize = "sm" | "md";
@@ -494,7 +494,7 @@ export type PillProps = {
  * <Pill onClick={handlePlan} keyboardHint="⇧Tab">Plan new idea</Pill>
  * ```
  */
-export declare function Pill({ children, active, size, leadingContent, keyboardHint, disabled, title, style, onClick }: PillProps): JSX.Element;
+export declare function Pill({ children, active, size, leadingContent, keyboardHint, disabled, title, style, onClick, }: PillProps): JSX.Element;
 export type StatTone = "success" | "danger" | "warning" | "info";
 export type StatProps = {
     /** The primary metric value (number, percentage, short string). */
@@ -542,5 +542,5 @@ export type CalloutProps = {
  * </Callout>
  * ```
  */
-export declare function Callout({ children, tone, title, icon, style }: CalloutProps): JSX.Element;
+export declare function Callout({ children, tone, title, icon, style, }: CalloutProps): JSX.Element;
 //# sourceMappingURL=ui-primitives.d.ts.map

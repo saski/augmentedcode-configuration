@@ -61,6 +61,84 @@ flowchart LR
 
 The important boundary: `.agents/` is canonical. Local runtime state, editor state, sessions, machine-specific paths, and mutable credentials stay outside the shared repo.
 
+## Agent routing architecture
+
+The entry surface does not own the work. Codex is the frontier control plane; OmniRoute is restricted to explicitly authorized, bounded free-worker execution.
+
+```mermaid
+flowchart LR
+    user["User"]
+
+    subgraph entry["Entry surfaces"]
+        telegram["Telegram"] --> hermes["Hermes"]
+        opencode_entry["OpenCode"]
+        codex_entry["Codex App / CLI"]
+        cursor["Cursor"]
+    end
+
+    contract{"Explicit mode"}
+    hermes --> contract
+    opencode_entry --> contract
+    codex_entry --> contract
+    cursor --> contract
+
+    contract -->|"frontier"| codex["Codex principal\nGPT-5.6 Sol"]
+    contract -->|"free, bounded, non-sensitive"| adapter["Free-worker adapter"]
+
+    codex --> openspec["OpenSpec\nplan · tasks · acceptance"]
+    codex --> review["Frontier review\nand integration"]
+    codex -->|"eligible subtask"| adapter
+
+    adapter --> worker["OpenCode one-shot worker"]
+    worker --> omniroute["OmniRoute\nverified free-model policy"]
+    omniroute --> models["Free models"]
+    models --> result["Result\ndiff · validation · usage"]
+    result --> review
+
+    codex_auth["ChatGPT OAuth\nCodex store"] -.-> codex
+    free_auth["Free-provider credentials"] -.-> omniroute
+```
+
+### Frontier-to-free task lifecycle
+
+```mermaid
+sequenceDiagram
+    participant U as User / entry surface
+    participant C as Codex frontier principal
+    participant S as OpenSpec
+    participant A as Free-worker adapter
+    participant O as OpenCode worker
+    participant R as OmniRoute free route
+
+    U->>C: Start or continue frontier task
+    C->>S: Define requirement, scope, and validation
+    C->>C: Classify sensitivity and ambiguity
+    alt Eligible bounded task
+        C->>A: Worker contract (role=worker, depth=1)
+        A->>A: Validate routing policy and file scope
+        A->>O: One-shot execution
+        O->>R: Explicit verified free model
+        R-->>O: Completion
+        O-->>A: Final text, diff, usage
+        A-->>C: Stable result and validation evidence
+        C->>C: Review and integrate or reject
+    else Sensitive, ambiguous, or unsafe task
+        C->>C: Keep work on the frontier lane
+    end
+```
+
+The detailed policy, contracts, and risks live in [the active OpenSpec design](docs/openspec/changes/codex-led-agent-routing/design.md).
+
+### Requesting a bounded free worker
+
+Codex remains the frontier owner for scope preparation and final diff review. There is no paid fallback; free workers handle only explicitly authorized, bounded, non-sensitive tasks.
+
+```
+Use a free worker for this bounded, non-sensitive task: lint and fix only README.md, then run ["git","diff","--check","--","README.md"].
+```
+
+Codex scopes the task, the free-worker adapter validates the file list and routing policy, and the frontier agent reviews the result before integrating. See the [free-agent-execution skill](.agents/skills/free-agent-execution/SKILL.md) for contracts, constraints, and the active OpenSpec design for full policy details.
+
 ## Quick start
 
 Clone this repository to the default location expected by the setup script:

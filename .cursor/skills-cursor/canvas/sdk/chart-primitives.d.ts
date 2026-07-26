@@ -175,7 +175,7 @@ export type PieChartProps = {
  * />
  * ```
  */
-export declare function BarChart({ categories, series, height, stacked, horizontal, normalized, valueSuffix, valuePrefix, showValues, beginAtZero, yMin, yMax, referenceLines, style }: BarChartProps): JSX.Element;
+export declare function BarChart({ categories, series, height, stacked, horizontal, normalized, valueSuffix, valuePrefix, showValues, beginAtZero, yMin, yMax, referenceLines, style, }: BarChartProps): JSX.Element;
 /**
  * Multi-series line chart with optional area fill. Distilled from the
  * portal-website Highcharts analytics charts.
@@ -230,7 +230,7 @@ export declare function BarChart({ categories, series, height, stacked, horizont
  * />
  * ```
  */
-export declare function LineChart({ categories, series, height, fill, valueSuffix, valuePrefix, showValues, showHoverGuide, beginAtZero, yMin, yMax, referenceLines, style }: LineChartProps): JSX.Element;
+export declare function LineChart({ categories, series, height, fill, valueSuffix, valuePrefix, showValues, showHoverGuide, beginAtZero, yMin, yMax, referenceLines, style, }: LineChartProps): JSX.Element;
 /**
  * Pie (or donut) chart with hover highlighting. Distilled from the
  * portal-website Highcharts analytics charts.
@@ -267,6 +267,6 @@ export declare function LineChart({ categories, series, height, fill, valueSuffi
  * />
  * ```
  */
-export declare function PieChart({ data, size, donut, style }: PieChartProps): JSX.Element;
+export declare function PieChart({ data, size, donut, style, }: PieChartProps): JSX.Element;
 export {};
 //# sourceMappingURL=chart-primitives.d.ts.map

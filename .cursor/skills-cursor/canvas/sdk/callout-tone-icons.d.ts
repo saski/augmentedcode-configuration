@@ -3,7 +3,7 @@ type CalloutToneIconGlyph = "info" | "warning" | "circles-check" | "exclamation-
 type CalloutToneForIcon = "info" | "success" | "warning" | "danger" | "neutral";
 /** Maps `Callout` tone to the same cursor icons used by `@anysphere/ui` toasts. */
 export declare const calloutToneIconGlyph: Record<Exclude<CalloutToneForIcon, "neutral">, CalloutToneIconGlyph>;
-export declare function CalloutToneIcon({ tone, color }: {
+export declare function CalloutToneIcon({ tone, color, }: {
     tone: CalloutToneForIcon;
     color: string;
 }): JSX.Element;

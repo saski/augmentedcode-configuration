@@ -144,7 +144,8 @@ export declare const chartPalette: {
  * (`Swatch`, `UsageBar` segments, etc.). Hexes mirror the cursor core hues
  * from `packages/ui/src/tokens/themes/cursor-core/{dark,light}.ts` (via the
  * `text-{hue}-primary` semantic tokens); `gray` mirrors `text-tertiary`
- * (`mixTransparent base 54%`).
+ * (`mixTransparent base 54%`). `orange` is mixed 70/30 with red to keep
+ * Conversation distinct from Skills' yellow in light mode while staying warm.
  *
  * The insertion order here is the canonical category order — primitives
  * that auto-assign colors (e.g. `UsageBar` segments without an explicit
@@ -158,7 +159,8 @@ export declare const categoryPaletteDark: {
     readonly cyan: "#81A1C1";
     readonly pink: "#B48EAD";
     readonly blue: "#7BAFE9";
-    readonly orange: "#D08770";
+    readonly orange: "#DD7F76";
+    readonly red: "#FC6B83";
 };
 export declare const categoryPaletteLight: {
     readonly gray: "#1414148A";
@@ -168,19 +170,11 @@ export declare const categoryPaletteLight: {
     readonly cyan: "#4C7F8C";
     readonly pink: "#B8448B";
     readonly blue: "#3685BF";
-    readonly orange: "#DB704B";
+    readonly orange: "#D75C4E";
+    readonly red: "#CF2D56";
 };
 /** Legacy `colorPalette` name kept for back-compat; per-theme tables are `categoryPalette{Dark,Light}`. React consumers should read `useHostTheme().category` so the color flips with the host theme. */
-export declare const colorPalette: {
-    readonly gray: "#E4E4E48A";
-    readonly purple: "#9386F2";
-    readonly green: "#3FA266";
-    readonly yellow: "#F1B467";
-    readonly cyan: "#81A1C1";
-    readonly pink: "#B48EAD";
-    readonly blue: "#7BAFE9";
-    readonly orange: "#D08770";
-};
+export declare const colorPalette: typeof categoryPaletteDark;
 export type Color = keyof typeof colorPalette;
 export type CategoryPalette = Readonly<Record<Color, string>>;
 /**
@@ -196,48 +190,9 @@ export declare const usageColorSequence: readonly Color[];
  * Ordered array for automatic series coloring — alternates dark/light across
  * distinct hue families for maximum perceptual separation.
  */
-export declare const chartColorSequence: readonly ["#1F8A65E8", "#70B0D8E0", "#5A6CC0F0", "#F0A040E0", "#C06028E0", "#E8C030E0", "#C85898E0", "#F0A088E0", "#7B64B8F0", "#7DCAB0E0", "#8888A8E0", "#2A9A8AE0"];
-declare function buildTokens(palette: CanvasPalette, category: CategoryPalette): {
-    bg: {
-        editor: string;
-        chrome: string;
-        elevated: string;
-    };
-    text: {
-        primary: string;
-        secondary: string;
-        tertiary: string;
-        quaternary: string;
-        link: string;
-        onAccent: string;
-    };
-    stroke: {
-        primary: string;
-        secondary: string;
-        tertiary: string;
-        focused: string;
-    };
-    fill: {
-        primary: string;
-        secondary: string;
-        tertiary: string;
-        quaternary: string;
-    };
-    accent: {
-        primary: string;
-        control: string;
-        controlHover: string;
-    };
-    diff: {
-        insertedLine: string;
-        removedLine: string;
-        stripAdded: string;
-        stripRemoved: string;
-    };
-    category: Readonly<Record<"blue" | "cyan" | "gray" | "green" | "orange" | "pink" | "purple" | "yellow", string>>;
-};
+export declare const chartColorSequence: readonly string[];
 /** Semantic colors for components (spacing and radius live in `theme.ts`). */
-export declare const canvasTokens: {
+export interface CanvasTokens {
     bg: {
         editor: string;
         chrome: string;
@@ -274,48 +229,10 @@ export declare const canvasTokens: {
         stripAdded: string;
         stripRemoved: string;
     };
-    category: Readonly<Record<"blue" | "cyan" | "gray" | "green" | "orange" | "pink" | "purple" | "yellow", string>>;
-};
-export declare const canvasTokensLight: {
-    bg: {
-        editor: string;
-        chrome: string;
-        elevated: string;
-    };
-    text: {
-        primary: string;
-        secondary: string;
-        tertiary: string;
-        quaternary: string;
-        link: string;
-        onAccent: string;
-    };
-    stroke: {
-        primary: string;
-        secondary: string;
-        tertiary: string;
-        focused: string;
-    };
-    fill: {
-        primary: string;
-        secondary: string;
-        tertiary: string;
-        quaternary: string;
-    };
-    accent: {
-        primary: string;
-        control: string;
-        controlHover: string;
-    };
-    diff: {
-        insertedLine: string;
-        removedLine: string;
-        stripAdded: string;
-        stripRemoved: string;
-    };
-    category: Readonly<Record<"blue" | "cyan" | "gray" | "green" | "orange" | "pink" | "purple" | "yellow", string>>;
-};
-export type CanvasTokens = ReturnType<typeof buildTokens>;
+    category: CategoryPalette;
+}
+export declare const canvasTokens: CanvasTokens;
+export declare const canvasTokensLight: CanvasTokens;
 /**
  * Resolve the full token set for a host theme `kind`, optionally overlaying
  * the active editor's primary/accent color via {@link applyPrimaryColor}.
@@ -328,5 +245,4 @@ export declare function buildHostTokens(kind: string, overrides?: CanvasHostThem
     tokens: CanvasTokens;
     palette: CanvasPalette;
 };
-export {};
 //# sourceMappingURL=canvas-tokens.d.ts.map

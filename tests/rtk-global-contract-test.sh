@@ -4,7 +4,6 @@ set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 HOOK="$REPO_DIR/.agents/hooks/rtk-rewrite.sh"
-CLAUDE_HOOK="$REPO_DIR/.claude/hooks/rtk-rewrite.sh"
 CODEX_HOOK_TEMPLATE="$REPO_DIR/templates/codex/hooks.json"
 
 _CLEANUP_DIRS=()
@@ -88,7 +87,6 @@ EOF
 
 test_canonical_layout_contract() {
     assert_file_exists "$HOOK"
-    assert_symlink_target_contains "$CLAUDE_HOOK" ".agents/hooks/rtk-rewrite.sh"
     assert_file_exists "$CODEX_HOOK_TEMPLATE"
     assert_file_contains "$CODEX_HOOK_TEMPLATE" '$HOME/.codex/hooks/rtk-rewrite.sh'
     assert_file_contains "$REPO_DIR/setup-symlinks.sh" 'ln -sfn "$REPO_DIR/.agents/hooks/rtk-rewrite.sh" "$HOME/.codex/hooks/rtk-rewrite.sh"'

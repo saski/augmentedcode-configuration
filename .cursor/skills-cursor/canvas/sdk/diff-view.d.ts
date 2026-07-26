@@ -53,7 +53,7 @@ export type DiffStatsProps = {
  * </Row>
  * ```
  */
-export declare function DiffStats({ additions, deletions, style }: DiffStatsProps): JSX.Element | null;
+export declare function DiffStats({ additions, deletions, style, }: DiffStatsProps): JSX.Element | null;
 export type DiffLineType = "added" | "removed" | "unchanged";
 export type DiffLineData = {
     type: DiffLineType;
@@ -126,5 +126,5 @@ export type DiffViewProps = {
  * </Card>
  * ```
  */
-export declare function DiffView({ lines, path, language, showLineNumbers, coloredLineNumbers, showAccentStrip, style }: DiffViewProps): JSX.Element;
+export declare function DiffView({ lines, path, language, showLineNumbers, coloredLineNumbers, showAccentStrip, style, }: DiffViewProps): JSX.Element;
 //# sourceMappingURL=diff-view.d.ts.map

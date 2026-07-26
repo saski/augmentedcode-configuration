@@ -8,7 +8,6 @@ Use this skill when the user asks to run `/review-security`.
 
 Launch exactly one `security-review` subagent with:
 
-- `readonly: true`
 - `run_in_background: false` unless explicitly asked to run in background
 - `description: "Security Review"`
 - `subagent_type: "security-review"`

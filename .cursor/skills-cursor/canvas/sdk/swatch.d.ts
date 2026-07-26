@@ -9,7 +9,7 @@
 import type { CSSProperties, JSX } from "react";
 import type { Color } from "./canvas-tokens.js";
 export type SwatchProps = {
-    /** One of the 7 shared category hues. Matches `UsageBar` segment colors. */
+    /** One of the shared category hues. Matches `UsageBar` segment colors. */
     color: Color;
     style?: CSSProperties;
 };
@@ -18,7 +18,7 @@ export type SwatchProps = {
  * category rows, list items, or as the `leading` slot of a
  * `CollapsibleSection`.
  *
- * Colors come from the shared 7-hue `Color` palette, so a category's swatch
+ * Colors come from the shared `Color` palette, so a category's swatch
  * matches its `UsageBar` segment for the same `color`.
  *
  * @example

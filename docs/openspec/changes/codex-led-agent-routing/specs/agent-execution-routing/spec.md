@@ -22,19 +22,42 @@ The system SHALL use Codex, authenticated directly to the user's ChatGPT account
 
 The system SHALL allow Hermes, OpenCode, Codex App/CLI, and Cursor to initiate work through the same logical entry contract without making every client an orchestration owner.
 
+The shared contract SHALL identify `mode` as `frontier` or `free`, `execution_role` as `entry` or `worker`, `task_id` as a non-empty task identifier, and `delegation_depth` as the number of frontier-to-worker handoffs. An `entry` contract SHALL have `delegation_depth: 0` and SHALL NOT declare a parent role or parent run. A `worker` contract SHALL have `mode: free`, `execution_role: worker`, `parent_role: frontier`, a non-empty `parent_run_id`, and `delegation_depth: 1`.
+
 #### Scenario: Start a frontier run from any supported client
 
 - **GIVEN** a user is working in Hermes, OpenCode, Codex App/CLI, or Cursor
-- **WHEN** the user selects `frontier` mode
+- **WHEN** the user submits an `entry` contract with `frontier` mode and delegation depth zero
 - **THEN** the parent request SHALL start or continue a Codex-controlled run
 - **AND** the originating client SHALL remain an entry and presentation surface
 
 #### Scenario: Run an explicit free task
 
 - **GIVEN** a user selects `free` mode for a bounded, non-sensitive, verifiable task
-- **WHEN** the entry contract accepts the request
+- **WHEN** the user submits an `entry` contract with delegation depth zero
 - **THEN** it SHALL invoke the free-worker adapter without creating a frontier orchestration tree
 - **AND** it SHALL return the structured result to the originating client
+
+#### Scenario: Delegate a free worker
+
+- **GIVEN** a Codex frontier run owns a bounded, non-sensitive, verifiable task
+- **WHEN** Codex creates a worker contract
+- **THEN** the contract SHALL use `mode: free`, `execution_role: worker`, `parent_role: frontier`, non-empty `task_id` and `parent_run_id` values, and `delegation_depth: 1`
+- **AND** the worker SHALL receive only the bounded task context and exact file scope
+
+#### Scenario: Reject an invalid role transition
+
+- **GIVEN** a contract combines `frontier` mode with the `worker` role, declares a worker parent other than `frontier`, or declares a delegation depth greater than one
+- **WHEN** an entry adapter or free-worker adapter validates the contract
+- **THEN** it SHALL reject the contract before invoking a model runtime
+- **AND** it SHALL return a visible diagnostic
+
+#### Scenario: Prevent OpenCode worker re-entry
+
+- **GIVEN** OpenCode is executing a contract with `execution_role: worker`
+- **WHEN** that execution attempts to initiate another contract as `execution_role: entry`
+- **THEN** the entry adapter SHALL reject the request before invoking OpenCode again
+- **AND** no nested worker or orchestration tree SHALL be created
 
 #### Scenario: Avoid automatic edge routing
 

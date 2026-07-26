@@ -18,6 +18,7 @@ For shared skills, use [skill-factory-skills.md](skill-factory-skills.md) and [s
 | automate | ide | Create Cursor Automations through the Automations editor handoff, with trigger, tool, prompt, and integration completeness checks. |
 | babysit | ide | Keep a PR merge-ready by triaging comments, resolving clear conflicts, and fixing CI in a loop. |
 | canvas | ide | Live React Canvas beside the chat for analytical artifacts, charts, tables, and MCP-heavy deliverables; also required when editing `.canvas.tsx` files. |
+| env-setup | ide | Explain, inspect, configure, and troubleshoot Cloud Agent development environments. |
 | loop | ide | Run a prompt or skill on a recurring local interval using monitored background shell output (`/loop`, polling, local cron-like loops). |
 | onboard | ide | Focused Cursor onboarding flow that learns basic preferences, picks a first goal, and routes the user to the right next action (`/onboard`). |
 | review | ide | Route a code review request to either Bugbot or Security Review. |

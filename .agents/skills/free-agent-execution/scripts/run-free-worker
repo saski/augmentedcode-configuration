@@ -23,6 +23,10 @@ if ! jq -e '
     and (.allowed_files | type == "array")
     and (.validation.command | type == "array" and length > 0)
     and (.model | type == "string" and length > 0)
+    and (.parent_run_id | type == "string" and length > 0)
+    and (.task_id | type == "string" and length > 0)
+    and .delegation_depth == 1
+    and (.timeout_seconds | type == "number" and . > 0 and floor == .)
 ' "$contract_path" >/dev/null; then
     echo '{"status":"failed","diagnostic":"Invalid free-worker contract"}'
     exit 0
@@ -31,6 +35,7 @@ fi
 workspace="$(jq -r '.working_directory' "$contract_path")"
 model="$(jq -r '.model' "$contract_path")"
 task_class="$(jq -r '.task_class // ""' "$contract_path")"
+timeout_seconds="$(jq -r '.timeout_seconds' "$contract_path")"
 
 if ! "$script_dir/validate-routing-manifest" "$manifest_path"; then
     jq -n \
@@ -57,6 +62,15 @@ if [[ ! -d "$workspace" ]] || ! git -C "$workspace" rev-parse --is-inside-work-t
     exit 0
 fi
 
+worktree_lock_id="$(printf '%s' "$workspace" | shasum -a 256 | awk '{print $1}')"
+lock_dir="/private/tmp/free-agent-worktree-lock-$worktree_lock_id"
+if ! mkdir "$lock_dir" 2>/dev/null; then
+    jq -n \
+        --arg model "$model" \
+        '{status: "failed", model: $model, diagnostic: "Another free worker already owns this worktree"}'
+    exit 0
+fi
+
 prompt="$(
     jq -r '
         "Implement exactly this bounded task:\n"
@@ -73,7 +87,11 @@ prompt="$(
 
 opencode_config='{"agent":{"free-worker":{"mode":"primary","permission":{"task":"deny","bash":"deny"}}}}'
 output_file="$(mktemp)"
-trap 'rm -f "$output_file"' EXIT
+cleanup() {
+    rm -f "$output_file"
+    rmdir "$lock_dir" 2>/dev/null || true
+}
+trap cleanup EXIT
 
 git_changed_files() {
     git -C "$workspace" status --porcelain=v1 --untracked-files=all \
@@ -91,7 +109,19 @@ OPENCODE_CONFIG_CONTENT="$opencode_config" \
     --model "$model" \
     --agent free-worker \
     --dir "$workspace" \
-    "$prompt" >"$output_file" 2>&1
+    "$prompt" >"$output_file" 2>&1 &
+opencode_pid=$!
+opencode_timed_out=false
+started_at=$SECONDS
+while kill -0 "$opencode_pid" >/dev/null 2>&1; do
+    if (( SECONDS - started_at >= timeout_seconds )); then
+        kill "$opencode_pid" >/dev/null 2>&1
+        opencode_timed_out=true
+        break
+    fi
+    sleep 0.1
+done
+wait "$opencode_pid" 2>/dev/null
 opencode_status=$?
 set -e
 
@@ -177,7 +207,9 @@ fi
 
 status="failed"
 diagnostic=""
-if [[ "$opencode_status" -ne 0 ]]; then
+if [[ "$opencode_timed_out" == "true" ]]; then
+    diagnostic="OpenCode timed out after $timeout_seconds seconds"
+elif [[ "$opencode_status" -ne 0 ]]; then
     diagnostic="OpenCode exited with status $opencode_status"
 elif [[ -z "$summary" ]]; then
     diagnostic="OpenCode returned no usable completion result"

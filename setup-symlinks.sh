@@ -494,24 +494,6 @@ validate_symlinks() {
         echo "✓ $claude_settings_path is a local managed file"
     fi
 
-    local claude_hook_path="$HOME/.claude/hooks/rtk-rewrite.sh"
-    if [ ! -L "$claude_hook_path" ]; then
-        echo "❌ $claude_hook_path is not a symlink"
-        errors=$((errors + 1))
-    elif [ ! -e "$claude_hook_path" ]; then
-        echo "❌ $claude_hook_path is a broken symlink"
-        errors=$((errors + 1))
-    else
-        local claude_hook_target
-        claude_hook_target=$(readlink "$claude_hook_path")
-        if [[ "$claude_hook_target" != *".agents/hooks/rtk-rewrite.sh" ]]; then
-            echo "❌ $claude_hook_path should point to .agents/hooks/rtk-rewrite.sh, got: $claude_hook_target"
-            errors=$((errors + 1))
-        else
-            echo "✓ $claude_hook_path → $claude_hook_target"
-        fi
-    fi
-
     # Check Gemini MCP config symlink
     local gemini_mcp_path="$HOME/.gemini/antigravity/mcp_config.json"
     if [ ! -L "$gemini_mcp_path" ]; then

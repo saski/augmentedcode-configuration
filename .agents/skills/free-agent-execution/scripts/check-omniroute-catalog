@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_DIR="$(cd "$SCRIPT_DIR/../../../.." && pwd)"
+
+manifest_path="${FREE_AGENT_ROUTING_MANIFEST:-$REPO_DIR/.agents/free-agent-routing.json}"
+
+if [[ ! -f "$manifest_path" ]]; then
+    echo "error: routing manifest not found: $manifest_path" >&2
+    exit 1
+fi
+
+verified_models=$(jq -r '.verified_free_models[]' "$manifest_path")
+
+if [[ -z "$verified_models" ]]; then
+    echo "error: no verified free models in routing manifest" >&2
+    exit 1
+fi
+
+catalog=$(curl -sS --max-time 15 -f http://localhost:20128/v1/models) || {
+    echo "error: failed to fetch OmniRoute model catalog from http://localhost:20128/v1/models" >&2
+    exit 1
+}
+
+catalog_models=$(echo "$catalog" | jq -r '.data[].id' 2>/dev/null) || {
+    echo "error: invalid catalog response — expected JSON with data[].id entries" >&2
+    exit 1
+}
+
+missing=0
+while IFS= read -r model; do
+    catalog_model="${model#omniroute/}"
+    if ! echo "$catalog_models" | grep -Fqx "$catalog_model"; then
+        echo "error: verified free model not found in OmniRoute catalog: $model" >&2
+        missing=1
+    fi
+done <<< "$verified_models"
+
+exit "$missing"
