@@ -1,0 +1,199 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+contract_path="${1:-}"
+if [[ -z "$contract_path" || ! -f "$contract_path" ]]; then
+    echo "usage: run-free-worker <contract.json>" >&2
+    exit 2
+fi
+
+if ! jq -e '
+    .contract_version == "1"
+    and .mode == "free"
+    and .execution_role == "worker"
+    and .parent_role == "frontier"
+    and .sensitivity == "non_sensitive"
+    and (.working_directory | type == "string" and length > 0)
+    and (.requirement | type == "string" and length > 0)
+    and (.allowed_files | type == "array")
+    and (.validation.command | type == "array" and length > 0)
+    and (.model | type == "string" and length > 0)
+' "$contract_path" >/dev/null; then
+    echo '{"status":"failed","diagnostic":"Invalid free-worker contract"}'
+    exit 0
+fi
+
+workspace="$(jq -r '.working_directory' "$contract_path")"
+model="$(jq -r '.model' "$contract_path")"
+
+case "$model" in
+    omniroute/oc/deepseek-v4-flash-free | omniroute/oc/big-pickle) ;;
+    *)
+        jq -n \
+            --arg model "$model" \
+            '{status: "failed", model: $model, diagnostic: "Model is not in the verified free-worker allowlist"}'
+        exit 0
+        ;;
+esac
+
+if [[ ! -d "$workspace" ]] || ! git -C "$workspace" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    jq -n \
+        --arg model "$model" \
+        '{status: "failed", model: $model, diagnostic: "Working directory is not a Git worktree"}'
+    exit 0
+fi
+
+prompt="$(
+    jq -r '
+        "Implement exactly this bounded task:\n"
+        + .requirement
+        + "\n\nAllowed files:\n"
+        + (.allowed_files | map("- " + .) | join("\n"))
+        + "\n\nValidation command:\n"
+        + (.validation.command | @json)
+        + "\n\nDo not delegate or run shell commands. "
+        + "Finish with: FREE_AGENT_RESULT: "
+        + "{\"status\":\"completed\",\"summary\":\"<concise summary>\"}"
+    ' "$contract_path"
+)"
+
+opencode_config='{"agent":{"free-worker":{"mode":"primary","permission":{"task":"deny","bash":"deny"}}}}'
+output_file="$(mktemp)"
+trap 'rm -f "$output_file"' EXIT
+
+git_changed_files() {
+    git -C "$workspace" status --porcelain=v1 --untracked-files=all \
+        | sed -E 's/^.. //' \
+        | jq -Rsc 'split("\n") | map(select(length > 0)) | sort'
+}
+
+changed_files_before="$(git_changed_files)"
+
+set +e
+OPENCODE_CONFIG_CONTENT="$opencode_config" \
+    opencode run \
+    --pure \
+    --format json \
+    --model "$model" \
+    --agent free-worker \
+    --dir "$workspace" \
+    "$prompt" >"$output_file" 2>&1
+opencode_status=$?
+set -e
+
+summary="$(
+    jq -Rrs '
+        [
+            split("\n")[]
+            | fromjson?
+            | select(.type == "text")
+            | .part.text
+            | select(type == "string" and length > 0)
+        ] as $texts
+        | (
+            [
+                $texts[]
+                | select(startswith("FREE_AGENT_RESULT: "))
+                | sub("^FREE_AGENT_RESULT: "; "")
+                | fromjson?
+                | .summary
+                | select(type == "string" and length > 0)
+            ]
+            | last
+          )
+        // (
+            [
+                $texts[]
+                | select(startswith("FREE_AGENT_RESULT: ") | not)
+            ]
+            | last
+          )
+        // ""
+    ' "$output_file"
+)"
+
+usage="$(
+    jq -Rrs '
+        [
+            split("\n")[]
+            | fromjson?
+            | select(.type == "step_finish")
+            | .part.tokens
+        ]
+        | {
+            input_tokens: (map(.input // 0) | add // 0),
+            output_tokens: (map(.output // 0) | add // 0)
+        }
+    ' "$output_file"
+)"
+
+changed_files_after="$(git_changed_files)"
+changed_files="$(
+    jq -cn \
+        --argjson before "$changed_files_before" \
+        --argjson after "$changed_files_after" \
+        '$after - $before'
+)"
+allowed_files="$(jq -c '.allowed_files | sort' "$contract_path")"
+out_of_scope_files="$(
+    jq -cn \
+        --argjson changed "$changed_files" \
+        --argjson allowed "$allowed_files" \
+        '$changed - $allowed'
+)"
+
+validation_command=()
+while IFS= read -r -d '' argument; do
+    validation_command+=("$argument")
+done < <(jq -j '.validation.command[] | ., "\u0000"' "$contract_path")
+
+set +e
+(
+    cd "$workspace"
+    "${validation_command[@]}"
+) >/dev/null 2>&1
+validation_status=$?
+set -e
+
+if [[ "$validation_status" -eq 0 ]]; then
+    validation_result="passed"
+else
+    validation_result="failed"
+fi
+
+status="failed"
+diagnostic=""
+if [[ "$opencode_status" -ne 0 ]]; then
+    diagnostic="OpenCode exited with status $opencode_status"
+elif [[ -z "$summary" ]]; then
+    diagnostic="OpenCode returned no usable completion result"
+elif [[ "$out_of_scope_files" != "[]" ]]; then
+    diagnostic="OpenCode changed files outside the allowed scope"
+elif [[ "$validation_status" -ne 0 ]]; then
+    diagnostic="Validation command failed"
+else
+    status="succeeded"
+fi
+
+jq -n \
+    --arg status "$status" \
+    --arg model "$model" \
+    --arg summary "$summary" \
+    --argjson changed_files "$changed_files" \
+    --arg validation_status "$validation_result" \
+    --argjson validation_command "$(jq -c '.validation.command' "$contract_path")" \
+    --argjson usage "$usage" \
+    --arg diagnostic "$diagnostic" \
+    '{
+        status: $status,
+        model: $model,
+        summary: $summary,
+        changed_files: $changed_files,
+        validation: {
+            command: $validation_command,
+            status: $validation_status
+        },
+        usage: $usage
+    }
+    + if $diagnostic == "" then {} else {diagnostic: $diagnostic} end'

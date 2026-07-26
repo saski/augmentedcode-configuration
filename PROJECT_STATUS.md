@@ -24,6 +24,15 @@
 
 ## Recent Changes
 
+### 2026-07-26: Bounded free-worker execution ✅
+
+- Added the `free-agent-execution` shared skill and a local adapter that runs one explicitly requested, bounded, non-sensitive task through OpenCode using verified free OmniRoute models.
+- The adapter constructs an ephemeral OpenCode configuration, restricts edits to approved paths, denies shell, network, and recursive delegation, and returns a JSON result with validation and file-attribution data.
+- It accepts both the preferred structured `FREE_AGENT_RESULT` output and an ordinary non-empty final worker message, while retaining exit-status, scope, and validation checks.
+- Added a behavior-level shell test suite covering successful structured and generic completions, pre-existing worktree changes, and rejection of legacy model identifiers.
+
+**Validation**: `bash tests/free-agent-execution-test.sh`, Bash syntax validation, and skill-library validation pass.
+
 ### 2026-06-26: Hardening and validation gap closure ✅
 
 Full review-driven remediation across validators, destructive sync scripts, the RTK hook, CI, and tests. Phased plan: `thoughts/shared/plans/2026-06-26-hardening-and-validation-gaps.md`.

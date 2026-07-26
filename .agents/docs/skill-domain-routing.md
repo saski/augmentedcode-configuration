@@ -108,12 +108,13 @@ Skills:
 
 ## Developer Tooling, Runtimes, and Automation
 
-Tags: `tooling`, `bash`, `python`, `javascript`, `git`, `automation`, `agent-runtime`
+Tags: `tooling`, `bash`, `python`, `javascript`, `git`, `automation`, `agent-runtime`, `opencode`, `free-agent`
 
 Use when the task is about command-line tooling, runtime setup, repo workflow, local automation, or agent development tools.
 
 Skills:
 
+- `free-agent-execution` - Use only when the user explicitly requests a bounded, non-sensitive free OpenCode worker run.
 - `writing-bash-scripts` - Use when creating or editing shell scripts.
 - `using-uv` - Use for Python projects, scripts, and dependency management with uv.
 - `bun-toolkit` - Use for Bun-aware JS, TS, and JSX work.

@@ -481,6 +481,21 @@ skills:
 
   # --- Developer tools ---
 
+  - name: free-agent-execution
+    category: workflow-automation
+    pattern: tool-wrapper
+    owner: engineering
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - launching-agent-teams
+    notes: "Executes one explicitly requested, bounded, non-sensitive task through the local free-worker adapter and verified free OpenCode models."
+
   - name: writing-bash-scripts
     category: tool-reference
     pattern: tool-wrapper
