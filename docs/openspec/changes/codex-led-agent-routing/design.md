@@ -166,15 +166,15 @@ No worker command uses `--auto`, `--yolo`, or an equivalent global approval bypa
 
 ### 11. Configuration is declarative and secret-free
 
-The repository will own:
+The repository owns:
 
-- a small routing manifest containing roles, verified free model identifiers, and policy flags;
+- a small routing manifest containing the frontier owner, verified free model identifiers, permitted task classes, and privacy flags, plus a validator that rejects paid, unverified, incomplete, or secret-like policy values;
 - the free-worker adapter and its behavior-level tests;
 - a reusable shared skill that tells compatible frontier agents when and how to invoke the adapter;
 - non-secret Codex, OpenCode, Hermes, and Cursor entry templates;
 - setup and validation logic.
 
-Local credentials and mutable provider health remain outside version control. Setup must preserve existing credential stores and unrelated user configuration.
+Local credentials and mutable provider health remain outside version control. Setup must preserve existing credential stores and unrelated user configuration. Timeout enforcement and expanded model conformance remain follow-up work.
 
 ### 12. Rollout is incremental
 

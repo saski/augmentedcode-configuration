@@ -12,6 +12,9 @@ SHELL_SCRIPTS := \
 	validate-cursor-skills.sh \
 	lib/validate-skill-frontmatter.sh \
 	.agents/skills/openspec/scripts/install-openspec \
+	.agents/skills/free-agent-execution/scripts/run-free-worker \
+	.agents/skills/free-agent-execution/scripts/validate-routing-manifest \
+	tests/free-agent-execution-test.sh \
 	tests/openspec-install-test.sh \
 	tests/validate-skill-library-test.sh \
 	tests/external-skill-references-test.sh \
@@ -25,6 +28,7 @@ SHELL_SCRIPTS := \
 check: test lint-shell validate-skills validate-cursor-skills validate-openspec validate-symlinks check-tracked-ignored
 
 test:
+	./tests/free-agent-execution-test.sh
 	./tests/openspec-install-test.sh
 	./tests/validate-skill-library-test.sh
 	./tests/external-skill-references-test.sh
@@ -78,6 +82,7 @@ discover-saski-repos:
 # external-skill-references test (sibling repos). Runs on a stock runner with
 # ruby, jq, python3, and git preinstalled.
 ci-check: lint-shell validate-cursor-skills
+	./tests/free-agent-execution-test.sh
 	./tests/openspec-install-test.sh
 	./tests/validate-skill-library-test.sh
 	./tests/healthcheck-automation-test.sh

@@ -23,7 +23,7 @@ The OpenAI account already provides direct access to frontier Codex agents, so r
 
 The first free-worker slice is implemented: the repository contains a documented one-shot OpenCode adapter, an explicit allowlist for `omniroute/oc/deepseek-v4-flash-free` and `omniroute/oc/big-pickle`, and behavior-level tests for a bounded frontier-to-worker handoff. A live smoke run has also completed through OpenCode and local OmniRoute.
 
-The adapter treats non-empty final worker text as semantic completion, while preferring the structured `FREE_AGENT_RESULT` summary when supplied. It still requires a successful OpenCode process, allowed newly changed paths, and passing declared validation. It does not yet enforce a process timeout or consume a declarative routing manifest; those are the next implementation slice.
+The adapter treats non-empty final worker text as semantic completion, while preferring the structured `FREE_AGENT_RESULT` summary when supplied. It still requires a successful OpenCode process, allowed newly changed paths, and passing declared validation. It now consumes a secret-free declarative routing manifest; process timeout enforcement is the next hardening slice.
 
 ## Capabilities
 

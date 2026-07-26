@@ -1,0 +1,29 @@
+{
+  "manifest_version": "1",
+  "frontier_role": "codex_principal",
+  "verified_free_models": [
+    "omniroute/oc/deepseek-v4-flash-free",
+    "omniroute/oc/big-pickle"
+  ],
+  "free_worker": {
+    "default_model": "omniroute/oc/deepseek-v4-flash-free",
+    "task_classes": {
+      "bounded_code": {
+        "sensitivity": "non_sensitive",
+        "models": [
+          "omniroute/oc/deepseek-v4-flash-free",
+          "omniroute/oc/big-pickle"
+        ]
+      }
+    }
+  },
+  "privacy": {
+    "frontier_only_categories": [
+      "credentials",
+      "personal_data",
+      "private_customer_data",
+      "proprietary_secrets",
+      "security_sensitive"
+    ]
+  }
+}

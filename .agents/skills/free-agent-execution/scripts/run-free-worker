@@ -2,6 +2,9 @@
 
 set -euo pipefail
 
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+repository_root="$(cd "$script_dir/../../../.." && pwd)"
+manifest_path="${FREE_AGENT_ROUTING_MANIFEST:-$repository_root/.agents/free-agent-routing.json}"
 contract_path="${1:-}"
 if [[ -z "$contract_path" || ! -f "$contract_path" ]]; then
     echo "usage: run-free-worker <contract.json>" >&2
@@ -16,6 +19,7 @@ if ! jq -e '
     and .sensitivity == "non_sensitive"
     and (.working_directory | type == "string" and length > 0)
     and (.requirement | type == "string" and length > 0)
+    and (.task_class | type == "string" and length > 0)
     and (.allowed_files | type == "array")
     and (.validation.command | type == "array" and length > 0)
     and (.model | type == "string" and length > 0)
@@ -26,16 +30,25 @@ fi
 
 workspace="$(jq -r '.working_directory' "$contract_path")"
 model="$(jq -r '.model' "$contract_path")"
+task_class="$(jq -r '.task_class // ""' "$contract_path")"
 
-case "$model" in
-    omniroute/oc/deepseek-v4-flash-free | omniroute/oc/big-pickle) ;;
-    *)
-        jq -n \
-            --arg model "$model" \
-            '{status: "failed", model: $model, diagnostic: "Model is not in the verified free-worker allowlist"}'
-        exit 0
-        ;;
-esac
+if ! "$script_dir/validate-routing-manifest" "$manifest_path"; then
+    jq -n \
+        --arg model "$model" \
+        '{status: "failed", model: $model, diagnostic: "Free-worker routing manifest is invalid"}'
+    exit 0
+fi
+
+if ! jq -e --arg model "$model" --arg task_class "$task_class" '
+    (.verified_free_models | index($model) != null)
+    and (.free_worker.task_classes[$task_class].sensitivity == "non_sensitive")
+    and (.free_worker.task_classes[$task_class].models | index($model) != null)
+' "$manifest_path" >/dev/null; then
+    jq -n \
+        --arg model "$model" \
+        '{status: "failed", model: $model, diagnostic: "Model is not verified for the requested free-worker task class"}'
+    exit 0
+fi
 
 if [[ ! -d "$workspace" ]] || ! git -C "$workspace" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     jq -n \

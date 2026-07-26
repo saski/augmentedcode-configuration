@@ -27,6 +27,7 @@
 ### 2026-07-26: Bounded free-worker execution ✅
 
 - Added the `free-agent-execution` shared skill and a local adapter that runs one explicitly requested, bounded, non-sensitive task through OpenCode using verified free OmniRoute models.
+- Added a secret-free routing manifest and validator for the frontier owner, task classes, verified free models, and privacy boundary. The adapter now reads this policy instead of carrying a model allowlist in code.
 - The adapter constructs an ephemeral OpenCode configuration, restricts edits to approved paths, denies shell, network, and recursive delegation, and returns a JSON result with validation and file-attribution data.
 - It accepts both the preferred structured `FREE_AGENT_RESULT` output and an ordinary non-empty final worker message, while retaining exit-status, scope, and validation checks.
 - Added a behavior-level shell test suite covering successful structured and generic completions, pre-existing worktree changes, and rejection of legacy model identifiers.

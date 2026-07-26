@@ -62,17 +62,28 @@ The adapter requires these values and types:
 - `allowed_files`: an array of worktree-relative file paths. Use exact Git path spelling.
 - `validation.command`: a non-empty array of executable and argument strings. It is executed directly, without shell interpolation.
 - `model`: one of the verified models below.
+- `task_class`: a configured free-worker task class. Version one provides `bounded_code`.
 
 The remaining fields in the example are trace metadata. Preserve them for auditability, but note that adapter version 1 does not currently validate or enforce them. In particular, `timeout_seconds` is informational and does not stop a long-running worker.
 
 ## Verified free models
 
-Only these model identifiers are accepted:
+The checked-in routing manifest at `.agents/free-agent-routing.json` is the source of truth. Version one verifies these model identifiers for `bounded_code`:
 
 - `omniroute/oc/deepseek-v4-flash-free`
 - `omniroute/oc/big-pickle`
 
-Do not substitute aliases or newly advertised free models without updating and validating the adapter allowlist.
+Do not substitute aliases or newly advertised free models without updating and validating the routing manifest. The adapter validates that the model is both globally verified and admitted for the requested task class.
+
+## Routing manifest
+
+The manifest is non-secret and declares the frontier owner, verified free models, allowed task classes, and frontier-only privacy categories. Validate it after every policy change:
+
+```bash
+.agents/skills/free-agent-execution/scripts/validate-routing-manifest .agents/free-agent-routing.json
+```
+
+The validator rejects missing task policies, non-OmniRoute free-worker models, defaults absent from the verified pool, class models absent from that pool, and common secret-like credential values.
 
 ## Result contract
 

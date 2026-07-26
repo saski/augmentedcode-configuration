@@ -108,6 +108,24 @@ The system SHALL route worker requests only to free models that have passed the 
 - **WHEN** an agent task is routed
 - **THEN** the model SHALL NOT be selected
 
+### Requirement: Declarative routing manifest
+
+The repository SHALL define the frontier owner, verified free models, free-worker task classes, and frontier-only privacy categories in one secret-free routing manifest. The adapter SHALL use that manifest when selecting a worker model.
+
+#### Scenario: Validate a routing policy
+
+- **GIVEN** a routing manifest with a verified default model and a non-sensitive task class
+- **WHEN** the manifest validator runs
+- **THEN** it SHALL accept only class models present in the verified free-model pool
+- **AND** it SHALL reject paid model identifiers, unverified defaults, missing task policies, and secret-like values
+
+#### Scenario: Select a model for a task class
+
+- **GIVEN** a bounded non-sensitive worker contract names a task class and model
+- **WHEN** the adapter evaluates the contract
+- **THEN** it SHALL accept the model only when the manifest verifies it for that task class
+- **AND** it SHALL return a visible failure without invoking OpenCode otherwise
+
 ### Requirement: Free-only OmniRoute boundary
 
 The agent execution route SHALL contain only verified free models and SHALL never silently escalate to a paid provider.

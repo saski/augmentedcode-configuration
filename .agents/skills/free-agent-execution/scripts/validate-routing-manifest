@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+manifest_path="${1:-}"
+if [[ -z "$manifest_path" || ! -f "$manifest_path" ]]; then
+    echo "usage: validate-routing-manifest <manifest.json>" >&2
+    exit 2
+fi
+
+jq -e '
+    def nonempty_string: type == "string" and length > 0;
+    try (
+        .verified_free_models as $verified
+        | .free_worker.default_model as $default
+        |
+        .manifest_version == "1"
+        and .frontier_role == "codex_principal"
+        and ($verified | type == "array" and length > 0)
+        and all($verified[]; nonempty_string and test("^omniroute/oc/"))
+        and (.free_worker | type == "object")
+        and ($default | nonempty_string)
+        and (.free_worker.task_classes | type == "object" and length > 0)
+        and ($verified | index($default) != null)
+        and all(
+            .free_worker.task_classes[];
+            .sensitivity == "non_sensitive"
+            and (.models | type == "array" and length > 0)
+            and all(.models[]; . as $model | ($verified | index($model)) != null)
+        )
+        and (.privacy.frontier_only_categories | type == "array" and length > 0)
+        and ([.. | strings | select(test("(^sk-[A-Za-z0-9_-]{8,}$|^Bearer[[:space:]]|^AIza[0-9A-Za-z_-]{8,}$|^ghp_[A-Za-z0-9]{8,}$)"))] | length == 0)
+    ) catch false
+' "$manifest_path" >/dev/null

@@ -34,7 +34,7 @@ The goal is not to create a giant prompt library. The goal is to keep a small, e
 | Capability | What it gives you |
 |------------|-------------------|
 | Shared rules | A compact baseline rulebook plus contextual rules for specific kinds of work. |
-| Shared skills | Portable task guidance for XP/TDD, FIC, OpenSpec, documentation lookup, PR review, vault/wiki work, bounded free-worker execution, AI adoption, and more. |
+| Shared skills | Portable task guidance for XP/TDD, FIC, OpenSpec, documentation lookup, PR review, vault/wiki work, bounded free-worker execution with a declarative routing policy, AI adoption, and more. |
 | Shared commands | Slash-command style prompts where the target tool supports them. |
 | Shared MCP config | One canonical MCP configuration consumed by local tools. |
 | Tool adapters | Cursor, Codex, Claude, Gemini, Antigravity, and Langflow wiring through symlinks or local template-backed files. |

@@ -1,8 +1,8 @@
 ## 1. Routing Policy and Contracts
 
 - [x] 1.1 Add a behavior-level test that describes a Codex principal delegating one bounded OpenSpec task to a free worker and receiving a structured result.
-- [ ] 1.2 Add a small, secret-free routing manifest under `.agents/` with frontier roles, free-worker task classes, privacy rules, and the initially verified model identifiers.
-- [ ] 1.3 Add schema validation that rejects missing task policies, paid models in the free pool, unverified defaults, and secret-like values.
+- [x] 1.2 Add a small, secret-free routing manifest under `.agents/` with frontier roles, free-worker task classes, privacy rules, and the initially verified model identifiers.
+- [x] 1.3 Add schema validation that rejects missing task policies, paid models in the free pool, unverified defaults, and secret-like values.
 - [ ] 1.4 Define the shared `frontier` and `free` entry contract, including `entry` versus `worker` roles and a loop guard.
 - [ ] 1.5 Document the account boundary: Codex App/CLI uses ChatGPT OAuth; Hermes-managed OAuth is separate and optional; OmniRoute never receives either credential.
 
