@@ -1,6 +1,6 @@
 ## 1. Routing Policy and Contracts
 
-- [ ] 1.1 Add a behavior-level test that describes a Codex principal delegating one bounded OpenSpec task to a free worker and receiving a structured result.
+- [x] 1.1 Add a behavior-level test that describes a Codex principal delegating one bounded OpenSpec task to a free worker and receiving a structured result.
 - [ ] 1.2 Add a small, secret-free routing manifest under `.agents/` with frontier roles, free-worker task classes, privacy rules, and the initially verified model identifiers.
 - [ ] 1.3 Add schema validation that rejects missing task policies, paid models in the free pool, unverified defaults, and secret-like values.
 - [ ] 1.4 Define the shared `frontier` and `free` entry contract, including `entry` versus `worker` roles and a loop guard.
@@ -9,18 +9,18 @@
 ## 2. Free-Worker Adapter
 
 - [ ] 2.1 Add failing adapter tests for a successful structured OpenCode result, provider error, unsupported model, empty HTTP 200 completion, missing final result, timeout, and out-of-scope file change.
-- [ ] 2.2 Implement the smallest adapter that invokes `opencode run` in one-shot JSON mode with an explicit OmniRoute model and working directory.
-- [ ] 2.3 Return a stable result containing model, status, summary, changed files, validation command and outcome, token usage when available, and diagnostic details on failure.
+- [x] 2.2 Implement the smallest adapter that invokes `opencode run` in one-shot JSON mode with an explicit OmniRoute model and working directory.
+- [x] 2.3 Return a stable result containing model, status, summary, changed files, validation command and outcome, token usage when available, and diagnostic details on failure.
 - [ ] 2.4 Enforce the no-auto-approval, context-minimization, and one-writer-per-worktree policies.
-- [ ] 2.5 Prove the adapter does not retry a paid model or an unlisted free model.
+- [x] 2.5 Prove the adapter does not retry a paid model or an unlisted free model.
 
 ## 3. Shared Agent Workflow
 
-- [ ] 3.1 Create a `free-agent-execution` shared skill that teaches Codex and other frontier agents how to classify tasks, prepare the OpenSpec handoff, invoke the adapter, and review the result.
+- [x] 3.1 Create a `free-agent-execution` shared skill that teaches Codex and other frontier agents how to classify tasks, prepare the OpenSpec handoff, invoke the adapter, and review the result.
 - [ ] 3.2 Add entry instructions that let Hermes, OpenCode, Codex App/CLI, and Cursor select `frontier` or explicit `free` mode without adding another LLM router.
-- [ ] 3.3 Register the skill in `.agents/docs/skill-factory-skills.md`, `.agents/docs/skill-domain-routing.md`, the engineering governance catalog, `README.md`, `PROJECT_STATUS.md`, and the applicable provenance lock.
+- [x] 3.3 Register the skill in `.agents/docs/skill-factory-skills.md`, `.agents/docs/skill-domain-routing.md`, the engineering governance catalog, `README.md`, `PROJECT_STATUS.md`, and the applicable provenance lock.
 - [ ] 3.4 Update the universal rules with only the smallest routing pointer needed to make compatible clients discover the skill; keep model catalogs and operational detail out of always-loaded rules.
-- [ ] 3.5 Run `./validate-skill-library.sh` after the shared skill inventory changes.
+- [x] 3.5 Run `./validate-skill-library.sh` after the shared skill inventory changes.
 
 ## 4. Managed Client Configuration
 

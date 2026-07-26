@@ -19,6 +19,12 @@ The OpenAI account already provides direct access to frontier Codex agents, so r
 - Add structured handoff, semantic-success, privacy, concurrency, and no-silent-paid-fallback policies.
 - Add smoke tests and configuration validation so stale, empty, paid, or unsupported routes cannot be promoted into the free-worker pool.
 
+## Implementation Status
+
+The first free-worker slice is implemented: the repository contains a documented one-shot OpenCode adapter, an explicit allowlist for `omniroute/oc/deepseek-v4-flash-free` and `omniroute/oc/big-pickle`, and behavior-level tests for a bounded frontier-to-worker handoff. A live smoke run has also completed through OpenCode and local OmniRoute.
+
+The adapter treats non-empty final worker text as semantic completion, while preferring the structured `FREE_AGENT_RESULT` summary when supplied. It still requires a successful OpenCode process, allowed newly changed paths, and passing declared validation. It does not yet enforce a process timeout or consume a declarative routing manifest; those are the next implementation slice.
+
 ## Capabilities
 
 ### New Capabilities
@@ -39,4 +45,4 @@ None.
 - The existing Codex CLI session, currently authenticated through ChatGPT OAuth, remains the credential source for Codex App/CLI and Hermes Codex app-server turns.
 - Hermes-managed `openai-codex` OAuth remains optional and isolated in Hermes' credential store; it is not shared with the Codex CLI session.
 - Existing local credentials remain outside the repository. Configuration artifacts will contain environment-variable references or non-secret local placeholders only.
-- The first implementation slice will use the already verified `oc/deepseek-v4-flash-free` and `oc/big-pickle` routes. Other free models require conformance testing before admission.
+- The first implementation slice uses the already verified OpenCode provider-qualified model identifiers `omniroute/oc/deepseek-v4-flash-free` and `omniroute/oc/big-pickle`. Other free models require conformance testing before admission.

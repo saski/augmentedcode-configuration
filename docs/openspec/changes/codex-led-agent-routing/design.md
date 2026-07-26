@@ -75,7 +75,7 @@ Codex -> free-worker adapter -> opencode run -> OmniRoute -> verified free model
 
 OpenCode is retained because this exact path has been verified locally and it already provides an agent runtime, model selection, working-directory control, and structured JSON events. It does not choose paid OpenAI models and does not spawn another orchestration tree.
 
-The adapter, not a second LLM, owns the mechanical boundary: input validation, process timeout, output parsing, usage capture, and conversion to a stable handoff result.
+The adapter, not a second LLM, owns the mechanical boundary: input validation, output parsing, usage capture, and conversion to a stable handoff result. Process timeout enforcement remains a planned hardening step; the version-one `timeout_seconds` field is trace metadata only.
 
 ### 4. OmniRoute is the free-model data plane
 
@@ -85,8 +85,8 @@ The first release uses direct verified model pins:
 
 | Task class | Initial model | Status |
 |---|---|---|
-| bounded code implementation | `oc/deepseek-v4-flash-free` | Verified through Hermes and OmniRoute |
-| fallback or general worker | `oc/big-pickle` | Verified through OpenCode and Hermes |
+| bounded code implementation | `omniroute/oc/deepseek-v4-flash-free` | Verified through OpenCode and local OmniRoute |
+| fallback or general worker | `omniroute/oc/big-pickle` | Verified through OpenCode and Hermes |
 
 The local catalog's other free models remain candidates, not production routes. Each candidate must pass the same conformance suite before it is added.
 
@@ -144,11 +144,11 @@ A worker run is successful only when all of the following are true:
 - the process completed without a transport or provider error;
 - the selected model is in the verified free allowlist;
 - the response contains non-empty final content;
-- the worker returns the required structured completion fields;
+- the worker returns non-empty final text; `FREE_AGENT_RESULT` is preferred when a concise structured summary is available;
 - declared validation actually ran and its status is reported;
 - changed files stay inside the allowed scope.
 
-An HTTP 200, a zero exit code, or a synthetic `finish_reason` is insufficient by itself. Empty content, zero-token completions, missing final output, or an unsupported-model response are failures.
+An HTTP 200, a zero exit code, or a synthetic `finish_reason` is insufficient by itself. Empty content, zero-token completions, missing final output, or an unsupported-model response are failures. The adapter itself always emits its stable structured result, even when the worker only supplies ordinary final text.
 
 The initial adapter returns failures to Codex. It does not silently retry a paid model. A second free model may be attempted only when the routing policy explicitly lists it for that task class and the first failure is retry-safe.
 

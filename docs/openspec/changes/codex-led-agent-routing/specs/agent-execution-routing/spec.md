@@ -137,12 +137,19 @@ The system SHALL validate the semantic content and declared verification of a wo
 - **THEN** the run SHALL be classified as failed
 - **AND** the task SHALL remain incomplete
 
-#### Scenario: Successful worker result
+#### Scenario: Successful structured worker result
 
-- **GIVEN** a worker returns non-empty final content and the required completion fields
+- **GIVEN** a worker returns non-empty final content and the preferred structured completion summary
 - **WHEN** the adapter validates the result
 - **THEN** it SHALL report the declared changed files and validation outcome to Codex
 - **AND** Codex SHALL perform final review before accepting the task
+
+#### Scenario: Successful ordinary worker result
+
+- **GIVEN** a worker returns non-empty final content without the preferred structured completion summary
+- **WHEN** the adapter validates the result and all process, scope, and validation checks pass
+- **THEN** the adapter SHALL retain that final content as its result summary
+- **AND** it SHALL return the same stable structured result shape to Codex
 
 ### Requirement: Controlled fallback
 
