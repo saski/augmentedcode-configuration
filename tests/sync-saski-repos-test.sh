@@ -45,6 +45,8 @@ make_broken_head_repo() {
 
     mkdir -p "$repo"
     git -C "$repo" -c init.defaultBranch="$branch" init -q
+    git -C "$repo" config user.email "test@example.com"
+    git -C "$repo" config user.name "Test User"
     git -C "$repo" commit --allow-empty -q -m init
     git -C "$repo" update-ref "refs/remotes/$remote/$branch" HEAD
     git -C "$repo" update-ref -d "refs/heads/$branch"
