@@ -128,6 +128,8 @@ sequenceDiagram
 ```
 
 The detailed policy, contracts, and risks live in [the active OpenSpec design](docs/openspec/changes/codex-led-agent-routing/design.md).
+The verified local Telegram/Hermes/OmniRoute procedure and recovery steps live
+in [Hermes, OmniRoute, and Telegram Operations](docs/hermes-omniroute-operations.md).
 
 ### Requesting a bounded free worker
 
@@ -137,7 +139,9 @@ Codex remains the frontier owner for scope preparation and final diff review. Th
 Use a free worker for this bounded, non-sensitive task: lint and fix only README.md, then run ["git","diff","--check","--","README.md"].
 ```
 
-Codex scopes the task, the free-worker adapter validates the file list and routing policy, and the frontier agent reviews the result before integrating. See the [free-agent-execution skill](.agents/skills/free-agent-execution/SKILL.md) for contracts, constraints, and the active OpenSpec design for full policy details.
+Codex scopes the task, the free-worker adapter validates the file list and routing policy, and the frontier agent reviews the result before integrating. The verified free pool is declared in `.agents/free-agent-routing.json` and currently contains `omniroute/oc/deepseek-v4-flash-free` and `omniroute/oc/big-pickle` (fully verified 2026-07-26). The six catalogued `omniroute/opencode-zen/*` candidates failed individual §5.4 conformance on 2026-07-30 and are quarantined rather than admitted. See the [free-agent-execution skill](.agents/skills/free-agent-execution/SKILL.md) for contracts, constraints, and the active OpenSpec design for full policy details.
+
+For an explicit OpenCode entry contract, see [OpenCode Free-Agent Entry](docs/opencode-free-entry.md).
 
 ## Quick start
 

@@ -1,7 +1,7 @@
 # Augmentedcode Configuration - Project Status
 
-**Last Updated**: 2026-06-26
-**Overall Status**: 🟢 **Ready** - Canonical local workspace is `~/Code`; home-level tool symlinks point at this checkout and `make check` passes. Validation gaps, destructive-script bugs, and hook fail-open gaps closed; CI added.
+**Last Updated**: 2026-08-04
+**Overall Status**: 🟢 **Ready** - Canonical local workspace is `~/Code`; the local Hermes Telegram entry now has verified frontier and explicit free lanes. OpenCode managed free-entry installation is verified; additional free-model conformance remains pending. `make check` green after Cursor-skills index repair and `.claude/hooks` restore.
 
 ---
 
@@ -17,12 +17,98 @@
 | Skill governance | ✅ Aligned | Index, catalog, and provenance lock validated |
 | Local healthchecks | ✅ Passing | `make check` covers tests, shell lint, skill validation, OpenSpec validation, symlink validation, and tracked-ignored reporting |
 | Marmalade team rules | ⚠️ Pending | Still loading via Eventbrite team config; awaiting admin removal |
+| Hermes Telegram and OmniRoute operations | ✅ Locally verified | Frontier reset, explicit free model switch, secret-scope patch, dashboard, and recovery runbook documented; mutable local configuration remains out of repo |
 
 **Current Readiness**: Configuration is stable for daily use across Cursor, Codex, Claude Code, Gemini, Antigravity, and Langflow. Local saski repositories now live under `~/Code`; the old `~/saski` root has been retired to `~/saski.legacy-2026-06-17`.
+
+### 2026-07-30: Hermes Telegram and OmniRoute operational slice ✅
+
+- Verified Telegram ingress routes the configured chat to the `coding` Hermes profile; `/new` starts `gpt-5.6-sol` through `openai-codex`.
+- Verified the explicit, session-only free lane: `/model oc/deepseek-v4-flash-free --provider custom` followed by a non-sensitive `RUTA_FREE_OK` smoke completion.
+- Replaced stale broad free-route use with the direct verified model in local runtime configuration. `auto/*`, `free-stack`, and `free-deterministic` remain unsuitable operational defaults.
+- Fixed the multiplex secret-scope defect in the local Hermes `/model` text handler. The patch preserves per-profile isolation; it must be retained or upstreamed before a future Hermes update.
+- Eliminated duplicate Telegram adapter startup by keeping Telegram ingress on the default profile and disabling Telegram on the routed `coding` profile.
+- Added [Hermes, OmniRoute, and Telegram Operations](docs/hermes-omniroute-operations.md), including Mermaid diagrams, command sequencing, recovery, and local-state boundaries.
+
+**Validation**: Gateway supervised by launchd; Telegram connected; dashboard returned HTTP 200 on `127.0.0.1:9119`; direct OmniRoute completion and routed Telegram free completion both returned non-empty expected text. Hermes source regression test was added but could not run because the release virtualenv lacks `pytest`.
 
 ---
 
 ## Recent Changes
+
+### 2026-08-04: Cursor-skills index repair and `.claude/hooks` restore ✅
+
+- Realigned `.agents/docs/cursor-skills.md` with the on-disk `.cursor/skills-cursor/` tree:
+  replaced the deleted `babysit` and `env-setup` rows with `autopilot` (the rename
+  of `babysit`) and `migrate-to-builds`, keeping the ide/meta/config category groups
+  and alphabetical ordering intact.
+- Registered the two untracked Cursor skill directories (`autopilot`, `migrate-to-builds`)
+  so `validate-cursor-skills.sh` git-tracking check passes.
+- Restored `.claude/hooks/rtk-rewrite.sh` as a symlink to `.agents/hooks/rtk-rewrite.sh`,
+  which `setup-symlinks.sh` `validate` and `templates/claude/settings.json` expect but
+  commit `dd27979` had removed. The obsolete `.rtk-hook.sha256` checksum was not
+  restored because nothing references it anymore.
+- `make check` now passes end-to-end for the first time since the 2026-07-30 work:
+  all test suites, shell lint, skill-library validation, Cursor-skills validation,
+  OpenSpec validation, and symlink validation are green.
+
+**Validation**: `make check` exit 0.
+
+### 2026-07-30: Managed OpenCode free entry ✅
+
+- Added `templates/opencode/free-worker.jsonc`: a non-secret OmniRoute
+  provider template exposing only the two verified free models and the
+  constrained three-step worker policy.
+- Added `docs/opencode-free-entry.md` for explicit `frontier` versus `free`
+  entry selection, contract invocation, prohibitions, and recovery behavior.
+- Added `tests/opencode-free-template-test.sh` to reject automatic routes,
+  paid/frontier models, quarantined families, or relaxed worker permissions.
+- Added `./setup-symlinks.sh opencode-free-worker` and
+  `validate-opencode-free-worker`. They atomically add only missing managed
+  fields, preserve unrelated configuration and credential storage, and reject
+  incompatible local values without writing.
+- The local OpenCode configuration was installed and validated with its
+  existing `localhost` OmniRoute endpoint and provider-specific model metadata
+  preserved.
+- Added `tests/opencode-managed-config-test.sh` for idempotence, new
+  configuration creation, unrelated configuration preservation, and credential
+  preservation.
+
+### 2026-07-30: Minimal free-worker context ✅
+
+- Constrained the ephemeral OpenCode worker to a short purpose prompt, `read`
+  and `edit` only, and a three-step cap. Shell, web, discovery, delegation,
+  skills, interactive tools, and external-directory access remain disabled.
+- Three bounded smokes on `omniroute/oc/deepseek-v4-flash-free` used
+  20,082–20,509 input tokens versus the 90,297-token baseline (77.3–77.8%
+  reduction), while retaining structured results, allowed-file attribution,
+  and passing validation.
+- Added the active OpenSpec change `minimize-free-worker-context`. A token
+  budget remains deferred until repeated measurements establish variance.
+
+**Validation**: `bash tests/free-agent-execution-test.sh`, routing-manifest
+validation, and `openspec validate --all` pass.
+
+### 2026-07-30: OpenCode Zen conformance and quarantine ✅
+
+- Queried the live local OmniRoute catalog and reconciled the valid prefix as
+  `opencode-zen/*`; the earlier `openai-codex-zen/*` identifiers were not live
+  provider-qualified OpenCode models.
+- Ran isolated, bounded-edit smoke contracts for all six Zen candidates. Each
+  failed with OpenCode status 1, zero token usage, no changed files, and no
+  paid fallback. A direct diagnostic call returned an OmniRoute server error.
+- Quarantined all six from `.agents/free-agent-routing.json`. The free-worker
+  allowlist now contains only the two previously verified `omniroute/oc/*`
+  models. The validator and its regression suite now accept the actual
+  `omniroute/opencode-zen/*` prefix for any future re-conformance run.
+- Completed OpenSpec §5.4 as a negative conformance result and §6.4 as
+  visible no-fallback evidence. Hermes' explicit free lane remains verified;
+  OpenCode's one-shot free acceptance also passed against the stable
+  `omniroute/oc/deepseek-v4-flash-free` route.
+
+**Validation**: `bash tests/free-agent-execution-test.sh` and routing-manifest
+validation pass. The 2026-07-28 and 2026-07-29 history below is superseded by
+this conformance result where it refers to a widened Zen pool.
 
 ### 2026-07-26: Bounded free-worker execution ✅
 
@@ -33,6 +119,43 @@
 - Added a behavior-level shell test suite covering successful structured and generic completions, pre-existing worktree changes, and rejection of legacy model identifiers.
 
 **Validation**: `bash tests/free-agent-execution-test.sh`, Bash syntax validation, and skill-library validation pass.
+
+### 2026-07-28: Free-worker pool maximized (option b) ⚠️ Partial
+
+- Expanded the verified free pool from 2 to 7 models in `.agents/free-agent-routing.json`:
+  the original `omniroute/oc/deepseek-v4-flash-free` + `omniroute/oc/big-pickle`,
+  plus 5 `omniroute/openai-codex-zen/*-free` (deepseek-v4-flash, ling-3.0-flash, mimo-v2.5,
+  nemotron-3-ultra, north-mini-code, laguna-s-2.1).
+- Modified `validate-routing-manifest` (line 20) from `^omniroute/oc/` to
+  `^omniroute/(oc|openai-codex-zen)/` so the adapter accepts the new free models.
+- Hermes `coding` profile `config.yaml` (provider `omniroute-local`):
+  model pin `auto/best-coding` -> `omniroute/oc/deepseek-v4-flash-free`,
+  `discover_models` true -> false, and the `oc/*-free` + `openai-codex-zen/*-free` entries
+  added to the models map. Default frontier unchanged: `gpt-5.6-sol` / `openai-codex`.
+  Backup: `config.yaml.bak.20260728_000318`.
+
+**PENDING (not done by agent — blocked by tool parser on localhost:20128):**
+- Per-request conformance suite (`tasks.md` 5.4: response + tool-use + structured-result
+  + bounded-edit checks via `opencode run` against OmniRoute) was NOT executed for the 5
+  new `openai-codex-zen/*-free` models. They are admitted by the manifest/adapter but
+  not individually verified. Run the smoke loop in a terminal outside the agent:
+  for each model, build a contract per `free-agent-execution/SKILL.md` and call
+  `.agents/skills/free-agent-execution/scripts/run-free-worker /tmp/contract.json`.
+- Spec note: the original design verified only the 2 `oc/*` models (2026-07-26).
+  Widening to `openai-codex-zen/*` is a spec change the original design did not foresee.
+
+**Validation**: `validate-routing-manifest` exits 0; all 7 models pass the adapter
+acceptance check. `hermes config check` exits 0.
+
+### 2026-07-29: Documentation aligned with widened free pool ✅
+
+- **`free-agent-execution` SKILL.md** — `## Verified free models` no longer hard-codes only the two `oc/*` identifiers. The manifest is now the authoritative source; the section documents the two 2026-07-26 verified models, names the five 2026-07-28 `openai-codex-zen/*` additions as **provisionally admitted**, and tells the reader to prefer one of the two `oc/*` models until §5.4 smoke runs have passed for each `openai-codex-zen/*` identifier.
+- **`docs/openspec/changes/codex-led-agent-routing/proposal.md`** — Implementation Status and the closing admission paragraph now describe the seven-identifier allowlist, mark the five `openai-codex-zen/*` entries as provisionally admitted, and explicitly defer full verification to §5.4.
+- **`docs/openspec/changes/codex-led-agent-routing/tasks.md` §5.4** — Split into 5.4.1–5.4.6, one sub-task per `omniroute/openai-codex-zen/*-free` identifier, each marked `manifest admitted 2026-07-28; awaiting smoke run`. Anything that passes all four §5.4 checks (response + tool-use + structured-result + bounded-edit) is promoted to fully verified.
+- **`README.md`** — Free-worker section now states the seven-identifier pool, the dates of the original verification vs. the config-only widening, and the practical rule (prefer the two `oc/*` models for attested work).
+- **`PROJECT_STATUS.md`** — This entry; header `Last Updated` and overall status line now reflect the doc alignment. The 2026-07-28 entry's `PENDING` block is intentionally preserved as the canonical reference for the open §5.4 work.
+
+**Validation**: `bash tests/free-agent-execution-test.sh`, `bash tests/check-omniroute-catalog-test.sh`, and the canonical `make validate-skills` run are scheduled next; if any check fails, this entry is downgraded.
 
 ### 2026-06-26: Hardening and validation gap closure ✅
 
@@ -134,11 +257,12 @@ Self-contained skill library, validator and contract tests, repository validatio
 
 ## Next Steps
 
-1. **Marmalade team rules** — escalate to Eventbrite Engineering Cursor admin to remove the `marmalade-*` rules from team config (they are now available as a workspace skill in `~/eventbrite/listings-webapp/.cursor/skills/marmalade-design-system/`).
-2. **`tlz-connection` PR** — push the `add-tlz-connection-rule` branch in `~/eventbrite/cursor-prompts` and open a PR.
-3. **Benchmark monitored skills** (`pbt-pragmatic-adoption`, `creating-hooks`, `writing-statuslines`) after the next major model update.
-4. **Keep governance aligned**: `components.lock.json`, the discovery index, and the skill-foundry catalogs whenever skills change.
-5. **Monitor CI** once `.github/workflows/check.yml` runs on the first push/PR; expand `ci-check` toward the full `make check` if sibling-repo skill sources and the openspec CLI are provisioned on the runner.
+1. **§6.6 OpenCode one-shot free acceptance** — re-run only after a healthy OmniRoute free upstream is available. The six Zen candidates were individually tested and quarantined on 2026-07-30; do not re-admit them without a new catalog check and complete conformance evidence.
+2. **Marmalade team rules** — escalate to Eventbrite Engineering Cursor admin to remove the `marmalade-*` rules from team config (they are now available as a workspace skill in `~/eventbrite/listings-webapp/.cursor/skills/marmalade-design-system/`).
+3. **`tlz-connection` PR** — push the `add-tlz-connection-rule` branch in `~/eventbrite/cursor-prompts` and open a PR.
+4. **Benchmark monitored skills** (`pbt-pragmatic-adoption`, `creating-hooks`, `writing-statuslines`) after the next major model update.
+5. **Keep governance aligned**: `components.lock.json`, the discovery index, and the skill-foundry catalogs whenever skills change.
+6. **Monitor CI** once `.github/workflows/check.yml` runs on the first push/PR; expand `ci-check` toward the full `make check` if sibling-repo skill sources and the openspec CLI are provisioned on the runner.
 
 ---
 

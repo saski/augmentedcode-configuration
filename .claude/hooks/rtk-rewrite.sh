@@ -1,0 +1,1 @@
+../../.agents/hooks/rtk-rewrite.sh

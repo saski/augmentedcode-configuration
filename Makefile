@@ -16,6 +16,8 @@ SHELL_SCRIPTS := \
 	.agents/skills/free-agent-execution/scripts/validate-routing-manifest \
 	.agents/skills/free-agent-execution/scripts/check-omniroute-catalog \
 	tests/free-agent-execution-test.sh \
+	tests/opencode-free-template-test.sh \
+	tests/opencode-managed-config-test.sh \
 	tests/check-omniroute-catalog-test.sh \
 	tests/openspec-install-test.sh \
 	tests/validate-skill-library-test.sh \
@@ -32,6 +34,8 @@ check: test lint-shell validate-skills validate-cursor-skills validate-openspec 
 
 test:
 	./tests/free-agent-execution-test.sh
+	./tests/opencode-free-template-test.sh
+	./tests/opencode-managed-config-test.sh
 	./tests/check-omniroute-catalog-test.sh
 	./tests/openspec-install-test.sh
 	./tests/validate-skill-library-test.sh
@@ -45,6 +49,7 @@ test:
 
 lint-shell:
 	bash -n $(SHELL_SCRIPTS)
+	node --check lib/install-opencode-free-worker-config.mjs
 
 validate-skills:
 	./validate-skill-library.sh
@@ -88,6 +93,8 @@ discover-saski-repos:
 # ruby, jq, python3, and git preinstalled.
 ci-check: lint-shell validate-cursor-skills
 	./tests/free-agent-execution-test.sh
+	./tests/opencode-free-template-test.sh
+	./tests/opencode-managed-config-test.sh
 	./tests/check-omniroute-catalog-test.sh
 	./tests/openspec-install-test.sh
 	./tests/validate-skill-library-test.sh

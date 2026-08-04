@@ -61,7 +61,7 @@ The trigger is **user intent**, not response shape. Ask: would the user benefit 
 
 **Component discovery:** prefer built-in `cursor/canvas` components over hand-rolled markup. The full public surface (components, hooks, prop types, tokens) is declared in `~/.cursor/skills-cursor/canvas/sdk/index.d.ts` and its sibling `.d.ts` files — read them when you need exact exports, prop shapes, or hook signatures rather than guessing. Referencing an export that does not exist is the most common runtime error.
 
-Apply the Canvas generation policy below as you write, and complete its pre-delivery self-check (section 6) before returning the canvas.
+Apply the Design guidance below as you write, and complete its Pre-delivery self-check before returning the canvas.
 
 ## Design guidance
 

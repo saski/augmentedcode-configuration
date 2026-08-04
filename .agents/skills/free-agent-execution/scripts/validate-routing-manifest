@@ -17,7 +17,7 @@ jq -e '
         .manifest_version == "1"
         and .frontier_role == "codex_principal"
         and ($verified | type == "array" and length > 0)
-        and all($verified[]; nonempty_string and test("^omniroute/oc/"))
+        and all($verified[]; nonempty_string and test("^omniroute/(oc|opencode-zen)/"))
         and (.free_worker | type == "object")
         and ($default | nonempty_string)
         and (.free_worker.task_classes | type == "object" and length > 0)

@@ -1,0 +1,83 @@
+# OpenCode Free-Agent Entry
+
+OpenCode supports two explicit execution modes. It does not decide between
+them, and neither mode uses automatic model fallback.
+
+## Frontier work
+
+Sensitive, ambiguous, or multi-step work stays in Codex App or Codex CLI.
+Those frontier sessions use Codex directly and do not pass through OmniRoute.
+The frontier principal owns planning, OpenSpec, delegation, review, and
+integration.
+
+## Bounded free work
+
+Use the free route only for an explicitly authorized, non-sensitive bounded
+task. Copy the provider and worker policy from
+[`templates/opencode/free-worker.jsonc`](../templates/opencode/free-worker.jsonc).
+The only admitted models are:
+
+- `omniroute/oc/deepseek-v4-flash-free`
+- `omniroute/oc/big-pickle`
+
+## Managed local installation
+
+Install only the managed OpenCode fields with:
+
+```bash
+./setup-symlinks.sh opencode-free-worker
+./setup-symlinks.sh validate-opencode-free-worker
+```
+
+The installer updates `~/.config/opencode/opencode.jsonc` atomically. It adds
+the two verified model identifiers and the constrained `free-worker` agent if
+they are missing. It preserves unrelated top-level configuration, providers,
+models, agent definitions, and the existing local OmniRoute endpoint when it
+uses either supported loopback form (`localhost` or `127.0.0.1`). It never
+reads or writes OpenCode credential storage.
+
+The local configuration must be strict JSON. A comment-bearing or malformed
+JSONC file, a different OmniRoute endpoint, or an incompatible managed agent
+is a visible conflict and leaves the file unchanged.
+
+Dispatch the work through a versioned contract, then return the result to the
+frontier principal for diff and validation review:
+
+```json
+{
+  "contract_version": "1",
+  "mode": "free",
+  "execution_role": "worker",
+  "parent_role": "frontier",
+  "parent_run_id": "run-example",
+  "delegation_depth": 1,
+  "task_id": "task-example",
+  "task_class": "bounded_code",
+  "sensitivity": "non_sensitive",
+  "working_directory": "/absolute/path/to/clean-worktree",
+  "requirement": "Implement one precise, bounded change.",
+  "allowed_files": ["relative/path/to/file"],
+  "validation": { "command": ["bash", "tests/example-test.sh"] },
+  "model": "omniroute/oc/deepseek-v4-flash-free",
+  "timeout_seconds": 180
+}
+```
+
+Run it with:
+
+```bash
+.agents/skills/free-agent-execution/scripts/run-free-worker /absolute/path/to/contract.json
+```
+
+## Hard prohibitions
+
+The free route must not receive credentials, secrets, environment values,
+personal data, or other sensitive content. It must not use `auto/*`, paid
+models, shell access, recursive delegation, or automatic fallback.
+
+## Recovery
+
+If the selected free route is unavailable or semantically unhealthy, surface
+the failure and do not retry on a paid model. Continue through direct Codex
+frontier work only when that is an explicit decision; otherwise stop and report
+the blocker.

@@ -149,6 +149,45 @@ The repository SHALL define the frontier owner, verified free models, free-worke
 - **THEN** it SHALL accept the model only when the manifest verifies it for that task class
 - **AND** it SHALL return a visible failure without invoking OpenCode otherwise
 
+### Requirement: OpenCode free-entry template
+
+The repository SHALL provide a non-secret OpenCode template for explicit free
+worker execution through the local OmniRoute endpoint. It SHALL expose only
+verified free models and a constrained `free-worker` agent.
+
+#### Scenario: Use the portable free template
+
+- **GIVEN** a user configures OpenCode from the managed free-entry template
+- **WHEN** the user selects an explicit free worker model
+- **THEN** the template SHALL expose only `oc/deepseek-v4-flash-free` and
+  `oc/big-pickle` through the OmniRoute-compatible provider
+- **AND** SHALL exclude paid frontier models, automatic routes, and quarantined
+  model families
+
+### Requirement: Managed OpenCode free-entry installation
+
+The repository SHALL provide an idempotent installation and validation command
+for the managed OpenCode free-entry fields. It SHALL atomically add only missing
+managed fields and SHALL preserve unrelated user configuration and credential
+storage.
+
+#### Scenario: Preserve user configuration and credentials
+
+- **GIVEN** a user has an existing OpenCode configuration with unrelated
+  providers, models, agents, or top-level fields and an existing credential
+  store
+- **WHEN** the managed free-entry installation runs
+- **THEN** it SHALL retain those unrelated configuration fields and credentials
+- **AND** it SHALL add the verified model identifiers and constrained
+  `free-worker` agent only when they are missing
+
+#### Scenario: Reject a managed field conflict
+
+- **GIVEN** the existing OpenCode configuration has an incompatible managed
+  provider, endpoint, model shape, or `free-worker` agent
+- **WHEN** managed installation or validation runs
+- **THEN** it SHALL fail visibly without modifying the user configuration
+
 ### Requirement: Free-only OmniRoute boundary
 
 The agent execution route SHALL contain only verified free models and SHALL never silently escalate to a paid provider.
@@ -261,6 +300,21 @@ Hermes SHALL support Telegram, CLI, and TUI as entry surfaces for both Codex app
 - **WHEN** the user selects `free` mode
 - **THEN** Hermes SHALL select an explicit verified free model or verified free-only route
 - **AND** SHALL NOT default to an uncontrolled broad `auto/*` route
+
+#### Scenario: Switch a routed Telegram session to a verified free model
+
+- **GIVEN** a Telegram chat is routed to a multiplexed Hermes profile whose default is a Codex frontier model
+- **WHEN** the user sends `/model oc/deepseek-v4-flash-free --provider custom` as one command message
+- **THEN** Hermes SHALL resolve the named custom-provider credential inside the routed profile's secret scope
+- **AND** SHALL select the raw `oc/deepseek-v4-flash-free` model only for that session
+- **AND** SHALL return a visible model-switch confirmation or a visible failure without paid fallback
+
+#### Scenario: Reset a routed Telegram session
+
+- **GIVEN** a routed Telegram session has a session-only free-model override
+- **WHEN** the user sends `/new` without title text
+- **THEN** Hermes SHALL clear the override and restore the routed profile's frontier default
+- **AND** text following `/new` in the same message SHALL be treated as a session title, not as a second command
 
 #### Scenario: OmniRoute or Hermes is unavailable
 

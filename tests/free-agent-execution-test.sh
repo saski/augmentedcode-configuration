@@ -156,6 +156,13 @@ EOF
     fi
     grep -Fq '"task":"deny"' "$capture"
     grep -Fq '"bash":"deny"' "$capture"
+    local expected_worker_config
+    for expected_worker_config in '"maxSteps":3' '"read":true' '"edit":true' '"glob":false' '"grep":false' '"webfetch":false' '"task":false'; do
+        if ! grep -Fq "$expected_worker_config" "$capture"; then
+            echo "expected constrained worker config to contain $expected_worker_config" >&2
+            exit 1
+        fi
+    done
 }
 
 test_frontier_principal_delegates_one_bounded_task() {
@@ -172,6 +179,10 @@ test_worker_accepts_generic_completion_text() {
 
 test_worker_uses_verified_model_from_routing_manifest() {
     run_bounded_task_case "no" "structured" "omniroute/oc/fixture-free"
+}
+
+test_worker_accepts_opencode_zen_model_from_routing_manifest() {
+    run_bounded_task_case "no" "structured" "omniroute/opencode-zen/fixture-free"
 }
 
 assert_manifest_rejected() {
@@ -524,6 +535,7 @@ test_frontier_principal_delegates_one_bounded_task
 test_changed_files_ignores_preexisting_git_changes
 test_worker_accepts_generic_completion_text
 test_worker_uses_verified_model_from_routing_manifest
+test_worker_accepts_opencode_zen_model_from_routing_manifest
 test_routing_manifest_rejects_unsafe_or_incomplete_policy
 test_legacy_model_identifier_rejected
 test_loop_guard_rejects_invalid_role_transitions

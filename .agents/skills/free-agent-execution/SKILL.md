@@ -80,12 +80,16 @@ A context that is already acting as an OpenCode worker must not re-enter as entr
 
 ## Verified free models
 
-The checked-in routing manifest at `.agents/free-agent-routing.json` is the source of truth. Version one verifies these model identifiers for `bounded_code`:
+The checked-in routing manifest at `.agents/free-agent-routing.json` is the source of truth. Treat the manifest, not this document, as authoritative for which model identifiers the adapter admits: both `verified_free_models` and `free_worker.task_classes.<class>.models`.
+
+Version one (2026-07-26) verified two `omniroute/oc/*` identifiers for `bounded_code`:
 
 - `omniroute/oc/deepseek-v4-flash-free`
 - `omniroute/oc/big-pickle`
 
-Do not substitute aliases or newly advertised free models without updating and validating the routing manifest. The adapter validates that the model is both globally verified and admitted for the requested task class.
+Six `omniroute/opencode-zen/*` identifiers were reconciled with the live OmniRoute catalog and tested on 2026-07-30. All returned an OpenCode status-1 failure with no usable completion, so they are quarantined and absent from the manifest. Use only the two original `oc/*` models unless a future conformance run promotes another model.
+
+Do not substitute aliases or newly advertised free models without updating the routing manifest and re-running `validate-routing-manifest`. The adapter still validates that the requested model is both globally verified and admitted for the requested task class.
 
 ## Routing manifest
 
@@ -130,6 +134,11 @@ A completed adapter run returns:
 ## Safety boundaries
 
 - The adapter configures the worker with delegation (`task`) and shell (`bash`) denied. The frontier agent performs validation after the worker returns.
+- The ephemeral worker is intentionally minimal: it has a concise task prompt,
+  only `read` and `edit` enabled, and a three-step cap. Do not broaden this
+  tool surface without measuring the input-token impact and reviewing the
+  safety boundary. Three 2026-07-30 bounded smokes used 20,082–20,509 input
+  tokens versus a 90,297-token pre-minimization baseline.
 - `allowed_files` is a post-execution check, not a write sandbox. An out-of-scope change fails the result but is not reverted.
 - The Git comparison is path-based. A worker change to a path that was already dirty before execution is not attributed or scope-checked. Use a clean worktree for stronger attribution, especially for allowed files.
 - The validation command is trusted local code and runs with the adapter caller's permissions even when the worker fails. Review the array before execution.

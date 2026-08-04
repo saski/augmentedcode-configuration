@@ -1,0 +1,41 @@
+{
+  "provider": {
+    "omniroute": {
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "http://127.0.0.1:20128/v1"
+      },
+      "models": {
+        "oc/deepseek-v4-flash-free": {},
+        "oc/big-pickle": {}
+      }
+    }
+  },
+  "agent": {
+    "free-worker": {
+      "mode": "primary",
+      "prompt": "Complete only the stated bounded task. Use only the permitted files. Do not explain your reasoning. Return the requested FREE_AGENT_RESULT when finished.",
+      "maxSteps": 3,
+      "tools": {
+        "read": true,
+        "edit": true,
+        "bash": false,
+        "glob": false,
+        "grep": false,
+        "question": false,
+        "skill": false,
+        "task": false,
+        "todowrite": false,
+        "webfetch": false
+      },
+      "permission": {
+        "edit": "allow",
+        "bash": "deny",
+        "task": "deny",
+        "webfetch": "deny",
+        "external_directory": "deny",
+        "doom_loop": "deny"
+      }
+    }
+  }
+}

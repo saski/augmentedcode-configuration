@@ -16,9 +16,8 @@ For shared skills, use [skill-factory-skills.md](skill-factory-skills.md) and [s
 | Skill | Category | Purpose |
 |-------|----------|---------|
 | automate | ide | Create Cursor Automations through the Automations editor handoff, with trigger, tool, prompt, and integration completeness checks. |
-| babysit | ide | Keep a PR merge-ready by triaging comments, resolving clear conflicts, and fixing CI in a loop. |
+| autopilot | ide | Keep a PR merge-ready by triaging comments, resolving clear conflicts, and fixing CI in a loop. |
 | canvas | ide | Live React Canvas beside the chat for analytical artifacts, charts, tables, and MCP-heavy deliverables; also required when editing `.canvas.tsx` files. |
-| env-setup | ide | Explain, inspect, configure, and troubleshoot Cloud Agent development environments. |
 | loop | ide | Run a prompt or skill on a recurring local interval using monitored background shell output (`/loop`, polling, local cron-like loops). |
 | onboard | ide | Focused Cursor onboarding flow that learns basic preferences, picks a first goal, and routes the user to the right next action (`/onboard`). |
 | review | ide | Route a code review request to either Bugbot or Security Review. |
@@ -32,6 +31,7 @@ For shared skills, use [skill-factory-skills.md](skill-factory-skills.md) and [s
 | create-rule | meta | Create Cursor rules for persistent AI guidance (`.cursor/rules/`). |
 | create-skill | meta | Author Agent Skills; points canonical shared skills at `.agents/skills/`. |
 | create-subagent | meta | Create custom subagents for specialized tasks. |
+| migrate-to-builds | ide | Test that a Cloud Agent environment works with prebuilt environment builds and recommend required changes; use when migrating to builds, testing build compatibility, or following the Builds page setup-agent flow. |
 | migrate-to-skills | meta | Convert Cursor rules (`.mdc`) and slash commands to Agent Skills. |
 | update-cli-config | config | View and modify `~/.cursor/cli-config.json`. |
 | update-cursor-settings | config | Modify Cursor/VSCode `settings.json` preferences. |

@@ -45,6 +45,9 @@ Release channel: `"prod"` | `"lab"` | `"static"`
 ### `maxMode` (optional)
 boolean (default: false) — enable max mode for higher-quality model responses
 
+### `exploreSubagentModel` (optional)
+`"default"` | `"inherit"` (default: `"default"`) — use Cursor's default Explore model or inherit the parent agent's model
+
 ### `approvalMode` (optional)
 Controls tool approval behavior:
 - `"allowlist"` (default) — require approval for tools not in the allow list

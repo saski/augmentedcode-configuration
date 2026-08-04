@@ -21,9 +21,20 @@ The OpenAI account already provides direct access to frontier Codex agents, so r
 
 ## Implementation Status
 
-The first free-worker slice is implemented: the repository contains a documented one-shot OpenCode adapter, an explicit allowlist for `omniroute/oc/deepseek-v4-flash-free` and `omniroute/oc/big-pickle`, and behavior-level tests for a bounded frontier-to-worker handoff. A live smoke run has also completed through OpenCode and local OmniRoute.
+The first free-worker slice is implemented: the repository contains a documented one-shot OpenCode adapter, an explicit allowlist containing the two verified `omniroute/oc/*` identifiers, and behavior-level tests for a bounded frontier-to-worker handoff. A live smoke run has also completed through OpenCode and local OmniRoute.
+
+The verified model identifiers are `omniroute/oc/deepseek-v4-flash-free` and `omniroute/oc/big-pickle`. Six `omniroute/opencode-zen/*` candidates were found in the live catalog and exercised individually on 2026-07-30; all failed with OpenCode status 1 and no usable completion. They are quarantined, not admitted. A future catalog change requires a new conformance run before any candidate is promoted.
+
+The repository now provides a portable OpenCode free-entry template and a
+preservation-aware managed installer. The template exposes only the two
+verified OmniRoute models and mirrors the constrained worker policy. The
+installer atomically adds missing managed fields while preserving unrelated
+configuration and never reading or writing OpenCode credentials; incompatible
+local fields fail visibly without modification.
 
 The adapter treats non-empty final worker text as semantic completion, while preferring the structured `FREE_AGENT_RESULT` summary when supplied. It still requires a successful OpenCode process, allowed newly changed paths, and passing declared validation. It now consumes a secret-free declarative routing manifest; process timeout enforcement is the next hardening slice.
+
+The local Telegram entry has now completed a verified operational slice: the default ingress routes the configured chat to the `coding` profile; `/new` starts a Codex app-server frontier session; and an explicit session-only switch to `oc/deepseek-v4-flash-free` through the named `omniroute-local` custom provider returned a non-empty completion. The operation is documented separately because the profile files, bot credentials, and local Hermes patch are mutable machine state rather than repository-managed templates.
 
 ## Capabilities
 
@@ -45,4 +56,4 @@ None.
 - The existing Codex CLI session, currently authenticated through ChatGPT OAuth, remains the credential source for Codex App/CLI and Hermes Codex app-server turns.
 - Hermes-managed `openai-codex` OAuth remains optional and isolated in Hermes' credential store; it is not shared with the Codex CLI session.
 - Existing local credentials remain outside the repository. Configuration artifacts will contain environment-variable references or non-secret local placeholders only.
-- The first implementation slice uses the already verified OpenCode provider-qualified model identifiers `omniroute/oc/deepseek-v4-flash-free` and `omniroute/oc/big-pickle`. Other free models require conformance testing before admission.
+- The first implementation slice uses the already verified OpenCode provider-qualified model identifiers `omniroute/oc/deepseek-v4-flash-free` and `omniroute/oc/big-pickle`. Other free models require conformance testing before they are promoted from provisional admission (manifest acceptance + `validate-routing-manifest` exit 0) to fully verified status (§5.4).

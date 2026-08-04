@@ -85,7 +85,7 @@ prompt="$(
     ' "$contract_path"
 )"
 
-opencode_config='{"agent":{"free-worker":{"mode":"primary","permission":{"task":"deny","bash":"deny"}}}}'
+opencode_config='{"agent":{"free-worker":{"mode":"primary","prompt":"Complete only the stated bounded task. Use only the permitted files. Do not explain your reasoning. Return the requested FREE_AGENT_RESULT when finished.","maxSteps":3,"tools":{"read":true,"edit":true,"bash":false,"glob":false,"grep":false,"question":false,"skill":false,"task":false,"todowrite":false,"webfetch":false},"permission":{"edit":"allow","task":"deny","bash":"deny","webfetch":"deny","external_directory":"deny","doom_loop":"deny"}}}}'
 output_file="$(mktemp)"
 cleanup() {
     rm -f "$output_file"

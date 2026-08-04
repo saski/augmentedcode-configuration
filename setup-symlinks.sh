@@ -7,6 +7,9 @@ TEMPLATES_DIR="$REPO_DIR/templates"
 CODEX_CONFIG_TEMPLATE="$TEMPLATES_DIR/codex/config.toml"
 CODEX_HOOKS_TEMPLATE="$TEMPLATES_DIR/codex/hooks.json"
 CLAUDE_SETTINGS_TEMPLATE="$TEMPLATES_DIR/claude/settings.json"
+OPENCODE_FREE_WORKER_TEMPLATE="$TEMPLATES_DIR/opencode/free-worker.jsonc"
+OPENCODE_CONFIG_PATH="$HOME/.config/opencode/opencode.jsonc"
+OPENCODE_CONFIG_INSTALLER="$REPO_DIR/lib/install-opencode-free-worker-config.mjs"
 
 # Dev/AI tools under ~ that get a direct "$HOME/$tool/skills" symlink.
 # Cursor and Codex are handled separately due tool-specific directory layouts.
@@ -19,7 +22,9 @@ Usage: $(basename $0) [command]
 
 Commands:
   setup     - Create all symlinks (first-time setup or repair)
+  opencode-free-worker - Safely install managed OpenCode free-worker fields
   validate  - Verify all symlinks are correct
+  validate-opencode-free-worker - Verify managed OpenCode free-worker fields
   status    - Show git status of config changes
   commit    - Stage, commit, and push config changes
   help      - Show this help message
@@ -86,6 +91,33 @@ check_environment() {
 
     if [ ! -f "$CLAUDE_SETTINGS_TEMPLATE" ]; then
         echo "❌ templates/claude/settings.json not found in repo"
+        exit 1
+    fi
+
+    if [ ! -f "$OPENCODE_FREE_WORKER_TEMPLATE" ]; then
+        echo "❌ templates/opencode/free-worker.jsonc not found in repo"
+        exit 1
+    fi
+
+    if [ ! -f "$OPENCODE_CONFIG_INSTALLER" ]; then
+        echo "❌ lib/install-opencode-free-worker-config.mjs not found in repo"
+        exit 1
+    fi
+}
+
+check_opencode_environment() {
+    if [ ! -d "$REPO_DIR" ]; then
+        echo "❌ Repository not found at $REPO_DIR"
+        exit 1
+    fi
+
+    if [ ! -f "$OPENCODE_FREE_WORKER_TEMPLATE" ]; then
+        echo "❌ templates/opencode/free-worker.jsonc not found in repo"
+        exit 1
+    fi
+
+    if [ ! -f "$OPENCODE_CONFIG_INSTALLER" ]; then
+        echo "❌ lib/install-opencode-free-worker-config.mjs not found in repo"
         exit 1
     fi
 }
@@ -208,6 +240,14 @@ setup_claude_config() {
     install_template_file "$CLAUDE_SETTINGS_TEMPLATE" "$HOME/.claude/settings.json"
 }
 
+setup_opencode_free_worker_config() {
+    node "$OPENCODE_CONFIG_INSTALLER" install "$OPENCODE_FREE_WORKER_TEMPLATE" "$OPENCODE_CONFIG_PATH"
+}
+
+validate_opencode_free_worker_config() {
+    node "$OPENCODE_CONFIG_INSTALLER" validate "$OPENCODE_FREE_WORKER_TEMPLATE" "$OPENCODE_CONFIG_PATH"
+}
+
 setup_symlinks() {
     echo "🔗 Setting up symlinks..."
 
@@ -264,6 +304,7 @@ setup_symlinks() {
         "$(resolve_path_binary openspec)" || true
 
     setup_claude_config
+    setup_opencode_free_worker_config
 
     # Create root-level config symlinks
     ln -sfn "$REPO_DIR/CLAUDE.md" ~/CLAUDE.md
@@ -278,6 +319,10 @@ validate_symlinks() {
     echo "🔍 Validating symlinks..."
 
     local errors=0
+
+    if ! validate_opencode_free_worker_config; then
+        errors=$((errors + 1))
+    fi
 
     # Check .cursor symlinks
     for link in commands skills skills-cursor .agents; do
@@ -653,20 +698,30 @@ commit_changes() {
 }
 
 # Main
-check_environment
-
 case "${1:-help}" in
     setup)
+        check_environment
         setup_symlinks
         ;;
+    opencode-free-worker)
+        check_opencode_environment
+        setup_opencode_free_worker_config
+        ;;
     validate)
+        check_environment
         validate_symlinks
         ;;
-    status)
-        show_status
+    validate-opencode-free-worker)
+        check_opencode_environment
+        validate_opencode_free_worker_config
         ;;
-    commit)
-        commit_changes
+    status|commit)
+        check_environment
+        if [ "${1:-help}" = "status" ]; then
+            show_status
+        else
+            commit_changes
+        fi
         ;;
     help|*)
         usage
