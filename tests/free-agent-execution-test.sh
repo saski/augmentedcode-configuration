@@ -511,7 +511,7 @@ EOF
 
     local worktree_lock_id
     worktree_lock_id="$(printf '%s' "$workspace" | shasum -a 256 | awk '{print $1}')"
-    local lock_dir="/private/tmp/free-agent-worktree-lock-$worktree_lock_id"
+    local lock_dir="${TMPDIR:-/tmp}/free-agent-worktree-lock-$worktree_lock_id"
     mkdir "$lock_dir"
     rm -f "$capture"
     local locked_result
