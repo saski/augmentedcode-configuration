@@ -1,0 +1,59 @@
+# Secret-free overlay for ~/.hermes/config.yaml.
+# Merge these keys into the local file; do not replace the whole file.
+# Replace the Telegram chat placeholder locally before restarting the gateway.
+
+model:
+  default: oc/deepseek-v4-flash-free
+  provider: omniroute
+  openai_runtime: codex_app_server
+  base_url: http://localhost:20128/v1
+
+providers:
+  omniroute-local:
+    name: OmniRoute local
+    base_url: http://localhost:20128/v1
+    key_env: OMNIROUTE_API_KEY
+    model: oc/deepseek-v4-flash-free
+    default_model: oc/deepseek-v4-flash-free
+    discover_models: true
+    models:
+      oc/deepseek-v4-flash-free:
+        supports_vision: false
+
+auxiliary:
+  vision:
+    provider: openai-codex
+    model: gpt-5.6-sol
+    reasoning_effort: low
+
+agent:
+  image_input_mode: auto
+
+gateway:
+  multiplex_profiles: true
+  profile_routes:
+    - name: telegram-default-dynamic-vision
+      platform: telegram
+      chat_id: REPLACE_WITH_TELEGRAM_CHAT_ID
+      profile: default
+      enabled: true
+
+# The automatic image preprocessor above remains active without the explicit
+# vision tool. Keeping that tool out prevents a second frontier vision call.
+platform_toolsets:
+  telegram:
+    - browser
+    - clarify
+    - code_execution
+    - computer_use
+    - cronjob
+    - delegation
+    - file
+    - image_gen
+    - memory
+    - session_search
+    - skills
+    - terminal
+    - todo
+    - tts
+    - web

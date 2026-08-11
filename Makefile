@@ -28,6 +28,7 @@ SHELL_SCRIPTS := \
 	tests/sync-saski-repos-test.sh \
 	tests/sync-skill-factory-test.sh \
 	tests/codex-free-entry-test.sh \
+	tests/hermes-routing-template-test.sh \
 	hooks/pre-commit
 
 check: test lint-shell validate-skills validate-cursor-skills validate-openspec validate-symlinks check-tracked-ignored
@@ -46,6 +47,7 @@ test:
 	./tests/sync-saski-repos-test.sh
 	./tests/sync-skill-factory-test.sh
 	./tests/codex-free-entry-test.sh
+	./tests/hermes-routing-template-test.sh
 
 lint-shell:
 	bash -n $(SHELL_SCRIPTS)
@@ -103,3 +105,4 @@ ci-check: lint-shell validate-cursor-skills
 	./tests/cursor-skills-validation-test.sh
 	./tests/sync-saski-repos-test.sh
 	./tests/sync-skill-factory-test.sh
+	./tests/hermes-routing-template-test.sh
