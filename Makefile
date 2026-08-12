@@ -1,4 +1,4 @@
-.PHONY: check test lint-shell validate-skills validate-cursor-skills validate-openspec validate-symlinks check-tracked-ignored install-hooks sync-saski-repos sync-saski-repos-apply discover-saski-repos ci-check
+.PHONY: check test lint-shell validate-skills validate-cursor-skills validate-openspec validate-symlinks check-tracked-ignored install-hooks install-hermes-gateway-config-watch sync-saski-repos sync-saski-repos-apply discover-saski-repos ci-check
 
 export PATH := $(HOME)/.agents/bin:$(HOME)/.bun/bin:/opt/homebrew/bin:/usr/local/bin:$(PATH)
 
@@ -8,6 +8,8 @@ SHELL_SCRIPTS := \
 	sync-skill-factory.sh \
 	pull-and-sync-skills.sh \
 	backup-cursor-config.sh \
+	hermes-gateway-config-watch.sh \
+	install-hermes-gateway-config-watch.sh \
 	validate-skill-library.sh \
 	validate-cursor-skills.sh \
 	lib/validate-skill-frontmatter.sh \
@@ -29,6 +31,7 @@ SHELL_SCRIPTS := \
 	tests/sync-skill-factory-test.sh \
 	tests/codex-free-entry-test.sh \
 	tests/hermes-routing-template-test.sh \
+	tests/hermes-gateway-config-watch-test.sh \
 	hooks/pre-commit
 
 check: test lint-shell validate-skills validate-cursor-skills validate-openspec validate-symlinks check-tracked-ignored
@@ -48,6 +51,7 @@ test:
 	./tests/sync-skill-factory-test.sh
 	./tests/codex-free-entry-test.sh
 	./tests/hermes-routing-template-test.sh
+	./tests/hermes-gateway-config-watch-test.sh
 
 lint-shell:
 	bash -n $(SHELL_SCRIPTS)
@@ -79,6 +83,9 @@ install-hooks:
 	install -d "$$(dirname "$$(git rev-parse --git-path hooks/pre-commit)")"
 	install -m 0755 hooks/pre-commit "$$(git rev-parse --git-path hooks/pre-commit)"
 
+install-hermes-gateway-config-watch:
+	./install-hermes-gateway-config-watch.sh
+
 sync-saski-repos:
 	./sync-saski-repos.sh
 
@@ -106,3 +113,4 @@ ci-check: lint-shell validate-cursor-skills
 	./tests/sync-saski-repos-test.sh
 	./tests/sync-skill-factory-test.sh
 	./tests/hermes-routing-template-test.sh
+	./tests/hermes-gateway-config-watch-test.sh

@@ -158,6 +158,49 @@ authoritative local process check. After a configuration change, restart the
 supervised process rather than leaving a detached gateway with stale
 environment values.
 
+### Automatic reload after Desktop changes
+
+Hermes Desktop and the Telegram gateway share the same `HERMES_HOME`, but they
+are different processes. Desktop starts a local `hermes serve` backend; the
+launchd job `ai.hermes.gateway` owns Telegram polling. An old interactive
+`hermes` CLI session is a third process: it may keep a terminal and the state
+database open, but it neither listens for Telegram nor competes with the
+gateway. Exit it normally when it is no longer needed; closing it is not a
+gateway recovery step.
+
+Install the repository-owned launchd watcher once:
+
+```bash
+make install-hermes-gateway-config-watch
+```
+
+The watcher observes the global `~/.hermes/config.yaml`, `~/.hermes/.env`, and
+`~/.hermes/auth.json`. A meaningful change made from Desktop to the global
+model, provider, OAuth identity, or channel configuration automatically runs:
+
+```bash
+launchctl kickstart -k "gui/$(id -u)/ai.hermes.gateway"
+```
+
+Automatic OAuth token renewal does not restart the gateway. Tokens, expiry
+timestamps, provider health, and request counters are deliberately excluded
+from the semantic OAuth fingerprint so a background refresh cannot interrupt
+an active Telegram task. Provider selection, provider membership, credential
+identity, account identity, endpoint, authentication type, or priority changes
+do trigger a restart. No credential value is logged or committed.
+
+Check the watcher and its restart log with:
+
+```bash
+launchctl print "gui/$(id -u)/ai.hermes.gateway-config-watch"
+tail -n 20 ~/.hermes/logs/gateway-config-watch.log
+```
+
+The watcher covers the global Desktop environment only. Named profiles under
+`~/.hermes/profiles/` remain explicit operational units because observing an
+entire mutable profile directory would also react to sessions, logs, and token
+traffic and could create restart loops.
+
 If Codex OAuth has expired, authenticate or run one direct Codex-backed Hermes
 turn in the default profile before retrying image preprocessing. Keep this
 recovery local; no OAuth artifact belongs in Git.

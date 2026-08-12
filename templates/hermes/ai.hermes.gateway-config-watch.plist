@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>ai.hermes.gateway-config-watch</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>__WATCHER_PATH__</string>
+  </array>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>HERMES_HOME</key>
+    <string>__HERMES_HOME__</string>
+  </dict>
+
+  <key>WatchPaths</key>
+  <array>
+    <string>__HERMES_HOME__/config.yaml</string>
+    <string>__HERMES_HOME__/.env</string>
+    <string>__HERMES_HOME__/auth.json</string>
+  </array>
+
+  <key>ProcessType</key>
+  <string>Background</string>
+  <key>ThrottleInterval</key>
+  <integer>2</integer>
+  <key>StandardOutPath</key>
+  <string>__HERMES_HOME__/logs/gateway-config-watch.log</string>
+  <key>StandardErrorPath</key>
+  <string>__HERMES_HOME__/logs/gateway-config-watch.log</string>
+</dict>
+</plist>
