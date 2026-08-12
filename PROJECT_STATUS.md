@@ -1,7 +1,7 @@
 # Augmentedcode Configuration - Project Status
 
 **Last Updated**: 2026-08-12
-**Overall Status**: 🟢 **Ready** - Canonical local workspace is `~/Code`; the local Hermes Telegram entry now has verified frontier and explicit free lanes. OpenCode managed free-entry installation is verified; additional free-model conformance remains pending. `make check` green after Cursor-skills index repair and `.claude/hooks` restore.
+**Overall Status**: 🟢 **Ready** - Canonical local workspace is `~/Code`; Hermes Telegram has verified frontier and explicit free lanes. The Codex-to-OpenCode dispatcher now enforces policy-owned step, context, timeout, and required-edit postconditions. Direct free pins are healthy; the active `free-deterministic` combo remains unverified after a live member billing failure.
 
 ---
 
@@ -16,7 +16,7 @@
 | Conditional rules | ✅ Single source | `.agents/rules/{python,makefile,react}-project.md`, loaded on demand per `base.md §2` |
 | RTK guidance and hooks | ✅ Compact pointer in `base.md §5`; shared hook wired | Recursive `@-include` removed; Codex and Claude Bash hooks use `.agents/hooks/rtk-rewrite.sh` |
 | Skill governance | ✅ Aligned | Index, catalog, and provenance lock validated |
-| Local healthchecks | ✅ Passing | `make check` covers tests, shell lint, skill validation, OpenSpec validation, symlink validation, and tracked-ignored reporting |
+| Local healthchecks | ✅ Passing | `make check` covers tests, shell lint, skill validation, Cursor inventory, OpenSpec validation, symlink validation, and tracked-ignored reporting |
 | Marmalade team rules | ⚠️ Pending | Still loading via Eventbrite team config; awaiting admin removal |
 | Hermes Telegram and OmniRoute operations | ✅ Locally verified | Frontier reset, explicit free model switch, secret-scope patch, dashboard, and recovery runbook documented; mutable local configuration remains out of repo |
 
@@ -26,7 +26,7 @@
 
 - Verified Telegram ingress routes the configured chat to the `coding` Hermes profile; `/new` starts `gpt-5.6-sol` through `openai-codex`.
 - Verified the explicit, session-only free lane: `/model oc/deepseek-v4-flash-free --provider custom` followed by a non-sensitive `RUTA_FREE_OK` smoke completion.
-- Replaced stale broad free-route use with the direct verified model in local runtime configuration. `auto/*`, `free-stack`, and `free-deterministic` remain unsuitable operational defaults.
+- Replaced stale broad free-route use with the direct verified model in local runtime configuration. `auto/*` and `free-stack` remain unsuitable defaults; `free-deterministic` is active but semantically unhealthy as of 2026-08-06.
 - Fixed the multiplex secret-scope defect in the local Hermes `/model` text handler. The patch preserves per-profile isolation; it must be retained or upstreamed before a future Hermes update.
 - Eliminated duplicate Telegram adapter startup by keeping Telegram ingress on the default profile and disabling Telegram on the routed `coding` profile.
 - Added [Hermes, OmniRoute, and Telegram Operations](docs/hermes-omniroute-operations.md), including Mermaid diagrams, command sequencing, recovery, and local-state boundaries.
@@ -53,9 +53,57 @@
 - Added regression contracts for instruction budget, routing, documented Make
   targets, and global/repository symlink scope.
 
-**Validation**: `make test`, `make lint-shell`, `make validate-skills`,
-`make validate-openspec`, `make validate-symlinks`, and `git diff --check`
-passed.
+**Validation**: Canonical `make check` passes, including rule, routing,
+skill-library, Cursor inventory, shell-syntax, OpenSpec, and live symlink
+checks.
+
+### 2026-08-12: Cursor-managed skill refresh consolidated ✅
+
+- Replaced the retired `migrate-to-builds` skill with the slash-only
+  `rename-chat` command and aligned the governed Cursor-only skill index.
+- Refreshed the Canvas SDK declarations and Cursor CLI configuration guidance
+  from the same managed update snapshot.
+- Kept these Cursor-only assets out of the shared skill-factory catalogs, as
+  required by the repository's separate Cursor inventory contract.
+
+**Validation**: `make validate-cursor-skills` and canonical `make check` pass.
+
+### 2026-08-06: Shared OpenSpec runtime resolution and local UI cleanup ✅
+
+- Persisted NVM-aware OpenSpec CLI resolution in the shared `openspec` skill
+  consumed by Codex, Cursor, Claude, Gemini, and the other managed clients.
+  Agents now load `~/.nvm/nvm.sh` and retry before diagnosing OpenSpec as
+  missing; the NVM default is used without hard-coding a Node version.
+- Added regression coverage to `tests/openspec-install-test.sh` so the shared
+  resolution procedure cannot disappear silently.
+- Stopped tracking repository-local `.obsidian/` UI and plugin state and
+  ignored the complete directory. No Obsidian runtime state remains versioned;
+  the local core settings that still exist are preserved outside Git.
+
+**Validation**: Canonical `make check` passes, including the OpenSpec
+installer/runtime regression, OpenSpec validation, skill inventories, managed
+symlinks, and tracked-ignore reporting.
+
+### 2026-08-06: Deterministic free-worker dispatch hardening ✅
+
+- Confirmed failed direct OpenCode attempts bypassed the constrained worker:
+  one request carried 133 messages, 318 KB, and 11 tools, then repeated
+  80k-150k-token calls despite healthy HTTP 200 provider responses.
+- Kept `run-free-worker` as the single dispatcher and moved the `bounded_code`
+  ceilings into the routing manifest: 3 steps, 50,000 cumulative input tokens,
+  and 180 seconds.
+- Added live context-budget termination, stable `termination_reason` values,
+  timeout-policy rejection, and `require_changes` no-op rejection.
+- Verified three live dispatcher smokes: DeepSeek no-edit (1,659 input tokens),
+  DeepSeek one-file edit (2,002), and Big Pickle no-edit (6,128); scope and
+  validation passed in all three.
+- Confirmed `free-deterministic` is catalog-active, but its minimal semantic
+  probe failed with `payment_required` at pipeline step 3
+  (`longcat/LongCat-2.0`). It remains a candidate rather than a verified route.
+
+**Validation**: Three live direct-pin smokes and canonical `make check` pass,
+including the adapter suite, routing-manifest validation, shell syntax, skill
+and Cursor inventories, OpenSpec, managed symlinks, and tracked-ignore checks.
 
 ### 2026-08-04: Cursor-skills index repair and `.claude/hooks` restore ✅
 
