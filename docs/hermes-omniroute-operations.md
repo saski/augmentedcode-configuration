@@ -8,6 +8,10 @@ overlay is versioned at
 Credentials, OAuth state, Telegram identifiers, sessions, and paired-channel
 state remain local machine data and are never committed.
 
+For the broader current and target tool topology, including the optional Orca
+level-1 workspace, see
+[Local Agentic Development Architecture](local-agentic-development-architecture.md).
+
 ## Operating model
 
 ```mermaid
