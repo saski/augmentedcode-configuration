@@ -27,10 +27,31 @@ Use OpenSpec as the planning layer when work needs durable requirements, reviewa
 ## Before You Start
 
 1. Check whether the current repository already has an `openspec/` directory or `docs/openspec/`.
-2. Check whether the CLI is available with `openspec --version`.
+2. Resolve and verify the CLI with the NVM-aware procedure below.
 3. If OpenSpec is missing and the user asked to adopt it, initialize it with the shared installer after confirming the target repository.
 4. If OpenSpec is present, read the relevant `openspec/specs/*/spec.md` and active `openspec/changes/<change>/` artifacts before proposing edits. If `openspec/` is a symlink to `docs/openspec/`, keep using `openspec/...` paths for CLI compatibility while recognizing that the physical files live under `docs/openspec/`.
 5. Treat OpenSpec artifacts as source files: update them with the same care as code, keep language precise, and include them in validation.
+
+## CLI Runtime Resolution
+
+Non-interactive clients such as Codex App may not inherit the shell that loads
+NVM. On this machine OpenSpec is managed by the NVM default Node installation;
+the exact Node version is intentionally not hard-coded. Before reporting a
+missing CLI, use this resolution sequence:
+
+```bash
+if ! openspec --version >/dev/null 2>&1; then
+    if [ -s "$HOME/.nvm/nvm.sh" ]; then
+        . "$HOME/.nvm/nvm.sh"
+    fi
+fi
+openspec --version
+```
+
+Do not conclude that OpenSpec is unavailable merely because it is absent from
+the initial `PATH`, or because `~/.agents/bin/openspec` reports
+`env: node: No such file or directory`. Load NVM and retry first. Only treat it
+as missing when the post-NVM `openspec --version` still fails.
 
 ## Shared Installer
 

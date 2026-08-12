@@ -5,6 +5,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 INSTALLER="$REPO_DIR/.agents/skills/openspec/scripts/install-openspec"
+OPENSPEC_SKILL="$REPO_DIR/.agents/skills/openspec/SKILL.md"
 
 _CLEANUP_DIRS=()
 _cleanup() {
@@ -104,7 +105,18 @@ FAKE_OPENSPEC
     fi
 }
 
+test_shared_skill_documents_nvm_resolution() {
+    if ! grep -Fq '. "$HOME/.nvm/nvm.sh"' "$OPENSPEC_SKILL"; then
+        fail "expected the shared OpenSpec skill to load the NVM runtime fallback"
+    fi
+
+    if ! grep -Fq 'Do not conclude that OpenSpec is unavailable' "$OPENSPEC_SKILL"; then
+        fail "expected the shared OpenSpec skill to prevent false missing-CLI diagnoses"
+    fi
+}
+
 test_installs_under_docs_when_docs_exists
 test_installs_under_thoughts_when_docs_is_missing
+test_shared_skill_documents_nvm_resolution
 
 printf 'openspec install tests passed\n'
