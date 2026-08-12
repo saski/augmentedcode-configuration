@@ -139,7 +139,22 @@ Codex remains the frontier owner for scope preparation and final diff review. Th
 Use a free worker for this bounded, non-sensitive task: lint and fix only README.md, then run ["git","diff","--check","--","README.md"].
 ```
 
-Codex scopes the task, the free-worker adapter validates the file list and routing policy, and the frontier agent reviews the result before integrating. The verified free pool is declared in `.agents/free-agent-routing.json` and currently contains `omniroute/oc/deepseek-v4-flash-free` and `omniroute/oc/big-pickle` (fully verified 2026-07-26). The six catalogued `omniroute/opencode-zen/*` candidates failed individual §5.4 conformance on 2026-07-30 and are quarantined rather than admitted. See the [free-agent-execution skill](.agents/skills/free-agent-execution/SKILL.md) for contracts, constraints, and the active OpenSpec design for full policy details.
+Codex must translate that request into the versioned contract and invoke
+`.agents/skills/free-agent-execution/scripts/run-free-worker`. That adapter is
+the single supported Codex-to-OpenCode dispatcher; a direct `opencode run` is
+neither a native Codex subagent nor an equivalent safe handoff. Set
+`require_changes: true` for edit tasks so a worker that only explains or
+exhausts its steps cannot be accepted as an implementation.
+
+The `bounded_code` policy currently allows three steps, 50,000 cumulative input
+tokens, and 180 seconds. The verified pool contains
+`omniroute/oc/deepseek-v4-flash-free` and `omniroute/oc/big-pickle`.
+`free-deterministic` is active in the 2026-08-06 OmniRoute catalog, but its
+semantic probe failed with `payment_required` at `longcat/LongCat-2.0`, so it
+remains a candidate rather than a production route. The frontier agent reviews
+every structured result before integration. See the
+[free-agent-execution skill](.agents/skills/free-agent-execution/SKILL.md) for
+the full contract and failure semantics.
 
 For an explicit OpenCode entry contract, see [OpenCode Free-Agent Entry](docs/opencode-free-entry.md).
 

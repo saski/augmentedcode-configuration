@@ -10,6 +10,9 @@
     "task_classes": {
       "bounded_code": {
         "sensitivity": "non_sensitive",
+        "max_steps": 3,
+        "max_input_tokens": 50000,
+        "max_timeout_seconds": 180,
         "models": [
           "omniroute/oc/deepseek-v4-flash-free",
           "omniroute/oc/big-pickle"

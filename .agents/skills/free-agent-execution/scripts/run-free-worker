@@ -23,6 +23,7 @@ if ! jq -e '
     and (.allowed_files | type == "array")
     and (.validation.command | type == "array" and length > 0)
     and (.model | type == "string" and length > 0)
+    and ((has("require_changes") | not) or (.require_changes | type == "boolean"))
     and (.parent_run_id | type == "string" and length > 0)
     and (.task_id | type == "string" and length > 0)
     and .delegation_depth == 1
@@ -36,6 +37,7 @@ workspace="$(jq -r '.working_directory' "$contract_path")"
 model="$(jq -r '.model' "$contract_path")"
 task_class="$(jq -r '.task_class // ""' "$contract_path")"
 timeout_seconds="$(jq -r '.timeout_seconds' "$contract_path")"
+require_changes="$(jq -r '.require_changes // false' "$contract_path")"
 
 if ! "$script_dir/validate-routing-manifest" "$manifest_path"; then
     jq -n \
@@ -52,6 +54,22 @@ if ! jq -e --arg model "$model" --arg task_class "$task_class" '
     jq -n \
         --arg model "$model" \
         '{status: "failed", model: $model, diagnostic: "Model is not verified for the requested free-worker task class"}'
+    exit 0
+fi
+
+max_steps="$(jq -r --arg task_class "$task_class" '.free_worker.task_classes[$task_class].max_steps' "$manifest_path")"
+max_input_tokens="$(jq -r --arg task_class "$task_class" '.free_worker.task_classes[$task_class].max_input_tokens' "$manifest_path")"
+max_timeout_seconds="$(jq -r --arg task_class "$task_class" '.free_worker.task_classes[$task_class].max_timeout_seconds' "$manifest_path")"
+
+if (( timeout_seconds > max_timeout_seconds )); then
+    jq -n \
+        --arg model "$model" \
+        '{
+            status: "failed",
+            model: $model,
+            termination_reason: "policy_violation",
+            diagnostic: "Requested timeout exceeds the task-class policy"
+        }'
     exit 0
 fi
 
@@ -85,7 +103,39 @@ prompt="$(
     ' "$contract_path"
 )"
 
-opencode_config='{"agent":{"free-worker":{"mode":"primary","prompt":"Complete only the stated bounded task. Use only the permitted files. Do not explain your reasoning. Return the requested FREE_AGENT_RESULT when finished.","maxSteps":3,"tools":{"read":true,"edit":true,"bash":false,"glob":false,"grep":false,"question":false,"skill":false,"task":false,"todowrite":false,"webfetch":false},"permission":{"edit":"allow","task":"deny","bash":"deny","webfetch":"deny","external_directory":"deny","doom_loop":"deny"}}}}'
+opencode_config="$(
+    jq -cn --argjson max_steps "$max_steps" '
+        {
+            agent: {
+                "free-worker": {
+                    mode: "primary",
+                    prompt: "Complete only the stated bounded task. Use only the permitted files. Do not explain your reasoning. Return the requested FREE_AGENT_RESULT when finished.",
+                    maxSteps: $max_steps,
+                    tools: {
+                        read: true,
+                        edit: true,
+                        bash: false,
+                        glob: false,
+                        grep: false,
+                        question: false,
+                        skill: false,
+                        task: false,
+                        todowrite: false,
+                        webfetch: false
+                    },
+                    permission: {
+                        edit: "allow",
+                        task: "deny",
+                        bash: "deny",
+                        webfetch: "deny",
+                        external_directory: "deny",
+                        doom_loop: "deny"
+                    }
+                }
+            }
+        }
+    '
+)"
 output_file="$(mktemp)"
 cleanup() {
     rm -f "$output_file"
@@ -101,6 +151,21 @@ git_changed_files() {
 
 changed_files_before="$(git_changed_files)"
 
+read_usage() {
+    jq -Rrs '
+        [
+            split("\n")[]
+            | fromjson?
+            | select(.type == "step_finish")
+            | .part.tokens
+        ]
+        | {
+            input_tokens: (map(.input // 0) | add // 0),
+            output_tokens: (map(.output // 0) | add // 0)
+        }
+    ' "$output_file"
+}
+
 set +e
 OPENCODE_CONFIG_CONTENT="$opencode_config" \
     opencode run \
@@ -112,8 +177,15 @@ OPENCODE_CONFIG_CONTENT="$opencode_config" \
     "$prompt" >"$output_file" 2>&1 &
 opencode_pid=$!
 opencode_timed_out=false
+context_budget_exceeded=false
 started_at=$SECONDS
 while kill -0 "$opencode_pid" >/dev/null 2>&1; do
+    observed_input_tokens="$(read_usage | jq -r '.input_tokens')"
+    if (( observed_input_tokens > max_input_tokens )); then
+        kill "$opencode_pid" >/dev/null 2>&1
+        context_budget_exceeded=true
+        break
+    fi
     if (( SECONDS - started_at >= timeout_seconds )); then
         kill "$opencode_pid" >/dev/null 2>&1
         opencode_timed_out=true
@@ -156,20 +228,10 @@ summary="$(
     ' "$output_file"
 )"
 
-usage="$(
-    jq -Rrs '
-        [
-            split("\n")[]
-            | fromjson?
-            | select(.type == "step_finish")
-            | .part.tokens
-        ]
-        | {
-            input_tokens: (map(.input // 0) | add // 0),
-            output_tokens: (map(.output // 0) | add // 0)
-        }
-    ' "$output_file"
-)"
+usage="$(read_usage)"
+if (( $(jq -r '.input_tokens' <<<"$usage") > max_input_tokens )); then
+    context_budget_exceeded=true
+fi
 
 changed_files_after="$(git_changed_files)"
 changed_files="$(
@@ -207,23 +269,37 @@ fi
 
 status="failed"
 diagnostic=""
-if [[ "$opencode_timed_out" == "true" ]]; then
+termination_reason="process_error"
+if [[ "$context_budget_exceeded" == "true" ]]; then
+    diagnostic="OpenCode exceeded the $max_input_tokens input-token budget"
+    termination_reason="context_budget_exceeded"
+elif [[ "$opencode_timed_out" == "true" ]]; then
     diagnostic="OpenCode timed out after $timeout_seconds seconds"
+    termination_reason="timeout"
 elif [[ "$opencode_status" -ne 0 ]]; then
     diagnostic="OpenCode exited with status $opencode_status"
+    termination_reason="process_error"
 elif [[ -z "$summary" ]]; then
     diagnostic="OpenCode returned no usable completion result"
+    termination_reason="missing_completion"
 elif [[ "$out_of_scope_files" != "[]" ]]; then
     diagnostic="OpenCode changed files outside the allowed scope"
+    termination_reason="scope_violation"
+elif [[ "$require_changes" == "true" && "$changed_files" == "[]" ]]; then
+    diagnostic="OpenCode returned no required file changes"
+    termination_reason="required_changes_missing"
 elif [[ "$validation_status" -ne 0 ]]; then
     diagnostic="Validation command failed"
+    termination_reason="validation_failed"
 else
     status="succeeded"
+    termination_reason="completed"
 fi
 
 jq -n \
     --arg status "$status" \
     --arg model "$model" \
+    --arg termination_reason "$termination_reason" \
     --arg summary "$summary" \
     --argjson changed_files "$changed_files" \
     --arg validation_status "$validation_result" \
@@ -233,6 +309,7 @@ jq -n \
     '{
         status: $status,
         model: $model,
+        termination_reason: $termination_reason,
         summary: $summary,
         changed_files: $changed_files,
         validation: {

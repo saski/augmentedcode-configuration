@@ -36,6 +36,7 @@ Use this shape:
   "sensitivity": "non_sensitive",
   "working_directory": "/absolute/path/to/git-worktree",
   "requirement": "Implement one precise, bounded change.",
+  "require_changes": true,
   "allowed_files": [
     "relative/path/to/file"
   ],
@@ -64,10 +65,15 @@ The adapter requires these values and types:
 - `model`: one of the verified models below.
 - `task_class`: a configured free-worker task class. Version one provides `bounded_code`.
 - `parent_run_id`: a non-empty string identifying the delegating frontier run.
+- `require_changes`: an optional boolean. Set it to `true` for edit tasks so a non-empty explanation without an attributed file change fails visibly. Omit it or set it to `false` when a no-change result is valid.
 - `task_id`: a non-empty string identifying this task within the delegation tree.
 - `delegation_depth`: exactly `1` for a worker contract.
 
-The remaining fields in the example are informational. Preserve them for auditability. The adapter validates that `parent_run_id` and `task_id` are non-empty strings, `delegation_depth` is exactly `1`, and `timeout_seconds` is a positive integer. It stops and reports an OpenCode run that exceeds the declared timeout.
+Every configured task class declares `max_steps`, `max_input_tokens`, and
+`max_timeout_seconds` in the routing manifest. These policy ceilings override
+contract preferences. Version one's `bounded_code` values are `3`, `50000`,
+and `180`, respectively. The adapter rejects a requested timeout above the
+class ceiling.
 
 ## Role envelope
 
@@ -89,6 +95,11 @@ Version one (2026-07-26) verified two `omniroute/oc/*` identifiers for `bounded_
 
 Six `omniroute/opencode-zen/*` identifiers were reconciled with the live OmniRoute catalog and tested on 2026-07-30. All returned an OpenCode status-1 failure with no usable completion, so they are quarantined and absent from the manifest. Use only the two original `oc/*` models unless a future conformance run promotes another model.
 
+OmniRoute advertised the active `free-deterministic` combo on 2026-08-06, but
+its minimal semantic probe failed with `payment_required` at pipeline step 3,
+`longcat/LongCat-2.0`. Active catalog presence is not semantic conformance, so
+the combo remains a candidate and is not admitted to the manifest.
+
 Do not substitute aliases or newly advertised free models without updating the routing manifest and re-running `validate-routing-manifest`. The adapter still validates that the requested model is both globally verified and admitted for the requested task class.
 
 ## Routing manifest
@@ -99,7 +110,7 @@ The manifest is non-secret and declares the frontier owner, verified free models
 .agents/skills/free-agent-execution/scripts/validate-routing-manifest .agents/free-agent-routing.json
 ```
 
-The validator rejects missing task policies, non-OmniRoute free-worker models, defaults absent from the verified pool, class models absent from that pool, and common secret-like credential values.
+The validator rejects missing or non-positive class limits, missing task policies, non-OmniRoute free-worker models, defaults absent from the verified pool, class models absent from that pool, and common secret-like credential values.
 
 ## Result contract
 
@@ -109,6 +120,7 @@ A completed adapter run returns:
 {
   "status": "succeeded",
   "model": "omniroute/oc/deepseek-v4-flash-free",
+  "termination_reason": "completed",
   "summary": "Implemented the bounded task.",
   "changed_files": [
     "relative/path/to/file"
@@ -127,7 +139,7 @@ A completed adapter run returns:
 }
 ```
 
-`status` is `"succeeded"` only when OpenCode exits successfully, returns usable final text, changes no newly dirty paths outside `allowed_files`, and the validation command passes. The preferred final format is `FREE_AGENT_RESULT` because it gives a concise structured summary; ordinary non-empty final text is retained as the summary when the worker does not follow that format. Failed runs include a `diagnostic` when the adapter reaches normal result assembly.
+`status` is `"succeeded"` only when OpenCode exits successfully, returns usable final text, satisfies any `require_changes` postcondition, changes no newly dirty paths outside `allowed_files`, stays within policy, and the validation command passes. `termination_reason` is stable for programmatic handling; examples include `completed`, `context_budget_exceeded`, `timeout`, `required_changes_missing`, `scope_violation`, and `validation_failed`. The preferred final format is `FREE_AGENT_RESULT` because it gives a concise structured summary; ordinary non-empty final text is retained as the summary when the worker does not follow that format. Failed runs include a `diagnostic` when the adapter reaches normal result assembly.
 
 `changed_files` contains paths that are dirty after the worker but were not dirty immediately before it ran. Pre-existing tracked and untracked changes are intentionally excluded.
 
@@ -135,10 +147,15 @@ A completed adapter run returns:
 
 - The adapter configures the worker with delegation (`task`) and shell (`bash`) denied. The frontier agent performs validation after the worker returns.
 - The ephemeral worker is intentionally minimal: it has a concise task prompt,
-  only `read` and `edit` enabled, and a three-step cap. Do not broaden this
+  only `read` and `edit` enabled, and a policy-owned step cap. Do not broaden this
   tool surface without measuring the input-token impact and reviewing the
   safety boundary. Three 2026-07-30 bounded smokes used 20,082–20,509 input
   tokens versus a 90,297-token pre-minimization baseline.
+- The adapter monitors cumulative input tokens reported by `step_finish`
+  events and stops a worker after the class budget is exceeded. Usage becomes
+  visible only after a provider call finishes, so this cannot prevent the
+  first oversized request; it prevents the repeated 80k-150k-token loop that
+  motivated the guard.
 - `allowed_files` is a post-execution check, not a write sandbox. An out-of-scope change fails the result but is not reverted.
 - The Git comparison is path-based. A worker change to a path that was already dirty before execution is not attributed or scope-checked. Use a clean worktree for stronger attribution, especially for allowed files.
 - The validation command is trusted local code and runs with the adapter caller's permissions even when the worker fails. Review the array before execution.

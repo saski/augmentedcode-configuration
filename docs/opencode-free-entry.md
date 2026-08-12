@@ -56,6 +56,7 @@ frontier principal for diff and validation review:
   "sensitivity": "non_sensitive",
   "working_directory": "/absolute/path/to/clean-worktree",
   "requirement": "Implement one precise, bounded change.",
+  "require_changes": true,
   "allowed_files": ["relative/path/to/file"],
   "validation": { "command": ["bash", "tests/example-test.sh"] },
   "model": "omniroute/oc/deepseek-v4-flash-free",
@@ -68,6 +69,22 @@ Run it with:
 ```bash
 .agents/skills/free-agent-execution/scripts/run-free-worker /absolute/path/to/contract.json
 ```
+
+This adapter is the single supported Codex-to-OpenCode dispatcher. Do not
+replace it with a direct `opencode run` when Codex delegates work: that bypasses
+the role envelope, policy limits, file attribution, and structured result.
+
+The `bounded_code` policy currently caps a worker at three steps, 50,000
+cumulative input tokens, and 180 seconds. The adapter reports a stable
+`termination_reason`, stops after observed usage exceeds the context budget,
+and rejects a no-op when `require_changes` is true. Usage is visible only after
+a provider call emits its `step_finish` event, so the first oversized request
+may cross the threshold; the guard prevents repeated oversized iterations.
+
+The OmniRoute catalog listed `free-deterministic` as active on 2026-08-06, but
+a minimal semantic probe failed with `payment_required` at pipeline step 3
+(`longcat/LongCat-2.0`). Keep the direct verified pins until the combo passes
+the same semantic and bounded-edit conformance.
 
 ## Hard prohibitions
 

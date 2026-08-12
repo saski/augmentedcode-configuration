@@ -42,7 +42,10 @@ write_valid_manifest() {
                 task_classes: {
                     bounded_code: {
                         sensitivity: "non_sensitive",
-                        models: [$model]
+                        models: [$model],
+                        max_steps: 3,
+                        max_input_tokens: 50000,
+                        max_timeout_seconds: 180
                     }
                 }
             },
@@ -218,6 +221,12 @@ test_routing_manifest_rejects_unsafe_or_incomplete_policy() {
 
     jq 'del(.free_worker.task_classes)' "$valid_manifest" >"$fixture_dir/missing-task-policy.json"
     assert_manifest_rejected "$fixture_dir/missing-task-policy.json"
+
+    jq 'del(.free_worker.task_classes.bounded_code.max_input_tokens)' "$valid_manifest" >"$fixture_dir/missing-execution-limit.json"
+    assert_manifest_rejected "$fixture_dir/missing-execution-limit.json"
+
+    jq '.free_worker.task_classes.bounded_code.max_steps = 0' "$valid_manifest" >"$fixture_dir/nonpositive-execution-limit.json"
+    assert_manifest_rejected "$fixture_dir/nonpositive-execution-limit.json"
 }
 
 test_legacy_model_identifier_rejected() {
@@ -353,6 +362,7 @@ test_worker_timeout_fails_without_paid_fallback() {
     local manifest="$fixture_dir/routing-manifest.json"
     local workspace="$fixture_dir/workspace"
     local contract="$fixture_dir/contract.json"
+    local capture="$fixture_dir/opencode-invocation.txt"
 
     mkdir -p "$fake_bin" "$workspace"
     git -C "$workspace" init -q
@@ -364,6 +374,7 @@ test_worker_timeout_fails_without_paid_fallback() {
 
     cat >"$fake_bin/opencode" <<'EOF'
 #!/usr/bin/env bash
+touch "$FAKE_CAPTURE"
 sleep 2
 printf '%s\n' '{"type":"text","part":{"text":"FREE_AGENT_RESULT: {\"status\":\"completed\",\"summary\":\"too late\"}"}}'
 EOF
@@ -392,12 +403,149 @@ EOF
     local result
     result="$(
         PATH="$fake_bin:$PATH" \
+        FAKE_CAPTURE="$capture" \
         FREE_AGENT_ROUTING_MANIFEST="$manifest" \
         "$ADAPTER" "$contract"
     )"
 
     assert_json_equals "$result" '.status' '"failed"'
     assert_json_equals "$result" '.diagnostic' '"OpenCode timed out after 1 seconds"'
+
+    jq '.timeout_seconds = 181' "$contract" >"$fixture_dir/over-policy-timeout.json"
+    rm -f "$capture"
+    result="$(
+        PATH="$fake_bin:$PATH" \
+        FAKE_CAPTURE="$capture" \
+        FREE_AGENT_ROUTING_MANIFEST="$manifest" \
+        "$ADAPTER" "$fixture_dir/over-policy-timeout.json"
+    )"
+
+    assert_json_equals "$result" '.status' '"failed"'
+    assert_json_equals "$result" '.termination_reason' '"policy_violation"'
+    assert_json_equals "$result" '.diagnostic' '"Requested timeout exceeds the task-class policy"'
+    if [[ -f "$capture" ]]; then
+        echo "opencode was invoked for a timeout above the task-class policy" >&2
+        exit 1
+    fi
+}
+
+test_worker_stops_after_context_budget_exceeded() {
+    local fixture_dir
+    fixture_dir="$(mktemp -d)"
+    _CLEANUP_DIRS+=("$fixture_dir")
+
+    local fake_bin="$fixture_dir/bin"
+    local manifest="$fixture_dir/routing-manifest.json"
+    local workspace="$fixture_dir/workspace"
+    local contract="$fixture_dir/contract.json"
+
+    mkdir -p "$fake_bin" "$workspace"
+    git -C "$workspace" init -q
+    git -C "$workspace" config user.email "test@example.com"
+    git -C "$workspace" config user.name "Test User"
+    touch "$workspace/.gitkeep"
+    git -C "$workspace" add .gitkeep
+    git -C "$workspace" commit -qm "Initial fixture"
+
+    cat >"$fake_bin/opencode" <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+
+printf '%s\n' '{"type":"step_finish","part":{"tokens":{"input":50001,"output":0}}}'
+sleep 2
+EOF
+    chmod +x "$fake_bin/opencode"
+
+    write_valid_manifest "$manifest" "omniroute/oc/deepseek-v4-flash-free"
+    jq -n --arg workspace "$workspace" '
+        {
+            contract_version: "1",
+            mode: "free",
+            execution_role: "worker",
+            parent_role: "frontier",
+            parent_run_id: "run-context-budget",
+            delegation_depth: 1,
+            task_id: "task-context-budget",
+            task_class: "bounded_code",
+            sensitivity: "non_sensitive",
+            working_directory: $workspace,
+            requirement: "Stop after the context budget is exceeded.",
+            allowed_files: [],
+            validation: {command: ["true"]},
+            model: "omniroute/oc/deepseek-v4-flash-free",
+            timeout_seconds: 30
+        }' >"$contract"
+
+    local result
+    result="$(
+        PATH="$fake_bin:$PATH" \
+            FREE_AGENT_ROUTING_MANIFEST="$manifest" \
+            "$ADAPTER" "$contract"
+    )"
+
+    assert_json_equals "$result" '.status' '"failed"'
+    assert_json_equals "$result" '.termination_reason' '"context_budget_exceeded"'
+    assert_json_equals "$result" '.usage.input_tokens' '50001'
+}
+
+test_worker_rejects_required_edit_without_changes() {
+    local fixture_dir
+    fixture_dir="$(mktemp -d)"
+    _CLEANUP_DIRS+=("$fixture_dir")
+
+    local fake_bin="$fixture_dir/bin"
+    local manifest="$fixture_dir/routing-manifest.json"
+    local workspace="$fixture_dir/workspace"
+    local contract="$fixture_dir/contract.json"
+
+    mkdir -p "$fake_bin" "$workspace"
+    git -C "$workspace" init -q
+    git -C "$workspace" config user.email "test@example.com"
+    git -C "$workspace" config user.name "Test User"
+    touch "$workspace/.gitkeep"
+    git -C "$workspace" add .gitkeep
+    git -C "$workspace" commit -qm "Initial fixture"
+
+    cat >"$fake_bin/opencode" <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+
+printf '%s\n' '{"type":"text","part":{"text":"FREE_AGENT_RESULT: {\"status\":\"completed\",\"summary\":\"Reached the step limit without editing\"}"}}'
+printf '%s\n' '{"type":"step_finish","part":{"tokens":{"input":10,"output":20}}}'
+EOF
+    chmod +x "$fake_bin/opencode"
+
+    write_valid_manifest "$manifest" "omniroute/oc/deepseek-v4-flash-free"
+    jq -n --arg workspace "$workspace" '
+        {
+            contract_version: "1",
+            mode: "free",
+            execution_role: "worker",
+            parent_role: "frontier",
+            parent_run_id: "run-required-edit",
+            delegation_depth: 1,
+            task_id: "task-required-edit",
+            task_class: "bounded_code",
+            sensitivity: "non_sensitive",
+            working_directory: $workspace,
+            requirement: "Create result.txt.",
+            require_changes: true,
+            allowed_files: ["result.txt"],
+            validation: {command: ["true"]},
+            model: "omniroute/oc/deepseek-v4-flash-free",
+            timeout_seconds: 30
+        }' >"$contract"
+
+    local result
+    result="$(
+        PATH="$fake_bin:$PATH" \
+            FREE_AGENT_ROUTING_MANIFEST="$manifest" \
+            "$ADAPTER" "$contract"
+    )"
+
+    assert_json_equals "$result" '.status' '"failed"'
+    assert_json_equals "$result" '.termination_reason' '"required_changes_missing"'
+    assert_json_equals "$result" '.changed_files' '[]'
 }
 
 test_worker_failure_modes_return_structured_failures() {
@@ -540,4 +688,6 @@ test_routing_manifest_rejects_unsafe_or_incomplete_policy
 test_legacy_model_identifier_rejected
 test_loop_guard_rejects_invalid_role_transitions
 test_worker_timeout_fails_without_paid_fallback
+test_worker_stops_after_context_budget_exceeded
+test_worker_rejects_required_edit_without_changes
 test_worker_failure_modes_return_structured_failures

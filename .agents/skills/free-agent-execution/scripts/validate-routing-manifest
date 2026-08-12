@@ -28,6 +28,12 @@ jq -e '
             and (.models | type == "array" and length > 0)
             and all(.models[]; . as $model | ($verified | index($model)) != null)
         )
+        and all(
+            .free_worker.task_classes[];
+            (.max_steps | type == "number" and . > 0 and . == floor)
+            and (.max_input_tokens | type == "number" and . > 0 and . == floor)
+            and (.max_timeout_seconds | type == "number" and . > 0 and . == floor)
+        )
         and (.privacy.frontier_only_categories | type == "array" and length > 0)
         and ([.. | strings | select(test("(^sk-[A-Za-z0-9_-]{8,}$|^Bearer[[:space:]]|^AIza[0-9A-Za-z_-]{8,}$|^ghp_[A-Za-z0-9]{8,}$)"))] | length == 0)
     ) catch false
