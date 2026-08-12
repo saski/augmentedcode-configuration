@@ -4,7 +4,7 @@ set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 SKILLS_DIR="$REPO_DIR/.agents/skills"
-BASE_RULES="$REPO_DIR/.agents/rules/base.md"
+SKILL_INDEX="$REPO_DIR/.agents/docs/skill-factory-skills.md"
 
 assert_skill_reference() {
     local skill_name="$1"
@@ -29,11 +29,11 @@ assert_skill_reference() {
     fi
 }
 
-assert_base_rules_reference() {
+assert_skill_index_reference() {
     local skill_name="$1"
 
-    if ! grep -Fq "~/.agents/skills/$skill_name/SKILL.md" "$BASE_RULES"; then
-        echo "base.md should reference ~/.agents/skills/$skill_name/SKILL.md" >&2
+    if ! grep -Fq "| $skill_name |" "$SKILL_INDEX"; then
+        echo "skill index should reference $skill_name" >&2
         exit 1
     fi
 }
@@ -46,9 +46,9 @@ assert_skill_reference "mutation-testing-js" "../../../augmentedcode-skills/muta
 assert_skill_reference "mutation-testing-python" "../../../augmentedcode-skills/mutation-testing-python"
 assert_skill_reference "test-desiderata" "../../../augmentedcode-skills/test-desiderata"
 
-assert_base_rules_reference "complexity-review"
-assert_base_rules_reference "hamburger-method"
-assert_base_rules_reference "micro-steps-coach"
-assert_base_rules_reference "story-splitting"
+assert_skill_index_reference "complexity-review"
+assert_skill_index_reference "hamburger-method"
+assert_skill_index_reference "micro-steps-coach"
+assert_skill_index_reference "story-splitting"
 
 echo "external skill references contract passed"

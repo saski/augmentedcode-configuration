@@ -279,7 +279,7 @@ setup_symlinks() {
     # Gemini: use shared MCP config, commands, and workflows from canonical .agents path.
     mkdir -p "$HOME/.gemini/antigravity"
     ln -sfn "$REPO_DIR/.agents/mcp.json" "$HOME/.gemini/antigravity/mcp_config.json"
-    ln -sfn "$REPO_DIR/GEMINI.md" "$HOME/.gemini/GEMINI.md"
+    ln -sfn "$REPO_DIR/.agents/rules/base.md" "$HOME/.gemini/GEMINI.md"
     ln -sfn "$REPO_DIR/.agents/workflows" "$HOME/.gemini/antigravity/workflows"
     ln -sfn "$REPO_DIR/.agents/commands" "$HOME/.gemini/antigravity/commands"
     ln -sfn "$REPO_DIR/.agents/skills" "$HOME/.gemini/antigravity/skills"
@@ -306,10 +306,10 @@ setup_symlinks() {
     setup_claude_config
     setup_opencode_free_worker_config
 
-    # Create root-level config symlinks
-    ln -sfn "$REPO_DIR/CLAUDE.md" ~/CLAUDE.md
+    # Create home-level global instruction symlinks.
+    ln -sfn "$REPO_DIR/.agents/rules/base.md" ~/CLAUDE.md
     ln -sfn "$REPO_DIR/.agents/rules/base.md" ~/AGENTS.md
-    ln -sfn "$REPO_DIR/GEMINI.md" ~/GEMINI.md
+    ln -sfn "$REPO_DIR/.agents/rules/base.md" ~/GEMINI.md
 
     echo "✅ Symlinks created"
 }
@@ -590,8 +590,8 @@ validate_symlinks() {
     else
         local gemini_rules_target
         gemini_rules_target=$(readlink "$gemini_rules_path")
-        if [[ "$gemini_rules_target" != *"/GEMINI.md" ]]; then
-            echo "❌ $gemini_rules_path should point to repo GEMINI.md, got: $gemini_rules_target"
+        if [[ "$gemini_rules_target" != *"/.agents/rules/base.md" ]]; then
+            echo "❌ $gemini_rules_path should point to .agents/rules/base.md, got: $gemini_rules_target"
             errors=$((errors + 1))
         else
             echo "✓ $gemini_rules_path → $gemini_rules_target"
@@ -641,7 +641,14 @@ validate_symlinks() {
             echo "❌ ~/$config is not a symlink"
             errors=$((errors + 1))
         else
-            echo "✓ ~/$config → $(readlink $path)"
+            local target
+            target=$(readlink "$path")
+            if [[ "$target" != *"/.agents/rules/base.md" ]]; then
+                echo "❌ ~/$config should point to .agents/rules/base.md, got: $target"
+                errors=$((errors + 1))
+            else
+                echo "✓ ~/$config → $target"
+            fi
         fi
     done
 

@@ -1,6 +1,6 @@
 # Augmentedcode Configuration - Project Status
 
-**Last Updated**: 2026-08-04
+**Last Updated**: 2026-08-12
 **Overall Status**: 🟢 **Ready** - Canonical local workspace is `~/Code`; the local Hermes Telegram entry now has verified frontier and explicit free lanes. OpenCode managed free-entry installation is verified; additional free-model conformance remains pending. `make check` green after Cursor-skills index repair and `.claude/hooks` restore.
 
 ---
@@ -9,11 +9,12 @@
 
 | Component | Status | Notes |
 |---|---|---|
-| Universal rulebook (`base.md`) | ✅ Single source | Loaded once per Cursor session; cross-tool via `~/AGENTS.md`, `~/CLAUDE.md`, `~/.codex/AGENTS.md` |
+| Universal rulebook (`base.md`) | ✅ Single global source | Home-level cross-repository baseline via `~/AGENTS.md`, `~/CLAUDE.md`, `~/GEMINI.md`, and `~/.codex/AGENTS.md` |
+| Repository rulebook (`repository.md`) | ✅ Scoped bootstrap | Root `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` expose project purpose, validation, contextual loading, and skill governance |
 | Cursor `.cursor/rules/` | ✅ Reduced 13 → 3 | Workspace-only: `use-base-rules`, `cursor-config-management`, `ai-feedback-learning-loop` |
 | Workflows as skills | ✅ Migrated | `tdd`, `refactoring`, `diagnose`, `fic-*`, `project-status-maintenance` |
 | Conditional rules | ✅ Single source | `.agents/rules/{python,makefile,react}-project.md`, loaded on demand per `base.md §2` |
-| RTK guidance and hooks | ✅ Inline in `base.md §8`; shared hook wired | Recursive `@-include` removed; Codex and Claude Bash hooks use `.agents/hooks/rtk-rewrite.sh` |
+| RTK guidance and hooks | ✅ Compact pointer in `base.md §5`; shared hook wired | Recursive `@-include` removed; Codex and Claude Bash hooks use `.agents/hooks/rtk-rewrite.sh` |
 | Skill governance | ✅ Aligned | Index, catalog, and provenance lock validated |
 | Local healthchecks | ✅ Passing | `make check` covers tests, shell lint, skill validation, OpenSpec validation, symlink validation, and tracked-ignored reporting |
 | Marmalade team rules | ⚠️ Pending | Still loading via Eventbrite team config; awaiting admin removal |
@@ -35,6 +36,26 @@
 ---
 
 ## Recent Changes
+
+### 2026-08-12: Global and repository rule scope split ✅
+
+- Reduced the always-loaded `base.md` from 166 lines and 1,651 words to 85
+  lines and 642 words while preserving the four operating principles and
+  explicit safety routes.
+- Added `repository.md` for this checkout's project description, canonical
+  `make check` / `make ci-check` commands, contextual rules, and skill-library
+  governance.
+- Rewired home-level instruction files to global `base.md` and the root
+  `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` shims to `repository.md`.
+- Removed nonexistent generic Make targets from the contextual Makefile rule.
+- Consolidated Context7 routing in `documentation-lookup`: MCP tools are
+  preferred and the CLI is the fallback.
+- Added regression contracts for instruction budget, routing, documented Make
+  targets, and global/repository symlink scope.
+
+**Validation**: `make test`, `make lint-shell`, `make validate-skills`,
+`make validate-openspec`, `make validate-symlinks`, and `git diff --check`
+passed.
 
 ### 2026-08-04: Cursor-skills index repair and `.claude/hooks` restore ✅
 

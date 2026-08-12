@@ -99,7 +99,7 @@ Skills:
 - `diagnose` - Use for disciplined debugging of failures, broken behavior, or regressions.
 - `fic-research` - Use to investigate the existing codebase and capture findings without proposing changes.
 - `find-docs` - Use for current library, framework, SDK, API, CLI tool, or cloud service documentation via the Context7 CLI.
-- `documentation-lookup` - Use when up-to-date framework or library docs are needed.
+- `documentation-lookup` - Canonical current-docs route; prefer Context7 MCP tools and fall back to the CLI when MCP is unavailable.
 - `corporate-aws-cli` - Use for AWS CLI work in federated corporate accounts and account-region validation.
 - `gcloud-auth-verification` - Use for Google Cloud CLI, BigQuery CLI, Dataform, or ADC authentication failures.
 - `gcp-composer-troubleshooting` - Use for Cloud Composer or Airflow DAG and task RCA.

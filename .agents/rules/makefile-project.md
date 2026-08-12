@@ -1,5 +1,5 @@
-<!-- last_updated: 2026-03-19 -->
-<!-- version: 1.0 -->
+<!-- last_updated: 2026-08-12 -->
+<!-- version: 1.1 -->
 # Makefile Project Rules
 
 This module extends `base.md` for repositories that use a `Makefile` as the canonical automation entry point.
@@ -16,15 +16,11 @@ This module extends `base.md` for repositories that use a `Makefile` as the cano
 - Treat validation failures as blocking until fixed and re-run.
 - Use the narrowest relevant `make` target while iterating, then finish with the full validation target.
 
-## 3. Common Targets
+## 3. Target Discovery
 
-- `make validate`
-- `make test-unit`
-- `make test-e2e`
-- `make check-typing`
-- `make check-format`
-- `make check-style`
-- `make reformat`
+- Read the repository's `Makefile` and development documentation before naming a target.
+- Do not assume generic target names such as `validate`, `test-unit`, or `check-format` exist.
+- When documentation and the `Makefile` disagree, treat the executable `Makefile` as current and report the stale documentation.
 
 ## 4. Makefile Conventions
 

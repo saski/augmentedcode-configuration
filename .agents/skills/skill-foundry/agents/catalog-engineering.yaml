@@ -621,7 +621,7 @@ skills:
       - cursor
     overlap_with:
       - find-docs
-    notes: "Fetches current framework and library docs through Context7 MCP instead of relying on stale model memory. find-docs uses the Context7 CLI path."
+    notes: "Canonical Context7 route: prefers MCP tools and falls back to the CLI when MCP is unavailable. find-docs remains the CLI-specific variant."
 
   - name: find-docs
     category: tool-reference
@@ -636,7 +636,7 @@ skills:
       - cursor
     overlap_with:
       - documentation-lookup
-    notes: "Fetches current developer documentation through the Context7 CLI. documentation-lookup is the MCP-oriented variant."
+    notes: "CLI-specific Context7 workflow. documentation-lookup is the canonical cross-harness route and may fall back to this transport."
 
   - name: obsidian-cli
     category: tool-reference

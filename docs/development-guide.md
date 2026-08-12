@@ -16,7 +16,9 @@ This document covers repository-internal structure, sync workflows, and validati
 
 ## Rule Model
 
-`.agents/rules/base.md` is intentionally compact and always-loaded. Its universal behavior is organized around four operating principles: Think Before Acting, Simplest Surgical Change, Goal-Driven Verification, and Checkpoint and Escalate.
+`.agents/rules/base.md` is the compact home-level rulebook shared across repositories. Its universal behavior is organized around four operating principles: Think Before Acting, Simplest Surgical Change, Goal-Driven Verification, and Checkpoint and Escalate.
+
+`.agents/rules/repository.md` is the bootstrap for this checkout: it owns the project description, canonical validation commands, contextual-rule triggers, and skill-library governance. Root `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` shims point to it.
 
 Repo-type details belong in contextual rule files such as `.agents/rules/python-project.md` and `.agents/rules/makefile-project.md`. Task-specific workflows belong in skills. Do not add generic best-practice prose to `base.md` unless it routes concrete behavior that agents cannot reliably infer from the codebase or user request.
 
@@ -123,6 +125,7 @@ SKILL_FACTORY=/path/to/skill-factory ./sync-skill-factory.sh --dry-run
 - `~/.cursor/cli-config.json` -> repo `.cursor/cli-config.json`
 - `~/.codex/skills/skills` -> repo `.agents/skills`
 - `~/.codex/rules/default.rules` -> repo `.agents/rules/codex-default.rules`
+- `~/.codex/AGENTS.md` -> repo `.agents/rules/base.md`
 - `~/.codex/hooks/rtk-rewrite.sh` -> repo `.agents/hooks/rtk-rewrite.sh`
 - `~/.codex/hooks.json` is seeded from `templates/codex/hooks.json`
 - `~/.claude/commands` -> repo `.agents/commands`
@@ -130,7 +133,7 @@ SKILL_FACTORY=/path/to/skill-factory ./sync-skill-factory.sh --dry-run
 - `~/.claude/hooks` -> repo `.claude/hooks`
 - `~/.claude/hooks/rtk-rewrite.sh` -> repo `.claude/hooks/rtk-rewrite.sh` -> repo `.agents/hooks/rtk-rewrite.sh`
 - `~/.gemini/antigravity/mcp_config.json` -> repo `.agents/mcp.json`
-- `~/.gemini/GEMINI.md` -> repo `GEMINI.md`
+- `~/.gemini/GEMINI.md` -> repo `.agents/rules/base.md`
 - `~/.agents` -> repo `.agents`
 - `~/.agents/bin/rtk` -> `/opt/homebrew/bin/rtk` when Homebrew RTK is present
 - `~/.agents/bin/openspec` -> `/opt/homebrew/bin/openspec` or `~/.bun/bin/openspec` when OpenSpec is present
@@ -145,7 +148,7 @@ Mutable local config such as `~/.codex/config.toml`, `~/.codex/hooks.json`, and 
 
 ## Repository Notes
 
-- The root shims `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` point to `.agents/rules/base.md`.
+- The root shims `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` point to `.agents/rules/repository.md`; home-level instruction files point to `.agents/rules/base.md`.
 - The validator only passes when filesystem inventory, catalogs, the skills index, and domain routing entries are in sync.
 - Adding, removing, renaming, or moving a skill requires the same-change updates to `.agents/docs/skill-factory-skills.md`, the relevant skill-foundry governance catalog, and a bullet in `.agents/docs/skill-domain-routing.md`. Update `README.md`, `PROJECT_STATUS.md`, and provenance lock files when user-facing inventory, status, or source ownership changes.
 - `./pull-and-sync-skills.sh` runs `./validate-skill-library.sh` after every sync so missing index, catalog, or routing updates fail immediately.

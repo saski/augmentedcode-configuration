@@ -143,7 +143,7 @@ Imported and local sources land in the same tree:
 | fic-validate-plan | workflow | Validate that an implementation plan was executed correctly. Use when the user asks to verify completion, compare code changes to a plan, or produce a validation report. |
 | project-status-maintenance | documentation | Create or update PROJECT_STATUS.md at the repo root using the canonical structure (Executive Summary, Completed Components, In Progress, Next Steps, Known Issues, Notes). |
 | find-docs | developer-tools | Retrieves up-to-date documentation, API references, and code examples for developer technologies using the Context7 CLI. Use for library, framework, SDK, API, CLI tool, or cloud service questions. |
-| documentation-lookup | developer-tools | Use up-to-date library and framework docs via Context7 MCP instead of training data. Activates for setup questions, API references, code examples, or when the user names a framework (e.g. React, Next.js, Prisma). |
+| documentation-lookup | developer-tools | Use current library and framework docs through Context7, preferring MCP tools with the CLI as a fallback. Activates for setup questions, API references, code examples, or named frameworks such as React, Next.js, or Prisma. |
 | verification-loop | workflow | A comprehensive verification system for Claude Code sessions. |
 | strategic-compact | workflow | Suggests manual context compaction at logical intervals to preserve context through task phases rather than arbitrary auto-compaction. |
 | xp-code-review | practices | Review pending changes for tests, maintainability, and project rules. Use when the user asks for code review, review pending changes, or alignment with maintainability and project rules. |

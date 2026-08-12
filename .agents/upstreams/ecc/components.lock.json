@@ -7,8 +7,8 @@
       "source_path": ".agents/skills/documentation-lookup",
       "local_path": ".agents/skills/documentation-lookup",
       "owner": "saski",
-      "reason": "Pilot ECC documentation lookup skill with a narrow, explicit upstream intake.",
-      "review_date": "2026-05-06",
+      "reason": "Locally adapted ECC documentation lookup skill with MCP-first and CLI-fallback routing.",
+      "review_date": "2026-08-12",
       "status": "pilot"
     },
     {

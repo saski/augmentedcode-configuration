@@ -222,7 +222,7 @@ The sync script uses [saski-github-repos.tsv](saski-github-repos.tsv) as an expl
 ```text
 .
 ├── .agents/                  # Canonical shared agent assets
-│   ├── rules/                # Universal and contextual rules
+│   ├── rules/                # Global, repository, and contextual rules
 │   ├── skills/               # Native, imported, and sibling-repo skills
 │   ├── commands/             # Shared slash-command prompts
 │   ├── workflows/            # Structured delivery workflows
@@ -249,8 +249,9 @@ Maintainer-facing details live in [docs/development-guide.md](docs/development-g
 
 | Asset | Canonical path | Notes |
 |-------|----------------|-------|
-| Universal rules | `.agents/rules/base.md` | Also exposed through root `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` shims. |
-| Contextual rules | `.agents/rules/*.md` | Python, Makefile, React, Codex defaults, feedback loop, and other scoped rules. RTK guidance is embedded in `base.md` §8. |
+| Universal rules | `.agents/rules/base.md` | Installed at home level for cross-repository behavior. |
+| Repository rules | `.agents/rules/repository.md` | Exposed through this repo's `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` shims. |
+| Contextual rules | `.agents/rules/*.md` | Python, Makefile, React, Codex defaults, feedback loop, and other scoped rules. |
 | Shared skills | `.agents/skills/` | Native skills, imported packs, and sibling-repo skill references. |
 | Cursor-only skills | `.cursor/skills-cursor/` | Canvas, SDK, loops, and meta-skills; see `cursor-skills.md`. |
 | Skill routing docs | `.agents/docs/` | `skill-domain-routing.md` and `skill-factory-skills.md` for shared skills; `cursor-skills.md` for Cursor-only. |
@@ -266,9 +267,9 @@ Maintainer-facing details live in [docs/development-guide.md](docs/development-g
 | Tool | Managed links |
 |------|---------------|
 | Cursor | Rules, commands, skills, `.agents`, MCP config, CLI config, and Cursor-only skills. |
-| Codex | Shared skills, Codex default rules, `AGENTS.md`, copied `config.toml` and `hooks.json` defaults, plus `~/.codex/hooks/rtk-rewrite.sh` for Bash command rewriting through RTK. |
-| Claude | Commands, skills, hooks, and copied `settings.json` defaults. The universal rulebook reaches Claude Code via `~/CLAUDE.md` → `base.md`; Bash hooks use the shared RTK rewrite script. |
-| Gemini | Shared skills, `GEMINI.md`, plus Antigravity MCP, command, and workflow links. |
+| Codex | Shared skills, Codex default rules, home-level `base.md`, copied `config.toml` and `hooks.json` defaults, plus `~/.codex/hooks/rtk-rewrite.sh` for Bash command rewriting through RTK. |
+| Claude | Commands, skills, hooks, and copied `settings.json` defaults. `~/CLAUDE.md` points to global `base.md`; the repo shim points to `repository.md`. |
+| Gemini | Shared skills, home-level `base.md`, the repo-local `repository.md` shim, plus Antigravity MCP, command, and workflow links. |
 | Antigravity and Langflow | Shared skills. |
 | Global shell | `~/.agents`, `~/.agents/bin/rtk`, and `~/.agents/bin/openspec`. |
 

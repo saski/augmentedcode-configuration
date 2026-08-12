@@ -1,1 +1,1 @@
-.agents/rules/base.md
+.agents/rules/repository.md
