@@ -20,6 +20,7 @@ For shared skills, use [skill-factory-skills.md](skill-factory-skills.md) and [s
 | canvas | ide | Live React Canvas beside the chat for analytical artifacts, charts, tables, and MCP-heavy deliverables; also required when editing `.canvas.tsx` files. |
 | loop | ide | Run a prompt or skill on a recurring local interval using monitored background shell output (`/loop`, polling, local cron-like loops). |
 | onboard | ide | Focused Cursor onboarding flow that learns basic preferences, picks a first goal, and routes the user to the right next action (`/onboard`). |
+| rename-chat | ide | Rename the current Cursor chat to a concise topic title when the user explicitly invokes `/rename-chat`. |
 | review | ide | Route a code review request to either Bugbot or Security Review. |
 | review-bugbot | ide | Review code changes with the Bugbot subagent. |
 | review-security | ide | Review code changes with the Security Review subagent. |
@@ -31,7 +32,6 @@ For shared skills, use [skill-factory-skills.md](skill-factory-skills.md) and [s
 | create-rule | meta | Create Cursor rules for persistent AI guidance (`.cursor/rules/`). |
 | create-skill | meta | Author Agent Skills; points canonical shared skills at `.agents/skills/`. |
 | create-subagent | meta | Create custom subagents for specialized tasks. |
-| migrate-to-builds | ide | Test that a Cloud Agent environment works with prebuilt environment builds and recommend required changes; use when migrating to builds, testing build compatibility, or following the Builds page setup-agent flow. |
 | migrate-to-skills | meta | Convert Cursor rules (`.mdc`) and slash commands to Agent Skills. |
 | update-cli-config | config | View and modify `~/.cursor/cli-config.json`. |
 | update-cursor-settings | config | Modify Cursor/VSCode `settings.json` preferences. |

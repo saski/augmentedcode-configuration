@@ -45,8 +45,12 @@ Release channel: `"prod"` | `"lab"` | `"static"`
 ### `maxMode` (optional)
 boolean (default: false) — enable max mode for higher-quality model responses
 
-### `exploreSubagentModel` (optional)
-`"default"` | `"inherit"` (default: `"default"`) — use Cursor's default Explore model or inherit the parent agent's model
+### `subagentModels` (optional)
+Per-subagent model settings.
+- `explore`: `"default"` | `"inherit"` | `"disabled"` or `{ "modelId": string, "parameters"?: [{ "id": string, "value": string }], "maxMode"?: boolean }` — use Cursor's default Explore model, inherit the parent agent's model, disable the Explore subagent, or pin a specific model. When `parameters` is omitted, saved per-model parameter preferences apply; when `maxMode` is omitted, the parent conversation's max mode applies.
+
+### `exploreSubagentModel` (optional, legacy)
+`"default"` | `"inherit"` (default: `"default"`) — legacy Explore model setting. `subagentModels.explore` wins when both are set; keep this in sync ("inherit" when explore inherits, otherwise "default") so older CLI versions reading the same config behave sensibly.
 
 ### `approvalMode` (optional)
 Controls tool approval behavior:

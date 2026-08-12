@@ -2,13 +2,14 @@
  * Public API for authoring `.canvas.tsx` files via `cursor/canvas`.
  *
  * Be creative with layout — use Grid, Row, cards, charts, tables, and raw SVG
- * in whatever combination serves the content. Read the canvas skill for full
- * design guidance. Key constraints:
+ * in whatever combination serves the content. Read
+ * `~/.cursor/skills-cursor/canvas/SKILL.md` for full design guidance. Key
+ * constraints:
  *
  * - Colors from `useHostTheme()` tokens. No hardcoded hex.
  * - No gradients, no box-shadows, no emojis as decoration.
  * - Don't wrap every section in Card — mix open sections with cards.
- * - Run the pre-delivery self-check before returning code.
+ * - Run that skill's Pre-delivery self-check before returning code.
  */
 /** Shared category color palette used by `Swatch`, `UsageBar`, etc. */
 export type { CategoryPalette, Color } from "./canvas-tokens.js";

@@ -12,8 +12,25 @@ export interface CanvasHostTheme extends CanvasTokens {
     readonly palette: CanvasPalette;
 }
 /**
- * Returns the current host theme. Falls back to dark mode when no host
- * state is available.
+ * Raw theme payload read from the host `theme` channel. Every field is typed
+ * `unknown` on purpose: the value crosses an untrusted JSON/SSE boundary
+ * (`window.__cursorCanvas.state`), so it is validated per-field at read time
+ * rather than trusted from the wire. Mirrors `CanvasHostThemeState` from
+ * `@anysphere/constants` (the producer side); kept local so this bundled SDK
+ * stays dependency-free.
+ */
+interface RawHostThemeState {
+    readonly kind?: unknown;
+    readonly primary?: unknown;
+    readonly editorBackground?: unknown;
+    readonly editorForeground?: unknown;
+}
+/** Exported for unit tests only; not part of the SDK surface (see index.ts). */
+export declare function resolveTheme(raw: RawHostThemeState | undefined): CanvasHostTheme;
+/**
+ * Returns the current host theme. When no host state is available (first
+ * paint, or a dead state bridge) it falls back to the page's
+ * `prefers-color-scheme` polarity instead of assuming dark.
  *
  * Semantic color groups are available directly on the returned object —
  * `accent`, `text`, `bg`, `fill`, `stroke`, `diff` — as well as `kind`
