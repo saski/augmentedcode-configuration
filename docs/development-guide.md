@@ -18,9 +18,19 @@ This document covers repository-internal structure, sync workflows, and validati
 
 `.agents/rules/base.md` is the compact home-level rulebook shared across repositories. Its universal behavior is organized around four operating principles: Think Before Acting, Simplest Surgical Change, Goal-Driven Verification, and Checkpoint and Escalate.
 
-`.agents/rules/repository.md` is the bootstrap for this checkout: it owns the project description, canonical validation commands, contextual-rule triggers, and skill-library governance. Root `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` shims point to it.
+`.agents/rules/repository.md` is the bootstrap for this checkout: it owns the
+project description, canonical validation commands, and skill-library
+governance. Root `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` shims point to it.
+The universal rulebook owns contextual-rule triggers so repository shims do not
+repeat them.
 
 Repo-type details belong in contextual rule files such as `.agents/rules/python-project.md` and `.agents/rules/makefile-project.md`. Task-specific workflows belong in skills. Do not add generic best-practice prose to `base.md` unless it routes concrete behavior that agents cannot reliably infer from the codebase or user request.
+
+Cursor consumes the home-level and repository `AGENTS.md` hierarchy directly.
+Do not add an always-applied Cursor wrapper that includes `base.md` or
+`repository.md` again. The only repository-wide Cursor rule is
+`.cursor/rules/cursor-config-management.mdc`, which documents this checkout's
+configuration topology.
 
 ## Skill Library Model
 
@@ -39,6 +49,12 @@ Shared skill governance lives in:
 - `.agents/skills/skill-foundry/agents/catalog.yaml`
 - `.agents/skills/skill-foundry/agents/catalog-engineering.yaml`
 - `.agents/skills/skill-foundry/agents/catalog-product-management.yaml`
+
+Use the skill catalog supplied by the active client for ordinary task routing.
+The full index and catalogs above are maintenance inventories; they are not a
+required context preamble before loading one matching skill. When a client has
+no catalog, search only the relevant section of
+`.agents/docs/skill-domain-routing.md`.
 
 Cursor-only skills are inventoried separately:
 

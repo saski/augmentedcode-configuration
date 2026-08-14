@@ -1,7 +1,7 @@
 # Augmentedcode Configuration - Project Status
 
-**Last Updated**: 2026-08-12
-**Overall Status**: 🟢 **Ready** - Canonical local workspace is `~/Code`; Hermes Telegram has verified frontier and explicit free lanes. The Codex-to-OpenCode dispatcher now enforces policy-owned step, context, timeout, and required-edit postconditions. Direct free pins are healthy; the active `free-deterministic` combo remains unverified after a live member billing failure.
+**Last Updated**: 2026-08-14
+**Overall Status**: 🟢 **Ready** - Agent instructions use progressive loading across clients, deterministic hygiene contracts protect the loading graph, and Codex/Orca retain separate runtime state with one versioned source for shared defaults.
 
 ---
 
@@ -10,9 +10,9 @@
 | Component | Status | Notes |
 |---|---|---|
 | Universal rulebook (`base.md`) | ✅ Single global source | Home-level cross-repository baseline via `~/AGENTS.md`, `~/CLAUDE.md`, `~/GEMINI.md`, and `~/.codex/AGENTS.md` |
-| Repository rulebook (`repository.md`) | ✅ Scoped bootstrap | Root `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` expose project purpose, validation, contextual loading, and skill governance |
-| Cursor `.cursor/rules/` | ✅ Reduced 13 → 3 | Workspace-only: `use-base-rules`, `cursor-config-management`, `ai-feedback-learning-loop` |
-| Workflows as skills | ✅ Migrated | `tdd`, `refactoring`, `diagnose`, `fic-*`, `project-status-maintenance` |
+| Repository rulebook (`repository.md`) | ✅ Scoped bootstrap | Root `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` expose project purpose, validation, and skill governance |
+| Cursor `.cursor/rules/` | ✅ Reduced 13 → 1 | Workspace-only topology guidance in `cursor-config-management`; global and repository rules arrive through `AGENTS.md` |
+| Workflows as skills | ✅ Migrated | `tdd`, `refactoring`, `diagnose`, `fic-*`, `project-status-maintenance`, `agent-config-hygiene` |
 | Conditional rules | ✅ Single source | `.agents/rules/{python,makefile,react}-project.md`, loaded on demand per `base.md §2` |
 | RTK guidance and hooks | ✅ Compact pointer in `base.md §5`; shared hook wired | Recursive `@-include` removed; Codex and Claude Bash hooks use `.agents/hooks/rtk-rewrite.sh` |
 | Skill governance | ✅ Aligned | Index, catalog, and provenance lock validated |
@@ -37,14 +37,29 @@
 
 ## Recent Changes
 
+### 2026-08-14: Agent configuration hygiene and runtime boundary ✅
+
+- Removed the two always-applied Cursor wrappers that reloaded canonical rules
+  or promoted the feedback loop from conditional to permanent.
+- Narrowed contextual rules to tasks that touch their language or build
+  surface, and changed skill routing to prefer the active client's catalog.
+- Added `agent-config-hygiene` as an explicit review skill; deterministic
+  loading, routing, and Codex/Orca invariants remain in the existing
+  healthcheck test instead of another permanent rule.
+- Kept Codex and Orca runtime state separate, documented their safe
+  synchronization boundary, and made `templates/codex/config.toml` the single
+  versioned source for shared model defaults.
+
+**Validation**: `bash tests/healthcheck-automation-test.sh`, skill-library
+validation, and canonical `make check` pass.
+
 ### 2026-08-12: Global and repository rule scope split ✅
 
 - Reduced the always-loaded `base.md` from 166 lines and 1,651 words to 85
   lines and 642 words while preserving the four operating principles and
   explicit safety routes.
 - Added `repository.md` for this checkout's project description, canonical
-  `make check` / `make ci-check` commands, contextual rules, and skill-library
-  governance.
+  `make check` / `make ci-check` commands, and skill-library governance.
 - Rewired home-level instruction files to global `base.md` and the root
   `AGENTS.md`, `CLAUDE.md`, and `GEMINI.md` shims to `repository.md`.
 - Removed nonexistent generic Make targets from the contextual Makefile rule.

@@ -13,6 +13,15 @@ assert_file_exists() {
     fi
 }
 
+assert_file_absent() {
+    local path="$1"
+
+    if [[ -e "$path" || -L "$path" ]]; then
+        echo "expected file to be absent: $path" >&2
+        exit 1
+    fi
+}
+
 assert_executable() {
     local path="$1"
 
@@ -82,14 +91,20 @@ test_healthcheck_automation_contract() {
 
 test_repository_rule_scope_contract() {
     local rules="$REPO_DIR/.agents/rules/repository.md"
-    local cursor_wrapper="$REPO_DIR/.cursor/rules/use-base-rules.mdc"
 
     assert_file_exists "$rules"
     assert_contains "$rules" "A portable operating layer for AI-assisted development"
     assert_contains "$rules" 'Read and follow `.agents/rules/base.md`'
     assert_contains "$rules" '`make check`'
     assert_contains "$rules" '`make ci-check`'
-    assert_contains "$cursor_wrapper" '@.agents/rules/repository.md'
+    assert_not_contains "$rules" "## Contextual Rules"
+    assert_not_contains "$rules" "Route task-specific work through"
+}
+
+test_progressive_rule_loading_contract() {
+    assert_file_absent "$REPO_DIR/.cursor/rules/use-base-rules.mdc"
+    assert_file_absent "$REPO_DIR/.cursor/rules/ai-feedback-learning-loop.mdc"
+    assert_file_exists "$REPO_DIR/.cursor/rules/cursor-config-management.mdc"
 }
 
 test_global_and_repository_rule_wiring_contract() {
@@ -151,6 +166,8 @@ test_global_rule_budget_contract() {
     assert_not_contains "$base_rules" "catalog-engineering.yaml"
     assert_not_contains "$base_rules" "./validate-skill-library.sh"
     assert_not_contains "$base_rules" "#### Resolution Order"
+    assert_contains "$base_rules" "Prefer the skill catalog exposed by the active client"
+    assert_not_contains "$base_rules" 'Use `~/.agents/docs/skill-factory-skills.md` to route task-specific work'
 
     word_count="$(wc -w < "$base_rules" | tr -d ' ')"
     if ((word_count > max_words)); then
@@ -182,11 +199,34 @@ test_base_rule_compaction_contract() {
     assert_contains "$rules" ".agents/rules/makefile-project.md"
     assert_contains "$rules" "git@github.com-saski:"
     assert_not_contains "$rules" "git@github.com-eventbrite:"
-    assert_contains "$rules" ".agents/docs/skill-factory-skills.md"
     assert_contains "$rules" "### RTK"
     assert_contains "$rules" "documentation-lookup"
     assert_contains "$rules" "personal-knowledge-routing"
     assert_not_contains "$rules" ".agents/rules/pyth![[REDIS_AUTH_REMEDIATION_HANDOFF]]on-project.md"
+}
+
+test_codex_orca_runtime_boundary_contract() {
+    local runtime_rule="$REPO_DIR/.agents/rules/codex-orca-runtime-boundary.md"
+    local runtime_doc="$REPO_DIR/docs/codex-orca-runtime-boundary.md"
+    local architecture_doc="$REPO_DIR/docs/local-agentic-development-architecture.md"
+    local codex_template="$REPO_DIR/templates/codex/config.toml"
+
+    assert_file_absent "$runtime_rule"
+    assert_file_exists "$runtime_doc"
+    assert_contains "$runtime_doc" "templates/codex/config.toml"
+    assert_not_contains "$runtime_doc" 'model = "gpt-5.6-terra"'
+    assert_contains "$architecture_doc" "codex-orca-runtime-boundary.md"
+    assert_contains "$codex_template" 'model = "gpt-5.6-terra"'
+    assert_contains "$codex_template" 'model_reasoning_effort = "medium"'
+}
+
+test_agent_config_hygiene_skill_contract() {
+    local skill="$REPO_DIR/.agents/skills/agent-config-hygiene/SKILL.md"
+
+    assert_file_exists "$skill"
+    assert_contains "$skill" "name: agent-config-hygiene"
+    assert_contains "$skill" "Classify each artifact"
+    assert_contains "$skill" "Do not turn this skill into an always-loaded rule"
 }
 
 test_managed_tool_path_contract() {
@@ -216,6 +256,7 @@ test_managed_tool_path_contract() {
 
 test_healthcheck_automation_contract
 test_repository_rule_scope_contract
+test_progressive_rule_loading_contract
 test_global_and_repository_rule_wiring_contract
 test_documented_make_targets_exist
 test_documentation_lookup_routing_contract
@@ -223,4 +264,6 @@ test_explicit_delegation_routing_contract
 test_global_rule_budget_contract
 test_skill_inventory_guidance_contract
 test_base_rule_compaction_contract
+test_codex_orca_runtime_boundary_contract
+test_agent_config_hygiene_skill_contract
 test_managed_tool_path_contract

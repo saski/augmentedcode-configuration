@@ -326,6 +326,10 @@ The README intentionally does not duplicate the full catalog. Use the canonical 
 | Engineering governance catalog | [.agents/skills/skill-foundry/agents/catalog-engineering.yaml](.agents/skills/skill-foundry/agents/catalog-engineering.yaml) |
 | Product-management catalog | [.agents/skills/skill-foundry/agents/catalog-product-management.yaml](.agents/skills/skill-foundry/agents/catalog-product-management.yaml) |
 
+Use `agent-config-hygiene` for an explicit audit of instruction loading,
+duplicate wrappers, skill routing, and mutable runtime boundaries. It is a
+review skill, not an always-loaded rule.
+
 Common command entry points:
 
 | Command | Purpose |

@@ -1,9 +1,0 @@
----
-description: AI feedback and rule refinement cycle - enables semi-automatic improvement of rules based on user feedback
-globs:
-alwaysApply: true
----
-
-# AI Feedback and Rule Refinement Cycle
-
-“Follow the AI Feedback and Rule Refinement Cycle in .agents/rules/ai-feedback-learning-loop.md

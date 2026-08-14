@@ -105,6 +105,12 @@ There is currently no Hermes-to-Orca bridge, no automatic Orca task creation,
 and no Orca-owned routing decision. Orca can be closed without affecting the
 rest of the system.
 
+Codex launched from Orca uses a separate `CODEX_HOME` under Orca's application
+support directory. This runtime boundary is intentional: it preserves Orca's
+hooks, session state, memories, and trust metadata. The two Codex config files
+must not be symlinked or merged; shared model preferences may be synchronized
+deliberately. See [Codex, Orca, Hermes, and OmniRoute runtime boundaries](codex-orca-runtime-boundary.md).
+
 ## Target architecture
 
 This target becomes relevant only if the level-1 trial demonstrates recurring

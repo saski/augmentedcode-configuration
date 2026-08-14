@@ -479,6 +479,22 @@ skills:
       - xp-technical-debt
     notes: "Unified code-health due diligence across security, dependencies, tests, linting, dead code, design, observability, performance, docs, CI, and structure."
 
+  - name: agent-config-hygiene
+    category: verification-testing
+    pattern: reviewer
+    owner: platform-ai
+    status: active
+    review_cycle_days: 90
+    benchmark_after_model_update: true
+    platforms:
+      - claude
+      - codex
+      - cursor
+    overlap_with:
+      - complexity-review
+      - xp-code-review
+    notes: "Audits effective agent instruction loading and recommends the smallest reversible reduction in context and configuration duplication."
+
   # --- Developer tools ---
 
   - name: free-agent-execution

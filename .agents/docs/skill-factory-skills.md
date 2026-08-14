@@ -136,6 +136,7 @@ Imported and local sources land in the same tree:
 
 | Skill | Category | Purpose |
 |-------|----------|---------|
+| agent-config-hygiene | practices | Audit and simplify AGENTS.md hierarchies, always-loaded rules, client wrappers, skill routing, and runtime boundaries without adding more permanent context. |
 | free-agent-execution | developer-tools | Run an explicitly requested, bounded, non-sensitive coding task through the local free-worker adapter using a verified free OpenCode model. Use only when the user asks to execute a free worker or free agent and accepts the external-model safety boundary. |
 | fic-create-plan | workflow | Build a detailed, phase-based implementation plan from research or a task description. Use when the user asks for implementation planning, phased rollout, or a concrete execution plan. |
 | fic-implement-plan | workflow | Execute an approved implementation plan phase by phase with verification. Use when the user asks to implement a plan file from thoughts/shared/plans. |

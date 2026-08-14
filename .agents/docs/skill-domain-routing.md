@@ -162,6 +162,7 @@ Use when the work is about creating, improving, selecting, evaluating, or govern
 
 Skills:
 
+- `agent-config-hygiene` - Use to audit or slim AGENTS.md hierarchies, always-loaded rules, client wrappers, skill routing, and agent runtime boundaries.
 - `skill-foundry` - Use to organize, evaluate, benchmark, and improve a skill library.
 - `skill-creator` - Use to create, edit, benchmark, and tune Agent Skills and evals.
 - `skill-repair` - Use to fix failed skill installations and update installer manifests.

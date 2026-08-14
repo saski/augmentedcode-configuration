@@ -2,8 +2,8 @@
 trigger: always_on
 ---
 
-<!-- last_updated: 2026-08-12 -->
-<!-- version: 4.0 -->
+<!-- last_updated: 2026-08-14 -->
+<!-- version: 4.1 -->
 # Universal Agent Rules
 
 This is the compact, cross-repository operating baseline. Repository and directory rules may extend it with narrower instructions.
@@ -41,9 +41,9 @@ This is the compact, cross-repository operating baseline. Repository and directo
 
 ## 2. Contextual Rule Loading
 
-- For Python repositories, read `~/.agents/rules/python-project.md`.
-- For repositories with a `Makefile`, read `~/.agents/rules/makefile-project.md`.
-- For React or TSX repositories, read `~/.agents/rules/react-best-practices.md`.
+- When the task changes Python source or packaging, read `~/.agents/rules/python-project.md`.
+- When the task changes a `Makefile` or relies on its targets, read `~/.agents/rules/makefile-project.md`.
+- When the task changes React or TSX source, read `~/.agents/rules/react-best-practices.md`.
 - Contextual rules extend this baseline. Missing contextual files are optional unless a repository says otherwise.
 
 ## 3. Communication and Documentation
@@ -57,7 +57,7 @@ This is the compact, cross-repository operating baseline. Repository and directo
 
 ## 4. Skills and Explicit Routing
 
-- Use `~/.agents/docs/skill-factory-skills.md` to route task-specific work before reading and following the matching `SKILL.md`.
+- Prefer the skill catalog exposed by the active client, then read and follow only the matching `SKILL.md`. If no catalog is available, search the relevant section of `~/.agents/docs/skill-domain-routing.md`; reserve the full skill inventory for library maintenance.
 - Load a named workflow or command from `~/.agents/workflows/` or `~/.agents/commands/` when the user explicitly invokes it or the task matches its documented trigger.
 - When the user explicitly asks to create or coordinate an agent team, load and follow the `launching-agent-teams` skill.
 - When the user explicitly requests a bounded, non-sensitive free worker, the agent loads and follows the free-agent-execution skill; the frontier agent retains scope preparation and final review.
