@@ -3,7 +3,7 @@ trigger: always_on
 ---
 
 <!-- last_updated: 2026-08-14 -->
-<!-- version: 4.1 -->
+<!-- version: 4.2 -->
 # Universal Agent Rules
 
 This is the compact, cross-repository operating baseline. Repository and directory rules may extend it with narrower instructions.
@@ -16,6 +16,7 @@ This is the compact, cross-repository operating baseline. Repository and directo
 - Read the relevant exports, callers, shared utilities, documentation, and tests before writing.
 - Use tools, code, tests, and primary documentation for deterministic answers; use model judgment for classification, drafting, synthesis, and tradeoffs.
 - State important assumptions and stop for one focused question when ambiguity makes the next step unsafe.
+- When a task is bounded, independent, and low risk, delegate it preferentially to a less-capable subagent; retain scope, consequential actions, and final review in the primary agent.
 
 ### Simplest Surgical Change
 
