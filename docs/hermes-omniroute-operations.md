@@ -209,6 +209,28 @@ If Codex OAuth has expired, authenticate or run one direct Codex-backed Hermes
 turn in the default profile before retrying image preprocessing. Keep this
 recovery local; no OAuth artifact belongs in Git.
 
+## Safe Hermes source updates
+
+Use the repository-owned wrapper instead of invoking `hermes update` directly:
+
+```bash
+make hermes-update-check
+make hermes-update-stage
+make hermes-update-activate
+```
+
+`check` fetches the official remote and confirms that the local checkout is a
+clean, linear ancestor of `origin/main`. `stage` creates a local, mode-600
+archive of `HERMES_HOME` and records the exact source revision to update.
+`activate` refuses if the source changed after staging, runs the native Hermes
+updater with its own backup, and restarts the launchd gateway only after a
+successful update.
+
+The wrapper intentionally refuses dirty or divergent checkouts. In that case,
+preserve the local source patches, build and smoke-test a parallel clean
+checkout, and switch the gateway only after the migration is verified. Do not
+force an in-place update across unrelated Git histories.
+
 WhatsApp is optional and independent of Telegram. Keep
 `WHATSAPP_ENABLED=false` in every active profile when it is unused, restart the
 gateway, and confirm that no WhatsApp adapter is listed.
