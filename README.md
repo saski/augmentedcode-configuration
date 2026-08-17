@@ -1,5 +1,10 @@
 <h1 align="center">Augmented Code Configuration</h1>
 
+> [!IMPORTANT]
+> Active development has moved to **[Arnesto](https://github.com/saski/arnesto)**,
+> the standalone multi-tool agent harness. This fork remains available as a
+> provenance record and migration pointer.
+
 <p align="center">
   A portable operating layer for AI-assisted development: shared rules, skills, commands, workflows, MCP config, hooks, and local setup conventions for Cursor, Codex, Claude, Gemini, Antigravity, and related tools.
 </p>
