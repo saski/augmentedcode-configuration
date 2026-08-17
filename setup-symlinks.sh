@@ -2,7 +2,8 @@
 
 set -euo pipefail
 
-REPO_DIR="${REPO_DIR:-$HOME/Code/augmentedcode-configuration}"
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+REPO_DIR="${REPO_DIR:-$SCRIPT_DIR}"
 TEMPLATES_DIR="$REPO_DIR/templates"
 CODEX_CONFIG_TEMPLATE="$TEMPLATES_DIR/codex/config.toml"
 CODEX_HOOKS_TEMPLATE="$TEMPLATES_DIR/codex/hooks.json"
@@ -608,7 +609,7 @@ validate_symlinks() {
     else
         local agents_target
         agents_target=$(readlink "$HOME/.agents")
-        if [[ "$agents_target" != *"augmentedcode-configuration/.agents" ]]; then
+        if [ "$agents_target" != "$REPO_DIR/.agents" ]; then
             echo "❌ ~/.agents should point to repo .agents, got: $agents_target"
             errors=$((errors + 1))
         else
